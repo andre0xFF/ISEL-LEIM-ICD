@@ -1,6 +1,6 @@
 package communications;
 
-import models.Command;
+import commands.Ping;
 import models.CommunicationProtocol;
 import models.Server;
 import java.io.BufferedReader;
@@ -15,26 +15,22 @@ public class BankCOM implements CommunicationProtocol {
     private PrintWriter writer;
     private Socket socket;
     private BufferedReader reader;
-    private final Server.Host host;
 
-    public BankCOM(String hostname, int port) {
-        this.host = new Server.Host(hostname, port);
+    public BankCOM(Socket socket) {
+        this.socket = socket;
 
         try {
-            this.socket = new Socket(hostname, port);
             this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.writer = new PrintWriter(this.socket.getOutputStream(), true);
         } catch (IOException e) {
             this.validated = false;
             return;
         }
-
-        this.validated = this.host.validate();
     }
 
     @Override
     public void send(Command cmd) {
-
+        this.writer.print(cmd.get());
     }
 
     @Override
@@ -44,5 +40,12 @@ public class BankCOM implements CommunicationProtocol {
             this.reader.close();
             this.socket.close();
         } catch (IOException e) {}
+    }
+
+    public boolean test() {
+        String destination = this.socket.getRemoteSocketAddress().toString();
+        this.send(new Ping());
+        // TODO
+        return true;
     }
 }

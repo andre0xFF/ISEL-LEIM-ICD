@@ -1,31 +1,38 @@
 package models;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
 public interface Server {
 
     // Fields
     public final static int DEFAULT_PORT = 5555;
 
     // Functions
-    public void connect(Client client);
-    public void execute();
-
-    // Modules
-    interface InternalClient {
-
+    public static void execute(Gate gate) {
+        Server.execute(Server.DEFAULT_PORT, gate);
     }
 
-    class Host {
-        public final String ip;
-        public final int port;
-
-        public Host(String ip, int port) {
-            this.ip = ip;
-            this.port = port;
+    public static boolean execute(int port, Gate gate) {
+        try {
+            ServerSocket socket = new ServerSocket(port);
+            gate.execute(socket);
+        } catch (IOException e) {
+            return false;
         }
 
-        public boolean validate() {
-            // TODO
-            return true;
-        }
+        return true;
+    }
+
+    // Modules
+    public interface InternalClient {
+        public boolean execute(Socket socket);
+    }
+
+    public interface Gate {
+        public void handle(Socket client_socket);
+        public void execute(ServerSocket server_socket);
+        public boolean is_active();
     }
 }

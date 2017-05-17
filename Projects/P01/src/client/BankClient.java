@@ -10,7 +10,7 @@ public class BankClient implements Client {
 
     public static void main(String[] args) {
         System.out.println("Hello world! This is BankClient");
-        new BankClient();
+        BankClient client = new BankClient();
     }
 
     public BankClient() {
@@ -19,6 +19,15 @@ public class BankClient implements Client {
 
     public BankClient(String server_ip, int server_port) {
         this.com = Client.connect(server_ip, server_port);
-        this.com.send(new Ping());
+
+        if (this.com == null) {
+            return;
+        }
+
+        this.com.test();
+    }
+
+    private void close() {
+        this.com.close();
     }
 }
