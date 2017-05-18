@@ -1,8 +1,7 @@
 package communications;
 
-import commands.Ping;
+import commands.*;
 import models.CommunicationProtocol;
-import models.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,30 +10,31 @@ import java.net.Socket;
 
 public class BankCOM implements CommunicationProtocol {
 
-    private boolean validated;
-    private PrintWriter writer;
     private Socket socket;
+    private PrintWriter writer;
     private BufferedReader reader;
+    private Encoding encoding;
 
-    public BankCOM(Socket socket) {
+    public BankCOM(Encoding encoding) {
+        this.encoding = encoding;
+    }
+
+    public boolean open(Socket socket) {
         this.socket = socket;
 
         try {
             this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             this.writer = new PrintWriter(this.socket.getOutputStream(), true);
         } catch (IOException e) {
-            this.validated = false;
-            return;
+            return false;
         }
-    }
 
-    @Override
-    public void send(Command cmd) {
-        this.writer.print(cmd.get());
+        return true;
     }
 
     @Override
     public void close() {
+        this.send(new Terminate());
         try {
             this.writer.close();
             this.reader.close();
@@ -42,10 +42,24 @@ public class BankCOM implements CommunicationProtocol {
         } catch (IOException e) {}
     }
 
-    public boolean test() {
-        String destination = this.socket.getRemoteSocketAddress().toString();
-        this.send(new Ping());
-        // TODO
-        return true;
+    @Override
+    public void send(Command cmd) {
+        String msg = this.encoding.encode(cmd);
+        this.writer.println(msg);
+    }
+
+    @Override
+    public Command receive() {
+        try {
+            String msg = this.reader.readLine();
+
+            if (msg == null) {
+                return null;
+            }
+
+            return this.encoding.decode(msg);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

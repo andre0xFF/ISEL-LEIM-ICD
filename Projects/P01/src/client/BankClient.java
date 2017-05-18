@@ -1,33 +1,29 @@
 package client;
 
 import commands.Ping;
+import commands.Terminate;
 import models.Client;
 import communications.BankCOM;
+import models.CommunicationProtocol.*;
 
 public class BankClient implements Client {
 
-    private final BankCOM com;
-
     public static void main(String[] args) {
-        System.out.println("Hello world! This is BankClient");
-        BankClient client = new BankClient();
+        new BankClient().execute();
     }
 
-    public BankClient() {
-        this(Client.SERVER_HOSTNAME, Client.SERVER_PORT);
-    }
+    private BankCOM com;
 
-    public BankClient(String server_ip, int server_port) {
-        this.com = Client.connect(server_ip, server_port);
+    public void execute() {
+        this.com = Client.connect(Client.SERVER_HOSTNAME, Client.SERVER_PORT);
 
-        if (this.com == null) {
-            return;
-        }
+        // Ping test
+        System.out.println("Ping!");
+        this.com.send(new Ping());
+        Command cmd = this.com.receive();
 
-        this.com.test();
-    }
+        System.out.println(cmd.get_name());
 
-    private void close() {
-        this.com.close();
+        this.com.send(new Terminate());
     }
 }

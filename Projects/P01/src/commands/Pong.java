@@ -2,21 +2,20 @@ package commands;
 
 import models.CommunicationProtocol.*;
 
-public class Ping implements Command {
+public class Pong implements Command {
 
-    public static final String NAME = "Ping";
-    private final Command rsp = new Pong();
+    public static final String NAME = "Pong";
 
     @Override
     public void execute() { }
 
     @Override
     public String get_name() {
-        return Ping.NAME;
+        return Pong.NAME;
     }
 
     @Override
     public Command get_response() {
-        return this.rsp;
+        return null;
     }
 }

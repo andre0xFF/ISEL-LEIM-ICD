@@ -1,7 +1,5 @@
 package models;
 
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public interface Server {
@@ -10,29 +8,20 @@ public interface Server {
     public final static int DEFAULT_PORT = 5555;
 
     // Functions
-    public static void execute(Gate gate) {
-        Server.execute(Server.DEFAULT_PORT, gate);
-    }
-
-    public static boolean execute(int port, Gate gate) {
-        try {
-            ServerSocket socket = new ServerSocket(port);
-            gate.execute(socket);
-        } catch (IOException e) {
-            return false;
-        }
-
-        return true;
-    }
+    public void execute(Gate gate);
+    public boolean add(InternalClient client);
+    public void update();
 
     // Modules
     public interface InternalClient {
-        public boolean execute(Socket socket);
+        public void execute(Socket socket);
+        public void set_active(Boolean active);
+        public boolean is_active();
     }
 
     public interface Gate {
         public void handle(Socket client_socket);
-        public void execute(ServerSocket server_socket);
+        public boolean execute(Server server, int port);
         public boolean is_active();
     }
 }
