@@ -1,7 +1,12 @@
 package communications;
 
-import commands.*;
+import communications.commands.Hello;
+import communications.commands.Ping;
+import communications.commands.Pong;
+import communications.commands.Terminate;
+import communications.commands.account.*;
 import models.CommunicationProtocol;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,10 +18,10 @@ public class BankCOM implements CommunicationProtocol {
     private Socket socket;
     private PrintWriter writer;
     private BufferedReader reader;
-    private Encoding encoding;
+    private Encoder encoder;
 
-    public BankCOM(Encoding encoding) {
-        this.encoding = encoding;
+    public BankCOM(Encoder encoder) {
+        this.encoder = encoder;
     }
 
     public boolean open(Socket socket) {
@@ -29,37 +34,42 @@ public class BankCOM implements CommunicationProtocol {
             return false;
         }
 
+        // TODO Hello with encoding
         return true;
     }
 
     @Override
     public void close() {
         this.send(new Terminate());
+
         try {
             this.writer.close();
             this.reader.close();
             this.socket.close();
-        } catch (IOException e) {}
+        } catch (IOException e) { }
     }
 
     @Override
-    public void send(Command cmd) {
-        String msg = this.encoding.encode(cmd);
+    public void send(String msg) {
         this.writer.println(msg);
     }
 
     @Override
+    public void send(Command cmd) {
+        String msg = this.encoder.encode(cmd);
+        this.send(msg);
+    }
+
+    @Override
     public Command receive() {
+        String msg;
+
         try {
-            String msg = this.reader.readLine();
-
-            if (msg == null) {
-                return null;
-            }
-
-            return this.encoding.decode(msg);
+            msg = this.reader.readLine();
         } catch (IOException e) {
             return null;
         }
+
+        return msg == null ? null : this.encoder.decode(msg, this.commands);
     }
 }

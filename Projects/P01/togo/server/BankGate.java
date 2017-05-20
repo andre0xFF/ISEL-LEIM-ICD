@@ -34,7 +34,7 @@ public class BankGate implements Server.Gate, Runnable {
     @Override
     public void handle(Socket client_socket) {
         BankInternalClient client = new BankInternalClient();
-        client.execute(client_socket);
+        client.connect(client_socket);
         this.server.add(client);
     }
 

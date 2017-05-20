@@ -10,12 +10,12 @@ public class BankServer implements Server {
         new BankServer().execute(new BankGate());
     }
 
-    private BankGate gate;
+    private Gate gate;
     private ArrayList<InternalClient> clients = new ArrayList<>();
 
     @Override
     public void execute(Gate gate) {
-        this.gate = (BankGate) gate;
+        this.gate = gate;
         System.out.println("Hello world! This is BankServer.");
         this.gate.execute(this, Server.DEFAULT_PORT);
     }
