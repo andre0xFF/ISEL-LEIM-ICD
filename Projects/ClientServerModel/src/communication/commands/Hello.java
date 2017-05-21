@@ -1,10 +1,12 @@
 package communication.commands;
 
-import client.Client;
-import communication.Protocol.Command;
-import communication.Protocol.CommandEncoder;
-import communication.Protocol.Encoder;
+import communication.Communication;
+import communication.Communication.Command;
+import communication.Communication.CommandEncoder;
+import communication.Communication.Encoder;
 import communication.encoders.XML;
+import server.Client;
+import server.Server.Worker;
 
 import java.util.HashMap;
 
@@ -18,9 +20,15 @@ public class Hello implements Command {
     }};
 
     @Override
+    public void execute(Worker client) {
+        Communication com = client.get_communication();
+        com.set_encoder(this.encoder);
+        com.send(new Ok());
+    }
+
+    @Override
     public void execute(Client client) {
-        client.set_encoder(this.encoder);
-        client.send(new Ok());
+        // The server is not supposed to send Hello
     }
 
     @Override
@@ -39,7 +47,7 @@ public class Hello implements Command {
     }
 
     @Override
-    public Command get_reponse() {
+    public Command get_response() {
         return null;
     }
 

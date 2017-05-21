@@ -1,9 +1,16 @@
 package communication.commands;
 
-import client.Client;
-import communication.Protocol;
+import communication.Communication;
+import server.Client;
+import server.Server.Worker;
 
-public class Denied implements Protocol.Command {
+public class Denied implements Communication.Command {
+
+
+    @Override
+    public void execute(Worker client) {
+
+    }
 
     @Override
     public void execute(Client client) {
@@ -11,12 +18,12 @@ public class Denied implements Protocol.Command {
     }
 
     @Override
-    public String encode(Protocol.Encoder encoder) {
+    public String encode(Communication.Encoder encoder) {
         return null;
     }
 
     @Override
-    public Protocol.Command decode(String message) {
+    public Communication.Command decode(String message) {
         return null;
     }
 
@@ -26,7 +33,7 @@ public class Denied implements Protocol.Command {
     }
 
     @Override
-    public Protocol.Command get_reponse() {
+    public Communication.Command get_response() {
         return null;
     }
 }

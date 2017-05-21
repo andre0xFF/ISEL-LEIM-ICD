@@ -1,7 +1,7 @@
 package communication.encoders;
 
-import communication.Protocol.Command;
-import communication.Protocol.Encoder;
+import communication.Communication.Command;
+import communication.Communication.Encoder;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,7 @@ public class JSON implements Encoder {
     }
 
     @Override
-    public ArrayList<Command> get() {
+    public ArrayList<Command> get_commands() {
         return this.commands;
     }
 }

@@ -1,10 +1,12 @@
 package communication.commands;
 
-import client.Client;
-import communication.Protocol.Command;
-import communication.Protocol.CommandEncoder;
-import communication.Protocol.Encoder;
+import communication.Communication;
+import communication.Communication.Command;
+import communication.Communication.CommandEncoder;
+import communication.Communication.Encoder;
 import communication.encoders.XML;
+import server.Client;
+import server.Server.Worker;
 
 import java.util.HashMap;
 
@@ -16,8 +18,17 @@ public class Ping implements Command {
     }};
 
     @Override
+    public void execute(Worker worker) {
+        System.out.println("Ping!");
+        Communication com = worker.get_communication();
+        com.send(new Pong());
+    }
+
+    @Override
     public void execute(Client client) {
-        client.send(new Pong());
+        System.out.println("Ping!");
+        Communication com = client.get_communication();
+        com.send(new Pong());
     }
 
     @Override
@@ -36,7 +47,7 @@ public class Ping implements Command {
     }
 
     @Override
-    public Command get_reponse() {
+    public Command get_response() {
         return new Pong();
     }
 
@@ -64,7 +75,14 @@ class Pong implements Command {
     }};
 
     @Override
-    public void execute(Client client) { }
+    public void execute(Worker worker) {
+        System.out.println("Pong.");
+    }
+
+    @Override
+    public void execute(Client client) {
+        System.out.println("Pong.");
+    }
 
     @Override
     public String encode(Encoder encoder) {
@@ -82,7 +100,7 @@ class Pong implements Command {
     }
 
     @Override
-    public Command get_reponse() {
+    public Command get_response() {
         return null;
     }
 

@@ -12,7 +12,7 @@ public class BankGate implements Server.Gate, Runnable {
     @Override
     public void handle(Socket client) {
         BankWorker worker = new BankWorker();
-        worker.connect(client);
+        worker.execute(client);
         this.server.register(worker);
     }
 
@@ -29,7 +29,7 @@ public class BankGate implements Server.Gate, Runnable {
     @Override
     public void run() {
         System.out.println("Hello this is BankGate");
-        while(this.server.is_active()) {
+        while(this.server.check()) {
             try {
                 Socket client = this.socket.accept();
                 this.handle(client);

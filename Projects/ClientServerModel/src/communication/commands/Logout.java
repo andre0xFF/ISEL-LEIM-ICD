@@ -1,12 +1,18 @@
 package communication.commands;
 
-import client.Client;
-import communication.Protocol.Command;
-import communication.Protocol.Encoder;
+import communication.Communication.Command;
+import communication.Communication.Encoder;
+import server.Client;
+import server.Server.Worker;
 
 public class Logout implements Command {
 
     private static final String NAME = "Logout";
+
+    @Override
+    public void execute(Worker client) {
+
+    }
 
     @Override
     public void execute(Client client) {
@@ -29,7 +35,7 @@ public class Logout implements Command {
     }
 
     @Override
-    public Command get_reponse() {
+    public Command get_response() {
         return null;
     }
 }

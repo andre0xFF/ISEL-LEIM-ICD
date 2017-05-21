@@ -5,34 +5,42 @@ import java.util.ArrayList;
 public class BankServer implements Server {
 
     public static void main(String[] args) {
-        new BankServer().execute();
+        BankGate gate = new BankGate();
+        BankServer server = new BankServer();
+
+        gate.execute(server, Gate.DEFAULT_PORT);
+        server.execute();
     }
 
     private ArrayList<Worker> workers = new ArrayList<>();
     private boolean active;
 
     @Override
-    public boolean is_active() {
+    public boolean check() {
         return this.active;
     }
 
     @Override
-    public void set(boolean active) {
-        this.active = active;
+    public void terminate() {
+        this.active = false;
+
+        for (Worker worker : this.workers) {
+            worker.terminate();
+        }
     }
 
     @Override
     public void execute() {
-        System.out.println("Hello this is BankServer");
-        this.set(true);
-        BankGate gate = new BankGate();
-        gate.execute(this, Gate.DEFAULT_PORT);
+        this.active = true;
 
-        while(this.is_active()) {
-            for (Worker worker : this.workers) {
-                if (!worker.is_active()) {
-                    worker.set(false);
+        while(this.check()) {
+            for (int i = 0; i < this.workers.size(); i++) {
+                Worker worker = this.workers.get(i);
+
+                if (!worker.check()) {
+                    worker.terminate();
                     this.workers.remove(worker);
+                    i--;
                 }
             }
 

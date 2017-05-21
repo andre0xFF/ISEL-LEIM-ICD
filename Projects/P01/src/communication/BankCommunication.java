@@ -1,15 +1,12 @@
 package communication;
 
-import communication.commands.Hello;
-import communication.commands.Logout;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class BankProtocol implements Protocol {
+public class BankCommunication implements Communication {
 
     private Encoder encoder;
     private Socket socket;
@@ -17,7 +14,8 @@ public class BankProtocol implements Protocol {
     private PrintWriter writer;
 
     @Override
-    public boolean open(Socket socket) {
+    public boolean execute(Socket socket) {
+        // Connect
         this.socket = socket;
 
         try {
@@ -27,13 +25,14 @@ public class BankProtocol implements Protocol {
             return false;
         }
 
-        return true;
+        // Commands and Encoders
+        boolean all_good = Communication.execute(this);
+
+        return all_good;
     }
 
     @Override
-    public void close() {
-        this.send(new Logout());
-
+    public void terminate() {
         try {
             this.writer.close();
             this.reader.close();
@@ -42,7 +41,7 @@ public class BankProtocol implements Protocol {
     }
 
     @Override
-    public boolean is_open() {
+    public boolean check() {
         return this.socket.isConnected();
     }
 
@@ -72,7 +71,7 @@ public class BankProtocol implements Protocol {
     @Override
     public void set_encoder(Encoder encoder) {
         if (this.encoder != null) {
-            encoder.set(this.encoder.get());
+            encoder.set(this.encoder.get_commands());
         }
 
         this.encoder = encoder;

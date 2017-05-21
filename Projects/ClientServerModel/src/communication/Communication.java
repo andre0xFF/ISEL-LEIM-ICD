@@ -1,35 +1,50 @@
 package communication;
 
-import client.Client;
 import communication.commands.Hello;
 import communication.commands.Ping;
+import communication.encoders.XML;
+import server.Client;
+import server.Server.Worker;
 
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public interface Protocol {
-
-    boolean open(Socket socket);
-    void close();
-
-    boolean is_open();
+public interface Communication {
 
     void send(String message);
     void send(Command command);
-
+    void set_encoder(Encoder encoder);
     Command receive();
 
-    void set_encoder(Encoder encoder);
+    //
+    boolean check();
+    void terminate();
+    boolean execute(Socket socket);
+    //
+
+    static boolean execute(Communication com) {
+        if (!com.check()) {
+            return false;
+        }
+
+        ArrayList<Command> commands = Command.get();
+        Communication.Encoder encoder = new XML();
+        encoder.set(commands);
+        com.set_encoder(encoder);
+
+        return true;
+    }
 
     interface Command {
 
+        void execute(Worker worker);
         void execute(Client client);
         String encode(Encoder encoder);
-        Command decode(String message);
         String get_name();
-        Command get_reponse();
+        Command decode(String message);
+        Command get_response();
 
         static Command decode(Collection<CommandEncoder> cmd_encoders, String message) {
             for (CommandEncoder cmd_encoder : cmd_encoders) {
@@ -43,7 +58,7 @@ public interface Protocol {
             return null;
         }
 
-        static ArrayList<Command> get_default_commands() {
+        static ArrayList<Command> get() {
             return new ArrayList<Command>() {{
                 add(new Hello());
                 add(new Ping());
@@ -53,11 +68,11 @@ public interface Protocol {
 
     interface Encoder {
 
-        String encode(Command command);
-        Command decode(String message);
         void add(Command command);
         void set(ArrayList<Command> commands);
-        ArrayList<Command> get();
+        String encode(Command command);
+        Command decode(String message);
+        ArrayList<Command> get_commands();
 
         static Command decode(List<Command> commands, String message) {
             for (Command command : commands) {
@@ -67,7 +82,7 @@ public interface Protocol {
                     return match;
                 }
 
-                Command response = command.get_reponse();
+                Command response = command.get_response();
 
                 if (response == null) {
                     continue;
