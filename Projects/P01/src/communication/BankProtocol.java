@@ -1,7 +1,7 @@
 package communication;
 
 import communication.commands.Hello;
-import communication.commands.Terminate;
+import communication.commands.Logout;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -27,13 +27,12 @@ public class BankProtocol implements Protocol {
             return false;
         }
 
-        this.send(new Hello());
         return true;
     }
 
     @Override
     public void close() {
-        this.send(new Terminate());
+        this.send(new Logout());
 
         try {
             this.writer.close();

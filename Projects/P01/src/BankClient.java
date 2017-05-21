@@ -1,6 +1,7 @@
 import client.Client;
 import communication.BankProtocol;
 import communication.Protocol;
+import communication.commands.Hello;
 import communication.commands.Ping;
 import communication.encoders.XML;
 import server.Server;
@@ -16,6 +17,7 @@ public class BankClient implements Client {
 
         try {
             client.connect(new Socket("127.0.0.1", Server.Gate.DEFAULT_PORT));
+            client.send(new Hello());
         } catch (IOException e) { }
 
         client.receive();

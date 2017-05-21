@@ -1,7 +1,6 @@
 package communication.commands;
 
 import client.Client;
-import communication.Protocol;
 import communication.Protocol.Command;
 import communication.Protocol.CommandEncoder;
 import communication.Protocol.Encoder;
@@ -21,6 +20,7 @@ public class Hello implements Command {
     @Override
     public void execute(Client client) {
         client.set_encoder(this.encoder);
+        client.send(new Ok());
     }
 
     @Override

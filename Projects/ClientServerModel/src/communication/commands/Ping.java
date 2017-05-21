@@ -1,15 +1,12 @@
 package communication.commands;
 
 import client.Client;
-import communication.Protocol;
 import communication.Protocol.Command;
 import communication.Protocol.CommandEncoder;
 import communication.Protocol.Encoder;
 import communication.encoders.XML;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Ping implements Command {
 

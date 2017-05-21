@@ -1,0 +1,74 @@
+<!-- Definitions -->
+
+<account_types>
+    <account_type id="0" name="on_demand"/>
+    <account_type id="1" name="on_term"/>
+</account_types>
+
+<user_types>
+    <user_type id="0" name="employee"/>
+    <user_type id="1" name="client"/>
+</user_type>
+
+<!-- Data -->
+
+<bank_accounts>
+    <account id="0" account_type="0" pin="1234">
+        <ammount>192474</ammount>
+    </account>
+
+    <account id="1" account_type="1" pin="1234">
+        <ammount>20345</ammount>
+    </account>
+
+    <account id="2" account_type="0" pin="1234">
+        <ammount>780001</ammount>
+    </account>
+
+    <account id="3" account_type="0" pin="1234">
+        <ammount>500000</ammount>
+    </account>
+
+    <account id="4" account_type="1" pin="1234">
+        <ammount>1000000</ammount>
+    </account>
+</bank_accounts>
+
+<clients>
+    <client id="0" user="1">
+        <name>Joao Baiao</name>
+        <CC>101101101</CC>
+        <nif>1010101010</nif>
+        <photo path="./photos/0_0.jpg"/>
+        <signature path="./signatures/0_0.jpg"/>
+    </client>
+    <client id="1" user="2">
+        <name>Elon Musk</name>
+        <CC>101101111</CC>
+        <nif>1010101011</nif>
+        <photo path="./photos/1_0.jpg"/>
+        <signature path="./signatures/1_0.jpg"/>
+    </client>
+</clients>
+
+<employees>
+    <employee id="0" user="0">
+        <name>Carlos Ramelas</name>
+    </employee>
+</employees>
+
+<application_users>
+    <user id="0" user_type="0" login="Ex01" password="qazwsx"/>
+    <user id="1" user_type="1" login="Cx02" password="qazwsx"/>
+    <user id="2" user_type="1" login="Cx0F" password="qazwsx"/>
+</application_users>
+
+<!-- Relationships -->
+
+<clients_accounts>
+    <user_account client="0" account="0"/>
+    <user_account client="0" account="1"/>
+    <user_account client="1" account="2"/>
+    <user_account client="1" account="3"/>
+    <user_account client="1" account="4"/>
+</clients_accounts>
