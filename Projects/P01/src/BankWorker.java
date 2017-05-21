@@ -1,6 +1,5 @@
 import communication.BankCommunication;
 import communication.Communication;
-import communication.commands.Ping;
 import server.Server;
 import server.Server.Worker;
 

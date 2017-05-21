@@ -18,11 +18,9 @@ public interface Communication {
     void set_encoder(Encoder encoder);
     Command receive();
 
-    //
     boolean check();
     void terminate();
     boolean execute(Socket socket);
-    //
 
     static boolean execute(Communication com) {
         if (!com.check()) {
