@@ -4,19 +4,21 @@ import java.net.Socket;
 
 public interface Server {
 
-    void execute(Gate gate);
+    // TODO: can ask for resources
+    boolean is_active();
+    void set(boolean active);
+
+    void execute();
     void register(Worker worker);
 
     interface Worker {
-        // TODO: can ask for resources
+        void set(boolean active);
+        boolean is_active();
     }
-
     interface Gate {
-
         int DEFAULT_PORT = 5555;
         void handle(Socket client);
-        boolean is_active();
-        void set(Server server);
+        void execute(Server server, int port);
     }
 
 }

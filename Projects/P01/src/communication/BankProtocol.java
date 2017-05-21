@@ -1,11 +1,7 @@
-package communications;
+package communication;
 
-import communications.commands.Hello;
-import communications.commands.Ping;
-import communications.commands.Pong;
-import communications.commands.Terminate;
-import communications.commands.account.*;
-import models.CommunicationProtocol;
+import communication.commands.Hello;
+import communication.commands.Terminate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,17 +9,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class BankCOM implements CommunicationProtocol {
+public class BankProtocol implements Protocol {
 
-    private Socket socket;
-    private PrintWriter writer;
-    private BufferedReader reader;
     private Encoder encoder;
+    private Socket socket;
+    private BufferedReader reader;
+    private PrintWriter writer;
 
-    public BankCOM(Encoder encoder) {
-        this.encoder = encoder;
-    }
-
+    @Override
     public boolean open(Socket socket) {
         this.socket = socket;
 
@@ -34,7 +27,7 @@ public class BankCOM implements CommunicationProtocol {
             return false;
         }
 
-        // TODO Hello with encoding
+        this.send(new Hello());
         return true;
     }
 
@@ -50,26 +43,39 @@ public class BankCOM implements CommunicationProtocol {
     }
 
     @Override
-    public void send(String msg) {
-        this.writer.println(msg);
+    public boolean is_open() {
+        return this.socket.isConnected();
     }
 
     @Override
-    public void send(Command cmd) {
-        String msg = this.encoder.encode(cmd);
-        this.send(msg);
+    public void send(String message) {
+        this.writer.println(message);
+    }
+
+    @Override
+    public void send(Command command) {
+        String encoded_msg = this.encoder.encode(command);
+        this.writer.println(encoded_msg);
     }
 
     @Override
     public Command receive() {
-        String msg;
+        String message = "";
 
         try {
-            msg = this.reader.readLine();
+            message = this.reader.readLine();
+            return this.encoder.decode(message);
         } catch (IOException e) {
             return null;
         }
+    }
 
-        return msg == null ? null : this.encoder.decode(msg, this.commands);
+    @Override
+    public void set_encoder(Encoder encoder) {
+        if (this.encoder != null) {
+            encoder.set(this.encoder.get());
+        }
+
+        this.encoder = encoder;
     }
 }

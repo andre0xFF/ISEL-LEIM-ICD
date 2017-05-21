@@ -28,6 +28,8 @@ public interface Protocol {
         void execute(Client client);
         String encode(Encoder encoder);
         Command decode(String message);
+        String get_name();
+        Command get_reponse();
 
         static Command decode(Collection<CommandEncoder> cmd_encoders, String message) {
             for (CommandEncoder cmd_encoder : cmd_encoders) {
@@ -41,7 +43,7 @@ public interface Protocol {
             return null;
         }
 
-        static ArrayList<Command> get() {
+        static ArrayList<Command> get_default_commands() {
             return new ArrayList<Command>() {{
                 add(new Hello());
                 add(new Ping());
@@ -60,6 +62,19 @@ public interface Protocol {
         static Command decode(List<Command> commands, String message) {
             for (Command command : commands) {
                 Command match = command.decode(message);
+
+                if (match != null) {
+                    return match;
+                }
+
+                Command response = command.get_reponse();
+
+                if (response == null) {
+                    continue;
+                }
+
+                List responses = new ArrayList<Command>() {{ add(response); }};
+                match = Encoder.decode(responses, message);
 
                 if (match != null) {
                     return match;

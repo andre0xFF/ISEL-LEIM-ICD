@@ -2,12 +2,8 @@ package communication.commands;
 
 import client.Client;
 import communication.Protocol;
-import communication.Protocol.Command;
-import communication.Protocol.Encoder;
 
-public class Terminate implements Command {
-
-    private static final String NAME = "Terminate";
+public class Loans implements Protocol.Command {
 
     @Override
     public void execute(Client client) {
@@ -15,22 +11,22 @@ public class Terminate implements Command {
     }
 
     @Override
-    public String encode(Encoder encoder) {
+    public String encode(Protocol.Encoder encoder) {
         return null;
     }
 
     @Override
-    public Command decode(String message) {
+    public Protocol.Command decode(String message) {
         return null;
     }
 
     @Override
     public String get_name() {
-        return Terminate.NAME;
+        return null;
     }
 
     @Override
-    public Command get_reponse() {
+    public Protocol.Command get_reponse() {
         return null;
     }
 }

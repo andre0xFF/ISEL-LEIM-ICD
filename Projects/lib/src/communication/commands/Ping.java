@@ -1,25 +1,26 @@
 package communication.commands;
 
 import client.Client;
+import communication.Protocol;
 import communication.Protocol.Command;
 import communication.Protocol.CommandEncoder;
 import communication.Protocol.Encoder;
 import communication.encoders.XML;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Ping implements Command {
 
-    private static final Object NAME = "ping";
+    private static final String NAME = "ping";
     HashMap<Class, CommandEncoder> encoders = new HashMap<Class, CommandEncoder>() {{
         put(XML.class, new XMLPing());
     }};
 
     @Override
     public void execute(Client client) {
-        Pong pong = new Pong();
-        pong.add(this.encoders);
-        client.send(pong);
+        client.send(new Pong());
     }
 
     @Override
@@ -30,6 +31,16 @@ public class Ping implements Command {
     @Override
     public Command decode(String message) {
         return Command.decode(this.encoders.values(), message);
+    }
+
+    @Override
+    public String get_name() {
+        return Ping.NAME;
+    }
+
+    @Override
+    public Command get_reponse() {
+        return new Pong();
     }
 
     private class XMLPing implements CommandEncoder {
@@ -43,7 +54,7 @@ public class Ping implements Command {
 
         @Override
         public Command decode(String message) {
-            return message.equals(this.FORMAT) ? new Ping() : null;
+            return message != null && message.equals(this.FORMAT) ? new Ping() : null;
         }
     }
 }
@@ -51,14 +62,12 @@ public class Ping implements Command {
 class Pong implements Command {
 
     private static final String NAME = "pong";
-    private HashMap<Class, CommandEncoder> encoders;
+    HashMap<Class, CommandEncoder> encoders = new HashMap<Class, CommandEncoder>() {{
+        put(XML.class, new XMLPong());
+    }};
 
     @Override
     public void execute(Client client) { }
-
-    protected void add(HashMap<Class, CommandEncoder> encoders) {
-        this.encoders = encoders;
-    }
 
     @Override
     public String encode(Encoder encoder) {
@@ -68,6 +77,16 @@ class Pong implements Command {
     @Override
     public Command decode(String message) {
         return Command.decode(this.encoders.values(), message);
+    }
+
+    @Override
+    public String get_name() {
+        return Pong.NAME;
+    }
+
+    @Override
+    public Command get_reponse() {
+        return null;
     }
 
     private class XMLPong implements CommandEncoder {
@@ -81,7 +100,7 @@ class Pong implements Command {
 
         @Override
         public Command decode(String message) {
-            return message.equals(this.FORMAT) ? new Pong() : null;
+            return message != null && message.equals(this.FORMAT) ? new Pong() : null;
         }
     }
 }

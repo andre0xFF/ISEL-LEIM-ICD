@@ -1,6 +1,7 @@
 package communication.commands;
 
 import client.Client;
+import communication.Protocol;
 import communication.Protocol.Command;
 import communication.Protocol.CommandEncoder;
 import communication.Protocol.Encoder;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 
 public class Hello implements Command {
 
-    private static final Object NAME = "hello";
+    private static final String NAME = "hello";
 
     private Encoder encoder;
     HashMap<Class, CommandEncoder> encoders = new HashMap<Class, CommandEncoder>() {{
@@ -32,6 +33,16 @@ public class Hello implements Command {
         return Command.decode(this.encoders.values(), message);
     }
 
+    @Override
+    public String get_name() {
+        return Hello.NAME;
+    }
+
+    @Override
+    public Command get_reponse() {
+        return null;
+    }
+
     public void set_encoder(Encoder encoder) {
         this.encoder = encoder;
     }
@@ -48,7 +59,7 @@ public class Hello implements Command {
 
         @Override
         public Command decode(String message) {
-            if (message.equals(this.FORMAT)) {
+            if (message != null && message.equals(this.FORMAT)) {
                 Hello hello = new Hello();
                 hello.set_encoder(new XML());
                 return hello;
