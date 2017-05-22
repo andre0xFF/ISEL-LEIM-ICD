@@ -1,5 +1,0 @@
-<periodic_transfers>
-    <periodic_transfer from_account="" to_account="" cron_schedule="@monthly">
-        <amount>100</amount>
-    </periodic_transfer>
-</periodic_transfers>
