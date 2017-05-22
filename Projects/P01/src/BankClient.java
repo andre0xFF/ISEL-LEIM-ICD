@@ -1,15 +1,17 @@
-import communication.BankCommunication;
+import client.Client;
+import communication.Command;
+import communication.Command.CommandEventHandler;
 import communication.Communication;
 import communication.commands.Hello;
+import communication.commands.Login;
 import communication.commands.Logout;
 import communication.commands.Ping;
-import server.Client;
 import server.Server;
 
 import java.io.IOException;
 import java.net.Socket;
 
-public class BankClient implements Client, Runnable {
+public class BankClient implements Client, Runnable, CommandEventHandler {
 
     private BankCommunication com = new BankCommunication();
     private boolean active;
@@ -27,11 +29,17 @@ public class BankClient implements Client, Runnable {
         this.com.send(new Hello());
         this.com.send(new Ping());
 
+        Login login = new Login("Ex01", "qazwsx");
+        this.com.send(login);
+
         while (this.check()) {
-            Communication.Command command = this.com.receive();
+            Command command = this.com.receive();
 
             if (command != null) {
-                command.execute(this);
+                command.execute((CommandEventHandler) this);
+
+                String log = String.format("%s > %s", "Client", command.get_name());
+                System.out.println(log);
             }
         }
 
@@ -60,5 +68,15 @@ public class BankClient implements Client, Runnable {
     @Override
     public Communication get_communication() {
         return this.com;
+    }
+
+    @Override
+    public void on_login_success() {
+
+    }
+
+    @Override
+    public void on_login_denied() {
+
     }
 }

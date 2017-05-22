@@ -12,7 +12,9 @@ public class BankGate implements Server.Gate, Runnable {
     @Override
     public void handle(Socket client) {
         BankWorker worker = new BankWorker();
-        worker.execute(client);
+        BankCommunication com = new BankCommunication();
+        com.execute(client);
+        worker.execute(com);
         this.server.register(worker);
     }
 
@@ -28,12 +30,15 @@ public class BankGate implements Server.Gate, Runnable {
 
     @Override
     public void run() {
-        System.out.println("Hello this is BankGate");
+        System.out.println("BankGate > Online");
+
         while(this.server.check()) {
             try {
                 Socket client = this.socket.accept();
                 this.handle(client);
             } catch (IOException e) { }
         }
+
+        System.out.println("BankGate > Offline");
     }
 }

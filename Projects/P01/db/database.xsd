@@ -134,7 +134,7 @@
 <xs:complexType name="user_schema">
     <xs:attribute name="id" type="xs:ID" use="required"/>
     <xs:attribute name="user_type" type="user_type" use="required"/>
-    <xs:attribute name="login" type="xs:string" use="required"/>
+    <xs:attribute name="username" type="xs:string" use="required"/>
     <xs:attribute name="password" type="xs:string" use="required"/>
 </xs:complexType>
 

@@ -1,14 +1,9 @@
 package communication;
 
-import communication.commands.Hello;
-import communication.commands.Ping;
 import communication.encoders.XML;
-import server.Client;
-import server.Server.Worker;
 
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public interface Communication {
@@ -28,40 +23,11 @@ public interface Communication {
         }
 
         ArrayList<Command> commands = Command.get();
-        Communication.Encoder encoder = new XML();
+        Encoder encoder = new XML();
         encoder.set(commands);
         com.set_encoder(encoder);
 
         return true;
-    }
-
-    interface Command {
-
-        void execute(Worker worker);
-        void execute(Client client);
-        String encode(Encoder encoder);
-        String get_name();
-        Command decode(String message);
-        Command get_response();
-
-        static Command decode(Collection<CommandEncoder> cmd_encoders, String message) {
-            for (CommandEncoder cmd_encoder : cmd_encoders) {
-                Command match = cmd_encoder.decode(message);
-
-                if (match != null) {
-                    return match;
-                }
-            }
-
-            return null;
-        }
-
-        static ArrayList<Command> get() {
-            return new ArrayList<Command>() {{
-                add(new Hello());
-                add(new Ping());
-            }};
-        }
     }
 
     interface Encoder {
@@ -80,13 +46,12 @@ public interface Communication {
                     return match;
                 }
 
-                Command response = command.get_response();
+                ArrayList<Command> responses = command.get_responses();
 
-                if (response == null) {
+                if (responses == null) {
                     continue;
                 }
 
-                List responses = new ArrayList<Command>() {{ add(response); }};
                 match = Encoder.decode(responses, message);
 
                 if (match != null) {
@@ -96,10 +61,5 @@ public interface Communication {
 
             return null;
         }
-    }
-
-    interface CommandEncoder {
-        String encode(Command command);
-        Command decode(String message);
     }
 }

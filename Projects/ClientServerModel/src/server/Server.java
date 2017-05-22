@@ -10,7 +10,7 @@ public interface Server {
     boolean check();
     void terminate();
 
-    void execute();
+    void execute(Database database);
     void register(Worker worker);
 
     interface Gate {
@@ -20,10 +20,12 @@ public interface Server {
     }
 
     interface Worker {
-        void execute(Socket socket);
+        void execute(Communication com);
+        void attach(Database database);
         void terminate();
         boolean check();
         Communication get_communication();
+        Database get_database();
     }
 
 }

@@ -52,9 +52,9 @@
 </employees>
 
 <users>
-    <user id="u_1" user_type="employee" login="Ex01" password="qazwsx"/>
-    <user id="u_2" user_type="client" login="Cx02" password="qazwsx"/>
-    <user id="u_3" user_type="client" login="Cx0F" password="qazwsx"/>
+    <user id="u_1" user_type="employee" username="Ex01" password="qazwsx"/>
+    <user id="u_2" user_type="client" username="Cx02" password="qazwsx"/>
+    <user id="u_3" user_type="client" username="Cx0F" password="qazwsx"/>
 </users>
 
 <loans>

@@ -1,18 +1,16 @@
 package communication.commands;
 
+import client.Client;
+import communication.Command;
 import communication.Communication;
-import communication.Communication.Command;
-import communication.Communication.CommandEncoder;
 import communication.Communication.Encoder;
 import communication.encoders.XML;
-import server.Client;
 import server.Server.Worker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Hello implements Command {
-
-    private static final String NAME = "hello";
 
     private Encoder encoder;
     HashMap<Class, CommandEncoder> encoders = new HashMap<Class, CommandEncoder>() {{
@@ -23,7 +21,7 @@ public class Hello implements Command {
     public void execute(Worker client) {
         Communication com = client.get_communication();
         com.set_encoder(this.encoder);
-        com.send(new Ok());
+        com.send(new LoginSuccess());
     }
 
     @Override
@@ -43,11 +41,11 @@ public class Hello implements Command {
 
     @Override
     public String get_name() {
-        return Hello.NAME;
+        return "hello";
     }
 
     @Override
-    public Command get_response() {
+    public ArrayList<Command> get_responses() {
         return null;
     }
 
@@ -58,22 +56,26 @@ public class Hello implements Command {
 
     private class XMLHello implements CommandEncoder {
 
-        private final String FORMAT = String.format("<%s/>", Hello.NAME);
-
         @Override
         public String encode(Command command) {
-            return this.FORMAT;
+            Hello hello = (Hello) command;
+            return String.format(this.get_format(), hello.get_name());
         }
 
         @Override
         public Command decode(String message) {
-            if (message != null && message.equals(this.FORMAT)) {
+            if (message != null && message.contains("hello")) {
                 Hello hello = new Hello();
                 hello.set_encoder(new XML());
                 return hello;
             }
 
             return null;
+        }
+
+        @Override
+        public String get_format() {
+            return "<%s/>";
         }
     }
 }

@@ -1,10 +1,13 @@
-package communication.commands;
+package commands;
 
-import communication.Communication;
-import server.Client;
+import client.Client;
+import communication.Command;
+import communication.Communication.Encoder;
 import server.Server.Worker;
 
-public class Ok implements Communication.Command {
+import java.util.ArrayList;
+
+public class Activity implements Command {
 
     @Override
     public void execute(Worker client) {
@@ -17,12 +20,12 @@ public class Ok implements Communication.Command {
     }
 
     @Override
-    public String encode(Communication.Encoder encoder) {
+    public String encode(Encoder encoder) {
         return null;
     }
 
     @Override
-    public Communication.Command decode(String message) {
+    public Command decode(String message) {
         return null;
     }
 
@@ -32,7 +35,7 @@ public class Ok implements Communication.Command {
     }
 
     @Override
-    public Communication.Command get_response() {
+    public ArrayList<Command> get_responses() {
         return null;
     }
 }

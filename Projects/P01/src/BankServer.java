@@ -1,17 +1,21 @@
+import server.Database;
 import server.Server;
 
 import java.util.ArrayList;
 
-public class BankServer implements Server {
+public class BankServer implements Server, Runnable {
 
     public static void main(String[] args) {
         BankGate gate = new BankGate();
         BankServer server = new BankServer();
+        BankDatabase db = new BankDatabase();
 
+        db.execute("P01/db/database.xml", "P01/db/database.xsd");
+        server.execute(db);
         gate.execute(server, Gate.DEFAULT_PORT);
-        server.execute();
     }
 
+    private Database db;
     private ArrayList<Worker> workers = new ArrayList<>();
     private boolean active;
 
@@ -30,8 +34,27 @@ public class BankServer implements Server {
     }
 
     @Override
-    public void execute() {
+    public void execute(Database db) {
         this.active = true;
+        boolean check = db.check();
+
+        if (!check) {
+            return;
+        }
+
+        this.db = db;
+        new Thread(this).start();
+    }
+
+    @Override
+    public void register(Worker worker) {
+        worker.attach(this.db);
+        this.workers.add(worker);
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Server > Online");
 
         while(this.check()) {
             for (int i = 0; i < this.workers.size(); i++) {
@@ -48,10 +71,7 @@ public class BankServer implements Server {
                 Thread.sleep(1000);
             } catch (InterruptedException e) { }
         }
-    }
 
-    @Override
-    public void register(Worker worker) {
-        this.workers.add(worker);
+        System.out.println("BankServer > Offline");
     }
 }

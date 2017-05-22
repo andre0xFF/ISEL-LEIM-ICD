@@ -1,3 +1,5 @@
+package lib;
+
 import javax.xml.XMLConstants;
 import javax.xml.parsers.*;
 import javax.xml.transform.dom.DOMSource;
@@ -15,7 +17,8 @@ import org.w3c.dom.*;
 import java.io.*;
 
 /* load & save */
-import org.w3c.dom.ls.*; 
+import org.w3c.dom.ls.*;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /* XML Transformation */
@@ -40,12 +43,12 @@ final public class XMLDoc {
 
 	/**
 	 * Devolve lista de n�s gerada pela express�o xPath indicada
-	 * 
+	 *
 	 * @param expression
 	 *            xpath
 	 * @param doc
 	 *            raiz do documento XML
-	 * @return 
+	 * @return
 	 * 			lista de n�s
 	 */
 	public static final NodeList getXPath(final String expression, final Document doc) {
@@ -64,11 +67,11 @@ final public class XMLDoc {
 
 	/**
 	 * Executa uma express�o XPath numa arvore DOM e devolve o 1� string (valor)
-	 * 
+	 *
 	 * @param expression
 	 * @param doc
 	 * @return string que � o valor do n� encontrado
-	 * 
+	 *
 	 */
 	public static final String getXPathV(final String expression, final Document doc) {
 		NodeList aux = getXPath(expression, doc);
@@ -80,42 +83,55 @@ final public class XMLDoc {
 			return aux.item(0).getNodeValue();
 	}
 
+	public static final String getXPathV(String expression, String xml) {
+		XPathFactory xpathFactory = XPathFactory.newInstance();
+		XPath xpath = xpathFactory.newXPath();
+		InputSource source = new InputSource(new StringReader(xml));
+		try {
+			Document doc = (Document) xpath.evaluate("/", source, XPathConstants.NODE);
+			return xpath.evaluate(expression, doc);
+		} catch (XPathExpressionException e) {
+			return null;
+		}
+	}
+
 	/** Parses XML file and returns XML document.
-     * @param fileName XML file to parse
-     * @return XML document or <B>null</B> if error occured
-     */
+	 * @param fileName XML file to parse
+	 * @return XML document or <B>null</B> if error occured
+	 */
 	public static final Document parseFile(final String fileName) {
-        DocumentBuilder docBuilder;
-        Document doc = null;
-        DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        docBuilderFactory.setIgnoringElementContentWhitespace(true);
-        try {
-            docBuilder = docBuilderFactory.newDocumentBuilder();
-        }
-        catch (ParserConfigurationException e) {
-            System.out.println("Wrong parser configuration: " + e.getMessage());
-            return null;
-        }
-        File sourceFile = new File(fileName);
-        try {
-            doc = docBuilder.parse(sourceFile);
-        }
-        catch (SAXException e) {
-            System.out.println("Wrong XML file structure: " + e.getMessage());
-            return null;
-        }
-        catch (IOException e) {
-            System.out.println("Could not read source file: " + e.getMessage());
-        }
-        return doc;
-    }
-    
-	
+		DocumentBuilder docBuilder;
+		Document doc = null;
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		docBuilderFactory.setIgnoringElementContentWhitespace(true);
+		try {
+			docBuilder = docBuilderFactory.newDocumentBuilder();
+		}
+		catch (ParserConfigurationException e) {
+			System.out.println("Wrong parser configuration: " + e.getMessage());
+			return null;
+		}
+		File sourceFile = new File(fileName);
+		try {
+			doc = docBuilder.parse(sourceFile);
+		}
+		catch (SAXException e) {
+			System.out.println("Wrong XML file structure: " + e.getMessage());
+			return null;
+		}
+		catch (IOException e) {
+			System.out.println("Could not read source file: " + e.getMessage());
+			return null;
+		}
+		return doc;
+	}
+
+
 	/**
 	 * @param DOMtree arvore DOM
 	 * @param targetFileName ficheiro usado para escrita
 	 */
-    public static final void StartSerialization(final Document DOMtree, final String targetFileName) {
+	public static final void StartSerialization(final Document DOMtree, final String targetFileName) {
 		/*
 		 * demonstra��o da funcionalidade save da arvore DOM alternativa ao uso
 		 * da transforma��o vazia
@@ -170,7 +186,7 @@ final public class XMLDoc {
 
 	/**
 	 * Escreve arvore DOM num ficheiro
-	 * 
+	 *
 	 * @param input arvore DOM
 	 * @param output ficheiro usado para escrita
 	 */
@@ -208,7 +224,7 @@ final public class XMLDoc {
 			else
 				transformer
 						.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
-			
+
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 			try {
@@ -228,7 +244,7 @@ final public class XMLDoc {
 	 * @param targetFileName documento gerado
 	 */
 	public static final void transfDoc(String xmlFileName, String xsltFileName,
-			String targetFileName) {
+									   String targetFileName) {
 
 		/*
 		 * System.setProperty("javax.xml.transform.TransformerFactory",
@@ -258,11 +274,11 @@ final public class XMLDoc {
 	}
 
 	public static final boolean validDocDTD(String xmlFileName, String vFileName) {
-		return validDoc(xmlFileName, xmlFileName, XMLConstants.XML_DTD_NS_URI);
+		return validDoc(xmlFileName, vFileName, XMLConstants.XML_DTD_NS_URI);
 	}
 
 	public static final boolean validDocXSD(String xmlFileName, String vFileName) {
-		return validDoc(xmlFileName, xmlFileName,
+		return validDoc(xmlFileName, vFileName,
 				XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	}
 
@@ -274,7 +290,8 @@ final public class XMLDoc {
 	 * @return
 	 */
 	private static final boolean validDoc(String xmlFileName, String vFileName,
-			String type) {
+										  String type) {
+		//System.out.println("Processo xml ("+xmlFileName+") e xsd ("+vFileName+")");
 		Source xmlFile = new StreamSource(new File(xmlFileName));
 		SchemaFactory schemaFactory = SchemaFactory.newInstance(type);
 		Schema schema = null;
@@ -282,6 +299,7 @@ final public class XMLDoc {
 			schema = schemaFactory.newSchema(new File(vFileName));
 		} catch (SAXException e1) {
 			e1.printStackTrace();
+			System.out.println("Erro no acesso ao ficheiro"+vFileName);
 			return false;
 		}
 		Validator validator = schema.newValidator();
@@ -304,7 +322,7 @@ final public class XMLDoc {
 	/**
 	 * Valida��o de documento na �rvore DOM, com XSD ou DTD conforme o indicado no parametro type
 	 * @param document
-	 * @param xsdFileName 
+	 * @param xsdFileName
 	 * @param type XMLConstants.W3C_XML_SCHEMA_NS_URI ou XMLConstants.XML_DTD_NS_URI
 	 * @return sucesso/insucesso
 	 * @throws SAXException
@@ -320,47 +338,16 @@ final public class XMLDoc {
 
 		// create a Validator instance, which can be used to validate an instance document
 		Validator validator = schema.newValidator();
-		
+
 
 		// validate the DOM tree
 		try {
-		    validator.validate(new DOMSource(document));
-		    return true;
+			validator.validate(new DOMSource(document));
+			return true;
 		} catch (IOException e) {
-		    // instance document is invalid!
+			// instance document is invalid!
 			return false;
 		}
-	}
-	
-	public static void main(String[] args) {
-
-		/* String contexto = "WebContent\\xml";
-
-		String xmlFileName = contexto + "exemplo.xml";
-		String xsdFileName = contexto + "exemplo.xsd";
-		String dtdFileName = contexto + "exemplo.dtd";
-
-		String xsltHTMFileName = contexto + "exemplo.xsl";
-
-		String targetFileName = contexto + "save.xml";
-		String HTMFileName = contexto + "exemplo.htm"; */
-
-		
-		
-		/*
-		if (validDocXSD(xmlFileName, xsdFileName))
-			System.out.println("Valida��o com XSD realizada com sucesso!");
-		else
-			System.out.println("Falhou a valida��o com XSD ("+xsdFileName+")!");
-
-		if (validDocDTD(xmlFileName, dtdFileName))
-			System.out.println("Valida��o com DTD realizada com sucesso!");
-		else
-			System.out.println("Falhou a valida��o com DTD ("+xsdFileName+")!");
-
-		transfDoc(xmlFileName, xsltHTMFileName, HTMFileName);
-		*/
-		
 	}
 
 }

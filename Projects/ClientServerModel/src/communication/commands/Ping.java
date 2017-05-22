@@ -1,13 +1,12 @@
 package communication.commands;
 
-import communication.Communication;
-import communication.Communication.Command;
-import communication.Communication.CommandEncoder;
+import client.Client;
+import communication.Command;
 import communication.Communication.Encoder;
 import communication.encoders.XML;
-import server.Client;
 import server.Server.Worker;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Ping implements Command {
@@ -19,17 +18,16 @@ public class Ping implements Command {
 
     @Override
     public void execute(Worker worker) {
-        System.out.println("Ping!");
-        Communication com = worker.get_communication();
-        com.send(new Pong());
+        worker.get_communication().send(new Pong());
     }
 
     @Override
     public void execute(Client client) {
-        System.out.println("Ping!");
-        Communication com = client.get_communication();
-        com.send(new Pong());
+        client.get_communication().send(new Pong());
     }
+
+    @Override
+    public void execute(CommandEventHandler event_handler) { }
 
     @Override
     public String encode(Encoder encoder) {
@@ -47,22 +45,27 @@ public class Ping implements Command {
     }
 
     @Override
-    public Command get_response() {
-        return new Pong();
+    public ArrayList<Command> get_responses() {
+        return new ArrayList<Command>() {{
+            add(new Pong());
+        }};
     }
 
     private class XMLPing implements CommandEncoder {
 
-        private final String FORMAT = String.format("<%s/>", Ping.NAME);
-
         @Override
         public String encode(Command command) {
-            return this.FORMAT;
+            return String.format(this.get_format(), Ping.NAME);
         }
 
         @Override
         public Command decode(String message) {
-            return message != null && message.equals(this.FORMAT) ? new Ping() : null;
+            return message != null && message.contains("ping") ? new Ping() : null;
+        }
+
+        @Override
+        public String get_format() {
+            return "<%s/>";
         }
     }
 }
@@ -75,14 +78,13 @@ class Pong implements Command {
     }};
 
     @Override
-    public void execute(Worker worker) {
-        System.out.println("Pong.");
-    }
+    public void execute(Worker worker) { }
 
     @Override
-    public void execute(Client client) {
-        System.out.println("Pong.");
-    }
+    public void execute(Client client) { }
+
+    @Override
+    public void execute(CommandEventHandler event_handler) { }
 
     @Override
     public String encode(Encoder encoder) {
@@ -100,22 +102,26 @@ class Pong implements Command {
     }
 
     @Override
-    public Command get_response() {
+    public ArrayList<Command> get_responses() {
         return null;
     }
 
     private class XMLPong implements CommandEncoder {
 
-        private final String FORMAT = String.format("<%s/>", Pong.NAME);
-
         @Override
         public String encode(Command command) {
-            return this.FORMAT;
+            Pong pong = (Pong) command;
+            return String.format(this.get_format(), pong.get_name());
         }
 
         @Override
         public Command decode(String message) {
-            return message != null && message.equals(this.FORMAT) ? new Pong() : null;
+            return message != null && message.contains("pong") ? new Pong() : null;
+        }
+
+        @Override
+        public String get_format() {
+            return "<%s/>";
         }
     }
 }

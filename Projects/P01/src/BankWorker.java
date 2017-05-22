@@ -1,5 +1,5 @@
-import communication.BankCommunication;
 import communication.Communication;
+import server.Database;
 import server.Server;
 import server.Server.Worker;
 
@@ -9,12 +9,16 @@ import java.net.Socket;
 public class BankWorker implements Worker, Runnable {
 
     private boolean active;
-    private BankCommunication com = new BankCommunication();
+    private Database db;
+    private Communication com;
 
     public static void main(String[] args) {
         BankWorker worker = new BankWorker();
+
         try {
-            worker.execute(new Socket("127.0.0.1", Server.Gate.DEFAULT_PORT));
+            BankCommunication com = new BankCommunication();
+            com.execute(new Socket("127.0.0.1", Server.Gate.DEFAULT_PORT));
+            worker.execute(com);
         } catch (IOException e) { }
     }
 
@@ -25,6 +29,9 @@ public class BankWorker implements Worker, Runnable {
 
             if (command != null) {
                 command.execute(this);
+
+                String log = String.format("%s > %s", "Worker", command.get_name());
+                System.out.println(log);
             }
         }
 
@@ -32,10 +39,15 @@ public class BankWorker implements Worker, Runnable {
     }
 
     @Override
-    public void execute(Socket socket) {
-        this.com.execute(socket);
+    public void execute(Communication com) {
+        this.com = com;
         this.active = true;
         new Thread(this).start();
+    }
+
+    @Override
+    public void attach(Database database) {
+        this.db = database;
     }
 
     @Override
@@ -52,5 +64,10 @@ public class BankWorker implements Worker, Runnable {
     @Override
     public Communication get_communication() {
         return this.com;
+    }
+
+    @Override
+    public Database get_database() {
+        return this.db;
     }
 }
