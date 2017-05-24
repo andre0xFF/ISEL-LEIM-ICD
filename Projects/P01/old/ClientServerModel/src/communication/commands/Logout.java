@@ -1,21 +1,32 @@
 package communication.commands;
 
 import communication.Command;
+import communication.Communication;
 import communication.Communication.Encoder;
 import client.Client;
+import server.Server;
 import server.Server.Worker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
-public class Logout implements Command {
+public class Logout extends Command {
+
 
     @Override
     public void execute(Worker worker) {
-        worker.terminate();
+
     }
 
     @Override
-    public void execute(Client client) { }
+    public void execute(Client client) {
+
+    }
+
+    @Override
+    public void execute(CommandEventHandler event_handler) {
+
+    }
 
     @Override
     public String encode(Encoder encoder) {
@@ -23,13 +34,13 @@ public class Logout implements Command {
     }
 
     @Override
-    public Command decode(String message) {
-        return null;
+    public String get_name() {
+        return "logout";
     }
 
     @Override
-    public String get_name() {
-        return "logout";
+    public Collection<CommandEncoder> get_command_encoders() {
+        return null;
     }
 
     @Override
