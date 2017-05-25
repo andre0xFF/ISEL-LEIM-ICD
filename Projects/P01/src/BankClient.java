@@ -7,8 +7,7 @@ class BankClient extends Client {
 
     public BankClient() throws IOException {
         super(
-                new BankProtocol(new Socket("127.0.0.1", 5555))
-        );
+                new BankProtocol(new Socket("127.0.0.1", 5555)));
     }
 
     @Override

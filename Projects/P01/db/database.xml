@@ -1,7 +1,7 @@
 <!-- Data -->
-<database
-    xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
-    xs:schemaLocation="http://prometheus.lv223.xyz accounts.xsd">
+<data
+        xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"
+        xs:schemaLocation="http://prometheus.lv223.xyz database.xsd">
 
 <accounts>
     <account id="a_1" account_type="on_demand" pin="1234">
@@ -92,4 +92,4 @@
     <periodic_transfer id="pt_1" client="c_1" from_account="a_1" to_account="a_2" cron_schedule="@monthly" amount="1000"/>
 </periodic_transfers>
 
-</database>
+</data>

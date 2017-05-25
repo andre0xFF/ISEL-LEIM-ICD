@@ -1,11 +1,12 @@
-import protocol.Encoder;
+import database.Database;
+import protocol.Encoding;
 import protocol.Protocol;
 import server.Worker;
 
-public class BankWorker extends Worker {
+public final class BankWorker extends Worker {
 
-    public BankWorker(Protocol protocol) {
-        super(protocol, new Encoder.XML());
+    public BankWorker(Protocol protocol, Database database) {
+        super(protocol, new Encoding.XML(), database);
     }
 
     @Override

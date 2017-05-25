@@ -1,9 +1,9 @@
 package client;
 
 import commands.Command;
-import commands.Hello;
+import commands.Login;
 import commands.Ping;
-import protocol.Encoder;
+import protocol.Encoding;
 import protocol.Endpoint;
 import protocol.Protocol;
 
@@ -12,21 +12,21 @@ public abstract class Client extends Endpoint implements
         Command.ClientCommandHandler {
 
 
-    private final Encoder encoder;
+    private final Encoding encoder;
 
     public Client(Protocol protocol) {
         super(protocol);
-        this.encoder = new Encoder.XML();
+        this.encoder = new Encoding.XML();
 
-        // Send Hello command so that the server knowns
-        // which encoding to use
-        super.send(new Hello());
-        super.send(new Ping());
+//        super.send(new Ping());
+        super.send(new Login("xpto", "pass"));
+        super.send(new Login.Logout("xpto"));
     }
 
     @Override
     protected Command[] commands() {
         return new Command[] {
+                new Login(null, null),
                 new Ping(),
         };
     }
@@ -38,7 +38,7 @@ public abstract class Client extends Endpoint implements
     }
 
     @Override
-    protected Encoder encoder() {
+    protected Encoding encoder() {
         return this.encoder;
     }
 

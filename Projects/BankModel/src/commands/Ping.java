@@ -1,31 +1,23 @@
 package commands;
 
-import protocol.Encoder;
-import protocol.Encoder.Encoding;
+import java.util.HashMap;
 
-public class Ping extends Command {
-
-    @Override
-    protected Encoding[] encodings() {
-        return new Encoding[] {
-                new XMLPing(),
-        };
-    }
+public final class Ping extends Command {
 
     @Override
-    public Command response() {
-        return new Pong();
+    public Command[] responses() {
+        return new Pong[]{ new Pong() };
     }
 
     @Override
     public void execute(ClientCommandHandler client) {
-        client.send(this.response());
+        client.send(new Pong());
         System.out.println("Client: Ping!");
     }
 
     @Override
     public void execute(ServerCommandHandler server) {
-        server.send(this.response());
+        server.send(new Pong());
         System.out.println("Server: Ping!");
     }
 
@@ -34,70 +26,46 @@ public class Ping extends Command {
         return "Ping";
     }
 
-    class XMLPing implements Encoding {
-
-
-        @Override
-        public String encode(Command command) {
-            return "<ping/>";
-        }
-
-        @Override
-        public Encoder encoder() {
-            return new Encoder.XML();
-        }
-
-        @Override
-        public Command command() {
-            return new Ping();
-        }
-    }
-}
-
-class Pong extends Command {
-
     @Override
-    protected Encoding[] encodings() {
-        return new Encoding[] {
-                new XMLPong(),
-        };
-    }
-
-    @Override
-    protected Command response() {
+    public HashMap<String, String> attributes() {
         return null;
     }
 
     @Override
-    public void execute(ClientCommandHandler client) {
-        System.out.println("Client: Pong.");
+    public void attributes(HashMap<String, String> attributes) {
+        return;
     }
 
-    @Override
-    public void execute(ServerCommandHandler server) {
-        System.out.println("Server: Pong.");
-    }
-
-    @Override
-    public String name() {
-        return "Pong";
-    }
-
-    class XMLPong implements Encoding {
+    private final class Pong extends Command {
 
         @Override
-        public String encode(Command command) {
-            return "<pong/>";
+        public Command[] responses() {
+            return null;
         }
 
         @Override
-        public Encoder encoder() {
-            return new Encoder.XML();
+        public void execute(ClientCommandHandler client) {
+            System.out.println("Client: Pong.");
         }
 
         @Override
-        public Command command() {
-            return new Pong();
+        public void execute(ServerCommandHandler server) {
+            System.out.println("Server: Pong.");
+        }
+
+        @Override
+        public String name() {
+            return "Pong";
+        }
+
+        @Override
+        public HashMap<String, String> attributes() {
+            return null;
+        }
+
+        @Override
+        public void attributes(HashMap<String, String> attributes) {
+            return;
         }
     }
 }

@@ -30,7 +30,7 @@
 </xs:complexType>
 
 <!-- Containers -->
-<xs:element name="database">
+<xs:element name="data">
     <xs:complexType>
         <xs:all>
             <xs:element name="accounts" type="account_container"/>

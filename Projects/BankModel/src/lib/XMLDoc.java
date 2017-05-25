@@ -1,7 +1,11 @@
 package lib;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import javax.xml.XMLConstants;
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -11,15 +15,13 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.*;
-
 import java.io.*;
 
 /* load & save */
 import org.w3c.dom.ls.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
 
 /* XML Transformation */
 import javax.xml.transform.Transformer;
@@ -51,8 +53,8 @@ final public class XMLDoc {
 	 * @return
 	 * 			lista de n�s
 	 */
-	public static final NodeList getXPath(final String expression, final Document doc) {
 
+	public static final NodeList getXPath(final String expression, final Document doc) {
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes;
 		try {
@@ -61,6 +63,34 @@ final public class XMLDoc {
 			return nodes;
 		} catch (XPathExpressionException e) {
 			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static NodeList getXPath(String xml_string, String expression) {
+		Document doc = XMLDoc.parseFile(xml_string);
+		XPathFactory xpathFactory = XPathFactory.newInstance();
+		XPath xpath = xpathFactory.newXPath();
+
+		try {
+			NodeList result = (NodeList) xpath.evaluate(xml_string, doc, XPathConstants.NODESET);
+			return result;
+
+		} catch (XPathExpressionException e) {
+			return null;
+		}
+
+	}
+
+	public static Document parseString(String xml_string) {
+		try {
+			XPathFactory xpathFactory = XPathFactory.newInstance();
+			XPath xpath = xpathFactory.newXPath();
+			InputSource source = new InputSource(new StringReader(xml_string));
+			Document doc = (Document) xpath.evaluate("/", source, XPathConstants.NODE);
+			return doc;
+
+		} catch (XPathExpressionException e) {
 			return null;
 		}
 	}
@@ -80,19 +110,7 @@ final public class XMLDoc {
 		else if (aux.item(0) == null)
 			return null;
 		else
-			return aux.item(0).getNodeValue();
-	}
-
-	public static final String getXPathV(String expression, String xml) {
-		XPathFactory xpathFactory = XPathFactory.newInstance();
-		XPath xpath = xpathFactory.newXPath();
-		InputSource source = new InputSource(new StringReader(xml));
-		try {
-			Document doc = (Document) xpath.evaluate("/", source, XPathConstants.NODE);
-			return xpath.evaluate(expression, doc);
-		} catch (XPathExpressionException e) {
-			return null;
-		}
+			return aux.item(0).getTextContent();
 	}
 
 	/** Parses XML file and returns XML document.
@@ -121,7 +139,6 @@ final public class XMLDoc {
 		}
 		catch (IOException e) {
 			System.out.println("Could not read source file: " + e.getMessage());
-			return null;
 		}
 		return doc;
 	}
@@ -223,7 +240,7 @@ final public class XMLDoc {
 						input.getXmlEncoding());
 			else
 				transformer
-						.setOutputProperty(OutputKeys.ENCODING, "ISO-8859-1");
+						.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
@@ -348,6 +365,17 @@ final public class XMLDoc {
 			// instance document is invalid!
 			return false;
 		}
+	}
+
+	public static final String ListarFicheiros(String pasta) {
+		String result = "<?xml version='1.0' encoding='ISO-8859-1' standalone='yes'?>\n";
+		result = result + "<ficheiros>\n";
+		File folder = new File(pasta);
+		File[] listOfFiles = folder.listFiles();
+		for (int i = 0; i < listOfFiles.length; i++)
+			if (listOfFiles[i].isFile())
+				result = result + "<ficheiro>" + listOfFiles[i].getName() + "</ficheiro>\n";
+		return result + "</ficheiros>\n";
 	}
 
 }

@@ -1,10 +1,10 @@
 package server;
 
 import commands.Command;
-import commands.Hello;
-import commands.Logout;
+import commands.Login;
 import commands.Ping;
-import protocol.Encoder;
+import database.Database;
+import protocol.Encoding;
 import protocol.Endpoint;
 import protocol.Protocol;
 
@@ -12,19 +12,21 @@ public abstract class Worker extends Endpoint implements
         Command.CommonCommandHandler,
         Command.ServerCommandHandler {
 
-    private Encoder encoder;
+    private Encoding encoder;
+    private Database database;
 
-    public Worker(Protocol protocol, Encoder encoder) {
+    public Worker(Protocol protocol, Encoding encoder, Database database) {
         super(protocol);
         this.encoder = encoder;
+        this.database = database;
     }
 
     @Override
     protected Command[] commands() {
         return new Command[] {
-                new Hello(),
                 new Ping(),
-                new Logout(),
+                new Login(null, null),
+                new Login.Logout(null),
         };
     }
 
@@ -34,12 +36,12 @@ public abstract class Worker extends Endpoint implements
     }
 
     @Override
-    protected Encoder encoder() {
+    protected Encoding encoder() {
         return this.encoder;
     }
 
     @Override
-    public void on_hello(Encoder encoder) {
+    public void on_hello(Encoding encoder) {
         this.encoder = encoder;
     }
 }

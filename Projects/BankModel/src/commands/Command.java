@@ -1,69 +1,44 @@
 package commands;
 
-import protocol.Encoder;
-import protocol.Encoder.Encoding;
+import protocol.Encoding;
 
-public abstract class Command {
+import java.util.HashMap;
 
-    protected abstract Encoding[] encodings();
-    protected abstract Command response();
+public abstract class Command implements Encoding.Encoder {
+
+    public abstract String name();
+    public abstract Command[] responses();
     public abstract void execute(ClientCommandHandler client);
     public abstract void execute(ServerCommandHandler worker);
-    public abstract String name();
 
-    public String encode(Encoder encoder) {
-        Encoding encoding = this.parse(encoder);
+    public static void main(String[] args) {
+        Login a = new Login("xpto", "cool");
+        Encoding encoding = new Encoding.XML();
+        String m = encoding.encode(a.name(), a.attributes());
 
-        if (encoding != null) {
-            return encoding.encode(this);
-        }
+        HashMap<String, String> t = encoding.decode(a.name(), m);
+        Login b = new Login(null, null);
+        b.attributes(t);
 
-        // The command does not contain the specified encoding
-        return null;
+        String wrap = encoding.wrap("command", a.name(), m);
+        String unwrap = encoding.unwrap("command", wrap);
+
+        new Login(null).search("ok");
     }
 
-    public Command decode(String encoded_command, Encoder encoder) {
-        Encoding encoding = this.parse(encoder);
-
-        if (encoding != null) {
-            return encoding.decode(encoded_command);
+    public Command search(String command_name) {
+        if (this.name().equals(command_name)) {
+            return this;
         }
 
-        return null;
-    }
+        Command[] responses = this.responses();
 
-    private Encoding parse(Encoder encoder) {
-        // Loop all encodings to find an encoder match
-        for (Encoding encoding : this.encodings()) {
-            if (encoding.encoder().equals(encoder)) {
-                return encoding;
+        if (responses != null) {
+            for (Command response : responses) {
+                return response.search(command_name);
             }
         }
 
-        return null;
-    }
-
-    public Command decode(String encoded_command) {
-        // Loop all command's encodings to see if any can
-        // decode the message
-        for (Encoding encoding : this.encodings()) {
-            Command command = encoding.decode(encoded_command);
-
-            if (command != null) {
-                return command;
-            }
-        }
-
-        // The message was not decode, then do the same
-        // recursively for all possible responses
-        Command response = this.response();
-
-        if (response != null) {
-            return response.decode(encoded_command);
-        }
-
-        // The command nor the command's response were
-        // able to decode the message
         return null;
     }
 
@@ -84,7 +59,7 @@ public abstract class Command {
 
     public interface ServerCommandHandler {
 
-        void on_hello(Encoder encoder);
+        void on_hello(Encoding encoder);
         void on_login_request();
         void on_logout_request();
         void send(Command command);
