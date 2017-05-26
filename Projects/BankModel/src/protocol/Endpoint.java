@@ -1,13 +1,14 @@
 package protocol;
 
-import commands.Command;
+import protocol.Protocol.Encoding;
+import protocol.encodings.XML;
 
 import java.util.HashMap;
 
 public abstract class Endpoint implements Command.CommonCommandHandler, Protocol.ProtocolHandler {
 
     private Protocol protocol;
-    private Encoding encoding = new Encoding.XML();
+    private Encoding encoding = new XML();
     protected abstract Command[] commands();
     protected abstract Encoding encoder();
 
@@ -29,27 +30,57 @@ public abstract class Endpoint implements Command.CommonCommandHandler, Protocol
         this.protocol.send(message);
     }
 
+    public void send(Command.Response response) {
+        String message = this.encode(response);
+        this.protocol.send(message);
+    }
+
     private String encode(Command command) {
         String name = command.name();
-        String message = this.encoding.encode(name, command.attributes());
-        String wrapped_message = this.encoding.wrap("command", name, message);
 
-        // Wrap the command encoding with command element
-        return String.format("<command name=\"%s\">%s</command>", name, message);
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("name", name);
+
+        String sub_element = this.encoding.encode(name, command.attributes());
+        String message = this.encoding.encode("command", attributes, sub_element);
+
+        return message;
+    }
+
+    private String encode(Command.Response response) {
+        String name = response.name();
+        String master = response.master().name();
+
+        HashMap<String, String> attributes = new HashMap<>();
+        attributes.put("name", master);
+        attributes.put("responder", name);
+
+        String sub_element = this.encoding.encode(name, response.attributes());
+        String message = this.encoding.encode("command", attributes, sub_element);
+
+        return message;
     }
 
     private Command decode(String encoded_message) {
-        encoded_message = this.encoding.unwrap("command", encoded_message);
-        String command_name = this.encoding.decode(encoded_message);
+        HashMap<String, String> attributes = this.encoding.decode_attributes(encoded_message);
+
+        String command_name = attributes.get("name");
+        String response_name = attributes.get("responder");
 
         Command[] commands = this.commands();
 
         for (Command command : commands) {
-            Command match = command.search(command_name);
+
+            Command match;
+
+            if (response_name != null) {
+                match = command.search(response_name);
+            }
+            else {
+                match = command.search(command_name);
+            }
 
             if (match != null) {
-                HashMap<String, String> att = this.encoding.decode(match.name(), encoded_message);
-                match.attributes(att);
                 return match;
             }
         }

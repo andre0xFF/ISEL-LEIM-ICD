@@ -1,4 +1,6 @@
-package commands;
+package protocol.commands;
+
+import protocol.Command;
 
 import java.util.HashMap;
 
@@ -23,7 +25,7 @@ public final class Ping extends Command {
 
     @Override
     public String name() {
-        return "Ping";
+        return "ping";
     }
 
     @Override
@@ -55,7 +57,7 @@ public final class Ping extends Command {
 
         @Override
         public String name() {
-            return "Pong";
+            return "pong";
         }
 
         @Override

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Protocol implements Runnable {
 
@@ -18,14 +19,7 @@ public abstract class Protocol implements Runnable {
 
     public Protocol(Socket socket) {
         this.socket = socket;
-
-        try {
-            this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-            this.writer = new PrintWriter(this.socket.getOutputStream(), true);
-            this.connected = true;
-
-        } catch (IOException e) { }
-
+        this.connect();
         new Thread(this).start();
     }
 
@@ -38,6 +32,13 @@ public abstract class Protocol implements Runnable {
     }
 
     public void connect() {
+        try {
+            this.reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            this.writer = new PrintWriter(this.socket.getOutputStream(), true);
+            this.connected = true;
+
+        } catch (IOException e) { }
+
         for (Endpoint endpoint : this.endpoints) {
             endpoint.on_connect();
         }
@@ -116,5 +117,23 @@ public abstract class Protocol implements Runnable {
         void on_disconnect();
         void on_connect();
         void on_received_message(String message);
+    }
+
+    public interface Encoding {
+
+        String name();
+        String encode(String root, HashMap<String, String> attributes);
+        String encode(String root, HashMap<String, String> attributes, String sub_element);
+        HashMap<String, String> decode_attributes(String message);
+        String decode_element(String message);
+        String decode_sub_element(String message);
+        String parse(HashMap<String, String> attributes);
+        HashMap<String, String> parse(String attributes);
+    }
+
+    public interface Encoder {
+
+        HashMap<String, String> attributes();
+        void attributes(HashMap<String, String> attributes);
     }
 }

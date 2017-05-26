@@ -1,8 +1,10 @@
-package commands;
+package protocol.commands;
+
+import protocol.Command;
 
 import java.util.HashMap;
 
-public final class Login extends Command {
+public class Login extends Command {
 
     private String username;
     private String password;
@@ -19,8 +21,8 @@ public final class Login extends Command {
     @Override
     public Command[] responses() {
         return new Command[] {
-                new Ok(),
-                new Denied(),
+                new Ok(this),
+                new Denied(this),
         };
     }
 
@@ -31,7 +33,7 @@ public final class Login extends Command {
 
     @Override
     public void execute(ServerCommandHandler worker) {
-
+        worker.send((Response) new Ok(this));
     }
 
     @Override
@@ -99,11 +101,12 @@ public final class Login extends Command {
         }
     }
 
-    private class Ok extends Command {
+    private class Ok extends Response  {
 
-        @Override
-        public Command[] responses() {
-            return null;
+        private Command master;
+
+        public Ok(Command command) {
+            master = command;
         }
 
         @Override
@@ -122,21 +125,32 @@ public final class Login extends Command {
         }
 
         @Override
+        public Command[] responses() {
+            return null;
+        }
+
+        @Override
         public HashMap<String, String> attributes() {
             return null;
         }
 
         @Override
         public void attributes(HashMap<String, String> attributes) {
-            return;
+
+        }
+
+        @Override
+        public Command master() {
+            return this.master;
         }
     }
 
-    private class Denied extends Command {
+    private class Denied extends Response {
 
-        @Override
-        public Command[] responses() {
-            return null;
+        private Command master;
+
+        public Denied(Command command) {
+            master = command;
         }
 
         @Override
@@ -155,13 +169,23 @@ public final class Login extends Command {
         }
 
         @Override
+        public Command[] responses() {
+            return null;
+        }
+
+        @Override
         public HashMap<String, String> attributes() {
             return null;
         }
 
         @Override
         public void attributes(HashMap<String, String> attributes) {
-            return;
+
+        }
+
+        @Override
+        public Command master() {
+            return this.master;
         }
     }
 }

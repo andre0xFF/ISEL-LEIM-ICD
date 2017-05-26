@@ -1,11 +1,12 @@
 package client;
 
-import commands.Command;
-import commands.Login;
-import commands.Ping;
-import protocol.Encoding;
+import protocol.Command;
+import protocol.commands.Login;
+import protocol.commands.Ping;
+import protocol.Protocol.Encoding;
 import protocol.Endpoint;
 import protocol.Protocol;
+import protocol.encodings.XML;
 
 public abstract class Client extends Endpoint implements
         Command.CommonCommandHandler,
@@ -16,11 +17,10 @@ public abstract class Client extends Endpoint implements
 
     public Client(Protocol protocol) {
         super(protocol);
-        this.encoder = new Encoding.XML();
+        this.encoder = new XML();
 
-//        super.send(new Ping());
+        super.send(new Ping());
         super.send(new Login("xpto", "pass"));
-        super.send(new Login.Logout("xpto"));
     }
 
     @Override

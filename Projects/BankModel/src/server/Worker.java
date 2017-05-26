@@ -1,10 +1,10 @@
 package server;
 
-import commands.Command;
-import commands.Login;
-import commands.Ping;
+import protocol.Command;
+import protocol.commands.Login;
+import protocol.commands.Ping;
+import protocol.Protocol.Encoding;
 import database.Database;
-import protocol.Encoding;
 import protocol.Endpoint;
 import protocol.Protocol;
 
@@ -38,10 +38,5 @@ public abstract class Worker extends Endpoint implements
     @Override
     protected Encoding encoder() {
         return this.encoder;
-    }
-
-    @Override
-    public void on_hello(Encoding encoder) {
-        this.encoder = encoder;
     }
 }

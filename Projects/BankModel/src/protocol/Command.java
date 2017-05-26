@@ -1,30 +1,11 @@
-package commands;
+package protocol;
 
-import protocol.Encoding;
+public abstract class Command implements Protocol.Encoder {
 
-import java.util.HashMap;
-
-public abstract class Command implements Encoding.Encoder {
-
-    public abstract String name();
-    public abstract Command[] responses();
     public abstract void execute(ClientCommandHandler client);
     public abstract void execute(ServerCommandHandler worker);
-
-    public static void main(String[] args) {
-        Login a = new Login("xpto", "cool");
-        Encoding encoding = new Encoding.XML();
-        String m = encoding.encode(a.name(), a.attributes());
-
-        HashMap<String, String> t = encoding.decode(a.name(), m);
-        Login b = new Login(null, null);
-        b.attributes(t);
-
-        String wrap = encoding.wrap("command", a.name(), m);
-        String unwrap = encoding.unwrap("command", wrap);
-
-        new Login(null).search("ok");
-    }
+    public abstract String name();
+    public abstract Command[] responses();
 
     public Command search(String command_name) {
         if (this.name().equals(command_name)) {
@@ -42,6 +23,10 @@ public abstract class Command implements Encoding.Encoder {
         return null;
     }
 
+    public abstract class Response extends Command {
+        public abstract Command master();
+    }
+
     public interface CommonCommandHandler {
 
         void on_command_received(Command command);
@@ -54,15 +39,16 @@ public abstract class Command implements Encoding.Encoder {
 
         void on_login_success();
         void send(Command command);
+        void send(Response response);
         void terminate();
     }
 
     public interface ServerCommandHandler {
 
-        void on_hello(Encoding encoder);
         void on_login_request();
         void on_logout_request();
         void send(Command command);
+        void send(Response response);
         void terminate();
     }
 }
