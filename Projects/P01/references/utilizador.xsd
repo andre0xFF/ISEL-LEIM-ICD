@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 sp1 (http://www.altova.com) by End User (free.org) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:simpleType name="T_Nome">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="([A-Z|ÁÀÃÂÉÈÍÌÒÓÕÔÙÚ][a-z|áàãâéèíìóòõôúùç]{1,30}|((\s(d'|((du|da|de|do|dos)\s))?)[A-Z|ÁÀÃÂÉÈÍÌÒÓÕÔÙÚ][a-z|áàãâéèíìóòõôúùç]{1,30}))+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="Utilizador">
+		<xs:annotation>
+			<xs:documentation>Utilizador da Loja</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:choice>
+				<xs:element name="Cliente">
+					<xs:annotation>
+						<xs:documentation>Existe se for um cliente</xs:documentation>
+					</xs:annotation>
+					<xs:complexType/>
+				</xs:element>
+				<xs:element name="Funcionário">
+					<xs:annotation>
+						<xs:documentation>Existe se for um funcionario</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Local" use="required">
+							<xs:annotation>
+								<xs:documentation>Local de trabalho</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Loja"/>
+									<xs:enumeration value="Caixa"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:choice>
+			<xs:attribute name="NIF" use="required">
+				<xs:annotation>
+					<xs:documentation>Numero de Identificação Fiscal			</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:decimal">
+						<xs:fractionDigits value="0"/>
+						<xs:minInclusive value="0"/>
+						<xs:totalDigits value="9"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Nome" use="required">
+				<xs:annotation>
+					<xs:documentation>Nome Completo</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value=""/>
+						<xs:enumeration value="aaaaaaa"/>
+						<xs:enumeration value="aaaa"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="DataNasc" type="xs:date" use="required">
+				<xs:annotation>
+					<xs:documentation>Data de Nascimento</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Peça Marca="UjBsR09EbGhjZ0dTQUxNQUFBUUNBRU1tQ1p0dU1GUXhEUzhi" Secção="Homem" Preço="25.00" idPeça="1" Designação="PALMILHA DE AMORTECIMENTO FULL STRIKE" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../peça.xsd">
+	<Foto>f1.jpg</Foto>
+	<Foto>f2.jpg</Foto>
+	<Descrição>Para o praticante de corrida que necessita de <Carateristica>amortecimento</Carateristica>
+	</Descrição>
+	<Calçado>
+		<Tamanho Quantidade="1" Valor="42"/>
+		<Tamanho Quantidade="3" Valor="43"/>
+	</Calçado>
+</Peça>
