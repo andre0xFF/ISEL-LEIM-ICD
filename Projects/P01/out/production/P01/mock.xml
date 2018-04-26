@@ -1,0 +1,30 @@
+<store>
+   <items class="store.Store$1">
+      <item key="123">
+         <item id="123">
+            <gender id="3"/>
+            <type id="3"/>
+            <size class="store.item.Size$Apperal" id="2"/>
+            <brand>Nike</brand>
+            <model>xpto</model>
+         </item>
+      </item>
+      <item key="124">
+         <item id="124">
+            <gender id="1"/>
+            <type id="2"/>
+            <size class="store.item.Size$Apperal" id="1"/>
+            <brand>Nike</brand>
+            <model>xpto</model>
+         </item>
+      </item>
+   </items>
+   <prices class="store.Store$2">
+      <item key="123">50.0</item>
+      <item key="124">35.0</item>
+   </prices>
+   <stocks class="store.Store$3">
+      <item key="123">20</item>
+      <item key="124">22</item>
+   </stocks>
+</store>
