@@ -51,6 +51,25 @@ public class Client implements Runnable {
         return null;
     }
 
+    private boolean connect() {
+        if (this.server.ip == null) {
+            // TODO server discover
+        }
+
+        try {
+            this.server.socket = new Socket(server.ip, server.port);
+            this.server.out = new PrintWriter(server.socket.getOutputStream(), true);
+            this.server.in = new BufferedReader(new InputStreamReader(server.socket.getInputStream()));
+        } catch (IOException e) {
+            server.isConnected = false;
+            return false;
+        }
+
+        this.server.isConnected = true;
+
+        return true;
+    }
+
     //
     // Interface
     //
@@ -70,25 +89,6 @@ public class Client implements Runnable {
         
         server.ip = ip;
         server.port = port;
-    }
-
-    public boolean connect() {
-        if (this.server.ip == null) {
-            // TODO server discover
-        }
-
-        try {
-            this.server.socket = new Socket(server.ip, server.port);
-            this.server.out = new PrintWriter(server.socket.getOutputStream(), true);
-            this.server.in = new BufferedReader(new InputStreamReader(server.socket.getInputStream()));
-        } catch (IOException e) {
-            server.isConnected = false;
-            return false;
-        }
-
-        this.server.isConnected = true;
-
-        return true;
     }
 
     public void send(Message message) {
