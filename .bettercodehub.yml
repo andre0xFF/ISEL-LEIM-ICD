@@ -1,1 +1,6 @@
 component_depth: 4
+
+exclude:
+- /Examples/*
+- /Labs/*
+- /Slides/*
