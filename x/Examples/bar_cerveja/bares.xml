@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<!-- by Porfírio Filipe -->
+<lista_bar_cerveja xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="bc.xsd">
+	<!-- Bares -->
+	<bar oBar="b1" nome="O Bar Inglês"/>
+	<bar oBar="b2" nome="O Pinguim"/>
+	<bar oBar="b3" nome="Alfaiataria"/>
+	<bar oBar="b4" nome="Quimera"/>
+	<bar oBar="b5" nome="Musa"/>
+	<bar oBar="b6" nome="Red Frog"/>
+	
+	<!-- Cervejas -->
+	<cerveja aCerveja="c1" nome="Budweiser"/>
+	<cerveja aCerveja="c2" nome="Antarctica"/>
+	<cerveja aCerveja="c3" nome="Sagres"/>
+	<cerveja aCerveja="c4" nome="Heineken"/>
+	<cerveja aCerveja="c5" nome="Amstel"/>
+	<cerveja aCerveja="c6" nome="Guinness"/>
+	<cerveja aCerveja="c7" nome="Duvel"/>
+	<cerveja aCerveja="c8" nome="Sapporo Premium"/>
+	<cerveja aCerveja="c9" nome="Baltika 8"/>
+	<cerveja aCerveja="c10" nome="Paceña Pico de Oro"/>
+	<cerveja aCerveja="c11" nome="Samuel Adams"/>
+	
+	<!-- Associação entre bares e cervejas -->
+	<bar_cerveja oBar="b1" aCerveja="c2"/>
+	<bar_cerveja oBar="b2" aCerveja="c2">Boa Escolha! </bar_cerveja>
+	<bar_cerveja oBar="b2" aCerveja="c3">Excelente Escolha! </bar_cerveja>
+	<bar_cerveja oBar="b8" aCerveja="c5">Razoável Escolha! </bar_cerveja>
+</lista_bar_cerveja>
