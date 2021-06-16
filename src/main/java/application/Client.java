@@ -90,7 +90,7 @@ public class Client {
             null
         );
 
-        Function sendMessage = new domain.SendMessage(
+        domain.SendMessage sendMessage = new domain.SendMessage(
                 new domain.Message(
                     andre,
                     channel,
