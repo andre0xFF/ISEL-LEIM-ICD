@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="calc.xsd" -->
-<calculadora>
-	<operacao>soma</operacao>
-	<op1>5</op1>
-	<op2>5</op2>
-</calculadora>
