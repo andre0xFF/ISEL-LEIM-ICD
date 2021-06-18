@@ -39,9 +39,8 @@ public class Client {
         this.output.println(text);
 
         text = this.input.readLine();
-        function = this.deserialize(text);
-
-        Result result = function.getResult();
+        
+        Result result = this.deserialize(text).getResult();
 
         return result;
     }

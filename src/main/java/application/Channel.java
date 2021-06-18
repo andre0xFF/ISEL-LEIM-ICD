@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class Channel {
 
-    final String name;
-    final ArrayList<User> users;
+    private final String name;
+    private final ArrayList<User> users;
 
     public Channel(ArrayList<User> users, String name) {
         this.users = users;

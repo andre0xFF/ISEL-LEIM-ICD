@@ -23,8 +23,7 @@ class Server {
                     PrintWriter output = new PrintWriter(new_socket.getOutputStream(), true);
                     BufferedReader input = new BufferedReader(new InputStreamReader(new_socket.getInputStream()));
 
-                    String text;
-                    text = input.readLine();
+                    String text = input.readLine();
 
                     // todo: validate xsd
 

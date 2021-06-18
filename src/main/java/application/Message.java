@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 class Message {
 
-    Function function;
+    private Function function;
     
     public Message(Function function) {
         this.function = function;

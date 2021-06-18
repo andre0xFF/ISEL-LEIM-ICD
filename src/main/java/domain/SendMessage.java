@@ -7,10 +7,10 @@ import application.User;
 
 public class SendMessage implements Function {
 
-    User sender;
-    Channel receiver;
-    Message message;
-    Result result;
+    private User sender;
+    private Channel receiver;
+    private Message message;
+    private Result result;
 
     public SendMessage(Message message) {
         this.message = message;

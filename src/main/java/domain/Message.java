@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 public class Message implements Resource {
 
-    User sender;
-    Channel receiver;
-    String content;
-    LocalDateTime when = LocalDateTime.now();
+    private User sender;
+    private Channel receiver;
+    private String content;
+    private LocalDateTime when = LocalDateTime.now();
 
     public Message(User sender, Channel receiver, String content) {
         this.sender = sender;
