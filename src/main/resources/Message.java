@@ -1,4 +1,4 @@
-package domain;
+package resources;
 
 import java.time.LocalDateTime;
 
@@ -10,9 +10,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-import application.Resource;
-
-public class Message implements Resource {
+public class Message {
 
     private String content;
     private LocalDateTime when;

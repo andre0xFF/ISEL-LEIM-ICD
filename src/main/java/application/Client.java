@@ -14,7 +14,7 @@ import application.models.Function;
 import application.models.Function.Result;
 import application.models.Invoker;
 
-public class Client {
+public class Client implements Runnable {
 
     public static final String DEFAULT_IP = "localhost";
     public static final Integer DEFAULT_PORT = 9999;
@@ -24,10 +24,6 @@ public class Client {
     private PrintWriter output;
     private BufferedReader input;
     private ArrayList<Invoker<? extends Function, ? extends Result<? extends Function>>> invokers = new ArrayList<>();
-
-    // public void register(Invoker invoker) {
-    //     this.invokers.add(invoker);
-    // }
 
     public void register(Invoker<? extends Function, ? extends Result<? extends Function>> invoker) {
         this.invokers.add(invoker);
@@ -39,37 +35,52 @@ public class Client {
         this.output = new PrintWriter(this.socket.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 
-        Thread listener = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        listen();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
+        Thread thread = new Thread(this);
+        thread.start();
+
+    }
+    
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Function function = listen(this.input);
+
+                if (function.getResult() != null) {
+                    this.handle(function);
+                }
+                else {
+                    this.invoke(function);
                 }
             }
-        };
-
-        listener.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private void listen() throws IOException {
-        String text = this.input.readLine();
+    public static Function listen(BufferedReader input) throws IOException {
+        String text = input.readLine();
         Function function = Client.DEFAULT_SERIALIZER.readValue(text, Function.class);
 
-        // todo
-        // has result?
-        // true: handle result
-        // false: execute function
+        return function;
+
+    }
+
+    private void handle(Function function) {
+        for (Invoker invoker : invokers) {
+            try {
+                invoker.onResult(function, function.getResult());
+            } catch (ClassCastException e) {
+                continue;
+            }
+        }
 
     }
 
     public void invoke(Function function) throws IOException {
         String text = Server.DEFAULT_SERIALIZER.writeValueAsString(function);
-        // this.output.println(text);
+        this.output.println(text);
 
         for (Invoker invoker : invokers) {
             try {
@@ -82,4 +93,5 @@ public class Client {
         }
 
     }
+
 }

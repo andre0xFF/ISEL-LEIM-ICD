@@ -1,12 +1,9 @@
-package domain;
+package resources;
 
 import java.util.ArrayList;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-
-import application.Resource;
-import application.User;
 
 public class Student implements Resource, User {
     private String id;

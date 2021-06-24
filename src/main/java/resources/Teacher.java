@@ -1,4 +1,4 @@
-package resources;
+package domain;
 
 import application.Resource;
 import application.User;

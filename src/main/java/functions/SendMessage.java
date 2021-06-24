@@ -1,9 +1,12 @@
-package domain;
+package functions;
 
-import application.Function;
-import application.Result;
-import application.User;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import application.models.Function;
 import resources.Channel;
+import resources.Message;
+import resources.models.User;
 
 public class SendMessage implements Function {
 
@@ -12,12 +15,14 @@ public class SendMessage implements Function {
     private User sender;
     private Channel receiver;
     private Message message;
-    private Result result;
+    private Result<SendMessage> result;
 
-    public SendMessage() {
-    }
-
-    public SendMessage(User sender, Channel receiver, Message message) {
+    @JsonCreator()
+    public SendMessage(
+        @JsonProperty(value = "sender") User sender, 
+        @JsonProperty(value = "receiver") Channel receiver, 
+        @JsonProperty(value = "message") Message message
+    ) {
         this.message = message;
         this.sender = sender;
         this.receiver = receiver;
@@ -36,12 +41,14 @@ public class SendMessage implements Function {
     }
 
     @Override
-    public Result getResult() {
+    public Result<SendMessage> getResult() {
         return this.result;
     }
 
     @Override
-    public void setResult(Result result) {
-        this.result = result;
+    public void execute() {
+        // TODO Auto-generated method stub
+        
     }
+
 }

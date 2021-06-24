@@ -5,6 +5,8 @@ import functions.results.ResultTest1;
 
 public class FunctionTest1 implements Function {
 
+    private String hello = "world";
+
     private Result<FunctionTest1> result;
 
     @Override
@@ -17,6 +19,10 @@ public class FunctionTest1 implements Function {
     public void execute() {
         this.result = new ResultTest1();
 
+    }
+
+    public String getHello() {
+        return this.hello;
     }
 
 }

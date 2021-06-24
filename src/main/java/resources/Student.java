@@ -1,12 +1,17 @@
 package resources;
 
-import application.Resource;
-import application.User;
-
 import java.util.ArrayList;
 
-public class Teacher implements Resource, User {
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
+import resources.models.User;
+
+public class Student implements User {
     private String id;
+    private Integer number;
     private String firstName;
     private String lastName;
     private String email;
@@ -19,24 +24,24 @@ public class Teacher implements Resource, User {
     private String phoneNumber;
     private ArrayList<String> languages = new ArrayList<>();
 
-    public Teacher() {
-    }
-
-    public Teacher(
-        String id,
-        String firstName,
-        String lastName,
-        String email,
-        String username,
-        String password,
-        String nationality,
-        String citizenship,
-        String gender,
-        String address,
-        String phoneNumber,
-        ArrayList<String> languages
+    @JsonCreator
+    public Student(
+        @JsonProperty(value = "id") String id, 
+        @JsonProperty(value = "number") Integer number,
+        @JsonProperty(value = "firstName") String firstName,
+        @JsonProperty(value = "lastName") String lastName,
+        @JsonProperty(value = "email") String email,
+        @JsonProperty(value = "username") String username,
+        @JsonProperty(value = "password") String password,
+        @JsonProperty(value = "nationality") String nationality,
+        @JsonProperty(value = "citizenship") String citizenship,
+        @JsonProperty(value = "gender") String gender,
+        @JsonProperty(value = "address") String address,
+        @JsonProperty(value = "phoneNumber") String phoneNumber,
+        @JsonProperty(value = "languages") ArrayList<String> languages
     ) {
         this.id = id;
+        this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -48,6 +53,10 @@ public class Teacher implements Resource, User {
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.languages = languages;
+    }
+
+    public Integer getNumber() {
+        return number;
     }
 
     public String getFirstName() {
@@ -90,6 +99,8 @@ public class Teacher implements Resource, User {
         return phoneNumber;
     }
 
+    @JacksonXmlElementWrapper(localName = "languages")
+    @JacksonXmlProperty(localName = "language")
     public ArrayList<String> getLanguages() {
         return languages;
     }
