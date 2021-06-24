@@ -1,29 +1,43 @@
 package domain;
 
-import application.Channel;
-import application.Resource;
-import application.User;
-
 import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+
+import application.Resource;
 
 public class Message implements Resource {
 
-    private User sender;
-    private Channel receiver;
     private String content;
-    private LocalDateTime when = LocalDateTime.now();
+    private LocalDateTime when;
 
-    public Message(User sender, Channel receiver, String content) {
-        this.sender = sender;
-        this.receiver = receiver;
+    @JsonCreator
+    public Message(
+        @JsonProperty("content") String content,
+        @JsonProperty("when") LocalDateTime when
+    ) {
         this.content = content;
+        this.when = when;
+    }
+    
+    public Message(String content) {
+        this(content, LocalDateTime.now());
     }
 
-	public User getSender() {
-		return this.sender;
-	}
+    public String getContent() {
+        return this.content;
+    }
 
-    public Channel getReceiver() {
-        return this.receiver;
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    public LocalDateTime getWhen() {
+        return this.when;
     }
 }

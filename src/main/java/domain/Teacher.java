@@ -6,6 +6,7 @@ import application.User;
 import java.util.ArrayList;
 
 public class Teacher implements Resource, User {
+    private String id;
     private String firstName;
     private String lastName;
     private String email;
@@ -18,21 +19,24 @@ public class Teacher implements Resource, User {
     private String phoneNumber;
     private ArrayList<String> languages = new ArrayList<>();
 
-    public Teacher() {}
+    public Teacher() {
+    }
 
     public Teacher(
-            String firstName,
-            String lastName,
-            String email,
-            String username,
-            String password,
-            String nationality,
-            String citizenship,
-            String gender,
-            String address,
-            String phoneNumber,
-            ArrayList<String> languages
+        String id,
+        String firstName,
+        String lastName,
+        String email,
+        String username,
+        String password,
+        String nationality,
+        String citizenship,
+        String gender,
+        String address,
+        String phoneNumber,
+        ArrayList<String> languages
     ) {
+        this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -88,5 +92,10 @@ public class Teacher implements Resource, User {
 
     public ArrayList<String> getLanguages() {
         return languages;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 }

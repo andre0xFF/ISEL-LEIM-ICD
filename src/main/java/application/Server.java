@@ -7,10 +7,15 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-class Server {
-    public static final int DEFAULT_PORT = Client.DEFAULT_PORT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-    public Server() throws IOException {
+import application.models.Function;
+
+public class Server {
+    public static final Integer DEFAULT_PORT = Client.DEFAULT_PORT;
+    public static final ObjectMapper DEFAULT_SERIALIZER = Client.DEFAULT_SERIALIZER;
+
+    public void start() throws IOException {
         ServerSocket socket = new ServerSocket(DEFAULT_PORT);
 
         while (true) {
@@ -24,17 +29,16 @@ class Server {
                     BufferedReader input = new BufferedReader(new InputStreamReader(new_socket.getInputStream()));
 
                     String text = input.readLine();
-
+                    Function newest = Server.DEFAULT_SERIALIZER.readValue(text, Function.class);
+                    
                     // todo: validate xsd
-
-                } catch (IOException ignored) {}
+                    // todo: execute function
+                    // todo: send result
+                } catch (IOException ignored) {
+                }
             });
 
             client.start();
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-        new Server();
     }
 }

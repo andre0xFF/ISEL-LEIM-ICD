@@ -1,4 +1,4 @@
-package domain;
+package models;
 
 import application.Function;
 import application.Result;

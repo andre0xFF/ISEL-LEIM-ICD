@@ -1,16 +1,16 @@
 package domain;
 
-import application.Resource;
-import application.User;
+import java.util.ArrayList;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-import java.util.ArrayList;
+import application.Resource;
+import application.User;
 
 public class Student implements Resource, User {
-    private int number;
+    private String id;
+    private Integer number;
     private String firstName;
     private String lastName;
     private String email;
@@ -21,28 +21,27 @@ public class Student implements Resource, User {
     private String gender;
     private String address;
     private String phoneNumber;
-
-    @JsonProperty
-    @JacksonXmlElementWrapper(localName = "languages")
-    @JacksonXmlProperty(localName = "language")
     private ArrayList<String> languages = new ArrayList<>();
 
-    public Student() {}
+    public Student() {
+    }
 
     public Student(
-            int number,
-            String firstName,
-            String lastName,
-            String email,
-            String username,
-            String password,
-            String nationality,
-            String citizenship,
-            String gender,
-            String address,
-            String phoneNumber,
-            ArrayList<String> languages
+        String id, 
+        Integer number,
+        String firstName,
+        String lastName,
+        String email,
+        String username,
+        String password,
+        String nationality,
+        String citizenship,
+        String gender,
+        String address,
+        String phoneNumber,
+        ArrayList<String> languages
     ) {
+        this.id = id;
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -57,7 +56,7 @@ public class Student implements Resource, User {
         this.languages = languages;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -101,7 +100,14 @@ public class Student implements Resource, User {
         return phoneNumber;
     }
 
+    @JacksonXmlElementWrapper(localName = "languages")
+    @JacksonXmlProperty(localName = "language")
     public ArrayList<String> getLanguages() {
         return languages;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 }

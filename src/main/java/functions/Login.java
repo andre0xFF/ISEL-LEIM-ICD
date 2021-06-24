@@ -1,7 +1,6 @@
-package domain;
+package functions;
 
 import application.Function;
-import application.Result;
 
 public class Login implements Function {
 
