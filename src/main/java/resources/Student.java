@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
-import resources.models.User;
+import application.models.Role;
+import application.models.User;
 
 public class Student implements User {
-    private String id;
     private Integer number;
     private String firstName;
     private String lastName;
@@ -23,10 +23,10 @@ public class Student implements User {
     private String address;
     private String phoneNumber;
     private ArrayList<String> languages = new ArrayList<>();
-
+    private ArrayList<Role> roles = new ArrayList<>();
+    
     @JsonCreator
     public Student(
-        @JsonProperty(value = "id") String id, 
         @JsonProperty(value = "number") Integer number,
         @JsonProperty(value = "firstName") String firstName,
         @JsonProperty(value = "lastName") String lastName,
@@ -40,7 +40,6 @@ public class Student implements User {
         @JsonProperty(value = "phoneNumber") String phoneNumber,
         @JsonProperty(value = "languages") ArrayList<String> languages
     ) {
-        this.id = id;
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -71,10 +70,12 @@ public class Student implements User {
         return email;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
@@ -99,14 +100,14 @@ public class Student implements User {
         return phoneNumber;
     }
 
-    @JacksonXmlElementWrapper(localName = "languages")
-    @JacksonXmlProperty(localName = "language")
+    // @JacksonXmlElementWrapper(localName = "languages")
+    // @JacksonXmlProperty(localName = "language")
     public ArrayList<String> getLanguages() {
         return languages;
     }
 
     @Override
-    public String getId() {
-        return this.id;
+    public ArrayList<Role> getRoles() {
+        return this.roles;
     }
 }

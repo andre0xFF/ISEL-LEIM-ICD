@@ -1,9 +1,10 @@
-package domain;
+package resources;
 
-import application.Resource;
-import application.User;
 
 import java.util.ArrayList;
+
+import application.models.Resource;
+import resources.models.User;
 
 public class Teacher implements Resource, User {
     private String id;
