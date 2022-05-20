@@ -1,9 +1,7 @@
 package controllers;
 
-import messages.Message;
-
-public interface Controller<Message> {
+public interface Controller<T> {
 
     String getName();
-    void onMessage(Message message);
+    void onMessage(T message);
 }
