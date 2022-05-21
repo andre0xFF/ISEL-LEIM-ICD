@@ -90,10 +90,22 @@ class ShipPosition {
     public Point getEndingPoint() {
         double totalRotation = Math.toRadians(rotation.ordinal() * 90);
 
-        return new Point(
-                (int) (Math.cos(totalRotation) * (length + startingPoint.getX()) - Math.sin(totalRotation) * startingPoint.getY()),
-                (int) (Math.sin(totalRotation) * (length + startingPoint.getX()) + Math.cos(totalRotation) * startingPoint.getY())
-        );
+        Point endpoint = new Point((int)startingPoint.getX(), (int)(startingPoint.getY() + length));
+
+        // translate point back to origin
+        endpoint.x -= startingPoint.getX();
+        endpoint.y -= startingPoint.getY();
+
+        // rotated point
+        Point rotPoint = new Point(
+                (int) Math.round(Math.cos(totalRotation) * (endpoint.getX()) - Math.sin(totalRotation) * endpoint.getY()),
+                (int) Math.round(Math.sin(totalRotation) * (endpoint.getX()) + Math.cos(totalRotation) * endpoint.getY()));
+
+        // translate point back to original position
+        endpoint.x = (int)(rotPoint.getX() + startingPoint.getX());
+        endpoint.y = (int)(rotPoint.getY() + startingPoint.getY());
+
+        return endpoint;
     }
 }
 

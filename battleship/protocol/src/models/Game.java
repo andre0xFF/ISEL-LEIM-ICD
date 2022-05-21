@@ -63,6 +63,7 @@ class Board {
     private boolean validateShipPosition(Ship ship) {
         Point startingPosition = ship.getShipPosition().getStartingPoint();
         Point endingPosition = ship.getShipPosition().getEndingPoint();
+        System.out.println(endingPosition);
 
         boolean horizontalBoundCheck = 0 < startingPosition.getX() && startingPosition.getX() <= 10
                 && 0 <= endingPosition.getX() && endingPosition.getX() <= 10;
@@ -81,5 +82,7 @@ class Test {
         Board board = new Board();
 
         board.addShip(new Destroyer(new Point(9, 1), Rotation.NORTH));
+        board.addShip(new Destroyer(new Point(9, 1), Rotation.EAST));
+        board.addShip(new Destroyer(new Point(9, 1), Rotation.WEST));
     }
 }
