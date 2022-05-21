@@ -3,13 +3,26 @@ package models;
 import java.awt.*;
 import java.util.HashMap;
 
-class Test {
-    public static void main(String[] args) {
-        PlayerBoard playerBoard = new PlayerBoard();
 
-        BoardComponent success = playerBoard.attack(new Point(1, 1));
+class BoardModel {
+    private final HashMap<Point, Ship> ships = new HashMap<>();
+
+    public boolean addShip(Point point, Ship ship) {
+        // Is the ship inside board?
+        // Is ship type registered?
+        // Is ship type total under limit?
+        // Are board coordinates empty?
+
+        return true;
+    }
+
+    public boolean startBattle() {
+        // Are all ships in the board?
+
+        return true;
     }
 }
+
 public interface Board {
 
     int horizontalLowerBound = 0;
@@ -42,8 +55,6 @@ public interface Board {
 
         return endingPoint;
     }
-
-    boolean attack(Point point);
 }
 
 class PlayerBoard implements Board {
@@ -63,14 +74,14 @@ class PlayerBoard implements Board {
 
     @Override
     public boolean addComponent(Point point, Water water) {
-        if (isPointInsideBounds(point)) {
+        if (isShipInsideBoard(point)) {
             return false;
         }
 
         return boardComponents.addComponent(point, water);
     }
 
-    private boolean isPointInsideBounds(Point point) {
+    private boolean isShipInsideBoard(Point point) {
         return !(horizontalLowerBound < point.getX()) || !(point.getX() <= horizontalUpperBound)
                 || !(verticalLowerBound < point.getY()) || !(point.getY() <= verticalUpperBound);
     }
@@ -83,22 +94,13 @@ class PlayerBoard implements Board {
         for (int i = 0; i < points.length; i++) {
             points[i] = Board.calculateShipEndingPoint(point, i, orientation);
 
-            if (isPointInsideBounds(points[i])) {
+            if (isShipInsideBoard(points[i])) {
                 return false;
             }
         }
 
         // Fill board components' coordinates with ship.
         return boardComponents.addComponent(points, ship);
-    }
-
-    @Override
-    public BoardComponent attack(Point point) {
-        if (!isPointInsideBounds(point)) {
-            return null;
-        }
-
-        return boardComponents.attack(point);
     }
 }
 
