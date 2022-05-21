@@ -3,6 +3,13 @@ package models;
 import java.awt.*;
 import java.util.HashMap;
 
+class Test {
+    public static void main(String[] args) {
+        PlayerBoard playerBoard = new PlayerBoard();
+
+        BoardComponent success = playerBoard.attack(new Point(1, 1));
+    }
+}
 public interface Board {
 
     int horizontalLowerBound = 0;
@@ -11,12 +18,13 @@ public interface Board {
     int verticalUpperBound = 10;
 
     boolean addComponent(Point point, Water water);
+
     boolean addComponent(Point point, Ship ship, Orientation north);
 
     static Point calculateShipEndingPoint(Point startingPoint, int length, Orientation orientation) {
         double totalRotation = Math.toRadians(orientation.ordinal() * 90);
 
-        Point endingPoint = new Point((int) startingPoint.getX(), (int) (startingPoint.getY() + length - 1));
+        Point endingPoint = new Point((int) startingPoint.getX() + length, (int) (startingPoint.getY()));
 
         // Translate point back to origin.
         endingPoint.x -= startingPoint.getX();
@@ -24,8 +32,8 @@ public interface Board {
 
         // Rotated point.
         Point rotatedPoint = new Point(
-                (int) Math.round(Math.cos(totalRotation) * (endingPoint.getX()) - Math.sin(totalRotation) * endingPoint.getY()),
-                (int) Math.round(Math.sin(totalRotation) * (endingPoint.getX()) + Math.cos(totalRotation) * endingPoint.getY())
+                (int) Math.round(Math.cos(totalRotation) * endingPoint.getX() - Math.sin(totalRotation) * endingPoint.getY()),
+                (int) Math.round(Math.sin(totalRotation) * endingPoint.getX() + Math.cos(totalRotation) * endingPoint.getY())
         );
 
         // Translate point back to original position.
@@ -34,11 +42,17 @@ public interface Board {
 
         return endingPoint;
     }
+
+    boolean attack(Point point);
 }
 
 class PlayerBoard implements Board {
 
     private final BoardComponents boardComponents = new BoardComponents();
+
+    public PlayerBoard() {
+        initialize();
+    }
 
     private void initialize() {
         boardComponents.register(Ship.ShipName.Destroyer, 3);
@@ -49,14 +63,16 @@ class PlayerBoard implements Board {
 
     @Override
     public boolean addComponent(Point point, Water water) {
-        boardComponents.addComponent(point, water);
+        if (isPointInsideBounds(point)) {
+            return false;
+        }
 
-        return true;
+        return boardComponents.addComponent(point, water);
     }
 
     private boolean isPointInsideBounds(Point point) {
-        return horizontalLowerBound < point.x && point.x <= horizontalUpperBound
-                && verticalLowerBound < point.y && point.y <= verticalUpperBound;
+        return !(horizontalLowerBound < point.getX()) || !(point.getX() <= horizontalUpperBound)
+                || !(verticalLowerBound < point.getY()) || !(point.getY() <= verticalUpperBound);
     }
 
     @Override
@@ -67,13 +83,22 @@ class PlayerBoard implements Board {
         for (int i = 0; i < points.length; i++) {
             points[i] = Board.calculateShipEndingPoint(point, i, orientation);
 
-            if (!isPointInsideBounds(points[i])) {
+            if (isPointInsideBounds(points[i])) {
                 return false;
             }
         }
 
         // Fill board components' coordinates with ship.
         return boardComponents.addComponent(points, ship);
+    }
+
+    @Override
+    public BoardComponent attack(Point point) {
+        if (!isPointInsideBounds(point)) {
+            return null;
+        }
+
+        return boardComponents.attack(point);
     }
 }
 
@@ -85,7 +110,7 @@ class BoardComponents {
 
     private final HashMap<Ship.ShipName, Integer> registry = new HashMap<>();
     private final HashMap<Ship.ShipName, Integer> counter = new HashMap<>();
-    private final HashMap<Point, BoardComponent> boardComponents = new HashMap<>();
+    private final HashMap<Point, BoardComponent> components = new HashMap<>();
 
     public void register(Ship.ShipName shipName, int totalShips) {
         registry.put(shipName, totalShips);
@@ -99,13 +124,13 @@ class BoardComponents {
 
         // Are the points empty?
         for (Point point : points) {
-            if (boardComponents.containsKey(point)) {
+            if (components.containsKey(point)) {
                 return false;
             }
         }
 
         // Are we under the max amount of this ship's type?
-        Integer currentAmount = counter.get(ship.getName());
+        Integer currentAmount = counter.getOrDefault(ship.getName(), 0);
         Integer maxAmount = registry.get(ship.getName());
 
         if (currentAmount.equals(maxAmount)) {
@@ -113,27 +138,23 @@ class BoardComponents {
         }
 
         // Add ship or add partial ship.
-        if (!boardComponents.containsValue(ship)) {
+        if (!components.containsValue(ship)) {
             counter.put(ship.getName(), currentAmount + 1);
         }
 
         for (Point point : points) {
-            boardComponents.put(point, ship);
+            components.put(point, ship);
         }
 
         return true;
     }
 
-    public boolean addComponent(Point point, Ship ship) {
-        return addComponent(new Point[]{point}, ship);
-    }
-
     public boolean addComponent(Point point, Water water) {
-        if (boardComponents.containsKey(point)) {
+        if (components.containsKey(point)) {
             return false;
         }
 
-        boardComponents.put(point, water);
+        components.put(point, water);
 
         return true;
     }

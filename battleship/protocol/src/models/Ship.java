@@ -1,7 +1,6 @@
 package models;
 
 import models.ships.components.ShipDamage;
-import models.ships.components.ShipPosition;
 
 public interface Ship extends BoardComponent {
 
@@ -17,8 +16,6 @@ public interface Ship extends BoardComponent {
     int getLength();
 
     ShipDamage getShipDamage();
-
-    ShipPosition getShipPosition();
 
     default boolean isDestroyed() {
         return getShipDamage().isDestroyed();
