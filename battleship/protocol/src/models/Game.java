@@ -1,5 +1,8 @@
 package models;
 
+import models.ships.Destroyer;
+import models.ships.components.ShipPosition;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +17,11 @@ public class Game {
 }
 
 class BoardShips {
-    private final HashMap<ShipName, Integer> registry = new HashMap<>();
-    private final HashMap<ShipName, Integer> counter = new HashMap<>();
+    private final HashMap<Ship.ShipName, Integer> registry = new HashMap<>();
+    private final HashMap<Ship.ShipName, Integer> counter = new HashMap<>();
     private final ArrayList<Ship> ships = new ArrayList<>();
 
-    public void register(ShipName shipName, int totalShips) {
+    public void register(Ship.ShipName shipName, int totalShips) {
         registry.put(shipName, totalShips);
     }
 
@@ -44,13 +47,17 @@ class BoardShips {
 class Board {
 
     private final BoardShips boardShips = new BoardShips();
+    private final int horizontalLowerBound = 0;
+    private final int horizontalUpperBound = 10;
+    private final int verticalLowerBound = 0;
+    private final int verticalUpperBound = 10;
 
 
     private void initialize() {
-        boardShips.register(ShipName.Destroyer, 3);
-        boardShips.register(ShipName.Carrier, 1);
-        boardShips.register(ShipName.Submarine, 4);
-        boardShips.register(ShipName.Battleship, 2);
+        boardShips.register(Ship.ShipName.Destroyer, 3);
+        boardShips.register(Ship.ShipName.Carrier, 1);
+        boardShips.register(Ship.ShipName.Submarine, 4);
+        boardShips.register(Ship.ShipName.Battleship, 2);
     }
 
     public boolean addShip(Ship ship) {
@@ -63,15 +70,17 @@ class Board {
     private boolean validateShipPosition(Ship ship) {
         Point startingPosition = ship.getShipPosition().getStartingPoint();
         Point endingPosition = ship.getShipPosition().getEndingPoint();
-        System.out.println(endingPosition);
 
-        boolean horizontalBoundCheck = 0 < startingPosition.getX() && startingPosition.getX() <= 10
-                && 0 <= endingPosition.getX() && endingPosition.getX() <= 10;
+        boolean horizontalBoundCheck = (
+                horizontalLowerBound < startingPosition.getX() && startingPosition.getX() <= horizontalUpperBound
+                && horizontalLowerBound < endingPosition.getX() && endingPosition.getX() <= horizontalUpperBound
+        );
 
-        boolean verticalBoundCheck = 0 < startingPosition.getY() && startingPosition.getY() <= 10
-                && 0 <= endingPosition.getY() && endingPosition.getY() <= 10;
+        boolean verticalBoundCheck = (
+                verticalLowerBound < startingPosition.getY() && startingPosition.getY() <= verticalUpperBound
+                && verticalLowerBound < endingPosition.getY() && endingPosition.getY() <= verticalUpperBound
+        );
 
-        System.out.println(horizontalBoundCheck && verticalBoundCheck);
         return horizontalBoundCheck && verticalBoundCheck;
     }
 
@@ -81,8 +90,8 @@ class Test {
     public static void main(String[] args) {
         Board board = new Board();
 
-        board.addShip(new Destroyer(new Point(9, 1), Rotation.NORTH));
-        board.addShip(new Destroyer(new Point(9, 1), Rotation.EAST));
-        board.addShip(new Destroyer(new Point(9, 1), Rotation.WEST));
+        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.NORTH));
+        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.EAST));
+        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.WEST));
     }
 }
