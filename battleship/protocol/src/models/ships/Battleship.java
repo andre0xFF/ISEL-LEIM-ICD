@@ -1,5 +1,6 @@
 package models.ships;
 
+import models.Orientation;
 import models.Ship;
 import models.ships.components.ShipDamage;
 import models.ships.components.ShipPosition;
@@ -13,8 +14,8 @@ class Battleship implements Ship {
     private final ShipDamage shipDamage = new ShipDamage(length);
     private final ShipPosition shipPosition;
 
-    public Battleship(Point startPosition, ShipPosition.Rotation rotation) {
-        this.shipPosition = new ShipPosition(startPosition, rotation, this.length);
+    public Battleship(Point startPosition, Orientation orientation) {
+        this.shipPosition = new ShipPosition(startPosition, orientation, this.length);
     }
 
     @Override

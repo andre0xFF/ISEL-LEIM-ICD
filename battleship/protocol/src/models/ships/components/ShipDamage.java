@@ -1,7 +1,5 @@
 package models.ships.components;
 
-import models.Ship;
-
 public class ShipDamage {
     private final boolean[] damages;
 
