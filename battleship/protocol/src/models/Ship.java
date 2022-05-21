@@ -3,19 +3,13 @@ package models;
 import models.ships.components.ShipDamage;
 import models.ships.components.ShipPosition;
 
-import java.awt.Point;
-
-public interface Ship {
+public interface Ship extends BoardComponent {
 
     enum ShipName {
         Destroyer,
         Carrier,
         Submarine,
         Battleship
-    }
-
-    interface Component {
-
     }
 
     ShipName getName();

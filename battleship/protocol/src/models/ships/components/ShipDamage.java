@@ -2,7 +2,7 @@ package models.ships.components;
 
 import models.Ship;
 
-public class ShipDamage implements Ship.Component {
+public class ShipDamage {
     private final boolean[] damages;
 
     public ShipDamage(int length) {

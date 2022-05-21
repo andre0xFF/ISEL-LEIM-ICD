@@ -4,7 +4,7 @@ import models.Ship;
 
 import java.awt.*;
 
-public class ShipPosition implements Ship.Component {
+public class ShipPosition {
 
     public enum Rotation {
         EAST,

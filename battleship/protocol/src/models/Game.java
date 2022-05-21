@@ -1,8 +1,5 @@
 package models;
 
-import models.ships.Destroyer;
-import models.ships.components.ShipPosition;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,48 +13,45 @@ public class Game {
     }
 }
 
-class BoardShips {
-    private final HashMap<Ship.ShipName, Integer> registry = new HashMap<>();
-    private final HashMap<Ship.ShipName, Integer> counter = new HashMap<>();
-    private final ArrayList<Ship> ships = new ArrayList<>();
+interface BoardComponent {
 
-    public void register(Ship.ShipName shipName, int totalShips) {
-        registry.put(shipName, totalShips);
+}
+
+interface Board {
+
+    int horizontalLowerBound = 0;
+    int horizontalUpperBound = 10;
+    int verticalLowerBound = 0;
+    int verticalUpperBound = 10;
+
+    BoardComponents getBoardComponents();
+
+    boolean addWater(Point point);
+}
+
+class EnemyBoard implements Board {
+    private final BoardComponents boardComponents = new BoardComponents();
+
+    @Override
+    public BoardComponents getBoardComponents() {
+        return boardComponents;
     }
 
-    public boolean add(Ship ship) {
-        Integer count = counter.getOrDefault(ship.getName(), 0);
-        Integer limit = registry.get(ship.getName());
-
-        if (limit == null) {
-            return false;
-        }
-
-        if (count.equals(limit)) {
-            return false;
-        }
-
-        ships.add(ship);
-        counter.put(ship.getName(), count + 1);
-
-        return true;
+    @Override
+    public boolean addWater(Point point) {
+        return boardComponents.addComponent(point, new Water());
     }
 }
 
-class Board {
+class PlayerBoard implements Board {
 
-    private final BoardShips boardShips = new BoardShips();
-    private final int horizontalLowerBound = 0;
-    private final int horizontalUpperBound = 10;
-    private final int verticalLowerBound = 0;
-    private final int verticalUpperBound = 10;
-
+    private final BoardComponents boardComponents = new BoardComponents();
 
     private void initialize() {
-        boardShips.register(Ship.ShipName.Destroyer, 3);
-        boardShips.register(Ship.ShipName.Carrier, 1);
-        boardShips.register(Ship.ShipName.Submarine, 4);
-        boardShips.register(Ship.ShipName.Battleship, 2);
+        boardComponents.register(Ship.ShipName.Destroyer, 3);
+        boardComponents.register(Ship.ShipName.Carrier, 1);
+        boardComponents.register(Ship.ShipName.Submarine, 4);
+        boardComponents.register(Ship.ShipName.Battleship, 2);
     }
 
     public boolean addShip(Ship ship) {
@@ -73,25 +67,62 @@ class Board {
 
         boolean horizontalBoundCheck = (
                 horizontalLowerBound < startingPosition.getX() && startingPosition.getX() <= horizontalUpperBound
-                && horizontalLowerBound < endingPosition.getX() && endingPosition.getX() <= horizontalUpperBound
+                        && horizontalLowerBound < endingPosition.getX() && endingPosition.getX() <= horizontalUpperBound
         );
 
         boolean verticalBoundCheck = (
                 verticalLowerBound < startingPosition.getY() && startingPosition.getY() <= verticalUpperBound
-                && verticalLowerBound < endingPosition.getY() && endingPosition.getY() <= verticalUpperBound
+                        && verticalLowerBound < endingPosition.getY() && endingPosition.getY() <= verticalUpperBound
         );
 
         return horizontalBoundCheck && verticalBoundCheck;
     }
 
+    @Override
+    public BoardComponents getBoardComponents() {
+        return boardComponents;
+    }
 }
 
-class Test {
-    public static void main(String[] args) {
-        Board board = new Board();
+class BoardComponents {
+    private final HashMap<Ship.ShipName, Integer> registry = new HashMap<>();
+    private final HashMap<Ship.ShipName, Integer> counter = new HashMap<>();
 
-        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.NORTH));
-        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.EAST));
-        board.addShip(new Destroyer(new Point(9, 1), ShipPosition.Rotation.WEST));
+    private final HashMap<Point, BoardComponent> boardComponents = new HashMap<>();
+
+    public void register(Ship.ShipName shipName, int totalShips) {
+        registry.put(shipName, totalShips);
+    }
+
+    public boolean addComponent(Point point, Ship ship) {
+        if (boardComponents.containsKey(point)) {
+            return false;
+        }
+
+        Integer count = counter.getOrDefault(ship.getName(), 0);
+        Integer limit = registry.get(ship.getName());
+
+        if (limit == null) {
+            return false;
+        }
+
+        if (count.equals(limit)) {
+            return false;
+        }
+
+        boardComponents.put(point, ship);
+        counter.put(ship.getName(), count + 1);
+
+        return true;
+    }
+
+    public boolean addComponent(Point point, Water water) {
+        if (boardComponents.containsKey(point)) {
+            return false;
+        }
+
+        boardComponents.put(point, water);
+
+        return true;
     }
 }
