@@ -1,7 +1,7 @@
-package models.ships.components;
+package models_bkp.ships.components;
 
-import models.Board;
-import models.Orientation;
+import models_bkp.Board;
+import models_bkp.Orientation;
 
 import java.awt.*;
 

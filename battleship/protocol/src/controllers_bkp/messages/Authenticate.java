@@ -1,21 +1,19 @@
-package messages;
+package controllers_bkp.messages;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import controllers_bkp.Message;
 
-public class SubmitCredentials implements Message {
+public class Authenticate implements Message {
 
     private final String username;
     private final String password;
-    private final String controllerName;
 
     @JsonCreator
-    public SubmitCredentials(
-            @JsonSetter("controllerName") String controllerName,
+    public Authenticate(
             @JsonSetter("username") String username,
             @JsonSetter("password") String password
     ) {
-        this.controllerName = controllerName;
         this.username = username;
         this.password = password;
     }
@@ -26,10 +24,5 @@ public class SubmitCredentials implements Message {
 
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String getControllerName() {
-        return controllerName;
     }
 }

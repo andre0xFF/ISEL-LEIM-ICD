@@ -1,4 +1,6 @@
-package models;
+package models_bkp;
+
+import models_bkp.ships.Ship;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -102,10 +104,6 @@ class PlayerBoard implements Board {
         // Fill board components' coordinates with ship.
         return boardComponents.addComponent(points, ship);
     }
-}
-
-interface BoardComponent {
-
 }
 
 class BoardComponents {

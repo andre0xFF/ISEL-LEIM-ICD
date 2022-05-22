@@ -2,8 +2,10 @@ package sessions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import commands.Sign;
+import commands.SignResult;
 import controllers.Controller;
-import messages.Message;
+import controllers.GameController;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,39 +13,45 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 
 public class Server {
 
     public static ObjectMapper OBJECT_MAPPER = new XmlMapper();
     private ServerSocket serverSocket;
     private int port = 8888;
-    private final HashMap<String, Controller<Message>> controllers = new HashMap<>();
-    
-    public Server(int port) {
-        this.port = port;
-    }
-    
-    public Server() {
-        
-    }
+    private final Controller controller = new GameController();
 
-    public void start() throws IOException {
-        serverSocket = new ServerSocket(port);
-        
+    public void start() {
+        try {
+            serverSocket = new ServerSocket(port);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         while (true) {
-            Socket clientSocket = serverSocket.accept();
+            Socket clientSocket;
+
+            try {
+                clientSocket = serverSocket.accept();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             new Thread(() -> {
                 try {
                     PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
                     BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     String input;
+                    String output;
 
-                    while ((input = in.readLine()) != null) {
-                        Message message = OBJECT_MAPPER.readValue(input, Message.class);
-                        controllers.get(message.getControllerName()).onMessage(message);
-                    }
+                    input = in.readLine();
+                    // TODO: Validate schema.
+
+                    Sign sign = Server.OBJECT_MAPPER.readValue(input, Sign.class);
+                    SignResult signResult = sign.execute(controller);
+                    output = Server.OBJECT_MAPPER.writeValueAsString(signResult);
+                    out.println(output);
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -53,9 +61,5 @@ public class Server {
 
     public void stop() throws IOException {
         serverSocket.close();
-    }
-
-    public void addController(Controller<Message> controller) {
-        controllers.put(controller.getName(), controller);
     }
 }

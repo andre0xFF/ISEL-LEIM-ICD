@@ -1,9 +1,9 @@
-package messages;
+package controllers_bkp;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import controllers_bkp.messages.Authenticate;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -12,14 +12,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 )
 @JsonSubTypes(
         {
-                @JsonSubTypes.Type(StartGame.class),
-                @JsonSubTypes.Type(SubmitCredentials.class),
-                @JsonSubTypes.Type(SubmitPlayerDetails.class)
+                @JsonSubTypes.Type(Authenticate.class)
         }
 )
 @JsonRootName(value = "Message")
 public interface Message {
 
-        @JacksonXmlProperty(isAttribute = true)
-        String getControllerName();
 }

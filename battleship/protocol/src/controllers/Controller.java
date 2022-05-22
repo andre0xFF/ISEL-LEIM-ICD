@@ -1,7 +1,7 @@
 package controllers;
 
-public interface Controller<T> {
+import models.AccountsModel;
 
-    String getName();
-    void onMessage(T message);
+public interface Controller {
+    AccountsModel getAccountsModel();
 }

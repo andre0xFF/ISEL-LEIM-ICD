@@ -1,6 +1,7 @@
-package models;
+package models_bkp.ships;
 
-import models.ships.components.ShipDamage;
+import models_bkp.BoardComponent;
+import models_bkp.ships.components.ShipDamage;
 
 public interface Ship extends BoardComponent {
 

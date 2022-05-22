@@ -1,4 +1,4 @@
-package models.ships.components;
+package models_bkp.ships.components;
 
 public class ShipDamage {
     private final boolean[] damages;

@@ -1,7 +1,10 @@
 package sessions;
 
-import controllers.Controller;
-import messages.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import commands.Command;
+import commands.Sign;
+import commands.SignResult;
+import models.Account;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,32 +18,50 @@ public class Client {
     private final int port = 8888;
     private PrintWriter out;
     private BufferedReader in;
-    private Controller<Message> controller;
 
-    public void setController(Controller<Message> controller) {
-        this.controller = controller;
+    public void receive() throws IOException {
+        String text = in.readLine();
+        System.out.println(text);
     }
 
-    public String send(String message) {
-        out.println(message);
-        return "";
-    }
+    public void start() {
+        try {
+            clientSocket = new Socket(ip, port);
+            out = new PrintWriter(clientSocket.getOutputStream(), true);
+            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String input;
 
-    public Message listen() throws IOException {
-        in.readLine();
+            Command command = new Sign(
+                    true,
+                    false,
+                    new Account("andre", "123")
+            );
 
-        return null;
-    }
+            send(command);
+            input = in.readLine();
+            // TODO: Validate schema.
+            SignResult signResult = Server.OBJECT_MAPPER.readValue(input, SignResult.class);
 
-    public void start() throws IOException {
-        clientSocket = new Socket(ip, port);
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
-        in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void stop() throws IOException {
         in.close();
         out.close();
         clientSocket.close();
+    }
+
+    public void send(Command command) {
+        String text;
+
+        try {
+            text = Server.OBJECT_MAPPER.writeValueAsString(command);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        out.println(text);
     }
 }
