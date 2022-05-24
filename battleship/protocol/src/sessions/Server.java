@@ -1,65 +1,38 @@
 package sessions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import commands.Sign;
-import commands.SignResult;
-import controllers.Controller;
-import controllers.GameController;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-
-    public static ObjectMapper OBJECT_MAPPER = new XmlMapper();
     private ServerSocket serverSocket;
-    private int port = 8888;
-    private final Controller controller = new GameController();
 
     public void start() {
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(Communication.PORT);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Communication accept() {
+        Socket socket;
+
+        try {
+            socket = serverSocket.accept();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        while (true) {
-            Socket clientSocket;
+        Communication communication = new Communication();
+        communication.start(socket);
+        System.out.println("Server: Client accepted!");
 
-            try {
-                clientSocket = serverSocket.accept();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            new Thread(() -> {
-                try {
-                    PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                    BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                    String input;
-                    String output;
-
-                    input = in.readLine();
-                    // TODO: Validate schema.
-
-                    Sign sign = Server.OBJECT_MAPPER.readValue(input, Sign.class);
-                    SignResult signResult = sign.execute(controller);
-                    output = Server.OBJECT_MAPPER.writeValueAsString(signResult);
-                    out.println(output);
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }).start();
-        }
+        return communication;
     }
 
     public void stop() throws IOException {
         serverSocket.close();
+        System.out.println("Server: Stopped!");
     }
 }

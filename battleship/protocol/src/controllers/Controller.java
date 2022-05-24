@@ -1,7 +1,10 @@
 package controllers;
 
-import models.AccountsModel;
+import controllers.commands.CommandController;
+import sessions.Server;
 
 public interface Controller {
-    AccountsModel getAccountsModel();
+
+    void acceptCommunication();
+    void sendCommand(CommandController command);
 }

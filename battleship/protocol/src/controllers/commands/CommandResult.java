@@ -1,4 +1,4 @@
-package commands;
+package controllers.commands;
 
 public interface CommandResult {
 
