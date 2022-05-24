@@ -1,10 +1,10 @@
 package controllers.commands;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import controllers.Controller;
+import controllers.ClientController;
 
-public class PongCommand implements CommandController {
-    private Controller controller;
+public class PongCommand implements ClientControllerCommand {
+    private ClientController controller;
 
     @JsonCreator
     public PongCommand() {
@@ -17,7 +17,7 @@ public class PongCommand implements CommandController {
     }
 
     @Override
-    public void setController(Controller controller) {
+    public void setController(ClientController controller) {
         this.controller = controller;
     }
 }

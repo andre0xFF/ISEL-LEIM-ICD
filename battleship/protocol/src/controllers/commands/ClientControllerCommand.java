@@ -5,8 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import controllers.Controller;
-import controllers_bkp.messages.Authenticate;
+import controllers.ClientController;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -15,11 +14,12 @@ import controllers_bkp.messages.Authenticate;
 )
 @JsonSubTypes(
         {
-                @JsonSubTypes.Type(ServerControllerCommand.class),
-                @JsonSubTypes.Type(ClientControllerCommand.class),
+                @JsonSubTypes.Type(PongCommand.class)
         }
 )
-@JsonRootName(value = "CommandController")
-public interface CommandController extends Command<Controller> {
+@JsonRootName(value = "ServerControllerCommand")
+public interface ClientControllerCommand extends CommandController  {
 
+    @JsonIgnore
+    void setController(ClientController controller);
 }

@@ -2,8 +2,9 @@ package controllers.commands;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import controllers.Controller;
+import controllers.ServerController;
 
-public class PingCommand implements CommandController {
+public class PingCommand implements ServerControllerCommand {
 
     private Controller controller;
 
@@ -19,7 +20,7 @@ public class PingCommand implements CommandController {
     }
 
     @Override
-    public void setController(Controller controller) {
+    public void setController(ServerController controller) {
         this.controller = controller;
     }
 }

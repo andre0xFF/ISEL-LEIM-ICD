@@ -1,6 +1,8 @@
 import controllers.ClientController;
 import controllers.ServerController;
+import controllers.commands.Authenticate;
 import controllers.commands.PingCommand;
+import models.Account;
 import sessions.Server;
 
 public class TestController {
@@ -15,5 +17,6 @@ public class TestController {
         ClientController clientController = new ClientController();
         clientController.acceptCommunication();
         clientController.sendCommand(new PingCommand());
+        clientController.sendCommand(new Authenticate(new Account("andre", "12345")));
     }
 }

@@ -2,12 +2,13 @@ package controllers.commands;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import controllers.Controller;
+import controllers.ServerController;
 import models.Account;
 
-public class Authenticate implements CommandController {
+public class Authenticate implements ServerControllerCommand {
+
     private final Account account;
-    private Controller controller;
+    private ServerController controller;
 
     @JsonCreator
     public Authenticate(@JsonSetter("account") Account account) {
@@ -17,6 +18,7 @@ public class Authenticate implements CommandController {
     @Override
     public void execute() {
         String username = account.getUsername();
+        // Account storedAccount = controller.getAccount("username");
         // TODO: Get account from model.
 
         if (account == null) {
@@ -34,7 +36,11 @@ public class Authenticate implements CommandController {
     }
 
     @Override
-    public void setController(Controller controller) {
+    public void setController(ServerController controller) {
         this.controller = controller;
+    }
+
+    public Account getAccount() {
+        return account;
     }
 }

@@ -1,10 +1,9 @@
 package controllers;
 
-import controllers.commands.CommandController;
-import sessions.Server;
+import behavioral.command.Command;
 
 public interface Controller {
 
     void acceptCommunication();
-    void sendCommand(CommandController command);
+    void sendCommand(Command<?> command);
 }
