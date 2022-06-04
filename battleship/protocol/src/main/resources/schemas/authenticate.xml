@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<authenticate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://auth authenticate.xsd"
+              xmlns="http://auth">
+    <username>ase13331</username>
+    <password>@123114a4</password>
+</authenticate>

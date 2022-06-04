@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:au="http://auth"
+           targetNamespace="http://auth"
+           elementFormDefault="qualified">
+    <!--username Type-->
+    <xs:simpleType name="usernameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([a-zA-Z0-9]{4,10})"/>
+            <xs:whiteSpace value="collapse"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--password Type-->
+    <xs:simpleType name="passworType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="6"/>
+            <xs:maxLength value="10"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!--authenticate Type-->
+    <xs:complexType name="authenticateType">
+        <xs:sequence>
+            <xs:element name="username" type="au:usernameType"/>
+            <xs:element name="password" type="au:passworType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--element authenticate-->
+    <xs:element name="authenticate" type="au:authenticateType"/>
+</xs:schema>
