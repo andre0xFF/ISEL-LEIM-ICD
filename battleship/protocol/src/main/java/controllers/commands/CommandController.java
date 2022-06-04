@@ -1,11 +1,10 @@
 package controllers.commands;
 
 import behavioral.command.Command;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import controllers.ClientController;
+import controllers.Controller;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -14,12 +13,11 @@ import controllers.ClientController;
 )
 @JsonSubTypes(
         {
-                @JsonSubTypes.Type(PongCommand.class)
+                @JsonSubTypes.Type(ServerControllerCommand.class),
+                @JsonSubTypes.Type(ClientControllerCommand.class),
         }
 )
-@JsonRootName(value = "ServerControllerCommand")
-public interface ClientControllerCommand extends CommandController  {
+@JsonRootName(value = "CommandController")
+public interface CommandController extends Command<Controller> {
 
-    @JsonIgnore
-    void setController(ClientController controller);
 }

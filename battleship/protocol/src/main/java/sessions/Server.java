@@ -9,13 +9,13 @@ public class Server {
 
     public void start() {
         try {
-            serverSocket = new ServerSocket(Communication.PORT);
+            serverSocket = new ServerSocket(Messenger.PORT);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public Communication accept() {
+    public Messenger accept() {
         Socket socket;
 
         try {
@@ -24,11 +24,11 @@ public class Server {
             throw new RuntimeException(e);
         }
 
-        Communication communication = new Communication();
-        communication.start(socket);
+        Messenger messenger = new Messenger();
+        messenger.start(socket);
         System.out.println("Server: Client accepted!");
 
-        return communication;
+        return messenger;
     }
 
     public void stop() throws IOException {

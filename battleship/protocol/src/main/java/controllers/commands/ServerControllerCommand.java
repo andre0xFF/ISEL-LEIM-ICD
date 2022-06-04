@@ -1,6 +1,5 @@
 package controllers.commands;
 
-import behavioral.command.Command;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -19,7 +18,7 @@ import controllers.ServerController;
         }
 )
 @JsonRootName(value = "ServerControllerCommand")
-public interface ServerControllerCommand extends CommandController  {
+public interface ServerControllerCommand extends CommandController {
 
     @JsonIgnore
     void setController(ServerController controller);

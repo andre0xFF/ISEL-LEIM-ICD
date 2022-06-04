@@ -1,9 +1,8 @@
 package controllers;
 
-import behavioral.command.Command;
 import controllers.commands.CommandController;
 import controllers.commands.ServerControllerCommand;
-import sessions.Communication;
+import sessions.Messenger;
 import sessions.Server;
 
 import java.io.IOException;
@@ -11,7 +10,7 @@ import java.io.IOException;
 public class ServerController implements Controller {
 
     private Server server;
-    private Communication communication;
+    private Messenger messenger;
 
     public void setServer(Server server) {
         this.server = server;
@@ -23,28 +22,28 @@ public class ServerController implements Controller {
             server.start();
 
             while (true) {
-                communication = server.accept();
-                readCommunication(communication);
+                messenger = server.accept();
+                readCommunication(messenger);
             }
         }).start();
     }
 
     @Override
-    public void sendCommand(Command<?> command) {
-        communication.write(command);
+    public void sendCommand(CommandController command) {
+        messenger.write(command);
     }
 
-    private void readCommunication(Communication communication) {
+    private void readCommunication(Messenger messenger) {
         new Thread(() -> {
             ServerControllerCommand command;
 
-            while ((command = (ServerControllerCommand) communication.readAsCommand()) != null) {
+            while ((command = (ServerControllerCommand) messenger.readAsCommand()) != null) {
                 command.setController(this);
                 command.execute();
             }
 
             try {
-                communication.stop();
+                messenger.stop();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -24,4 +24,3 @@ public class PingCommand implements ServerControllerCommand {
         this.controller = controller;
     }
 }
-

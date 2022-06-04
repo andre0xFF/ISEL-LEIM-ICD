@@ -1,38 +1,37 @@
 package controllers;
 
-import behavioral.command.Command;
 import controllers.commands.ClientControllerCommand;
 import controllers.commands.CommandController;
-import sessions.Communication;
+import sessions.Messenger;
 
 import java.io.IOException;
 
 public class ClientController implements Controller {
 
-    private final Communication communication = new Communication();
+    private final Messenger messenger = new Messenger();
 
     @Override
     public void acceptCommunication() {
-        communication.start();
-        readCommunication(communication);
+        messenger.start();
+        readCommunication(messenger);
     }
 
     @Override
-    public void sendCommand(Command<?> command) {
-        communication.write(command);
+    public void sendCommand(CommandController command) {
+        messenger.write(command);
     }
 
-    private void readCommunication(Communication communication) {
+    private void readCommunication(Messenger messenger) {
         new Thread(() -> {
             ClientControllerCommand command;
 
-            while ((command = (ClientControllerCommand) communication.readAsCommand()) != null) {
+            while ((command = (ClientControllerCommand) messenger.readAsCommand()) != null) {
                 command.setController(this);
                 command.execute();
             }
 
             try {
-                communication.stop();
+                messenger.stop();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
