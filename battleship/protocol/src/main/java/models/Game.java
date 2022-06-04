@@ -1,4 +1,4 @@
-package models_bkp;
+package models;
 
 public class Game {
 

@@ -1,6 +1,6 @@
-package models_bkp;
+package models;
 
-import models_bkp.ships.Ship;
+import models.ships.Ship;
 
 import java.awt.*;
 import java.util.HashMap;

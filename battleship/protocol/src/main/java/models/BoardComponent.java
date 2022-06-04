@@ -1,4 +1,4 @@
-package models_bkp;
+package models;
 
 public interface BoardComponent {
 

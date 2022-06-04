@@ -1,11 +1,11 @@
-package models_bkp.ships;
+package models.ships;
 
-import models_bkp.ships.components.ShipDamage;
+import models.ships.components.ShipDamage;
 
-public class Destroyer implements Ship {
+class Carrier implements Ship {
 
-    private final int length = 3;
-    private final static ShipName NAME = ShipName.Destroyer;
+    private final int length = 5;
+    private final static ShipName NAME = ShipName.Carrier;
     private final ShipDamage shipDamage = new ShipDamage(length);
 
     @Override
