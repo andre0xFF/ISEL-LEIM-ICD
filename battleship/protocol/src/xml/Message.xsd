@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:msg="http://message"
+           targetNamespace="http://message"
+           elementFormDefault="qualified">
+
+<!--    schemaName type-->
+    <xs:simpleType name="schemanametype">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+<!--    content type-->
+    <xs:simpleType name="contenttype">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+<!--    message type-->
+    <xs:complexType name="Message">
+        <xs:sequence>
+            <xs:element name="schemaName" type="msg:schemanametype"/>
+            <xs:element name="content" type="msg:contenttype"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="Message" type="msg:Message"/>
+
+</xs:schema>
