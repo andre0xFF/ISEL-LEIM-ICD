@@ -1,0 +1,5 @@
+version: '3'
+
+services:
+  connectfour:
+    image: openjdk:18-jdk
