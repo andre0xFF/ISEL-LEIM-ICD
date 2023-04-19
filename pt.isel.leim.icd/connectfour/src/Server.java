@@ -82,6 +82,8 @@ public class Server {
                 String content = reader.readLine();
                 Message message = serializer.deserialize(content);
 
+                var targetClass = message.getClass().toString();
+
                 socket.close();
             } catch (IOException e) {
                 e.printStackTrace();
