@@ -6,6 +6,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.time.Duration;
+import java.util.Date;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -64,4 +67,58 @@ public interface Message {
             this(LocalDateTime.now());
         }
     }
+
+    record ErrorMessage(String details) implements Message{
+    }
+
+    record SignInMessage(String username, String password) implements Message{
+
+    }
+
+    record SignUpMessage(String username, String password) implements Message{
+
+    }
+
+    record SignOutMessage() implements Message{
+
+    }
+
+    // server response
+    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements Message{
+
+    }
+
+    //client move request
+    record TokenDropMessage(int gameBoardColumn)implements Message{
+
+    }
+
+    //Client move request
+    record TokenDropResultMessage(Boolean isValidTokenDrop) implements Message{
+
+    }
+
+    // server response when game's over to both players
+    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements Message{
+
+    }
+
+    record AskGameHistory() implements Message{
+
+    }
+
+
+    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements Message{
+
+    }
+
+    record AskPlayerProfile() implements Message{
+
+    }
+
+    record PlayerProfile(Profile profile) implements Message{
+
+    }
+
+
 }
