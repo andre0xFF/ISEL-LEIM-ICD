@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MessageTest {
-
-    private final String pingMessageContent = "<Message type=\"PingMessage\"><dateTime>2021-05-18T15:00:00</dateTime></Message>";
+    public static final String pingMessageContent = "<Message type=\"PingMessage\"><dateTime>2021-05-18T15:00:00</dateTime></Message>";
+    public static String pongMessageContent = "<Message type=\"PongMessage\"><dateTime>2021-05-18T15:00:00</dateTime></Message>";
     private final LocalDateTime dateTime = LocalDateTime.of(2021, 5, 18, 15, 0, 0);
     private final Message.Serializer serializer = new Message.Serializer();
 

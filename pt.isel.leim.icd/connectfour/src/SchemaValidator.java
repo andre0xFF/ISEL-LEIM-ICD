@@ -19,16 +19,15 @@ import java.io.IOException;
 import java.io.StringReader;
 
 public class SchemaValidator {
-
     private static final String xpathExpression = "/Message/@type";
+    private static final String xsdFilePath = "res/schemas/%s.xsd";
 
     public boolean validate(String xmlContent) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         String type = getType(xmlContent);
-        String xsdFilePath = String.format("res/schemas/%s.xsd", type);
 
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File(xsdFilePath));
+            Schema schema = factory.newSchema(new File(String.format(xsdFilePath, type)));
 
             Validator validator = schema.newValidator();
             validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
