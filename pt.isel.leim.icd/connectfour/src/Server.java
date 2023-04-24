@@ -59,6 +59,12 @@ public class Server {
         return port;
     }
 
+    public void broadcast(Message message) throws JsonProcessingException {
+        for (ClientHandler clientHandler : clientHandlers) {
+            clientHandler.write(message);
+        }
+    }
+
     /**
      * A client handler handles a client.
      */
@@ -79,25 +85,16 @@ public class Server {
         @Override
         public void run() {
             try {
-                String content = reader.readLine();
-                Message message = serializer.deserialize(content);
-
-                var targetClass = message.getClass().toString();
-
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private Message read() {
-            try {
-                String content = reader.readLine();
-
-                return serializer.deserialize(content);
+                read();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        }
+
+        private Message read() throws IOException {
+                String content = reader.readLine();
+
+                return serializer.deserialize(content);
         }
 
         private void write(Message message) throws JsonProcessingException {
