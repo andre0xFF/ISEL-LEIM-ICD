@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeAll;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
@@ -26,12 +27,12 @@ class ClientTest {
         client = new Client(8002);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldConnectToServer() {
         assertTrue(client.isConnected());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldSendPingMessage() throws JsonProcessingException {
         assertDoesNotThrow(() -> client.write(new Message.PingMessage()));
     }

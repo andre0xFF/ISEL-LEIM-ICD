@@ -4,11 +4,12 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchemaValidatorTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldValidatePingMessage() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
         SchemaValidator schemaValidator = new SchemaValidator();
 
@@ -17,7 +18,7 @@ class SchemaValidatorTest {
         assertTrue(isValid);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldValidatePongMessage() throws XPathExpressionException, ParserConfigurationException, IOException, SAXException {
         SchemaValidator schemaValidator = new SchemaValidator();
 

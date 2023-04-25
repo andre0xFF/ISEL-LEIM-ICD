@@ -6,6 +6,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MessageTest {
@@ -14,28 +16,28 @@ class MessageTest {
     private final LocalDateTime dateTime = LocalDateTime.of(2021, 5, 18, 15, 0, 0);
     private final Message.Serializer serializer = new Message.Serializer();
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldConstructPingMessage() {
         Message.PingMessage message = new Message.PingMessage(dateTime);
 
         assertEquals(dateTime, message.dateTime());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldSerializePingMessageAsXML() throws JsonProcessingException {
         String actualContent = serializer.serialize(new Message.PingMessage(dateTime));
 
         assertEquals(pingMessageContent, actualContent);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldDeserializePingMessageFromXML() throws JsonProcessingException {
         Message.PingMessage actualMessage = (Message.PingMessage) serializer.deserialize(pingMessageContent);
 
         assertEquals(dateTime, actualMessage.dateTime());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldCastPingMessage() throws JsonProcessingException {
         Message deserializedMessaged = serializer.deserialize(pingMessageContent);
 
@@ -44,7 +46,7 @@ class MessageTest {
         assertEquals(dateTime, actualMessage.dateTime());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldCastPingMessageUsingReflection() throws JsonProcessingException {
         Message deserializedMessaged = serializer.deserialize(pingMessageContent);
 

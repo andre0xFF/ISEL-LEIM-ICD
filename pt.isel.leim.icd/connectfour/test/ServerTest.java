@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ServerTest {
@@ -35,26 +37,26 @@ class ServerTest {
         serverThread.interrupt();
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldStartServerOnPort8000ByDefaultWhenNotSpecified() {
         assertEquals(8000, server.getPort());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldStartServerOnPort8001WhenSpecified() {
         Server server = new Server(messages, 8001);
 
         assertEquals(8001, server.getPort());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldAcceptConnection() throws IOException {
         Socket socket = new Socket("localhost", server.getPort());
 
         assertTrue(socket.isConnected());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldAcceptMultipleConnections() throws IOException {
         Socket socket1 = new Socket("localhost", server.getPort());
         Socket socket2 = new Socket("localhost", server.getPort());
@@ -65,7 +67,7 @@ class ServerTest {
         assertTrue(socket3.isConnected());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void shouldReceiveText() throws IOException {
         Socket socket = new Socket("localhost", server.getPort());
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
