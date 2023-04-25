@@ -42,6 +42,7 @@ public class Game {
     }
 
     private boolean checkWin(int row, int column) {
+
         return checkHorizontalWin(row, column)
                 || checkVerticalWin(row, column)
                 || checkDiagonalWin(row, column);
@@ -56,7 +57,8 @@ public class Game {
     }
 
     private boolean checkHorizontalWin(int row, int column) {
-        for (int currentColumn = max(column - 3, 0), count = 0; currentColumn < min(column + 4, board.getTotalColumns()); currentColumn++) {
+
+        for (int currentColumn = max(column - 3, 1), count = 0; currentColumn < min(column + 4, board.getTotalColumns()); currentColumn++) {
             if (board.getToken(row, currentColumn) == currentPlayer.getToken()) {
                 count++;
                 if (count == 4) {

@@ -14,7 +14,6 @@ public class Board {
 
     public int dropToken(int column, Token token) {
         column -= 1;
-
         for (int row = totalRows - 1; row >= 0; row--) {
             if (tokens[row][column] == null) {
                 tokens[row][column] = token;
