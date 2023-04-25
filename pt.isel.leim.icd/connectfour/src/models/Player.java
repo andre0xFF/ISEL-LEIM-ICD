@@ -1,49 +1,30 @@
 package models;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-//public record Player(String name) {
-//
-//    private static final ArrayList<Token> tokens = new ArrayList<>();
-//
-//    public Token getToken() {
-//        return tokens.get(0);
-//    }
-//
-//    public void addToken(Token token) {
-//        tokens.add(token);
-//    }
-//
-//    public ArrayList<Token> getTokens(){
-//        return tokens;
-//    }
-//}
+public class Player {
 
-public class Player{
+    private final ArrayList<Token> tokens = new ArrayList<>();
+    private final String name;
 
-    private ArrayList<Token> tokens;
-
-    private String name;
-    public Player(String name){
+    public Player(String name) {
         this.name = name;
-
-        tokens = new ArrayList<>();
     }
 
-    public Token getToken(){
-        return tokens.get(0);
+    public Token popToken() {
+        return tokens.remove(0);
     }
 
-
-    public void addToken(Token token){
+    public void addToken(Token token) {
         tokens.add(token);
     }
 
-
-    public ArrayList<Token> getTokens(){
-        return tokens;
+    public int getTokensCount() {
+        return tokens.size();
     }
 
-
+    public Color color() {
+        return tokens.get(0).color();
+    }
 }
-
