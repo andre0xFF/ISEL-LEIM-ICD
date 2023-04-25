@@ -42,11 +42,19 @@ public class Board {
         return tokens[row][column];
     }
 
-    public int getTotalRows() {
+    /**
+     * Returns the total number of rows in the board.
+     * @return The total number of rows in the board.
+     */
+    public int totalRows() {
         return totalRows;
     }
 
-    public int getTotalColumns() {
+    /**
+     * Returns the total number of columns in the board.
+     * @return The total number of columns in the board.
+     */
+    public int totalColumns() {
         return totalColumns;
     }
 }

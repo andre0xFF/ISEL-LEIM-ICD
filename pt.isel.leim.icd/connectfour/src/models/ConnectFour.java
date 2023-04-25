@@ -5,7 +5,7 @@ import java.awt.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class Game {
+public class ConnectFour {
 
     private final Board board = new Board();
     private final Player player1;
@@ -14,7 +14,7 @@ public class Game {
     private Player winner;
     private static final int totalToken = 21;
 
-    public Game(Player player1, Player player2) {
+    public ConnectFour(Player player1, Player player2) {
         for (int i = 0; i < totalToken; i++) {
             player1.addToken(new Token(Color.ORANGE));
             player2.addToken(new Token(Color.BLUE));
@@ -25,12 +25,23 @@ public class Game {
         this.currentPlayer = player1;
     }
 
+    /**
+     * Drops a token in the specified column
+     * @param column the column to drop the token in
+     * @return true if the token was dropped, false if the game is over or the column is full
+     */
     public boolean dropToken(int column) {
         if (isGameOver()) {
             return false;
         }
 
-        int row = board.dropToken(column, currentPlayer.popToken());
+        int row;
+
+        try {
+            row = board.dropToken(column, currentPlayer.popToken());
+        } catch (RuntimeException e) {
+            return false;
+        }
 
         if (checkWin(row, column, currentPlayer)) {
             winner = currentPlayer;
@@ -38,6 +49,7 @@ public class Game {
         }
 
         currentPlayer = currentPlayer == player1 ? player2 : player1;
+
         return true;
     }
 
@@ -55,33 +67,6 @@ public class Game {
     }
 
     private boolean checkDiagonalWin(int row, int column, Player player, int rowDirection, int columnDirection) {
-        Color playerColor = player.color();
-
-        for (
-                int currentRow = row + (3 * rowDirection),
-                        currentColumn = column - (3 * columnDirection),
-                count = 0;
-                currentRow > max(row - 4, 1)
-                        && currentColumn > max(column - 4, 1)
-                        && currentRow < min(row + 4, board.getTotalRows())
-                        && currentColumn < min(column + 4, board.getTotalColumns());
-                currentRow -= rowDirection,
-                        currentColumn -= columnDirection
-        ) {
-            Token currentToken = board.getToken(currentRow, currentColumn);
-
-            if (currentToken == null || !currentToken.color().equals(playerColor)) {
-                count = 0;
-                continue;
-            }
-
-            count++;
-
-            if (count == 4) {
-                return true;
-            }
-        }
-
         return false;
     }
 
@@ -89,7 +74,7 @@ public class Game {
         Color playerColor = player.color();
 
         for (
-                int currentRow = min(row + 3, board.getTotalRows()),
+                int currentRow = min(row + 3, board.totalRows()),
                 count = 0;
                 currentRow > max(row - 4, 1);
                 currentRow--
@@ -117,7 +102,7 @@ public class Game {
         for (
                 int currentColumn = max(column - 3, 1),
                 count = 0;
-                currentColumn < min(column + 4, board.getTotalColumns());
+                currentColumn < min(column + 4, board.totalColumns());
                 currentColumn++
         ) {
             Token currentToken = board.getToken(row, currentColumn);
@@ -137,19 +122,27 @@ public class Game {
         return false;
     }
 
+    /**
+     * Checks if the game is over
+     * @return true if the game is over, false otherwise
+     */
     public boolean isGameOver() {
         return winner != null;
     }
 
-    public Player getWinner() {
+    /**
+     * Gets the winner of the game
+     * @return the winner of the game, or null if the game is not over
+     */
+    public Player winner() {
         return winner;
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
-    public Player getCurrentPlayer() {
+    /**
+     * Gets the current player
+     * @return the current player
+     */
+    public Player currentPlayer() {
         return currentPlayer;
     }
 }

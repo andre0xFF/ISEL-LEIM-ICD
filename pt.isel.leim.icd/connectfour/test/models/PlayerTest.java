@@ -13,7 +13,7 @@ class PlayerTest {
         Player player = new Player("Player 1");
         player.addToken(new Token(Color.ORANGE));
 
-        assertEquals(1, player.getTokensCount());
+        assertEquals(1, player.tokensSize());
     }
 
     @Test
@@ -22,8 +22,15 @@ class PlayerTest {
         Token token = new Token(Color.ORANGE);
 
         player.addToken(token);
+
         assertEquals(token, player.popToken());
-        assertEquals(0, player.getTokensCount());
+        assertEquals(0, player.tokensSize());
     }
 
+    @Test
+    void shouldHaveName() {
+        Player player = new Player("Player 1");
+
+        assertEquals("Player 1", player.name());
+    }
 }
