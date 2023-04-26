@@ -2,64 +2,66 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-public class ConnectFourView extends JFrame {
+public class ConnectFourView {
 
     private static final int BUTTON_SIZE = 60;
     private static final String CURRENT_PLAYER_LABEL = "Current player: %s";
-    private JLabel currentPlayerLabel;
-    private JButton[][] buttons;
+    private JFrame frame;
+    private JPanel authenticationPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JPanel boardPanel;
+    private JButton[][] buttons;
+    private JLabel currentPlayerLabel;
     private final int rows;
     private final int columns;
     private ActionListener listener;
 
-    public ConnectFourView(String playerName, int rows, int columns) {
+    public ConnectFourView(int rows, int columns) {
+        createFrame(rows, columns);
+        createAuthenticationPanel();
+
+        this.frame.setVisible(true);
         this.rows = rows;
         this.columns = columns;
-
-
-        // add(createBoardPanel(), BorderLayout.CENTER);
-        // add(createControlPanel("André"), BorderLayout.SOUTH);
-
-        add(createAuthenticationPanel());
-
-        setTitle("Connect Four");
-        setSize(columns * BUTTON_SIZE, rows * BUTTON_SIZE + 50);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
-
-        // startNewGame();
     }
 
-    private JPanel createAuthenticationPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    public void setActionListener(ActionListener listener) {
+        this.listener = listener;
+    }
 
-        JPanel formPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+    private void createFrame(int rows, int columns) {
+        frame = new JFrame("Connect Four");
 
-        JLabel usernameLabel = new JLabel("Username:");
-        formPanel.add(usernameLabel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(new Dimension(BUTTON_SIZE * columns, (BUTTON_SIZE * rows) + 40));
+    }
 
-        usernameField = new JTextField();
-        formPanel.add(usernameField);
+    private void createAuthenticationPanel() {
+        authenticationPanel = new JPanel(new FlowLayout());
 
-        JLabel passwordLabel = new JLabel("Password:");
-        formPanel.add(passwordLabel);
+        JLabel usernameLabel = new JLabel("Username: ");
+        authenticationPanel.add(usernameLabel);
 
-        passwordField = new JPasswordField();
-        formPanel.add(passwordField);
+        JTextField usernameField = new JTextField(20);
+        authenticationPanel.add(usernameField);
 
-        panel.add(formPanel, BorderLayout.NORTH);
+        JLabel passwordLabel = new JLabel("Password: ");
+        authenticationPanel.add(passwordLabel);
+
+        JPasswordField passwordField = new JPasswordField(20);
+        authenticationPanel.add(passwordField);
 
         JButton loginButton = new JButton("Login");
-        loginButton.addActionListener(listener);
-        panel.add(loginButton, BorderLayout.SOUTH);
+        authenticationPanel.add(loginButton);
 
-        return panel;
+        this.frame.add(authenticationPanel, BorderLayout.NORTH);
+
+        this.usernameField = usernameField;
+        this.passwordField = passwordField;
     }
 
-    private JPanel createBoardPanel() {
+    private void createBoardPanel(int rows, int columns) {
         JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
 
         buttons = new JButton[rows][columns];
@@ -80,36 +82,49 @@ public class ConnectFourView extends JFrame {
             }
         }
 
-        return boardPanel;
+        this.boardPanel = boardPanel;
+        this.frame.add(boardPanel, BorderLayout.CENTER);
     }
 
-    public JPanel createControlPanel(String currentPlayerName) {
+    public void createControlPanel(String currentPlayerName) {
         JPanel controlPanel = new JPanel(new FlowLayout());
         currentPlayerLabel = new JLabel(String.format(CURRENT_PLAYER_LABEL, currentPlayerName));
 
         controlPanel.add(currentPlayerLabel);
 
-        return controlPanel;
-    }
-
-    public void setActionListener(ActionListener listener) {
-        this.listener = listener;
+        this.frame.add(controlPanel, BorderLayout.SOUTH);
     }
 
     public void updateToken(int row, int column, Color color) {
-        buttons[row][column].setBackground(color);
+        this.buttons[row][column].setBackground(color);
     }
 
-    public void setCurrentPlayer(String playerName) {
-        currentPlayerLabel.setText(String.format(CURRENT_PLAYER_LABEL, playerName));
+    public void updateCurrentPlayer(String playerName) {
+        this.currentPlayerLabel.setText(String.format(CURRENT_PLAYER_LABEL, playerName));
+    }
+
+    public JTextField usernameField() {
+        return usernameField;
+    }
+
+    public JPasswordField passwordField() {
+        return passwordField;
+    }
+
+    public void startGame() {
+        this.authenticationPanel.setVisible(false);
+        createBoardPanel(rows, columns);
     }
 
     public static void main(String[] args) {
-        ConnectFourView connectFourView = new ConnectFourView("André", 6, 7);
+        ConnectFourView connectFourView = new ConnectFourView(6, 7);
 
+        connectFourView.startGame();
         connectFourView.updateToken(1, 1, Color.RED);
         connectFourView.updateToken(1, 2, Color.RED);
         connectFourView.updateToken(1, 3, Color.RED);
         connectFourView.updateToken(1, 4, Color.RED);
+
+        // createControlPanel("André");
     }
 }
