@@ -84,9 +84,9 @@ public interface Message {
     }
 
     // server response
-    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements Message{
-
-    }
+//    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements Message{
+//
+//    }
 
     //client move request
     record TokenDropMessage(int gameBoardColumn)implements Message{
@@ -99,26 +99,26 @@ public interface Message {
     }
 
     // server response when game's over to both players
-    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements Message{
+//    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements Message{
 
-    }
+//    }
 
     record AskGameHistory() implements Message{
 
     }
 
 
-    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements Message{
-
-    }
+//    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements Message{
+//
+//    }
 
     record AskPlayerProfile() implements Message{
 
     }
 
-    record PlayerProfile(Profile profile) implements Message{
-
-    }
+//    record PlayerProfile(Profile profile) implements Message{
+//
+//    }
 
 
 }

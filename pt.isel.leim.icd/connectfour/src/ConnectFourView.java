@@ -38,24 +38,58 @@ public class ConnectFourView {
     }
 
     private void createAuthenticationPanel() {
-        authenticationPanel = new JPanel(new FlowLayout());
+        authenticationPanel = new JPanel();
+
+        GridBagLayout bagLayout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        authenticationPanel.setLayout(bagLayout);
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets.top = 10;
 
         JLabel usernameLabel = new JLabel("Username: ");
-        authenticationPanel.add(usernameLabel);
 
-        JTextField usernameField = new JTextField(20);
-        authenticationPanel.add(usernameField);
+        authenticationPanel.add(usernameLabel, constraints);
+
+
+        JTextField usernameField = new JTextField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets.top = 10;
+
+        authenticationPanel.add(usernameField, constraints);
 
         JLabel passwordLabel = new JLabel("Password: ");
-        authenticationPanel.add(passwordLabel);
 
-        JPasswordField passwordField = new JPasswordField(20);
-        authenticationPanel.add(passwordField);
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets.bottom = 10;
+        authenticationPanel.add(passwordLabel, constraints);
+
+        JPasswordField passwordField = new JPasswordField(10);
+
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets.bottom = 10;
+        authenticationPanel.add(passwordField, constraints);
+
 
         JButton loginButton = new JButton("Login");
-        authenticationPanel.add(loginButton);
 
-        this.frame.add(authenticationPanel, BorderLayout.NORTH);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.WEST;
+        authenticationPanel.add(loginButton, constraints);
+
+
+        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 
         this.usernameField = usernameField;
         this.passwordField = passwordField;
@@ -119,11 +153,11 @@ public class ConnectFourView {
     public static void main(String[] args) {
         ConnectFourView connectFourView = new ConnectFourView(6, 7);
 
-        connectFourView.startGame();
-        connectFourView.updateToken(1, 1, Color.RED);
-        connectFourView.updateToken(1, 2, Color.RED);
-        connectFourView.updateToken(1, 3, Color.RED);
-        connectFourView.updateToken(1, 4, Color.RED);
+//        connectFourView.startGame();
+//        connectFourView.updateToken(1, 1, Color.RED);
+//        connectFourView.updateToken(1, 2, Color.RED);
+//        connectFourView.updateToken(1, 3, Color.RED);
+//        connectFourView.updateToken(1, 4, Color.RED);
 
         // createControlPanel("André");
     }
