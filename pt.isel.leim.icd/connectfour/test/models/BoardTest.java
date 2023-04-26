@@ -44,8 +44,10 @@ class BoardTest {
     void shouldGetTokenInTheCorrectRow() {
         Board board = new Board();
         Token token = new Token(Color.BLUE);
-        board.dropToken(1, token);
+        int column = 1;
 
-        assertEquals(token, board.getToken(board.totalRows(), 1));
+        board.dropToken(column, token);
+
+        assertEquals(token, board.getToken(board.totalRows(), column));
     }
 }

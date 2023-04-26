@@ -31,7 +31,7 @@ class ConnectFourTest {
     }
 
     @Test
-    void shouldWinGameVertically() {
+    void shouldWinGameWhenFourTokensPlacedVertically() {
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
 
@@ -50,7 +50,7 @@ class ConnectFourTest {
     }
 
     @Test
-    void shouldWinGameHorizontally() {
+    void shouldWinGameWhenFourTokensPlacedHorizontally() {
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
 
@@ -69,33 +69,22 @@ class ConnectFourTest {
     }
 
     @Test
-    void shouldWinGameDiagonally() {
+    void shouldWinGameWhenFourTokensPlacedDiagonally() {
         Player player1 = new Player("Player 1");
         Player player2 = new Player("Player 2");
 
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
-        // Player 1
         connectFour.dropToken(1);
-        // Player 2
         connectFour.dropToken(2);
-        // Player 1
         connectFour.dropToken(2);
-        // Player 2
         connectFour.dropToken(3);
-        // Player 1
         connectFour.dropToken(3);
-        // Player 2
         connectFour.dropToken(4);
-        // Player 1
         connectFour.dropToken(3);
-        // Player 2
         connectFour.dropToken(4);
-        // Player 1
         connectFour.dropToken(5);
-        // Player 2
         connectFour.dropToken(4);
-        // Player 1
         connectFour.dropToken(4);
 
         assertTrue(connectFour.isGameOver());
