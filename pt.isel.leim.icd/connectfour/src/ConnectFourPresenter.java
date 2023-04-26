@@ -14,6 +14,10 @@ public class ConnectFourPresenter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(view.loginButton())) {
+            System.out.println("Login button clicked");
+        }
+
 //        if (e.getSource().equals(view.newGameButton())) {
 //
 //        }

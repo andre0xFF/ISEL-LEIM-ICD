@@ -5,13 +5,13 @@ import java.awt.event.ActionListener;
 public class ConnectFourView {
 
     private static final int BUTTON_SIZE = 60;
-    private static final String CURRENT_PLAYER_LABEL = "Current player: %s";
     private JFrame frame;
     private JPanel authenticationPanel;
     private JTextField usernameField;
     private JPasswordField passwordField;
+    private JButton loginButton;
     private JPanel boardPanel;
-    private JButton[][] buttons;
+    private JButton[][] boardTokenCells;
     private JLabel currentPlayerLabel;
     private final int rows;
     private final int columns;
@@ -19,15 +19,27 @@ public class ConnectFourView {
 
     public ConnectFourView(int rows, int columns) {
         createFrame(rows, columns);
-        createAuthenticationPanel();
 
+        createAuthenticationPanel();
+        createBoardPanel(rows, columns);
+
+        this.frame.add(authenticationPanel, BorderLayout.CENTER);
         this.frame.setVisible(true);
+
         this.rows = rows;
         this.columns = columns;
     }
 
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
+
+        this.loginButton.addActionListener(listener);
+
+        for (int column = 0; column < this.boardTokenCells[0].length; column++) {
+            for (JButton[] boardTokenCell : this.boardTokenCells) {
+                boardTokenCell[column].addActionListener(listener);
+            }
+        }
     }
 
     private void createFrame(int rows, int columns) {
@@ -38,7 +50,7 @@ public class ConnectFourView {
     }
 
     private void createAuthenticationPanel() {
-        authenticationPanel = new JPanel();
+        JPanel authenticationPanel = new JPanel();
 
         GridBagLayout bagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -52,7 +64,6 @@ public class ConnectFourView {
         JLabel usernameLabel = new JLabel("Username: ");
 
         authenticationPanel.add(usernameLabel, constraints);
-
 
         JTextField usernameField = new JTextField(10);
 
@@ -73,13 +84,11 @@ public class ConnectFourView {
 
         JPasswordField passwordField = new JPasswordField(10);
 
-
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets.bottom = 10;
         authenticationPanel.add(passwordField, constraints);
-
 
         JButton loginButton = new JButton("Login");
 
@@ -88,9 +97,8 @@ public class ConnectFourView {
         constraints.anchor = GridBagConstraints.WEST;
         authenticationPanel.add(loginButton, constraints);
 
-
-        this.frame.add(authenticationPanel, BorderLayout.CENTER);
-
+        this.authenticationPanel = authenticationPanel;
+        this.loginButton = loginButton;
         this.usernameField = usernameField;
         this.passwordField = passwordField;
     }
@@ -98,7 +106,7 @@ public class ConnectFourView {
     private void createBoardPanel(int rows, int columns) {
         JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
 
-        buttons = new JButton[rows][columns];
+        this.boardTokenCells = new JButton[rows][columns];
 
         for (int row = rows - 1; row >= 0; row--) {
             for (int column = 0; column < columns; column++) {
@@ -107,22 +115,20 @@ public class ConnectFourView {
                 button.setPreferredSize(new Dimension(BUTTON_SIZE, BUTTON_SIZE));
                 button.setBackground(Color.WHITE);
                 button.setOpaque(true);
-                button.setEnabled(false);
-                button.addActionListener(listener);
+                button.setEnabled(true);
 
-                buttons[row][column] = button;
+                boardTokenCells[row][column] = button;
 
                 boardPanel.add(button);
             }
         }
 
         this.boardPanel = boardPanel;
-        this.frame.add(boardPanel, BorderLayout.CENTER);
     }
 
     public void createControlPanel(String currentPlayerName) {
         JPanel controlPanel = new JPanel(new FlowLayout());
-        currentPlayerLabel = new JLabel(String.format(CURRENT_PLAYER_LABEL, currentPlayerName));
+        currentPlayerLabel = new JLabel(currentPlayerName);
 
         controlPanel.add(currentPlayerLabel);
 
@@ -130,11 +136,11 @@ public class ConnectFourView {
     }
 
     public void updateToken(int row, int column, Color color) {
-        this.buttons[row][column].setBackground(color);
+        this.boardTokenCells[row][column].setBackground(color);
     }
 
-    public void updateCurrentPlayer(String playerName) {
-        this.currentPlayerLabel.setText(String.format(CURRENT_PLAYER_LABEL, playerName));
+    public void updateCurrentPlayer(String currentPlayerName) {
+        this.currentPlayerLabel.setText(currentPlayerName);
     }
 
     public JTextField usernameField() {
@@ -145,14 +151,27 @@ public class ConnectFourView {
         return passwordField;
     }
 
+    public JButton loginButton() {
+        return loginButton;
+    }
+
     public void startGame() {
-        this.authenticationPanel.setVisible(false);
-        createBoardPanel(rows, columns);
+        this.frame.getContentPane().removeAll();
+        this.frame.add(boardPanel, BorderLayout.CENTER);
+        this.frame.repaint();
     }
 
     public static void main(String[] args) {
         ConnectFourView connectFourView = new ConnectFourView(6, 7);
+        ConnectFourClientModel clientModel = new ConnectFourClientModel();
+        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
 
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
 //        connectFourView.startGame();
 //        connectFourView.updateToken(1, 1, Color.RED);
 //        connectFourView.updateToken(1, 2, Color.RED);
