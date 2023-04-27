@@ -1,3 +1,5 @@
+package schemas;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
@@ -17,17 +19,30 @@ import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class SchemaValidator {
-    private static final String xpathExpression = "/Message/@type";
-    private static final String xsdFilePath = "res/schemas/%s.xsd";
+    public static final String DEFAULT_XSD_SCHEMAS_PATH = "res/schemas";
+    private final Path xsdSchemas;
 
-    public boolean validate(String xmlContent) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-        String type = getType(xmlContent);
+    public SchemaValidator() {
+        this(Paths.get(DEFAULT_XSD_SCHEMAS_PATH));
+    }
+
+    public SchemaValidator(Path xsdSchemas) {
+        this.xsdSchemas = xsdSchemas;
+    }
+
+    public boolean validate(String xmlContent, String xPathExpression) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
+        String type = evaluateXpath(xmlContent, xPathExpression);
 
         try {
-            SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new File(String.format(xsdFilePath, type)));
+            Path schemaPath = xsdSchemas.resolve(String.format("%s.xsd", type));
+            File schemaFile = new File(schemaPath.toString());
+
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaFile);
 
             Validator validator = schema.newValidator();
             validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
@@ -38,13 +53,13 @@ public class SchemaValidator {
         }
     }
 
-    private String getType(String xmlContent) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
+    private String evaluateXpath(String xmlContent, String xPathExpression) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc = dbf.newDocumentBuilder().parse(new InputSource(new StringReader(xmlContent)));
         XPathFactory xpf = XPathFactory.newInstance();
         XPath xpath = xpf.newXPath();
 
-        Node node = (Node) xpath.evaluate(xpathExpression, doc, XPathConstants.NODE);
+        Node node = (Node) xpath.evaluate(xPathExpression, doc, XPathConstants.NODE);
 
         return node.getNodeValue();
     }
