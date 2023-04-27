@@ -1,3 +1,5 @@
+package messages;
+
 import com.fasterxml.jackson.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
@@ -6,9 +8,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.time.Duration;
-import java.util.Date;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
@@ -17,8 +16,8 @@ import java.util.Date;
 )
 @JsonSubTypes(
         {
-                @JsonSubTypes.Type(value = Message.PingMessage.class, name = "PingMessage"),
-                @JsonSubTypes.Type(value = Message.PongMessage.class, name = "PongMessage")
+                @JsonSubTypes.Type(value = PingMessage.class, name = "PingMessage"),
+                @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage")
         }
 )
 @JsonRootName("Message")
@@ -27,10 +26,20 @@ public interface Message {
     /**
      * A serializer can serialize and deserialize messages.
      */
-    class Serializer {
-        private final XmlMapper xmlMapper = new XmlMapper();
+    interface Serializer {
+        Message deserialize(String content) throws JsonProcessingException;
 
-        public Serializer() {
+        String serialize(Message message) throws JsonProcessingException;
+    }
+
+    /**
+     * A serializer that uses XML.
+     */
+    class XMLSerializer implements Serializer {
+        private final XmlMapper xmlMapper = new XmlMapper();
+        public static final String DEFAULT_XPATH_EXPRESSION = "/Message/@type";
+
+        public XMLSerializer() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
             JavaTimeModule module = (JavaTimeModule) new JavaTimeModule().addSerializer(
@@ -41,30 +50,14 @@ public interface Message {
             xmlMapper.registerModule(module);
         }
 
+        @Override
         public Message deserialize(String content) throws JsonProcessingException {
             return xmlMapper.readValue(content, Message.class);
         }
 
+        @Override
         public String serialize(Message message) throws JsonProcessingException {
             return xmlMapper.writeValueAsString(message);
-        }
-    }
-
-    /**
-     * A ping message is a message that is sent to the server to check if it is still alive.
-     */
-    record PingMessage(LocalDateTime dateTime) implements Message {
-        public PingMessage() {
-            this(LocalDateTime.now());
-        }
-    }
-
-    /**
-     * A pong message is a message that is sent to the client to check if it is still alive.
-     */
-    record PongMessage(LocalDateTime dateTime) implements Message {
-        public PongMessage() {
-            this(LocalDateTime.now());
         }
     }
 
@@ -83,40 +76,40 @@ public interface Message {
 
     }
 
-    // server response
-//    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements Message{
+//    // server response
+//    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements messages.Message{
 //
 //    }
-
-    //client move request
-    record TokenDropMessage(int gameBoardColumn)implements Message{
-
-    }
-
-    //Client move request
-    record TokenDropResultMessage(Boolean isValidTokenDrop) implements Message{
-
-    }
-
-    // server response when game's over to both players
-//    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements Message{
-
-//    }
-
-    record AskGameHistory() implements Message{
-
-    }
-
-
-//    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements Message{
+//
+//    //client move request
+//    record TokenDropMessage(int gameBoardColumn)implements messages.Message{
 //
 //    }
-
-    record AskPlayerProfile() implements Message{
-
-    }
-
-//    record PlayerProfile(Profile profile) implements Message{
+//
+//    //Client move request
+//    record TokenDropResultMessage(Boolean isValidTokenDrop) implements messages.Message{
+//
+//    }
+//
+//    // server response when game's over to both players
+//    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements messages.Message{
+//
+//    }
+//
+//    record AskGameHistory() implements messages.Message{
+//
+//    }
+//
+//
+//    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements messages.Message{
+//
+//    }
+//
+//    record AskPlayerProfile() implements messages.Message{
+//
+//    }
+//
+//    record PlayerProfile(Profile profile) implements messages.Message{
 //
 //    }
 
