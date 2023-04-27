@@ -1,11 +1,8 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
+import messages.Message;
+import network.Socket;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,10 +10,9 @@ public class Server {
     private final int port;
     private Boolean running = true;
     private final HashMap<String, Class<? extends Message>> messages = new HashMap<>();
-    private final ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 
     public Server(ArrayList<Class<? extends Message>> messages) {
-        this(messages, 8000);
+        this(messages, Socket.DEFAULT_PORT);
     }
 
     public Server(ArrayList<Class<? extends Message>> messages, int port) {
@@ -31,13 +27,10 @@ public class Server {
      * Starts the server.
      */
     public void start() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
 
             while (running) {
-                Socket socket = serverSocket.accept();
-
-                clientHandlers.add(new ClientHandler(socket));
+                Socket socket = new Socket(serverSocket.accept());
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,51 +48,7 @@ public class Server {
         messages.put(clazz.toString(), clazz);
     }
 
-    public int getPort() {
+    public int port() {
         return port;
-    }
-
-    public void broadcast(Message message) throws JsonProcessingException {
-        for (ClientHandler clientHandler : clientHandlers) {
-            clientHandler.write(message);
-        }
-    }
-
-    /**
-     * A client handler handles a client.
-     */
-    class ClientHandler implements Runnable {
-        private final Socket socket;
-        private final PrintWriter writer;
-        private final BufferedReader reader;
-        private final Message.Serializer serializer = new Message.Serializer();
-
-        public ClientHandler(Socket socket) throws IOException {
-            this.socket = socket;
-            this.writer = new PrintWriter(socket.getOutputStream(), true);
-            this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            new Thread(this).start();
-        }
-
-        @Override
-        public void run() {
-            try {
-                read();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private Message read() throws IOException {
-                String content = reader.readLine();
-
-                return serializer.deserialize(content);
-        }
-
-        private void write(Message message) throws JsonProcessingException {
-            String content = serializer.serialize(message);
-            writer.println(content);
-        }
     }
 }

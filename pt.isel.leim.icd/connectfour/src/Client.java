@@ -1,32 +1,31 @@
+import messages.Message;
 import org.xml.sax.SAXException;
+import schemas.SchemaValidator;
+import network.Socket;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 public class Client {
     private final Socket socket;
-    private final PrintWriter writer;
-    private final BufferedReader reader;
-    Message.Serializer serializer = new Message.Serializer();
+    Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
     SchemaValidator validator = new SchemaValidator();
 
-    public Client() {
-        this(8000);
+    public Client() throws IOException {
+        this(Socket.DEFAULT_HOSTNAME, Socket.DEFAULT_PORT);
     }
 
-    public Client(int port) {
-        try {
-            socket = new Socket("localhost", port);
-            writer = new PrintWriter(socket.getOutputStream(), true);
-            reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    public Client(int port) throws IOException {
+        this(Socket.DEFAULT_HOSTNAME, port);
+    }
+
+    public Client(String hostname) throws IOException {
+        this(hostname, Socket.DEFAULT_PORT);
+    }
+
+    public Client(String hostname, int port) throws IOException {
+        socket = new Socket(hostname, port);
     }
 
     public boolean isConnected() {
@@ -34,20 +33,20 @@ public class Client {
     }
 
     public void write(Message message) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
-        String content = serializer.serialize(message);
-        boolean valid = validator.validate(content);
+        String content = XMLSerializer.serialize(message);
+        boolean valid = validator.validate(content, Message.XMLSerializer.DEFAULT_XPATH_EXPRESSION);
 
         if (valid) {
-            writer.println(content);
+            socket.write(content);
         }
     }
 
     public void read() throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
-        String content = reader.readLine();
-        boolean valid = validator.validate(content);
+        String content = socket.read();
+        boolean valid = validator.validate(content, Message.XMLSerializer.DEFAULT_XPATH_EXPRESSION);
 
         if (valid) {
-            Message message = serializer.deserialize(content);
+            Message message = XMLSerializer.deserialize(content);
         }
     }
 }

@@ -1,6 +1,10 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
+import messages.Message;
+import messages.PingMessage;
+import messages.PongMessage;
 import org.junit.jupiter.api.BeforeAll;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
@@ -12,13 +16,13 @@ class ClientTest {
     private static Client client;
     private static final ArrayList<Class<? extends Message>> messages = new ArrayList<>() {
         {
-            add(Message.PingMessage.class);
-            add(Message.PongMessage.class);
+            add(PingMessage.class);
+            add(PongMessage.class);
         }
     };
 
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws IOException {
         server = new Server(messages, 8002);
         serverThread = new Thread(server::start);
 
@@ -34,6 +38,6 @@ class ClientTest {
 
     @Test
     void shouldSendPingMessage() throws JsonProcessingException {
-        assertDoesNotThrow(() -> client.write(new Message.PingMessage()));
+        assertDoesNotThrow(() -> client.write(new PingMessage()));
     }
 }
