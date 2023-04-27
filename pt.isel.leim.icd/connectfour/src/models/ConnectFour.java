@@ -5,7 +5,7 @@ import java.awt.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class ConnectFour {
+public class ConnectFour implements Model {
 
     private final Board board = new Board();
     private final Player player1;

@@ -3,7 +3,7 @@ package models;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Player {
+public class Player implements Model {
 
     private final ArrayList<Token> tokens = new ArrayList<>();
     private final String name;

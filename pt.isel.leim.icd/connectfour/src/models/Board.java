@@ -3,7 +3,7 @@ package models;
 /**
  * Represents the Connect Four board in the game.
  */
-public class Board {
+public class Board implements Model {
 
     private final Token[][] tokens = new Token[6][7];
     private final int totalRows = tokens.length;
