@@ -13,6 +13,9 @@ public class ConnectFourView {
     private JPanel boardPanel;
     private JButton[][] boardTokenCells;
     private JLabel currentPlayerLabel;
+    private JPanel profilePanel;
+
+    private JPanel gameHistoryPanel;
     private final int rows;
     private final int columns;
     private ActionListener listener;
@@ -20,10 +23,15 @@ public class ConnectFourView {
     public ConnectFourView(int rows, int columns) {
         createFrame(rows, columns);
 
-        createAuthenticationPanel();
-        createBoardPanel(rows, columns);
+//        createAuthenticationPanel();
+//        createBoardPanel(rows, columns);
+//        createProfilePanel("Daniel", "xpto", "PT", "90");
+        createGameHistoryPanel();
 
-        this.frame.add(authenticationPanel, BorderLayout.CENTER);
+//        this.frame.add(authenticationPanel, BorderLayout.CENTER);
+//        this.frame.add(profilePanel, BorderLayout.CENTER);
+        this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
+//        this.frame.add(profilePanel);
         this.frame.setVisible(true);
 
         this.rows = rows;
@@ -58,7 +66,7 @@ public class ConnectFourView {
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.anchor = GridBagConstraints.WEST;
+        constraints.anchor = GridBagConstraints.PAGE_START;
         constraints.insets.top = 10;
 
         JLabel usernameLabel = new JLabel("Username: ");
@@ -101,6 +109,8 @@ public class ConnectFourView {
         this.loginButton = loginButton;
         this.usernameField = usernameField;
         this.passwordField = passwordField;
+        authenticationPanel.setBackground(Color.PINK);
+        authenticationPanel.setOpaque(true);
     }
 
     private void createBoardPanel(int rows, int columns) {
@@ -131,8 +141,189 @@ public class ConnectFourView {
         currentPlayerLabel = new JLabel(currentPlayerName);
 
         controlPanel.add(currentPlayerLabel);
-
+        controlPanel.setBackground(Color.RED);
+        controlPanel.setOpaque(true);
         this.frame.add(controlPanel, BorderLayout.SOUTH);
+    }
+
+    public void createGameHistoryPanel(){
+
+        JPanel gameHistoryPanel = new JPanel();
+
+        GridBagLayout bagLayout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        gameHistoryPanel.setLayout(bagLayout);
+
+        JLabel titleLabel = new JLabel("Game History");
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.weighty = 1;
+        constraints.gridwidth = 3;
+        constraints.anchor = GridBagConstraints.NORTH;
+
+        gameHistoryPanel.add(titleLabel, constraints);
+
+        constraints.gridwidth = 1;
+
+        JLabel gamesLabel = new JLabel("Games");
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        gameHistoryPanel.add(gamesLabel, constraints);
+
+
+        JLabel winsLossesLabel = new JLabel("Wins/Losses");
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.anchor =GridBagConstraints.CENTER;
+        constraints.insets.left = 10;
+
+        gameHistoryPanel.add(winsLossesLabel, constraints);
+
+        JLabel gameTimeLabel = new JLabel("Game Time");
+
+        constraints.gridx = 2;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets.left = 10;
+
+        gameHistoryPanel.add(gameTimeLabel, constraints);
+
+
+
+
+        this.gameHistoryPanel = gameHistoryPanel;
+
+
+    }
+
+    public void createProfilePanel(String nick, String password, String nationality, String age){
+        //TODO receives Image
+        JPanel profilePanel = new JPanel();
+
+        GridBagLayout bagLayout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+
+
+        profilePanel.setLayout(bagLayout);
+
+        JLabel titleLabel = new JLabel("Profile");
+
+        titleLabel.setOpaque(true);
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.weighty = 1;
+        constraints.gridy = 0;
+        constraints.gridx = 0;
+        constraints.gridwidth = 3;
+
+        profilePanel.add(titleLabel, constraints);
+
+        constraints.insets.top = 10;
+
+        JLabel profilePicture =  new JLabel("PlaceHolder");
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        profilePicture.setBackground(Color.red);
+        profilePicture.setOpaque(true);
+        profilePicture.setPreferredSize(new Dimension(60,60));
+
+        profilePanel.add(profilePicture, constraints);
+        constraints.gridwidth = 1;
+
+        JLabel nickLabel = new JLabel("Username");
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.WEST;
+
+        profilePanel.add(nickLabel, constraints);
+
+
+        JTextField nickField = new JTextField(10);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        profilePanel.add(nickField, constraints);
+
+
+        JLabel passLabel = new JLabel("Password");
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.anchor = GridBagConstraints.WEST;
+
+        profilePanel.add(passLabel, constraints);
+
+
+        JTextField passField = new JTextField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        profilePanel.add(passField, constraints);
+
+
+        JLabel nationalityLabel = new JLabel("Nationality");
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.anchor = GridBagConstraints.WEST;
+
+        profilePanel.add(nationalityLabel, constraints);
+
+
+        JTextField nationalityField = new JTextField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 4;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        profilePanel.add(nationalityField, constraints);
+
+        JLabel ageLabel = new JLabel("Age");
+
+        constraints.gridx = 0;
+        constraints.gridy = 5;
+        constraints.anchor = GridBagConstraints.WEST;
+
+        profilePanel.add(ageLabel, constraints);
+
+
+        JTextField ageField = new JTextField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 5;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        profilePanel.add(ageField, constraints);
+
+
+        JButton backButton = new JButton("Back");
+
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.anchor = GridBagConstraints.WEST;
+
+        profilePanel.add(backButton, constraints);
+
+
+        JButton submitButton = new JButton("Submit");
+
+        constraints.gridx = 1;
+        constraints.gridy = 6;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        profilePanel.add(submitButton, constraints);
+
+        this.profilePanel = profilePanel;
     }
 
     public void updateToken(int row, int column, Color color) {
@@ -163,8 +354,11 @@ public class ConnectFourView {
 
     public static void main(String[] args) {
         ConnectFourView connectFourView = new ConnectFourView(6, 7);
-        ConnectFourClientModel clientModel = new ConnectFourClientModel();
-        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
+//        ConnectFourClientModel clientModel = new ConnectFourClientModel();
+//        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
+
+
+
 
 //        try {
 //            Thread.sleep(5000);
