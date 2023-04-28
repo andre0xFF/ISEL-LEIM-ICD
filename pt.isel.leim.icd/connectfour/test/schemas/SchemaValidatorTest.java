@@ -30,7 +30,7 @@ class SchemaValidatorTest {
     }
 
     @Test
-    void shouldInValidateEmptyMessage() throws IOException {
+    void shouldNotValidateEmptyMessage() throws IOException {
         SchemaValidator schemaValidator = new SchemaValidator();
 
         boolean isValid = schemaValidator.validate(MessageTest.messageEmptyContent);
