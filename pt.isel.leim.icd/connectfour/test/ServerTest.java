@@ -1,6 +1,7 @@
 import messages.Message;
 import messages.PingMessage;
 import messages.PongMessage;
+import network.Server;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 

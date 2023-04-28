@@ -1,5 +1,6 @@
 package network;
 
+import network.socket.Socket;
 import org.junit.jupiter.api.*;
 
 import java.io.BufferedReader;
