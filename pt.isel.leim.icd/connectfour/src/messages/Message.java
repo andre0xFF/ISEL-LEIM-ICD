@@ -19,9 +19,6 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage")
         }
 )
-
-
-
 @JsonRootName("Message")
 public interface Message {
 
@@ -31,7 +28,6 @@ public interface Message {
     interface Serializer {
 
         Message deserialize(String content) throws JsonProcessingException;
-
 
         String serialize(Message message) throws JsonProcessingException;
     }
@@ -66,21 +62,21 @@ public interface Message {
         }
     }
 
-    record ErrorMessage(String details) implements Message{
-    }
-
-    record SignInMessage(String username, String password) implements Message{
-
-    }
-
-    record SignUpMessage(String username, String password) implements Message{
-
-    }
-
-    record SignOutMessage() implements Message{
-
-    }
-
+//    record ErrorMessage(String details) implements Message{
+//    }
+//
+//    record SignInMessage(String username, String password) implements Message{
+//
+//    }
+//
+//    record SignUpMessage(String username, String password) implements Message{
+//
+//    }
+//
+//    record SignOutMessage() implements Message{
+//
+//    }
+//
 //    // server response
 //    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements messages.Message{
 //
@@ -117,6 +113,4 @@ public interface Message {
 //    record PlayerProfile(Profile profile) implements messages.Message{
 //
 //    }
-
-
 }
