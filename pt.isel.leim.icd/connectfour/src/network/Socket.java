@@ -9,7 +9,13 @@ import java.io.PrintWriter;
  * A simple wrapper around java.net.Socket with thread functionality.
  */
 public class Socket implements java.io.Closeable, Runnable {
+    /**
+     * The default port.
+     */
     public static final int DEFAULT_PORT = 8000;
+    /**
+     * The default hostname.
+     */
     public static final String DEFAULT_HOSTNAME = "localhost";
 
     private final java.net.Socket socket;
@@ -105,7 +111,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Closes the socket.
-     * @throws IOException
+     * @throws IOException If an I/O error occurs when closing the socket.
      */
     @Override
     public void close() throws IOException {

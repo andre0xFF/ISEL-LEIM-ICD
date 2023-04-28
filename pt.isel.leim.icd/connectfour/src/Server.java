@@ -28,7 +28,6 @@ public class Server {
      */
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-
             while (running) {
                 Socket socket = new Socket(serverSocket.accept());
             }

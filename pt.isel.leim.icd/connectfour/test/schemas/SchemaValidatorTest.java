@@ -6,35 +6,30 @@ import messages.PongMessageTest;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SchemaValidatorTest {
 
     @Test
-    void shouldValidatePingMessage() throws IOException {
+    void shouldValidatePingMessage() {
         SchemaValidator schemaValidator = new SchemaValidator();
 
-        boolean isValid = schemaValidator.validate(PingMessageTest.pingMessageContent);
-
-        assertTrue(isValid);
+        assertDoesNotThrow(() -> schemaValidator.validate(PingMessageTest.serializedContent));
     }
 
     @Test
-    void shouldValidatePongMessage() throws IOException {
+    void shouldValidatePongMessage() {
         SchemaValidator schemaValidator = new SchemaValidator();
 
-        boolean isValid = schemaValidator.validate(PongMessageTest.pongMessageContent);
-
-        assertTrue(isValid);
+        assertDoesNotThrow(() -> schemaValidator.validate(PongMessageTest.serializedContent));
     }
 
     @Test
-    void shouldNotValidateEmptyMessage() throws IOException {
+    void shouldNotValidateEmptyMessage() throws IOException, SAXException {
         SchemaValidator schemaValidator = new SchemaValidator();
 
-        boolean isValid = schemaValidator.validate(MessageTest.messageEmptyContent);
-
-        assertFalse(isValid);
+        assertThrows(SAXException.class, () -> schemaValidator.validate(MessageTest.messageEmptyContent));
     }
 }

@@ -1,6 +1,5 @@
 package messages;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.lang.reflect.Constructor;
@@ -22,19 +21,19 @@ public class MessageTest {
     void shouldSerializePingMessageAsXML() throws JsonProcessingException {
         String actualContent = XMLSerializer.serialize(new PingMessage(dateTime));
 
-        assertEquals(PingMessageTest.pingMessageContent, actualContent);
+        assertEquals(PingMessageTest.serializedContent, actualContent);
     }
 
     @Test
     void shouldDeserializePingMessageFromXML() throws JsonProcessingException {
-        PingMessage actualMessage = (PingMessage) XMLSerializer.deserialize(PingMessageTest.pingMessageContent);
+        PingMessage actualMessage = (PingMessage) XMLSerializer.deserialize(PingMessageTest.serializedContent);
 
         assertEquals(dateTime, actualMessage.dateTime());
     }
 
     @Test
     void shouldCastPingMessage() throws JsonProcessingException {
-        Message deserializedMessaged = XMLSerializer.deserialize(PingMessageTest.pingMessageContent);
+        Message deserializedMessaged = XMLSerializer.deserialize(PingMessageTest.serializedContent);
 
         PingMessage actualMessage = (PingMessage) deserializedMessaged;
 
@@ -43,7 +42,7 @@ public class MessageTest {
 
     @Test
     void shouldCastPingMessageUsingReflection() throws JsonProcessingException {
-        Message deserializedMessaged = XMLSerializer.deserialize(PingMessageTest.pingMessageContent);
+        Message deserializedMessaged = XMLSerializer.deserialize(PingMessageTest.serializedContent);
 
         var targetClass = PingMessage.class;
 

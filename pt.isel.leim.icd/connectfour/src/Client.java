@@ -3,8 +3,6 @@ import org.xml.sax.SAXException;
 import schemas.SchemaValidator;
 import network.Socket;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.IOException;
 
 public class Client {
@@ -32,21 +30,21 @@ public class Client {
         return socket.isConnected();
     }
 
-    public void write(Message message) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
+    public void write(Message message) throws IOException, SAXException {
         String content = XMLSerializer.serialize(message);
-        boolean valid = validator.validate(content);
+        validator.validate(content);
 
-        if (valid) {
-            socket.write(content);
-        }
+        socket.write(content);
     }
 
-    public void read() throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
+    public Message read() throws IOException, SAXException {
         String content = socket.read();
-        boolean valid = validator.validate(content);
+        validator.validate(content);
 
-        if (valid) {
-            Message message = XMLSerializer.deserialize(content);
-        }
+        return XMLSerializer.deserialize(content);
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }

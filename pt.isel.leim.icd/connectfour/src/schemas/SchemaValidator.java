@@ -1,5 +1,6 @@
 package schemas;
 
+import org.junit.jupiter.api.function.Executable;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -26,19 +27,15 @@ public class SchemaValidator {
         this.xsdPath = xsdPath;
     }
 
-    public boolean validate(String xmlContent) throws IOException {
-        try {
-            File schemaFile = new File(xsdPath.toString());
+    public Executable validate(String xmlContent) throws IOException, SAXException {
+        File schemaFile = new File(xsdPath.toString());
 
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(schemaFile);
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema = schemaFactory.newSchema(schemaFile);
 
-            Validator validator = schema.newValidator();
-            validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
+        Validator validator = schema.newValidator();
+        validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
 
-            return true;
-        } catch (SAXException e) {
-            return false;
-        }
+        return null;
     }
 }
