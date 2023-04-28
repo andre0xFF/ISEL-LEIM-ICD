@@ -39,7 +39,6 @@ public interface Message {
      */
     class XMLSerializer implements Serializer {
         private final XmlMapper xmlMapper = new XmlMapper();
-        public static final String DEFAULT_XPATH_EXPRESSION = "/Message/@type";
 
         public XMLSerializer() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
@@ -89,7 +88,7 @@ public interface Message {
 //
 //    }
 //
-//    //Client move request
+//    //network.Client move request
 //    record TokenDropResultMessage(Boolean isValidTokenDrop) implements messages.Message{
 //
 //    }

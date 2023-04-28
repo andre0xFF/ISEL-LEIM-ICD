@@ -1,4 +1,4 @@
-package network;
+package network.socket;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Socket implements java.io.Closeable, Runnable {
     private final BufferedReader reader;
     private final String hostname;
     private final int port;
-    private Listener listener;
+    private Listener<String> listener;
     private Thread thread;
 
     /**
@@ -140,7 +140,7 @@ public class Socket implements java.io.Closeable, Runnable {
      * Starts listening for messages.
      * @param listener The listener to be called when a message is received.
      */
-    public void listen(Listener listener) {
+    public void listen(Listener<String> listener) {
         this.listener = listener;
 
         if (this.thread != null) {
@@ -172,16 +172,5 @@ public class Socket implements java.io.Closeable, Runnable {
             // TODO
             // e.printStackTrace();
         }
-    }
-
-    /**
-     * A listener is called when a message is received.
-     */
-    public interface Listener {
-        /**
-         * Called when a message is received.
-         * @param message The message received.
-         */
-        void onMessage(String message);
     }
 }

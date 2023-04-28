@@ -1,15 +1,28 @@
+package network;
+
 import messages.Message;
-import network.Socket;
+import network.socket.Socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * Represents a server.
+ */
 public class Server {
     private final int port;
     private Boolean running = true;
     private final HashMap<String, Class<? extends Message>> messages = new HashMap<>();
+
+    public Server() {
+        this(Socket.DEFAULT_PORT);
+    }
+
+    public Server(int port) {
+        this.port = port;
+    }
 
     public Server(ArrayList<Class<? extends Message>> messages) {
         this(messages, Socket.DEFAULT_PORT);
@@ -40,14 +53,24 @@ public class Server {
      * Stops the server.
      */
     public void stop() {
-        running = false;
+        this.running = false;
     }
 
     private void addMessage(Class<? extends Message> clazz) {
-        messages.put(clazz.toString(), clazz);
+        this.messages.put(clazz.toString(), clazz);
     }
 
     public int port() {
-        return port;
+        return this.port;
+    }
+
+    public Client accept() throws IOException {
+        Socket socket;
+
+        try (ServerSocket serverSocket = new ServerSocket(this.port)) {
+            socket = new Socket(serverSocket.accept());
+        }
+
+        return new Client(socket);
     }
 }
