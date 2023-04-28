@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -17,7 +18,20 @@ public class ConnectFourView {
     private JLabel currentPlayerLabel;
     private JPanel profilePanel;
 
+    private JTextField newNameField;
+
+    private JTextField newPasswordField;
+    private JTextField nationalityField;
+    private JTextField ageField;
+    private JButton profileBackButton;
+    private JButton profileSubmitButton;
     private JPanel gameHistoryPanel;
+    private JPanel gameMenuPanel;
+    private JButton historyBackButton;
+    private JButton menuNewGameButton;
+    private JButton menuProfileJButton;
+    private JButton menuGameHistoryButton;
+    private JButton gameQuitButton;
     private final int rows;
     private final int columns;
     private ActionListener listener;
@@ -29,21 +43,40 @@ public class ConnectFourView {
         createBoardPanel(rows, columns);
         createProfilePanel("Daniel", "xpto", "PT", "90");
         createGameHistoryPanel();
+        createGameMenuPanel();
 
-        this.frame.add(authenticationPanel, BorderLayout.CENTER);
+//        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
-        // this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
-//        this.frame.add(profilePanel);
+//         this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
+        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
+
         this.frame.setVisible(true);
 
         this.rows = rows;
         this.columns = columns;
     }
 
+
+
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
 
         this.loginButton.addActionListener(listener);
+
+        this.gameQuitButton.addActionListener(listener);
+        this.menuNewGameButton.addActionListener(listener);
+        this.menuProfileJButton.addActionListener(listener);
+        this.menuGameHistoryButton.addActionListener(listener);
+        this.gameQuitButton.addActionListener(listener);
+
+        //Profile Buttons
+        this.profileBackButton.addActionListener(listener);
+        this.profileSubmitButton.addActionListener(listener);
+
+        //Game History Buttons
+        this.historyBackButton.addActionListener(listener);
+
+
 
         for (int column = 0; column < this.boardTokenCells[0].length; column++) {
             for (JButton[] boardTokenCell : this.boardTokenCells) {
@@ -114,6 +147,72 @@ public class ConnectFourView {
         authenticationPanel.setBackground(Color.PINK);
         authenticationPanel.setOpaque(true);
     }
+
+    private void createGameMenuPanel() {
+        JPanel gameMenuPanel = new JPanel();
+        GridBagLayout bagLayout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        gameMenuPanel.setLayout(bagLayout);
+
+        JLabel menuTitleLabel = new JLabel("MENU", JLabel.CENTER);
+
+        constraints.anchor = GridBagConstraints.NORTH;
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 4;
+        constraints.weighty = 1;
+
+
+
+        gameMenuPanel.add(menuTitleLabel, constraints);
+
+        constraints.weighty = 0;
+
+
+        menuNewGameButton = new JButton("NEW GAME");
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.NORTH;
+        constraints.insets.top = 5;
+
+        gameMenuPanel.add(menuNewGameButton, constraints);
+
+        menuProfileJButton = new JButton("PROFILE");
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.WEST;
+
+
+        gameMenuPanel.add(menuProfileJButton, constraints);
+
+        menuGameHistoryButton= new JButton("GAME STATS");
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+
+
+        gameMenuPanel.add(menuGameHistoryButton, constraints);
+
+
+        gameQuitButton = new JButton("QUIT GAME");
+
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+
+        constraints.insets.top = 20;
+
+        gameMenuPanel.add(gameQuitButton , constraints);
+
+
+        this.gameMenuPanel = gameMenuPanel;
+
+    }
+
 
     private void createBoardPanel(int rows, int columns) {
         JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
@@ -195,6 +294,16 @@ public class ConnectFourView {
 
         gameHistoryPanel.add(gameTimeLabel, constraints);
 
+        historyBackButton = new JButton("Back");
+
+        constraints.gridx = 1;
+        constraints.gridy = -1;
+        constraints.anchor = GridBagConstraints.SOUTH;
+        constraints.insets.top = 10;
+
+        gameHistoryPanel.add(historyBackButton, constraints);
+
+
 
 
 
@@ -203,7 +312,7 @@ public class ConnectFourView {
 
     }
 
-    public void createProfilePanel(String nick, String password, String nationality, String age){
+    public void createProfilePanel(String username, String password, String nationality, String age){
         //TODO receives Image
         JPanel profilePanel = new JPanel();
 
@@ -247,12 +356,12 @@ public class ConnectFourView {
         profilePanel.add(nickLabel, constraints);
 
 
-        JTextField nickField = new JTextField(10);
+        newNameField = new JTextField(10);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(nickField, constraints);
+        profilePanel.add(usernameField, constraints);
 
 
         JLabel passLabel = new JLabel("Password");
@@ -264,13 +373,13 @@ public class ConnectFourView {
         profilePanel.add(passLabel, constraints);
 
 
-        JTextField passField = new JTextField(10);
+        newPasswordField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(passField, constraints);
+        profilePanel.add(newPasswordField, constraints);
 
 
         JLabel nationalityLabel = new JLabel("Nationality");
@@ -282,7 +391,7 @@ public class ConnectFourView {
         profilePanel.add(nationalityLabel, constraints);
 
 
-        JTextField nationalityField = new JTextField(10);
+        nationalityField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 4;
@@ -299,7 +408,7 @@ public class ConnectFourView {
         profilePanel.add(ageLabel, constraints);
 
 
-        JTextField ageField = new JTextField(10);
+        ageField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 5;
@@ -308,22 +417,22 @@ public class ConnectFourView {
         profilePanel.add(ageField, constraints);
 
 
-        JButton backButton = new JButton("Back");
+        profileBackButton = new JButton("Back");
 
         constraints.gridx = 0;
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.WEST;
 
-        profilePanel.add(backButton, constraints);
+        profilePanel.add(profileBackButton, constraints);
 
 
-        JButton submitButton = new JButton("Submit");
+        profileSubmitButton = new JButton("Submit");
 
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(submitButton, constraints);
+        profilePanel.add(profileSubmitButton, constraints);
 
         this.profilePanel = profilePanel;
     }
@@ -348,11 +457,93 @@ public class ConnectFourView {
         return this.loginButton;
     }
 
-    public void startGame() {
+
+    public JTextField newNameField(){
+        return this.newNameField;
+    }
+
+    public JTextField newPassword(){
+        return this.newPasswordField;
+    }
+
+    public JTextField nationalityField(){
+        return this.nationalityField;
+    }
+
+    public JTextField ageField(){
+        return this.ageField;
+    }
+
+    public JButton profileSubmitButton(){
+        return this.profileSubmitButton;
+    }
+
+    public JButton profileBackButton(){
+        return this.profileBackButton;
+    }
+
+    public JButton historyBackButton(){
+        return this.historyBackButton;
+    }
+
+    public JButton[][] boardTokenCells(){
+        return this.boardTokenCells;
+    }
+
+    public JButton menuGameHistoryButton() {
+        return this.menuGameHistoryButton;
+    }
+
+
+    public JButton profileButton() {
+        return this.menuProfileJButton;
+    }
+
+    public JButton quitButton() {
+        return this.gameQuitButton;
+    }
+
+    public JButton newGame() {
+        return this.menuNewGameButton;
+    }
+
+    public void connectFourProfile(){
+        this.frame.getContentPane().removeAll();
+        this.frame.add(profilePanel, BorderLayout.CENTER);
+        this.frame.repaint();
+        this.frame.validate();
+    }
+
+    public void connectFourGameHistoryPanel() {
+        this.frame.getContentPane().removeAll();
+        this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
+        this.frame.repaint();
+        this.frame.validate();
+    }
+
+    public void connectFourGameMenu() {
+        this.frame.getContentPane().removeAll();
+        this.frame.add(this.gameMenuPanel, BorderLayout.CENTER);
+        this.frame.repaint();
+        this.frame.validate();
+    }
+
+    public void connetFourCloseUI() {
+        this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING));
+    }
+
+
+
+
+
+    public void connectFourStartGame() {
         this.frame.getContentPane().removeAll();
         this.frame.add(boardPanel, BorderLayout.CENTER);
         this.frame.repaint();
+        this.frame.validate();
     }
+
+
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8000);
@@ -375,4 +566,7 @@ public class ConnectFourView {
 
         // createControlPanel("André");
     }
+
+
+
 }

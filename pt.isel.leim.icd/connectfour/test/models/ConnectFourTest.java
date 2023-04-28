@@ -75,16 +75,28 @@ class ConnectFourTest {
 
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
+        // Player 1
         connectFour.dropToken(1);
+
+        // Player 2
         connectFour.dropToken(2);
+        // Player 1
         connectFour.dropToken(2);
+        // Player 2
         connectFour.dropToken(3);
+        // Player 1
         connectFour.dropToken(3);
+        // Player 2
         connectFour.dropToken(4);
+        // Player 1
         connectFour.dropToken(3);
+        // Player 2
         connectFour.dropToken(4);
+        // Player 1
         connectFour.dropToken(5);
+        // Player 2
         connectFour.dropToken(4);
+        // Player 1
         connectFour.dropToken(4);
 
         assertTrue(connectFour.isGameOver());

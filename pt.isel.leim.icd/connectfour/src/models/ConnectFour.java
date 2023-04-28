@@ -67,6 +67,32 @@ public class ConnectFour implements Model {
     }
 
     private boolean checkDiagonalWin(int row, int column, Player player, int rowDirection, int columnDirection) {
+
+        Color playerColor = player.color();
+
+        for (int currentRow = min(row + 3, board.totalRows()),
+             count = 0;
+             currentRow > max(row - 4, 1);
+             currentRow--
+        ){
+            for(int currentColumn = max(column - 3, 1);
+                currentColumn < min(column + 4, board.totalColumns());
+                currentColumn++
+            ){
+                Token currentToken = board.getToken(row, currentColumn);
+                if (currentToken == null || !currentToken.color().equals(playerColor)) {
+                    count = 0;
+                    continue;
+                }
+                count++;
+                break;
+
+            }
+            if(count == 4){
+                return true;
+            }
+        }
+
         return false;
     }
 
