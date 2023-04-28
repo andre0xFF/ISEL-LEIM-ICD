@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="Message">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element name="dateTime" type="xs:dateTime"/>
-            </xs:sequence>
-            <xs:attribute name="type">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="PingMessage"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-        </xs:complexType>
-    </xs:element>
+<!--<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">-->
+<!--    <xs:element name="Message">-->
+<!--        <xs:complexType>-->
+<!--            <xs:sequence>-->
+<!--                <xs:element name="dateTime" type="xs:dateTime"/>-->
+<!--            </xs:sequence>-->
+<!--            <xs:attribute name="type">-->
+<!--                <xs:simpleType>-->
+<!--                    <xs:restriction base="xs:string">-->
+<!--                        <xs:enumeration value="PingMessage"/>-->
+<!--                    </xs:restriction>-->
+<!--                </xs:simpleType>-->
+<!--            </xs:attribute>-->
+<!--        </xs:complexType>-->
+<!--    </xs:element>-->
+<!--</xs:schema>-->
+
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+
+
+           elementFormDefault="qualified">
+
+
+    <xs:simpleType name="DateType">
+        <xs:restriction base="xs:dateTime"/>
+    </xs:simpleType>
+
+    <xs:complexType name="PingMessageType">
+        <xs:sequence>
+
+            <xs:element name="dateTime" type="DateType"/>
+
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="PingMessage" type="PingMessageType"/>
+
 </xs:schema>
+
+
+
+

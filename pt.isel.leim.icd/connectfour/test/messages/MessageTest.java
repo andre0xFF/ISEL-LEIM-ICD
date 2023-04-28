@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MessageTest {
+
+    public final static String messageEmptyContent = "<Message></Message>";
     private final LocalDateTime dateTime = LocalDateTime.of(2021, 5, 18, 15, 0, 0);
     private final Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
 

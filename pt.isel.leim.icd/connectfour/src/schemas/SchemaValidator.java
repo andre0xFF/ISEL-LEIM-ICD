@@ -53,6 +53,25 @@ public class SchemaValidator {
         }
     }
 
+    public boolean validate(String xmlContent) throws SAXException, IOException {
+
+        try{
+            Path schemaPath = xsdSchemas.resolve("Message.xsd");
+            File schemaFile = new File(schemaPath.toString());
+
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = schemaFactory.newSchema(schemaFile);
+
+            Validator validator = schema.newValidator();
+            validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
+
+            return true;
+        }catch (SAXException e){
+            return false;
+        }
+
+    }
+
     private String evaluateXpath(String xmlContent, String xPathExpression) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc = dbf.newDocumentBuilder().parse(new InputSource(new StringReader(xmlContent)));

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+
+
+           elementFormDefault="qualified">
+
+    <xs:include schemaLocation="PongMessage.xsd"/>
+    <xs:include schemaLocation="PingMessage.xsd"/>
+
+    <xs:complexType name="commTypes">
+        <xs:sequence>
+            <xs:choice minOccurs="1">
+                <xs:element name="PongMessage" type="PongMessageType" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="PingMessage" type="PingMessageType" minOccurs="1" maxOccurs="1"/>
+            </xs:choice>
+        </xs:sequence>
+
+    </xs:complexType>
+
+    <xs:element name="Message" type="commTypes"/>
+
+</xs:schema>

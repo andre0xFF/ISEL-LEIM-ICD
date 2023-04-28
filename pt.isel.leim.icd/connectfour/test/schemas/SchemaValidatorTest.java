@@ -1,6 +1,7 @@
 package schemas;
 
 import messages.Message;
+import messages.MessageTest;
 import messages.PingMessageTest;
 import messages.PongMessageTest;
 import org.xml.sax.SAXException;
@@ -31,5 +32,32 @@ class SchemaValidatorTest {
         boolean isValid = schemaValidator.validate(PongMessageTest.pongMessageContent, Message.XMLSerializer.DEFAULT_XPATH_EXPRESSION);
 
         assertTrue(isValid);
+    }
+
+    @Test
+    void shouldValidatePingMessage2() throws IOException, SAXException {
+        SchemaValidator schemaValidator = new SchemaValidator();
+
+        boolean isValid = schemaValidator.validate(PingMessageTest.pingMessageContent2);
+
+        assertTrue(isValid);
+    }
+
+    @Test
+    void shouldValidatePongMessage2() throws IOException, SAXException {
+        SchemaValidator schemaValidator = new SchemaValidator();
+
+        boolean isValid = schemaValidator.validate(PongMessageTest.pingMessageContent2);
+
+        assertTrue(isValid);
+    }
+
+    @Test
+    void shouldValidateEmptyMessage() throws IOException, SAXException {
+        SchemaValidator schemaValidator = new SchemaValidator();
+
+        boolean isValid = schemaValidator.validate(MessageTest.messageEmptyContent);
+
+        assertFalse(isValid);
     }
 }
