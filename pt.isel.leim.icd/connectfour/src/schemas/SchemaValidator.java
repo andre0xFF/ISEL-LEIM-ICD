@@ -34,26 +34,8 @@ public class SchemaValidator {
         this.xsdSchemas = xsdSchemas;
     }
 
-    public boolean validate(String xmlContent, String xPathExpression) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-        String type = evaluateXpath(xmlContent, xPathExpression);
 
-        try {
-            Path schemaPath = xsdSchemas.resolve(String.format("%s.xsd", type));
-            File schemaFile = new File(schemaPath.toString());
-
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = schemaFactory.newSchema(schemaFile);
-
-            Validator validator = schema.newValidator();
-            validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
-
-            return true;
-        } catch (SAXException e) {
-            return false;
-        }
-    }
-
-    public boolean validate(String xmlContent) throws SAXException, IOException {
+    public boolean validate(String xmlContent) throws IOException {
 
         try{
             Path schemaPath = xsdSchemas.resolve("Message.xsd");
@@ -70,16 +52,5 @@ public class SchemaValidator {
             return false;
         }
 
-    }
-
-    private String evaluateXpath(String xmlContent, String xPathExpression) throws ParserConfigurationException, IOException, SAXException, XPathExpressionException {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        Document doc = dbf.newDocumentBuilder().parse(new InputSource(new StringReader(xmlContent)));
-        XPathFactory xpf = XPathFactory.newInstance();
-        XPath xpath = xpf.newXPath();
-
-        Node node = (Node) xpath.evaluate(xPathExpression, doc, XPathConstants.NODE);
-
-        return node.getNodeValue();
     }
 }

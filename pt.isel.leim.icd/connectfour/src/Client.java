@@ -34,7 +34,7 @@ public class Client {
 
     public void write(Message message) throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
         String content = XMLSerializer.serialize(message);
-        boolean valid = validator.validate(content, Message.XMLSerializer.DEFAULT_XPATH_EXPRESSION);
+        boolean valid = validator.validate(content);
 
         if (valid) {
             socket.write(content);
@@ -43,7 +43,7 @@ public class Client {
 
     public void read() throws IOException, XPathExpressionException, ParserConfigurationException, SAXException {
         String content = socket.read();
-        boolean valid = validator.validate(content, Message.XMLSerializer.DEFAULT_XPATH_EXPRESSION);
+        boolean valid = validator.validate(content);
 
         if (valid) {
             Message message = XMLSerializer.deserialize(content);

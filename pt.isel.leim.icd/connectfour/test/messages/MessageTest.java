@@ -1,5 +1,6 @@
 package messages;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.lang.reflect.Constructor;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 public class MessageTest {
 

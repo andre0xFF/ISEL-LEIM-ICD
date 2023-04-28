@@ -11,8 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
-        property = "type"
+        include = JsonTypeInfo.As.WRAPPER_OBJECT
 )
 @JsonSubTypes(
         {
@@ -20,6 +19,9 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage")
         }
 )
+
+
+
 @JsonRootName("Message")
 public interface Message {
 
@@ -27,7 +29,9 @@ public interface Message {
      * A serializer can serialize and deserialize messages.
      */
     interface Serializer {
+
         Message deserialize(String content) throws JsonProcessingException;
+
 
         String serialize(Message message) throws JsonProcessingException;
     }
@@ -49,6 +53,7 @@ public interface Message {
 
             xmlMapper.registerModule(module);
         }
+
 
         @Override
         public Message deserialize(String content) throws JsonProcessingException {
