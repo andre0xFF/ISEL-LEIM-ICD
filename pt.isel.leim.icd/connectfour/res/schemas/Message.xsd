@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        targetNamespace="http://icd.leim.isel.pt/connectfour/messages"
+        xmlns:tns="http://icd.leim.isel.pt/connectfour/messages">
 
     <xs:include schemaLocation="PongMessage.xsd"/>
     <xs:include schemaLocation="PingMessage.xsd"/>
 
-    <xs:complexType name="commTypes">
-        <xs:sequence>
-            <xs:choice>
-                <xs:element ref="PongMessage"/>
-                <xs:element ref="PingMessage"/>
-            </xs:choice>
-        </xs:sequence>
-    </xs:complexType>
+    <xs:element name="Message" type="tns:MessageTypes"/>
 
-    <xs:element name="Message" type="commTypes"/>
+    <xs:complexType name="MessageTypes">
+        <xs:choice>
+            <xs:element ref="tns:PongMessage"/>
+            <xs:element ref="tns:PingMessage"/>
+        </xs:choice>
+    </xs:complexType>
 
 </xs:schema>
