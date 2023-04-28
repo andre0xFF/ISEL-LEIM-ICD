@@ -8,7 +8,7 @@ import java.io.IOException;
 public class Client {
     private final Socket socket;
     Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
-    SchemaValidator validator = new SchemaValidator();
+    SchemaValidator schemaValidator = new SchemaValidator();
 
     public Client() throws IOException {
         this(Socket.DEFAULT_HOSTNAME, Socket.DEFAULT_PORT);
@@ -32,14 +32,14 @@ public class Client {
 
     public void write(Message message) throws IOException, SAXException {
         String content = XMLSerializer.serialize(message);
-        validator.validate(content);
+        schemaValidator.validate(content);
 
         socket.write(content);
     }
 
     public Message read() throws IOException, SAXException {
         String content = socket.read();
-        validator.validate(content);
+        schemaValidator.validate(content);
 
         return XMLSerializer.deserialize(content);
     }

@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.ServerSocket;
 
 public class ConnectFourView {
 
@@ -23,14 +25,14 @@ public class ConnectFourView {
     public ConnectFourView(int rows, int columns) {
         createFrame(rows, columns);
 
-//        createAuthenticationPanel();
-//        createBoardPanel(rows, columns);
-//        createProfilePanel("Daniel", "xpto", "PT", "90");
+        createAuthenticationPanel();
+        createBoardPanel(rows, columns);
+        createProfilePanel("Daniel", "xpto", "PT", "90");
         createGameHistoryPanel();
 
-//        this.frame.add(authenticationPanel, BorderLayout.CENTER);
+        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
-        this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
+        // this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel);
         this.frame.setVisible(true);
 
@@ -335,15 +337,15 @@ public class ConnectFourView {
     }
 
     public JTextField usernameField() {
-        return usernameField;
+        return this.usernameField;
     }
 
     public JPasswordField passwordField() {
-        return passwordField;
+        return this.passwordField;
     }
 
     public JButton loginButton() {
-        return loginButton;
+        return this.loginButton;
     }
 
     public void startGame() {
@@ -352,13 +354,12 @@ public class ConnectFourView {
         this.frame.repaint();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ServerSocket serverSocket = new ServerSocket(8000);
+
         ConnectFourView connectFourView = new ConnectFourView(6, 7);
-//        ConnectFourClientModel clientModel = new ConnectFourClientModel();
-//        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
-
-
-
+        ConnectFourClientModel clientModel = new ConnectFourClientModel();
+        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
 
 //        try {
 //            Thread.sleep(5000);

@@ -6,6 +6,7 @@
 
     <xs:include schemaLocation="PongMessage.xsd"/>
     <xs:include schemaLocation="PingMessage.xsd"/>
+    <xs:include schemaLocation="LoginMessage.xsd"/>
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -13,6 +14,7 @@
         <xs:choice>
             <xs:element ref="PongMessage"/>
             <xs:element ref="PingMessage"/>
+            <xs:element ref="LoginMessage"/>
         </xs:choice>
     </xs:complexType>
 

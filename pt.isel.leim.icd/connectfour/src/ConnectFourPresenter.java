@@ -1,5 +1,9 @@
+import org.xml.sax.SAXException;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.Arrays;
 
 public class ConnectFourPresenter implements ActionListener {
     private ConnectFourView view;
@@ -14,8 +18,16 @@ public class ConnectFourPresenter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(view.loginButton())) {
-            System.out.println("Login button clicked");
+        if (e.getSource().equals(this.view.loginButton())) {
+            try {
+                this.model.login(
+                        this.view.usernameField().getText(),
+                        this.view.passwordField().getPassword()
+                );
+            } catch (IOException | SAXException ex) {
+                // TODO
+                throw new RuntimeException(ex);
+            }
         }
 
 //        if (e.getSource().equals(view.newGameButton())) {
