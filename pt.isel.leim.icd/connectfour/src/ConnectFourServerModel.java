@@ -1,6 +1,6 @@
-import messages.Message;
-import messages.PingMessage;
-import messages.PongMessage;
+import network.messages.Message;
+import network.messages.PingMessage;
+import network.messages.PongMessage;
 import models.ConnectFour;
 import network.Client;
 import network.Server;

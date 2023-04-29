@@ -1,6 +1,6 @@
 package network;
 
-import messages.Message;
+import network.messages.Message;
 import network.socket.Listener;
 import org.xml.sax.SAXException;
 import schemas.SchemaValidator;

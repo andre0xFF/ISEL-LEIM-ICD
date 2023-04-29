@@ -1,6 +1,6 @@
 package network;
 
-import messages.Message;
+import network.messages.Message;
 import network.socket.Socket;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package messages;
+package network.messages;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

@@ -1,4 +1,4 @@
-import messages.PingMessage;
+import network.messages.PingMessage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 
-import messages.PingMessageTest;
+import network.messages.PingMessageTest;
 import network.Client;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

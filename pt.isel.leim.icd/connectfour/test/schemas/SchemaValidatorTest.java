@@ -1,11 +1,9 @@
 package schemas;
 
-import messages.MessageTest;
-import messages.PingMessageTest;
-import messages.PongMessageTest;
-import java.io.IOException;
+import network.messages.MessageTest;
+import network.messages.PingMessageTest;
+import network.messages.PongMessageTest;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;

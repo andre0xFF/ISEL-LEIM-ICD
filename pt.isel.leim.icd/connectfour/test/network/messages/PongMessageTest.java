@@ -1,5 +1,6 @@
-package messages;
+package network.messages;
 
+import network.messages.PongMessage;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

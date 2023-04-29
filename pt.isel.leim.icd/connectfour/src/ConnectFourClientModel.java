@@ -1,6 +1,5 @@
-import messages.LoginMessage;
-import messages.GameHistoryMessage;
-import messages.UpdateProfileMessage;
+import network.messages.LoginMessage;
+import network.messages.UpdateProfileMessage;
 import models.ConnectFour;
 import network.Client;
 import org.xml.sax.SAXException;
@@ -26,7 +25,7 @@ public class ConnectFourClientModel {
         client.write(new LoginMessage(text, password));
     }
 
-    public void updateProfile(String username, char[] password, String nationality, int age)throws IOException, SAXException{
+    public void updateProfile(String username, char[] password, String nationality, int age) throws IOException, SAXException {
         client.write(new UpdateProfileMessage(username, password, nationality, age));
 
     }
