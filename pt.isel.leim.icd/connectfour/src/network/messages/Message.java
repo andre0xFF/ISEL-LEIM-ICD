@@ -18,7 +18,8 @@ import java.time.format.DateTimeFormatter;
 @JsonSubTypes(
         {
                 @JsonSubTypes.Type(value = PingMessage.class, name = "PingMessage"),
-                @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage")
+                @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage"),
+                @JsonSubTypes.Type(value = LoginMessage.class, name = "LoginMessage"),
         }
 )
 @JsonRootName("Message")

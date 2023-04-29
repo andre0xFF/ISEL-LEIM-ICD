@@ -12,6 +12,7 @@ import java.io.IOException;
  * Represents a client.
  */
 public class Client implements Listener<String> {
+    public static final int DEFAULT_PORT = Socket.DEFAULT_PORT;
     private final Socket socket;
     private final Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
     private final SchemaValidator schemaValidator = new SchemaValidator();
@@ -84,7 +85,6 @@ public class Client implements Listener<String> {
 
     /**
      * Called the listener when a message is received.
-     *
      * @param content The message.
      */
     @Override
@@ -99,7 +99,6 @@ public class Client implements Listener<String> {
 
     /**
      * Starts listening for messages.
-     *
      * @param listener The listener to be called when a message is received.
      */
     public void listen(Listener<Message> listener) {

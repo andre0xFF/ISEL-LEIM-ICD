@@ -6,14 +6,15 @@ import java.util.ArrayList;
 public class Player implements Model {
 
     private final ArrayList<Token> tokens = new ArrayList<>();
-    private final String name;
+    private final String username;
 
-    public Player(String name) {
-        this.name = name;
+    public Player(String username) {
+        this.username = username;
     }
 
     /**
      * Removes the first token from the player's tokens list
+     *
      * @return the token that was removed
      */
     public Token popToken() {
@@ -45,7 +46,7 @@ public class Player implements Model {
     /**
      * @return the name of the player
      */
-    public String name() {
-        return name;
+    public String username() {
+        return username;
     }
 }

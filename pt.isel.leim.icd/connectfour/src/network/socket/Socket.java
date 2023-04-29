@@ -82,7 +82,8 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Reads a message from the socket.
-     * @return The message read.
+     *
+     * @return The message read, or null if the end of the stream has been reached.
      * @throws IOException If an I/O error occurs when reading from the socket.
      */
     public String read() throws IOException {
@@ -157,9 +158,16 @@ public class Socket implements java.io.Closeable, Runnable {
     @Override
     public void run() {
         try {
-            while (this.socket.isConnected()) {
+            while (!this.socket.isClosed()) {
                 String message = read();
 
+                // The end of the stream has been reached.
+                if (message == null) {
+                    close();
+                    break;
+                }
+
+                // The listener may have called ignore() while we were reading the message.
                 if (this.listener != null) {
                     this.listener.onMessage(message);
                 }

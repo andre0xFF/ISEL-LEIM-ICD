@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PlayerTest {
 
@@ -31,6 +31,6 @@ class PlayerTest {
     void shouldHaveName() {
         Player player = new Player("Player 1");
 
-        assertEquals("Player 1", player.name());
+        assertEquals("Player 1", player.username());
     }
 }

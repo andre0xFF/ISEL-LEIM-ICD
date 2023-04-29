@@ -3,13 +3,12 @@ package schemas;
 import network.messages.MessageTest;
 import network.messages.PingMessageTest;
 import network.messages.PongMessageTest;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 import org.xml.sax.SAXException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SchemaValidatorTest {
 
@@ -18,6 +17,11 @@ class SchemaValidatorTest {
     @BeforeEach
     void setUp() {
         this.schemaValidator = new SchemaValidator();
+    }
+
+    @Test
+    void shouldNotValidateEmptyMessage() {
+        assertThrows(SAXException.class, () -> schemaValidator.validate(MessageTest.messageEmptyContent));
     }
 
     @Test
@@ -31,12 +35,12 @@ class SchemaValidatorTest {
     }
 
     @Test
-    void shouldNotValidateEmptyMessage() {
-        assertThrows(SAXException.class, () -> schemaValidator.validate(MessageTest.messageEmptyContent));
+    void shouldValidateAskGameHistoryMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameHistoryMessage/></Message>"));
     }
 
     @Test
-    void shouldValidateAskGameHistoryMessage(){
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameHistoryMessage/></Message>"));
+    void shouldValidateLoginMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><LoginMessage><username>player1</username><password>pass</password></LoginMessage></Message>"));
     }
 }

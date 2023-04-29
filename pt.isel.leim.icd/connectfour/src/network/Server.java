@@ -21,7 +21,6 @@ public class Server {
 
     /**
      * Returns the port of the server.
-     *
      * @return The port of the server.
      */
     public int port() {

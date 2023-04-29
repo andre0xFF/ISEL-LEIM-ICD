@@ -62,7 +62,7 @@ class SocketTest {
     }
 
     @Test
-    void shouldReadMessageWhenMessageIsWritten() throws IOException, InterruptedException {
+    void shouldReadMessageWhenMessageIsWritten() throws IOException {
         try (Socket socket = new Socket(javaServerSocket.getLocalPort())) {
             assertEquals(expectedMessage, socket.read());
         }
@@ -88,7 +88,7 @@ class SocketTest {
     void shouldIgnoreWhenMessagesAreWritten() throws IOException {
         try (Socket socket = new Socket(javaServerSocket.getLocalPort())) {
             socket.listen(
-                actualMessage -> fail()
+                    actualMessage -> fail()
             );
 
             socket.ignore();
@@ -99,9 +99,27 @@ class SocketTest {
     }
 
     @Test
+    void shouldNotReceiveMessageWhenSocketIsClosed() throws IOException, InterruptedException {
+        try (Socket socket = new Socket(javaServerSocket.getLocalPort())) {
+            // Reads the first message
+            socket.read();
+
+            // Listen should not be called
+            socket.listen(
+                    actualMessage -> fail()
+            );
+
+            // Wait for Socket thread to start
+            Thread.sleep(1000);
+            this.javaSocket.close();
+        }
+    }
+
+    @Test
     void shouldClose() throws IOException {
         try (Socket socket = new Socket(javaServerSocket.getLocalPort())) {
             socket.close();
+
             assertFalse(socket.isConnected());
             assertTrue(socket.isClosed());
         }
