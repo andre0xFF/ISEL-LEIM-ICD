@@ -57,7 +57,6 @@ public class ConnectFourView {
     }
 
 
-
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
 
@@ -75,7 +74,6 @@ public class ConnectFourView {
 
         //Game History Buttons
         this.historyBackButton.addActionListener(listener);
-
 
 
         for (int column = 0; column < this.boardTokenCells[0].length; column++) {
@@ -165,7 +163,6 @@ public class ConnectFourView {
         constraints.weighty = 1;
 
 
-
         gameMenuPanel.add(menuTitleLabel, constraints);
 
         constraints.weighty = 0;
@@ -189,7 +186,7 @@ public class ConnectFourView {
 
         gameMenuPanel.add(menuProfileJButton, constraints);
 
-        menuGameHistoryButton= new JButton("GAME STATS");
+        menuGameHistoryButton = new JButton("GAME STATS");
 
 
         constraints.gridx = 0;
@@ -206,7 +203,7 @@ public class ConnectFourView {
 
         constraints.insets.top = 20;
 
-        gameMenuPanel.add(gameQuitButton , constraints);
+        gameMenuPanel.add(gameQuitButton, constraints);
 
 
         this.gameMenuPanel = gameMenuPanel;
@@ -247,7 +244,7 @@ public class ConnectFourView {
         this.frame.add(controlPanel, BorderLayout.SOUTH);
     }
 
-    public void createGameHistoryPanel(){
+    public void createGameHistoryPanel() {
 
         JPanel gameHistoryPanel = new JPanel();
 
@@ -280,7 +277,7 @@ public class ConnectFourView {
 
         constraints.gridx = 1;
         constraints.gridy = 1;
-        constraints.anchor =GridBagConstraints.CENTER;
+        constraints.anchor = GridBagConstraints.CENTER;
         constraints.insets.left = 10;
 
         gameHistoryPanel.add(winsLossesLabel, constraints);
@@ -304,15 +301,12 @@ public class ConnectFourView {
         gameHistoryPanel.add(historyBackButton, constraints);
 
 
-
-
-
         this.gameHistoryPanel = gameHistoryPanel;
 
 
     }
 
-    public void createProfilePanel(String username, String password, String nationality, String age){
+    public void createProfilePanel(String username, String password, String nationality, String age) {
         //TODO receives Image
         JPanel profilePanel = new JPanel();
 
@@ -337,13 +331,13 @@ public class ConnectFourView {
 
         constraints.insets.top = 10;
 
-        JLabel profilePicture =  new JLabel("PlaceHolder");
+        JLabel profilePicture = new JLabel("PlaceHolder");
 
         constraints.gridx = 0;
         constraints.gridy = 1;
         profilePicture.setBackground(Color.red);
         profilePicture.setOpaque(true);
-        profilePicture.setPreferredSize(new Dimension(60,60));
+        profilePicture.setPreferredSize(new Dimension(60, 60));
 
         profilePanel.add(profilePicture, constraints);
         constraints.gridwidth = 1;
@@ -458,35 +452,35 @@ public class ConnectFourView {
     }
 
 
-    public JTextField newNameField(){
+    public JTextField newNameField() {
         return this.newNameField;
     }
 
-    public JTextField newPassword(){
+    public JTextField newPassword() {
         return this.newPasswordField;
     }
 
-    public JTextField nationalityField(){
+    public JTextField nationalityField() {
         return this.nationalityField;
     }
 
-    public JTextField ageField(){
+    public JTextField ageField() {
         return this.ageField;
     }
 
-    public JButton profileSubmitButton(){
+    public JButton profileSubmitButton() {
         return this.profileSubmitButton;
     }
 
-    public JButton profileBackButton(){
+    public JButton profileBackButton() {
         return this.profileBackButton;
     }
 
-    public JButton historyBackButton(){
+    public JButton historyBackButton() {
         return this.historyBackButton;
     }
 
-    public JButton[][] boardTokenCells(){
+    public JButton[][] boardTokenCells() {
         return this.boardTokenCells;
     }
 
@@ -507,7 +501,7 @@ public class ConnectFourView {
         return this.menuNewGameButton;
     }
 
-    public void connectFourProfile(){
+    public void connectFourProfile() {
         this.frame.getContentPane().removeAll();
         this.frame.add(profilePanel, BorderLayout.CENTER);
         this.frame.repaint();
@@ -533,16 +527,12 @@ public class ConnectFourView {
     }
 
 
-
-
-
     public void connectFourStartGame() {
         this.frame.getContentPane().removeAll();
         this.frame.add(boardPanel, BorderLayout.CENTER);
         this.frame.repaint();
         this.frame.validate();
     }
-
 
 
     public static void main(String[] args) throws IOException {
@@ -566,7 +556,6 @@ public class ConnectFourView {
 
         // createControlPanel("André");
     }
-
 
 
 }

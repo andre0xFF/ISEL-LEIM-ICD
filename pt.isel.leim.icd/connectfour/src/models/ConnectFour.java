@@ -27,6 +27,7 @@ public class ConnectFour implements Model {
 
     /**
      * Drops a token in the specified column
+     *
      * @param column the column to drop the token in
      * @return true if the token was dropped, false if the game is over or the column is full
      */
@@ -60,25 +61,17 @@ public class ConnectFour implements Model {
     }
 
     private boolean checkDiagonalWin(int row, int column, Player player) {
-        return checkDiagonalWin(row, column, player, 1, 1)
-                || checkDiagonalWin(row, column, player, 1, -1)
-                || checkDiagonalWin(row, column, player, -1, 1)
-                || checkDiagonalWin(row, column, player, -1, -1);
-    }
-
-    private boolean checkDiagonalWin(int row, int column, Player player, int rowDirection, int columnDirection) {
-
         Color playerColor = player.color();
 
         for (int currentRow = min(row + 3, board.totalRows()),
              count = 0;
              currentRow > max(row - 4, 1);
              currentRow--
-        ){
-            for(int currentColumn = max(column - 3, 1);
-                currentColumn < min(column + 4, board.totalColumns());
-                currentColumn++
-            ){
+        ) {
+            for (int currentColumn = max(column - 3, 1);
+                 currentColumn < min(column + 4, board.totalColumns());
+                 currentColumn++
+            ) {
                 Token currentToken = board.getToken(row, currentColumn);
                 if (currentToken == null || !currentToken.color().equals(playerColor)) {
                     count = 0;
@@ -88,7 +81,7 @@ public class ConnectFour implements Model {
                 break;
 
             }
-            if(count == 4){
+            if (count == 4) {
                 return true;
             }
         }
@@ -150,6 +143,7 @@ public class ConnectFour implements Model {
 
     /**
      * Checks if the game is over
+     *
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
@@ -158,6 +152,7 @@ public class ConnectFour implements Model {
 
     /**
      * Gets the winner of the game
+     *
      * @return the winner of the game, or null if the game is not over
      */
     public Player winner() {
@@ -166,6 +161,7 @@ public class ConnectFour implements Model {
 
     /**
      * Gets the current player
+     *
      * @return the current player
      */
     public Player currentPlayer() {

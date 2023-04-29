@@ -19,7 +19,7 @@ public class ConnectFourPresenter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        try{
+        try {
 
             // Authentication Events
             if (e.getSource().equals(this.view.loginButton())) {
@@ -30,7 +30,7 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
             // Profile Events
-            if(e.getSource().equals(this.view.profileSubmitButton())){
+            if (e.getSource().equals(this.view.profileSubmitButton())) {
                 this.model.updateProfile(
                         this.view.newNameField().getText(),
                         this.view.newPassword().getText().toCharArray(),
@@ -40,14 +40,14 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
             // Navigates from Profile Menu back to Game Menu
-            if(e.getSource().equals(this.view.profileBackButton())){
+            if (e.getSource().equals(this.view.profileBackButton())) {
                 this.view.connectFourGameMenu();
             }
 
             // Game History Events
 
             // Navigates from Game History back to Game Menu
-            if(e.getSource().equals(this.view.historyBackButton())){
+            if (e.getSource().equals(this.view.historyBackButton())) {
                 this.view.connectFourGameMenu();
 
             }
@@ -55,21 +55,21 @@ public class ConnectFourPresenter implements ActionListener {
             // Menu Events
 
             // Navigates from Game Menu to Game History
-            if(e.getSource().equals(this.view.menuGameHistoryButton())){
+            if (e.getSource().equals(this.view.menuGameHistoryButton())) {
                 this.view.connectFourGameHistoryPanel();
                 this.model.connectFourGameHistory();
 
             }
 
             // Navigate from Game Menu to Profile
-            if(e.getSource().equals(this.view.profileButton())){
+            if (e.getSource().equals(this.view.profileButton())) {
                 this.view.connectFourProfile();
 
             }
 
 
             // Game Menu quit button close app
-            if(e.getSource().equals(this.view.quitButton())){
+            if (e.getSource().equals(this.view.quitButton())) {
                 this.model.quitGame();
                 this.view.connetFourCloseUI();
 
@@ -77,7 +77,7 @@ public class ConnectFourPresenter implements ActionListener {
 
 
             // Navigate from Game Menu to new Game(Board)
-            if(e.getSource().equals(this.view.newGame())){
+            if (e.getSource().equals(this.view.newGame())) {
                 //TODO
                 this.view.connectFourStartGame();
             }
@@ -85,9 +85,9 @@ public class ConnectFourPresenter implements ActionListener {
 
             // GameBoardEvents
             JButton[][] boardTokenCells = this.view.boardTokenCells();
-            for(int row = 0; row < boardTokenCells.length; row++){
-                for (int column = 0; column < boardTokenCells[0].length; column++){
-                    if(e.getSource().equals(boardTokenCells[row][column])){
+            for (int row = 0; row < boardTokenCells.length; row++) {
+                for (int column = 0; column < boardTokenCells[0].length; column++) {
+                    if (e.getSource().equals(boardTokenCells[row][column])) {
                         //TODO
                         this.model.dropToken(column);
                         break;
@@ -96,21 +96,10 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
 
-
-        }catch (IOException | SAXException ex){
+        } catch (IOException | SAXException ex) {
 
             throw new RuntimeException(ex);
         }
-
-
-
-
-
-
-
-
-
-
 
 
 //        if (e.getSource().equals(view.newGameButton())) {
