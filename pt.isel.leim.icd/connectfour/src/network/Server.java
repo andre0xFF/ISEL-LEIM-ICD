@@ -1,75 +1,41 @@
 package network;
 
-import network.messages.Message;
 import network.socket.Socket;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Represents a server.
  */
 public class Server {
-    private final int port;
-    private Boolean running = true;
-    private final HashMap<String, Class<? extends Message>> messages = new HashMap<>();
+    private final ServerSocket serverSocket;
 
-    public Server() {
+    public Server() throws IOException {
         this(Socket.DEFAULT_PORT);
     }
 
-    public Server(int port) {
-        this.port = port;
-    }
-
-    public Server(ArrayList<Class<? extends Message>> messages) {
-        this(messages, Socket.DEFAULT_PORT);
-    }
-
-    public Server(ArrayList<Class<? extends Message>> messages, int port) {
-        this.port = port;
-
-        for (Class<? extends Message> message : messages) {
-            addMessage(message);
-        }
+    public Server(int port) throws IOException {
+        this.serverSocket = new ServerSocket(port);
     }
 
     /**
-     * Starts the server.
+     * Returns the port of the server.
+     *
+     * @return The port of the server.
      */
-    public void start() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            while (running) {
-                Socket socket = new Socket(serverSocket.accept());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Stops the server.
-     */
-    public void stop() {
-        this.running = false;
-    }
-
-    private void addMessage(Class<? extends Message> clazz) {
-        this.messages.put(clazz.toString(), clazz);
-    }
-
     public int port() {
-        return this.port;
+        return this.serverSocket.getLocalPort();
     }
 
+    /**
+     * Accepts a client.
+     *
+     * @return The client.
+     * @throws IOException If an I/O error occurs when accepting the client.
+     */
     public Client accept() throws IOException {
-        Socket socket;
-
-        try (ServerSocket serverSocket = new ServerSocket(this.port)) {
-            socket = new Socket(serverSocket.accept());
-        }
+        Socket socket = new Socket(serverSocket.accept());
 
         return new Client(socket);
     }

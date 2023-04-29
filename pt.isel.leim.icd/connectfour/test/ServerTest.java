@@ -1,67 +1,36 @@
-import network.messages.Message;
-import network.messages.PingMessage;
-import network.messages.PongMessage;
 import network.Server;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ServerTest {
 
-    private static Server server;
-    private static Thread serverThread;
-    private static final ArrayList<Class<? extends Message>> messages = new ArrayList<>() {
-        {
-            add(PingMessage.class);
-            add(PongMessage.class);
-        }
-    };
+    private Server server;
 
-    private final Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
-
-    @BeforeAll
-    static void setUp() {
-        server = new Server(messages);
-        serverThread = new Thread(server::start);
-
-        serverThread.start();
-    }
-
-    @AfterAll
-    static void tearDown() {
-        server.stop();
-        serverThread.interrupt();
-    }
-
-    @Test
-    void shouldStartServerOnPort8000ByDefaultWhenNotSpecified() {
-        assertEquals(8000, server.port());
-    }
-
-    @Test
-    void shouldStartServerOnPort8001WhenSpecified() {
-        Server server = new Server(messages, 8001);
-
-        assertEquals(8001, server.port());
+    @BeforeEach
+    void setUpEach() throws IOException {
+        this.server = new Server(0);
     }
 
     @Test
     void shouldAcceptConnection() throws IOException {
-        Socket socket = new Socket("localhost", server.port());
+        accept(1);
 
-        assertTrue(socket.isConnected());
+        try (Socket socket = new Socket("localhost", this.server.port())) {
+            assertTrue(socket.isConnected());
+        }
     }
 
     @Test
     void shouldAcceptMultipleConnections() throws IOException {
+        accept(3);
+
         Socket socket1 = new Socket("localhost", server.port());
         Socket socket2 = new Socket("localhost", server.port());
         Socket socket3 = new Socket("localhost", server.port());
@@ -69,13 +38,34 @@ class ServerTest {
         assertTrue(socket1.isConnected());
         assertTrue(socket2.isConnected());
         assertTrue(socket3.isConnected());
+
+        socket1.close();
+        socket2.close();
+        socket3.close();
     }
 
     @Test
     void shouldReceiveText() throws IOException {
-        Socket socket = new Socket("localhost", server.port());
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        accept(1);
 
-        assertDoesNotThrow(() -> out.println("Hello world!"));
+        try (Socket socket = new Socket("localhost", server.port())) {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            assertDoesNotThrow(() -> out.println("Hello world!"));
+        }
+    }
+
+    void accept(int totalClients) {
+        Thread thread = new Thread(() -> {
+            try {
+                for (int i = 0; i < totalClients; i++) {
+                    server.accept();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        thread.start();
     }
 }
