@@ -75,29 +75,56 @@ class ConnectFourTest {
 
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
+        // Bottom Left to Top Right Diagonal
+        // Player 1
+//        connectFour.dropToken(1);
+//        // Player 2
+//        connectFour.dropToken(2);
+//        // Player 1
+//        connectFour.dropToken(2);
+//        // Player 2
+//        connectFour.dropToken(3);
+//        // Player 1
+//        connectFour.dropToken(3);
+//        // Player 2
+//        connectFour.dropToken(4);
+//        // Player 1
+//        connectFour.dropToken(3);
+//        // Player 2
+//        connectFour.dropToken(4);
+//        // Player 1
+//        connectFour.dropToken(5);
+//        // Player 2
+//        connectFour.dropToken(4);
+//        // Player 1
+//        connectFour.dropToken(4);
+
+        // Top Left to Bottom Right Diagonal
+
+//         Player 1
+        connectFour.dropToken(4);
+        // Player 2
+        connectFour.dropToken(3);
+        // Player 1
+        connectFour.dropToken(3);
+        // Player 2
+        connectFour.dropToken(2);
         // Player 1
         connectFour.dropToken(1);
-
         // Player 2
         connectFour.dropToken(2);
         // Player 1
         connectFour.dropToken(2);
         // Player 2
-        connectFour.dropToken(3);
-        // Player 1
-        connectFour.dropToken(3);
-        // Player 2
-        connectFour.dropToken(4);
-        // Player 1
-        connectFour.dropToken(3);
-        // Player 2
-        connectFour.dropToken(4);
+        connectFour.dropToken(1);
         // Player 1
         connectFour.dropToken(5);
         // Player 2
-        connectFour.dropToken(4);
+        connectFour.dropToken(1);
         // Player 1
-        connectFour.dropToken(4);
+        connectFour.dropToken(1);
+
+
 
         assertTrue(connectFour.isGameOver());
         assertEquals(player1, connectFour.winner());

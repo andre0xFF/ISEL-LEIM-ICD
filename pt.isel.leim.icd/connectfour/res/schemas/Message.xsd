@@ -8,7 +8,7 @@
     <xs:include schemaLocation="PingMessage.xsd"/>
     <xs:include schemaLocation="LoginMessage.xsd"/>
     <xs:include schemaLocation="UpdateProfileMessage.xsd"/>
-    <xs:include schemaLocation="UpdateGameHistoryMessage.xsd"/>
+    <xs:include schemaLocation="AskGameHistoryMessage.xsd"/>
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -18,7 +18,7 @@
             <xs:element ref="PingMessage"/>
             <xs:element ref="LoginMessage"/>
             <xs:element ref="UpdateProfileMessage"/>
-            <xs:element ref="UpdateGameHistoryMessage"/>
+            <xs:element ref="AskGameHistoryMessage"/>
         </xs:choice>
     </xs:complexType>
 

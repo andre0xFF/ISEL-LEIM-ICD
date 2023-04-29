@@ -1,3 +1,4 @@
+import network.messages.AskHistoryMessage;
 import network.messages.LoginMessage;
 import network.messages.UpdateProfileMessage;
 import models.ConnectFour;
@@ -31,7 +32,7 @@ public class ConnectFourClientModel {
     }
 
     public void connectFourGameHistory() throws IOException, SAXException {
-//        client.write(new GameHistoryMessage());
+        client.write(new AskHistoryMessage());
     }
 
     public void quitGame() throws IOException {

@@ -6,6 +6,7 @@ import network.messages.PongMessageTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,5 +33,10 @@ class SchemaValidatorTest {
     @Test
     void shouldNotValidateEmptyMessage() {
         assertThrows(SAXException.class, () -> schemaValidator.validate(MessageTest.messageEmptyContent));
+    }
+
+    @Test
+    void shouldValidateAskGameHistoryMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameHistoryMessage/></Message>"));
     }
 }

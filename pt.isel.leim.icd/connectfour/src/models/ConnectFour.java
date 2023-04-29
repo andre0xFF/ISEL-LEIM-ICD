@@ -61,32 +61,34 @@ public class ConnectFour implements Model {
     }
 
     private boolean checkDiagonalWin(int row, int column, Player player) {
+        return checkDiagonalWin(row, column, player, 1, 1, 0)
+                || checkDiagonalWin(row, column, player, 1, -1, 0)
+                || checkDiagonalWin(row, column, player, -1, 1, 0)
+                || checkDiagonalWin(row, column, player, -1, -1, 0);
+    }
+
+    private boolean checkDiagonalWin(int row, int column, Player player, int rowDirection, int columnDirection, int count) {
         Color playerColor = player.color();
 
-        for (int currentRow = min(row + 3, board.totalRows()),
-             count = 0;
-             currentRow > max(row - 4, 1);
-             currentRow--
-        ) {
-            for (int currentColumn = max(column - 3, 1);
-                 currentColumn < min(column + 4, board.totalColumns());
-                 currentColumn++
-            ) {
-                Token currentToken = board.getToken(row, currentColumn);
-                if (currentToken == null || !currentToken.color().equals(playerColor)) {
-                    count = 0;
-                    continue;
-                }
-                count++;
-                break;
+//        row = min(row, board.totalRows());
+//        column = min(column, board.totalColumns());
 
-            }
-            if (count == 4) {
-                return true;
-            }
+        if(row < 1|| row > board.totalRows() || column < 1 || column > board.totalColumns()){
+            return false;
         }
 
-        return false;
+        Token currentToken = board.getToken(row, column);
+
+        if (currentToken == null || !currentToken.color().equals(playerColor)) {
+            return false;
+        }
+        count++;
+
+        if(count == 4) {
+            return true;
+        }
+
+        return checkDiagonalWin(row + rowDirection, column + columnDirection, player, rowDirection, columnDirection, count);
     }
 
     private boolean checkVerticalWin(int row, int column, Player player) {
