@@ -83,7 +83,7 @@ public class Client implements Listener<String> {
     }
 
     /**
-     * Called when a message is received.
+     * Called the listener when a message is received.
      *
      * @param content The message.
      */
@@ -97,6 +97,11 @@ public class Client implements Listener<String> {
         }
     }
 
+    /**
+     * Starts listening for messages.
+     *
+     * @param listener The listener to be called when a message is received.
+     */
     public void listen(Listener<Message> listener) {
         this.socket.listen(this);
         this.listener = listener;
