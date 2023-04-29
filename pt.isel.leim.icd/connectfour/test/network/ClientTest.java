@@ -1,4 +1,5 @@
-import network.Client;
+package network;
+
 import network.messages.PingMessage;
 import network.messages.PingMessageTest;
 import network.messages.PongMessage;

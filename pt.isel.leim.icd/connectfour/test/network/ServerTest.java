@@ -1,4 +1,5 @@
-import network.Server;
+package network;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
