@@ -21,8 +21,6 @@ public class Socket implements java.io.Closeable, Runnable {
     private final java.net.Socket socket;
     private final PrintWriter writer;
     private final BufferedReader reader;
-    private final String hostname;
-    private final int port;
     private Listener<String> listener;
     private Thread thread;
 
@@ -68,12 +66,10 @@ public class Socket implements java.io.Closeable, Runnable {
      * @throws IOException If an I/O error occurs when creating the socket.
      */
     public Socket(java.net.Socket socket) throws IOException {
-        this.socket = socket;
-        writer = new PrintWriter(this.socket.getOutputStream(), true);
-        reader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        writer = new PrintWriter(socket.getOutputStream(), true);
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-        this.hostname = socket.getInetAddress().getHostName();
-        this.port = socket.getPort();
+        this.socket = socket;
     }
 
     /**
@@ -125,7 +121,7 @@ public class Socket implements java.io.Closeable, Runnable {
      * @return The hostname.
      */
     public String hostname() {
-        return hostname;
+        return this.socket.getInetAddress().getHostName();
     }
 
     /**
@@ -133,7 +129,7 @@ public class Socket implements java.io.Closeable, Runnable {
      * @return The port.
      */
     public int port() {
-        return port;
+        return this.socket.getPort();
     }
 
     /**

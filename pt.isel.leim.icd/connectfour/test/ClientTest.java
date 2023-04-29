@@ -1,16 +1,17 @@
+import network.Client;
 import network.messages.PingMessage;
+import network.messages.PingMessageTest;
+import network.messages.PongMessage;
+import network.messages.PongMessageTest;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
-
-import network.messages.PingMessageTest;
-import network.Client;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.xml.sax.SAXException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,37 +21,35 @@ class ClientTest {
     private java.net.Socket javaSocket;
     private PrintWriter writer;
     private BufferedReader reader;
-//    private static final ArrayList<Class<? extends Message>> messages = new ArrayList<>() {
-//        {
-//            add(PingMessage.class);
-//            add(PongMessage.class);
-//        }
-//    };
 
     @BeforeEach
     void setUp() throws IOException {
         this.javaServerSocket = new ServerSocket(0);
         this.client = new Client(this.javaServerSocket.getLocalPort());
 
-        new Thread(() -> {
+        Thread thread = new Thread(() -> {
             try {
                 this.javaSocket = this.javaServerSocket.accept();
                 this.writer = new PrintWriter(this.javaSocket.getOutputStream(), true);
                 this.reader = new BufferedReader(new InputStreamReader(this.javaSocket.getInputStream()));
 
                 this.reader.readLine();
-            } catch (IOException ignored) {}
-        }).start();
+            } catch (IOException ignored) {
+            }
+        });
+
+        thread.start();
     }
 
     @Test
-    void shouldConnectToServer() {
+    void shouldConnect() {
         assertTrue(this.client.isConnected());
     }
 
     @Test
     void shouldDisconnect() throws IOException {
         this.client.close();
+
         assertFalse(client.isConnected());
     }
 
@@ -60,8 +59,14 @@ class ClientTest {
     }
 
     @Test
+    void shouldWritePongMessage() {
+        assertDoesNotThrow(() -> client.write(new PongMessage()));
+    }
+
+    @Test
     void shouldRead() {
         this.writer.println(PingMessageTest.serializedContent);
+
         assertDoesNotThrow(() -> client.read());
     }
 
@@ -74,8 +79,8 @@ class ClientTest {
 
     @Test
     void shouldReadPongMessage() throws IOException, SAXException {
-        this.writer.println(PingMessageTest.serializedContent);
+        this.writer.println(PongMessageTest.serializedContent);
 
-        assertInstanceOf(PingMessage.class, client.read());
+        assertInstanceOf(PongMessage.class, client.read());
     }
 }

@@ -2,9 +2,9 @@ package network;
 
 import network.messages.Message;
 import network.socket.Listener;
+import network.socket.Socket;
 import org.xml.sax.SAXException;
 import schemas.SchemaValidator;
-import network.socket.Socket;
 
 import java.io.IOException;
 
@@ -79,7 +79,7 @@ public class Client implements Listener<String> {
      * @throws IOException If an I/O error occurs when closing.
      */
     public void close() throws IOException {
-        socket.close();
+        this.socket.close();
     }
 
     /**
