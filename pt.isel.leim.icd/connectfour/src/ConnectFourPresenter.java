@@ -78,8 +78,9 @@ public class ConnectFourPresenter implements ActionListener {
 
             // Navigate from Game Menu to new Game(Board)
             if (e.getSource().equals(this.view.newGame())) {
-                //TODO
-                this.view.connectFourStartGame();
+                //TODO criar painel de espera da game queue
+                this.view.connectFourQueueGame();
+//                this.view.connectFourStartGame();
             }
 
 
