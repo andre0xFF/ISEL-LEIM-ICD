@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 import java.awt.*;
 import java.io.IOException;
 
-public class PlayerServerModel implements Listener<Message>, Player {
+public class PlayerServer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
     private final Client client;
@@ -21,7 +21,7 @@ public class PlayerServerModel implements Listener<Message>, Player {
     private Boolean isLogged = false;
     private String username;
 
-    public PlayerServerModel(Client client) {
+    public PlayerServer(Client client) {
         client.listen(this);
 
         this.client = client;
