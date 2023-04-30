@@ -10,6 +10,9 @@ import java.awt.*;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
+/**
+ * A Connect Four game
+ */
 public class ConnectFour implements GamePlayView {
 
     private final Board board = new Board();
@@ -18,6 +21,12 @@ public class ConnectFour implements GamePlayView {
     private Player currentPlayer;
     private Player winner;
 
+    /**
+     * Creates a new Connect Four game
+     *
+     * @param player1 the first player
+     * @param player2 the second player
+     */
     public ConnectFour(Player player1, Player player2) {
         player1.gamePlayView(this);
         player2.gamePlayView(this);
