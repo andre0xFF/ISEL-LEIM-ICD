@@ -9,6 +9,9 @@
     <xs:include schemaLocation="LoginMessage.xsd"/>
     <xs:include schemaLocation="UpdateProfileMessage.xsd"/>
     <xs:include schemaLocation="AskGameHistoryMessage.xsd"/>
+    <xs:include schemaLocation="DropTokenMessage.xsd"/>
+    <xs:include schemaLocation="AskQueueGameMessage.xsd"/>
+    <xs:include schemaLocation="CancelQueueGameMessage.xsd"/>
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -19,6 +22,9 @@
             <xs:element ref="LoginMessage"/>
             <xs:element ref="UpdateProfileMessage"/>
             <xs:element ref="AskGameHistoryMessage"/>
+            <xs:element ref="DropTokenMessage"/>
+            <xs:element ref="AskQueueGameMessage"/>
+            <xs:element ref="CancelQueueGameMessage"/>
         </xs:choice>
     </xs:complexType>
 

@@ -1,4 +1,5 @@
-import network.messages.AskHistoryMessage;
+import network.messages.AskGameHistoryMessage;
+import network.messages.DropTokenMessage;
 import network.messages.LoginMessage;
 import network.messages.UpdateProfileMessage;
 import models.ConnectFour;
@@ -14,12 +15,12 @@ public class ConnectFourClientModel {
     public ConnectFourClientModel() throws IOException {
     }
 
-    public void dropToken(int column) {
-//        boolean dropped = connectFour.dropToken(column);
-//
-//        if (dropped) {
-//            client.write(new DropTokenMessage(column));
-//        }
+    public void dropToken(int column) throws IOException, SAXException {
+        boolean dropped = connectFour.dropToken(column);
+
+        if (dropped) {
+            client.write(new DropTokenMessage(column));
+        }
     }
 
     public void login(String text, char[] password) throws IOException, SAXException {
@@ -32,7 +33,7 @@ public class ConnectFourClientModel {
     }
 
     public void connectFourGameHistory() throws IOException, SAXException {
-        client.write(new AskHistoryMessage());
+        client.write(new AskGameHistoryMessage());
     }
 
     public void quitGame() throws IOException {

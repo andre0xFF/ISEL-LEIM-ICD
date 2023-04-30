@@ -1,9 +1,6 @@
 package network;
 
-import network.messages.PingMessage;
-import network.messages.PingMessageTest;
-import network.messages.PongMessage;
-import network.messages.PongMessageTest;
+import network.messages.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
@@ -63,6 +60,12 @@ class ClientTest {
     void shouldWritePongMessage() {
         assertDoesNotThrow(() -> client.write(new PongMessage()));
     }
+
+    @Test
+    void shouldWriteDropTokenMessage(){assertDoesNotThrow(()-> client.write(new DropTokenMessage(2)));}
+
+    @Test
+    void shouldWriteAskQueueGameMessage(){assertDoesNotThrow(()-> client.write(new AskQueueGameMessage()));}
 
     @Test
     void shouldRead() {
