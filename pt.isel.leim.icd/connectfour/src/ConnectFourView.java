@@ -10,8 +10,12 @@ public class ConnectFourView {
     private static final int BUTTON_SIZE = 60;
     private JFrame frame;
     private JPanel authenticationPanel;
-    private JTextField usernameField;
-    private JPasswordField passwordField;
+    private JTextField authUsernameField;
+
+    private JPasswordField authPasswordField;
+
+    private JTextField profUserNameField;
+    private JPasswordField profPasswordField;
     private JButton loginButton;
     private JPanel boardPanel;
     private JButton[][] boardTokenCells;
@@ -27,6 +31,8 @@ public class ConnectFourView {
     private JButton profileSubmitButton;
     private JPanel gameHistoryPanel;
     private JPanel gameMenuPanel;
+
+    private JPanel startingMenuPanel;
     private JButton historyBackButton;
     private JButton menuNewGameButton;
     private JButton menuProfileJButton;
@@ -44,16 +50,110 @@ public class ConnectFourView {
         createProfilePanel("Daniel", "xpto", "PT", "90");
         createGameHistoryPanel();
         createGameMenuPanel();
+        createStartingMenuPanel();
+        createSignUpPanel();
 
-//        this.frame.add(authenticationPanel, BorderLayout.CENTER);
+        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
 //         this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
-        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
+//        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
+//        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
 
         this.frame.setVisible(true);
 
         this.rows = rows;
         this.columns = columns;
+    }
+
+    private void createSignUpPanel() {
+    }
+
+    private void createStartingMenuPanel() {
+
+        JPanel authenticationPanel = new JPanel();
+
+        GridBagLayout bagLayout = new GridBagLayout();
+        GridBagConstraints constraints = new GridBagConstraints();
+        authenticationPanel.setLayout(bagLayout);
+
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.PAGE_START;
+        constraints.insets.top = 10;
+
+        JLabel usernameLabel = new JLabel("Username: ");
+
+        authenticationPanel.add(usernameLabel, constraints);
+
+        authUsernameField = new JTextField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets.top = 10;
+
+        authenticationPanel.add(authUsernameField, constraints);
+
+        JLabel passwordLabel = new JLabel("Password: ");
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.WEST;
+        constraints.insets.bottom = 10;
+        authenticationPanel.add(passwordLabel, constraints);
+
+        authPasswordField = new JPasswordField(10);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.EAST;
+        constraints.insets.bottom = 10;
+        authenticationPanel.add(authPasswordField, constraints);
+
+        JButton loginButton = new JButton("Login");
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.WEST;
+        authenticationPanel.add(loginButton, constraints);
+
+        this.authenticationPanel = authenticationPanel;
+        this.loginButton = loginButton;
+//        this.usernameField = usernameField;
+//        this.passwordField = passwordField;
+//        authenticationPanel.setBackground(Color.PINK);
+        authenticationPanel.setOpaque(true);
+
+        
+
+
+
+
+        JPanel startMenuPanel = new JPanel(new BorderLayout());
+
+        JLabel startingMenuTitleLabel = new JLabel("CONNECT FOUR");
+        startingMenuTitleLabel.setHorizontalAlignment(SwingConstants.HORIZONTAL);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2,1));
+        startMenuPanel.setBackground(Color.green);
+        startMenuPanel.setOpaque(true);
+        startMenuPanel.add(startingMenuTitleLabel, BorderLayout.NORTH);
+
+        startMenuPanel.add(buttonPanel, BorderLayout.CENTER);
+
+        JButton startLogInButton = new JButton("Log In");
+        startLogInButton.setPreferredSize(new Dimension(30, 10));
+        JButton startSignUpButton = new JButton("Sign Up");
+        startSignUpButton.setPreferredSize(new Dimension(30, 10));
+
+//        buttonPanel.pac
+
+        buttonPanel.add(startLogInButton);
+        buttonPanel.add(startSignUpButton);
+
+        this.startingMenuPanel = startMenuPanel;
+
     }
 
 
@@ -106,14 +206,14 @@ public class ConnectFourView {
 
         authenticationPanel.add(usernameLabel, constraints);
 
-        JTextField usernameField = new JTextField(10);
+        authUsernameField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets.top = 10;
 
-        authenticationPanel.add(usernameField, constraints);
+        authenticationPanel.add(authUsernameField, constraints);
 
         JLabel passwordLabel = new JLabel("Password: ");
 
@@ -123,13 +223,13 @@ public class ConnectFourView {
         constraints.insets.bottom = 10;
         authenticationPanel.add(passwordLabel, constraints);
 
-        JPasswordField passwordField = new JPasswordField(10);
+        authPasswordField = new JPasswordField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets.bottom = 10;
-        authenticationPanel.add(passwordField, constraints);
+        authenticationPanel.add(authPasswordField, constraints);
 
         JButton loginButton = new JButton("Login");
 
@@ -140,9 +240,9 @@ public class ConnectFourView {
 
         this.authenticationPanel = authenticationPanel;
         this.loginButton = loginButton;
-        this.usernameField = usernameField;
-        this.passwordField = passwordField;
-        authenticationPanel.setBackground(Color.PINK);
+//        this.usernameField = usernameField;
+//        this.passwordField = passwordField;
+//        authenticationPanel.setBackground(Color.PINK);
         authenticationPanel.setOpaque(true);
     }
 
@@ -350,12 +450,12 @@ public class ConnectFourView {
         profilePanel.add(nickLabel, constraints);
 
 
-        newNameField = new JTextField(10);
+        profUserNameField = new JTextField(10);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(usernameField, constraints);
+        profilePanel.add(profUserNameField, constraints);
 
 
         JLabel passLabel = new JLabel("Password");
@@ -367,13 +467,13 @@ public class ConnectFourView {
         profilePanel.add(passLabel, constraints);
 
 
-        newPasswordField = new JTextField(10);
+        profPasswordField = new JPasswordField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(newPasswordField, constraints);
+        profilePanel.add(profPasswordField, constraints);
 
 
         JLabel nationalityLabel = new JLabel("Nationality");
@@ -439,12 +539,12 @@ public class ConnectFourView {
         this.currentPlayerLabel.setText(currentPlayerName);
     }
 
-    public JTextField usernameField() {
-        return this.usernameField;
+    public JTextField authUsernameField() {
+        return this.authUsernameField;
     }
 
-    public JPasswordField passwordField() {
-        return this.passwordField;
+    public JPasswordField authPasswordField() {
+        return this.authPasswordField;
     }
 
     public JButton loginButton() {

@@ -24,8 +24,8 @@ public class ConnectFourPresenter implements ActionListener {
             // Authentication Events
             if (e.getSource().equals(this.view.loginButton())) {
                 this.model.login(
-                        this.view.usernameField().getText(),
-                        this.view.passwordField().getPassword()
+                        this.view.authUsernameField().getText(),
+                        this.view.authPasswordField().getPassword()
                 );
             }
 
@@ -79,7 +79,7 @@ public class ConnectFourPresenter implements ActionListener {
             // Navigate from Game Menu to new Game(Board)
             if (e.getSource().equals(this.view.newGame())) {
                 //TODO criar painel de espera da game queue
-                this.view.connectFourQueueGame();
+//                this.view.connectFourQueueGame();
 //                this.view.connectFourStartGame();
             }
 

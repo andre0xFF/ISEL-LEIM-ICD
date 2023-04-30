@@ -54,7 +54,13 @@ public class ConnectFourServerModel implements Runnable {
             } else if (message instanceof LoginMessage loginMessage) {
                 onMessage(loginMessage);
             }else if(message instanceof DropTokenMessage dropTokenMessage){
-                onMessage(dropTokenMessage);
+                try {
+                    onMessage(dropTokenMessage);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (SAXException e) {
+                    throw new RuntimeException(e);
+                }
             }else if (message instanceof AskQueueGameMessage askQueueGameMessage){
                 onMessage(askQueueGameMessage);
             }else if(message instanceof CancelQueueGameMessage cancelQueueGameMessage){
