@@ -8,33 +8,24 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ConnectFourServerModel implements Runnable {
 
-
-
-    ArrayList<GameSessionModel> gameSessions = new ArrayList<>();
-
-
+    private ArrayList<GameSessionModel> gameSessions = new ArrayList<>();
 
     class PlayerServerModel implements Listener<Message> {
 
         private Client client;
         private Player player;
         private Client opponent;
-
         private GameSessionModel gameSession;
-
 
 
         public PlayerServerModel(Client client) {
             client.listen(this);
 
             this.client = client;
-
         }
-
 
         public boolean isLogged() {
             return this.player != null;
@@ -47,17 +38,16 @@ public class ConnectFourServerModel implements Runnable {
         @Override
         public void onMessage(Message message) {
             if (message instanceof PingMessage pingMessage) {
-
                 onMessage(pingMessage);
             } else if (message instanceof PongMessage pongMessage) {
                 onMessage(pongMessage);
             } else if (message instanceof LoginMessage loginMessage) {
                 onMessage(loginMessage);
-            }else if(message instanceof DropTokenMessage dropTokenMessage){
+            } else if (message instanceof DropTokenMessage dropTokenMessage) {
                 onMessage(dropTokenMessage);
-            }else if (message instanceof AskQueueGameMessage askQueueGameMessage){
+            } else if (message instanceof AskQueueGameMessage askQueueGameMessage) {
                 onMessage(askQueueGameMessage);
-            }else if(message instanceof CancelQueueGameMessage cancelQueueGameMessage){
+            } else if (message instanceof CancelQueueGameMessage cancelQueueGameMessage) {
                 onMessage(cancelQueueGameMessage);
             }
         }
@@ -74,39 +64,40 @@ public class ConnectFourServerModel implements Runnable {
             this.player = new Player(message.username());
         }
 
-        private void onMessage(DropTokenMessage dropTokenMessage) throws IOException, SAXException {
-            if(gameSession.getState() == GameSessionState.PLAYING_GAME){
+        private void onMessage(DropTokenMessage dropTokenMessage) {
+            if (gameSession.getState() == GameSessionState.PLAYING_GAME) {
 
-                if(connectFour.dropToken(dropTokenMessage.column())){
-                    //Send write message for other player in session
+                if (connectFour.dropToken(dropTokenMessage.column())) {
+                    // Send write message for other player in session
                     Client opponent = gameSession.getOpponent(client);
-                    opponent.write(new DropTokenMessage(dropTokenMessage.column()));
+
+                    try {
+                        opponent.write(new DropTokenMessage(dropTokenMessage.column()));
+                    } catch (IOException | SAXException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
-
         }
 
-        private void onMessage(AskQueueGameMessage QueueUpMessage){
+        private void onMessage(AskQueueGameMessage QueueUpMessage) {
             GameSessionModel gameSessionAvailable = getAvailableGameSession();
 
-            if(gameSessionAvailable == null){
+            if (gameSessionAvailable == null) {
                 this.gameSession = createGameSession(client);
 
-            }else{
+            } else {
                 gameSessionAvailable.addPlayer(this.client);
             }
         }
 
-        private void onMessage(CancelQueueGameMessage cancelQueueGameMessage){
-            if(gameSession.getState() == GameSessionState.WAITING_FOR_PLAYER){
+        private void onMessage(CancelQueueGameMessage cancelQueueGameMessage) {
+            if (gameSession.getState() == GameSessionState.WAITING_FOR_PLAYER) {
                 removeGameSession(gameSession);
                 gameSession = null;
             }
         }
     }
-
-
-
 
 
     public static final int clientsLimit = 2;
@@ -127,7 +118,6 @@ public class ConnectFourServerModel implements Runnable {
 
     /**
      * Gets the port of the server.
-     *
      * @return The port of the server.
      */
     public int port() {
@@ -146,7 +136,6 @@ public class ConnectFourServerModel implements Runnable {
 
     /**
      * Gets a player by username.
-     *
      * @param username The username of the player.
      * @return The player with the given username.
      */
@@ -160,24 +149,25 @@ public class ConnectFourServerModel implements Runnable {
         return null;
     }
 
-    public GameSessionModel getAvailableGameSession(){
+    public GameSessionModel getAvailableGameSession() {
         GameSessionModel gameSession;
-        for(int i = this.gameSessions.size(); i > 0; i--){
+        for (int i = this.gameSessions.size(); i > 0; i--) {
             gameSession = this.gameSessions.get(i);
 
-            if(!gameSession.isGameSessionFull()){
+            if (!gameSession.isGameSessionFull()) {
                 return gameSession;
             }
         }
         return null;
     }
-    public GameSessionModel createGameSession(Client client){
+
+    public GameSessionModel createGameSession(Client client) {
         GameSessionModel gameSession = new GameSessionModel(client);
         this.gameSessions.add(gameSession);
         return gameSession;
     }
 
-    public void removeGameSession(GameSessionModel gameSession){
+    public void removeGameSession(GameSessionModel gameSession) {
         this.gameSessions.remove(gameSession);
 
     }

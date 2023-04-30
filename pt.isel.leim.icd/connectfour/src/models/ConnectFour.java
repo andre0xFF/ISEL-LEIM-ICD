@@ -27,7 +27,6 @@ public class ConnectFour implements Model {
 
     /**
      * Drops a token in the specified column
-     *
      * @param column the column to drop the token in
      * @return true if the token was dropped, false if the game is over or the column is full
      */
@@ -145,7 +144,6 @@ public class ConnectFour implements Model {
 
     /**
      * Checks if the game is over
-     *
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
@@ -154,7 +152,6 @@ public class ConnectFour implements Model {
 
     /**
      * Gets the winner of the game
-     *
      * @return the winner of the game, or null if the game is not over
      */
     public Player winner() {
@@ -163,7 +160,6 @@ public class ConnectFour implements Model {
 
     /**
      * Gets the current player
-     *
      * @return the current player
      */
     public Player currentPlayer() {

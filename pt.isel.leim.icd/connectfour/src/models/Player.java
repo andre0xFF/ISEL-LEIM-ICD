@@ -14,7 +14,6 @@ public class Player implements Model {
 
     /**
      * Removes the first token from the player's tokens list
-     *
      * @return the token that was removed
      */
     public Token popToken() {
