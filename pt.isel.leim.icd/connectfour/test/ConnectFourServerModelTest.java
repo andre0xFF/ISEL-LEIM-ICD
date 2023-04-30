@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -57,21 +56,25 @@ class ConnectFourServerModelTest {
     }
 
     @Test
-    void shouldConnectOnePlayer() throws IOException {
+    void shouldConnectOnePlayer() throws IOException, InterruptedException {
         Client client = new Client("localhost", this.model.port());
 
+        Thread.sleep(1000);
+
         assertTrue(client.isConnected());
-        assertEquals(this.model.playersCount(), 1);
+        assertEquals(this.model.playersSize(), 1);
     }
 
     @Test
-    void shouldConnectTwoPlayers() throws IOException {
+    void shouldConnectTwoPlayers() throws IOException, InterruptedException {
         Client client1 = new Client("localhost", this.model.port());
         Client client2 = new Client("localhost", this.model.port());
 
+        Thread.sleep(1000);
+
         assertTrue(client1.isConnected());
         assertTrue(client2.isConnected());
-        assertEquals(this.model.playersCount(), 2);
+        assertEquals(this.model.playersSize(), 2);
     }
 
     @Test
@@ -90,7 +93,7 @@ class ConnectFourServerModelTest {
 
         Thread.sleep(1000);
 
-        assertEquals(this.model.loggedPlayersCount(), 1);
+        assertEquals(this.model.loggedPlayersSize(), 1);
         assertNotNull(this.model.player(expectedUsername));
     }
 }

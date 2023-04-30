@@ -1,21 +1,28 @@
 package models;
 
+import models.player.GamePlayView;
+import models.player.Player;
+import models.player.Token;
+import models.player.Tokens;
+
 import java.awt.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-public class ConnectFour implements Model {
+public class ConnectFour implements GamePlayView {
 
     private final Board board = new Board();
     private final Player player1;
     private final Player player2;
     private Player currentPlayer;
     private Player winner;
-    private static final int totalToken = 21;
 
     public ConnectFour(Player player1, Player player2) {
-        for (int i = 0; i < totalToken; i++) {
+        player1.gamePlayView(this);
+        player2.gamePlayView(this);
+
+        for (int i = 0; i < Tokens.MAX_TOKENS; i++) {
             player1.addToken(new Token(Color.ORANGE));
             player2.addToken(new Token(Color.BLUE));
         }
@@ -23,13 +30,17 @@ public class ConnectFour implements Model {
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
+
+        this.currentPlayer.playTurn();
     }
 
     /**
      * Drops a token in the specified column
+     *
      * @param column the column to drop the token in
      * @return true if the token was dropped, false if the game is over or the column is full
      */
+    @Override
     public boolean dropToken(int column) {
         if (isGameOver()) {
             return false;
@@ -38,17 +49,17 @@ public class ConnectFour implements Model {
         int row;
 
         try {
-            row = board.dropToken(column, currentPlayer.popToken());
+            row = this.board.dropToken(column, this.currentPlayer.popToken());
         } catch (RuntimeException e) {
             return false;
         }
 
         if (checkWin(row, column, currentPlayer)) {
-            winner = currentPlayer;
+            this.winner = this.currentPlayer;
             return true;
         }
 
-        currentPlayer = currentPlayer == player1 ? player2 : player1;
+        this.currentPlayer = this.currentPlayer == this.player1 ? this.player2 : this.player1;
 
         return true;
     }
@@ -69,10 +80,7 @@ public class ConnectFour implements Model {
     private boolean checkDiagonalWin(int row, int column, Player player, int rowDirection, int columnDirection, int count) {
         Color playerColor = player.color();
 
-//        row = min(row, board.totalRows());
-//        column = min(column, board.totalColumns());
-
-        if(row < 1|| row > board.totalRows() || column < 1 || column > board.totalColumns()){
+        if (row < 1 || row > board.totalRows() || column < 1 || column > board.totalColumns()) {
             return false;
         }
 
@@ -83,7 +91,7 @@ public class ConnectFour implements Model {
         }
         count++;
 
-        if(count == 4) {
+        if (count == 4) {
             return true;
         }
 
@@ -144,22 +152,25 @@ public class ConnectFour implements Model {
 
     /**
      * Checks if the game is over
+     *
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
-        return winner != null;
+        return this.winner != null;
     }
 
     /**
      * Gets the winner of the game
+     *
      * @return the winner of the game, or null if the game is not over
      */
     public Player winner() {
-        return winner;
+        return this.winner;
     }
 
     /**
      * Gets the current player
+     *
      * @return the current player
      */
     public Player currentPlayer() {

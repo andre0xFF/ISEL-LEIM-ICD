@@ -40,6 +40,11 @@ class SchemaValidatorTest {
     }
 
     @Test
+    void shouldValidatePlayTurnMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><PlayTurnMessage/></Message>"));
+    }
+
+    @Test
     void shouldValidateLoginMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><LoginMessage><username>player1</username><password>pass</password></LoginMessage></Message>"));
     }

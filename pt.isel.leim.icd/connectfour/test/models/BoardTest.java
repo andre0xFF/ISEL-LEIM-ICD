@@ -1,8 +1,9 @@
 package models;
 
-import java.awt.*;
-
+import models.player.Token;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 

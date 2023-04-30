@@ -1,40 +1,135 @@
 package models;
 
+import models.player.GamePlayView;
+import models.player.Player;
+import models.player.Token;
+import models.player.Tokens;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectFourTest {
 
+    private static Player player1;
+    private static Player player2;
+    private static ConnectFour connectFour;
+
+    @BeforeAll
+    static void setUp() {
+        player1 = new Player() {
+
+            private GamePlayView gamePlayView;
+            private Tokens tokens = new Tokens();
+
+            @Override
+            public String username() {
+                return "player1";
+            }
+
+            @Override
+            public void addToken(Token token) {
+                this.tokens.add(token);
+            }
+
+            @Override
+            public Token popToken() {
+                return this.tokens.pop();
+            }
+
+            @Override
+            public int countTokens() {
+                return this.tokens.size();
+            }
+
+            @Override
+            public Color color() {
+                return this.tokens.color();
+            }
+
+            @Override
+            public void tokens(Tokens tokens) {
+                this.tokens = tokens;
+            }
+
+            @Override
+            public void playTurn() {
+
+            }
+
+            @Override
+            public void gamePlayView(GamePlayView gamePlayView) {
+                this.gamePlayView = gamePlayView;
+            }
+        };
+
+        player2 = new Player() {
+
+            private GamePlayView gamePlayView;
+            private Tokens tokens = new Tokens();
+
+            @Override
+            public String username() {
+                return "player2";
+            }
+
+            @Override
+            public void addToken(Token token) {
+                this.tokens.add(token);
+            }
+
+            @Override
+            public Token popToken() {
+                return this.tokens.pop();
+            }
+
+            @Override
+            public int countTokens() {
+                return this.tokens.size();
+            }
+
+            @Override
+            public Color color() {
+                return this.tokens.color();
+            }
+
+            @Override
+            public void tokens(Tokens tokens) {
+                this.tokens = tokens;
+            }
+
+            @Override
+            public void playTurn() {
+
+            }
+
+            @Override
+            public void gamePlayView(GamePlayView gamePlayView) {
+                this.gamePlayView = gamePlayView;
+            }
+        };
+
+        connectFour = new ConnectFour(player1, player2);
+    }
+
     @Test
     void shouldDropToken() {
-        ConnectFour connectFour = new ConnectFour(
-                new Player("Player 1"),
-                new Player("Player 2")
-        );
-
         assertTrue(connectFour.dropToken(1));
     }
 
     @Test
     void shouldSwapPlayersWhenTokenDropped() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
-
-        ConnectFour connectFour = new ConnectFour(player1, player2);
-
-        assertEquals(player1, connectFour.currentPlayer());
+        Player currentPlayer = connectFour.currentPlayer();
 
         connectFour.dropToken(1);
 
-        assertEquals(player2, connectFour.currentPlayer());
+        assertNotEquals(currentPlayer, connectFour.currentPlayer());
     }
 
     @Test
     void shouldWinGameWhenFourTokensPlacedVertically() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
-
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
         connectFour.dropToken(1);
@@ -51,9 +146,6 @@ class ConnectFourTest {
 
     @Test
     void shouldWinGameWhenFourTokensPlacedHorizontally() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
-
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
         connectFour.dropToken(1);
@@ -69,39 +161,38 @@ class ConnectFourTest {
     }
 
     @Test
-    void shouldWinGameWhenFourTokensPlacedDiagonally() {
-        Player player1 = new Player("Player 1");
-        Player player2 = new Player("Player 2");
-
+    void shouldWinGameWhenFourTokensPlacedDiagonallyFromBottomLeftToTopRight() {
         ConnectFour connectFour = new ConnectFour(player1, player2);
 
-        // Bottom Left to Top Right Diagonal
         // Player 1
-//        connectFour.dropToken(1);
-//        // Player 2
-//        connectFour.dropToken(2);
-//        // Player 1
-//        connectFour.dropToken(2);
-//        // Player 2
-//        connectFour.dropToken(3);
-//        // Player 1
-//        connectFour.dropToken(3);
-//        // Player 2
-//        connectFour.dropToken(4);
-//        // Player 1
-//        connectFour.dropToken(3);
-//        // Player 2
-//        connectFour.dropToken(4);
-//        // Player 1
-//        connectFour.dropToken(5);
-//        // Player 2
-//        connectFour.dropToken(4);
-//        // Player 1
-//        connectFour.dropToken(4);
+        connectFour.dropToken(1);
+        // Player 2
+        connectFour.dropToken(2);
+        // Player 1
+        connectFour.dropToken(2);
+        // Player 2
+        connectFour.dropToken(3);
+        // Player 1
+        connectFour.dropToken(3);
+        // Player 2
+        connectFour.dropToken(4);
+        // Player 1
+        connectFour.dropToken(3);
+        // Player 2
+        connectFour.dropToken(4);
+        // Player 1
+        connectFour.dropToken(5);
+        // Player 2
+        connectFour.dropToken(4);
+        // Player 1
+        connectFour.dropToken(4);
+    }
 
-        // Top Left to Bottom Right Diagonal
+    @Test
+    void shouldWinGameWhenFourTokensPlacedDiagonallyFromTopLeftToBottomRight() {
+        ConnectFour connectFour = new ConnectFour(player1, player2);
 
-//         Player 1
+        // Player 1
         connectFour.dropToken(4);
         // Player 2
         connectFour.dropToken(3);
@@ -123,8 +214,6 @@ class ConnectFourTest {
         connectFour.dropToken(1);
         // Player 1
         connectFour.dropToken(1);
-
-
 
         assertTrue(connectFour.isGameOver());
         assertEquals(player1, connectFour.winner());

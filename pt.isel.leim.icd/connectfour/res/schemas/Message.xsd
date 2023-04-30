@@ -12,6 +12,7 @@
     <xs:include schemaLocation="DropTokenMessage.xsd"/>
     <xs:include schemaLocation="AskQueueGameMessage.xsd"/>
     <xs:include schemaLocation="CancelQueueGameMessage.xsd"/>
+    <xs:include schemaLocation="PlayTurnMessage.xsd"/>
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -25,7 +26,7 @@
             <xs:element ref="DropTokenMessage"/>
             <xs:element ref="AskQueueGameMessage"/>
             <xs:element ref="CancelQueueGameMessage"/>
+            <xs:element ref="PlayTurnMessage"/>
         </xs:choice>
     </xs:complexType>
-
 </xs:schema>

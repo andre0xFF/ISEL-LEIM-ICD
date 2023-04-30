@@ -20,9 +20,10 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = PingMessage.class, name = "PingMessage"),
                 @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage"),
                 @JsonSubTypes.Type(value = LoginMessage.class, name = "LoginMessage"),
-                @JsonSubTypes.Type(value = DropTokenMessage.class, name= "DropTokenMessage"),
+                @JsonSubTypes.Type(value = DropTokenMessage.class, name = "DropTokenMessage"),
                 @JsonSubTypes.Type(value = AskQueueGameMessage.class, name = "AskQueueGameMessage"),
                 @JsonSubTypes.Type(value = AskGameHistoryMessage.class, name = "AskGameHistoryMessage"),
+                @JsonSubTypes.Type(value = PlayTurnMessage.class, name = "PlayTurnMessage"),
         }
 )
 @JsonRootName("Message")
