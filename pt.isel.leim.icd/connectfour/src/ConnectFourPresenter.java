@@ -89,6 +89,11 @@ public class ConnectFourPresenter implements ActionListener {
 
             }
 
+            // Cancel Queue Search
+            if(e.getSource().equals(this.view.queueCancelButton())){
+                this.view.connectFourGameMenu();
+            }
+
             // Navigates from Profile Menu back to Game Menu
             if (e.getSource().equals(this.view.profEditBackButton())) {
                 this.view.connectFourDisplayProfile();
@@ -129,7 +134,7 @@ public class ConnectFourPresenter implements ActionListener {
             // Navigate from Game Menu to new Game Board
             if (e.getSource().equals(this.view.newGame())) {
                 //TODO criar painel de espera da game queue
-//                this.view.connectFourQueueGame();
+                this.view.connectFourQueueGame();
 //                this.view.connectFourStartGame();
             }
 

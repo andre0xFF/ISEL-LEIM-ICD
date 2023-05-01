@@ -25,8 +25,7 @@ public class ConnectFourView {
     private JLabel currentPlayerLabel;
     private JPanel profileEditPanel;
 
-    // Profile Edit Panel
-
+    // Profile Display
 
     private JPanel profileDisplayPanel;
 
@@ -35,19 +34,24 @@ public class ConnectFourView {
     private JLabel profDispPasswordLabel;
     private JLabel profDispNationalityLabel;
     private JLabel profDispAgeLabel;
+    private JButton profDispBackButton;
+    private JButton profDispEditButton;
 
+
+    // Profile Edit
     private JTextField profEditnationalityField;
     private JTextField profEditAgeField;
     private JButton profEditBackButton;
     private JButton profEditSubmitButton;
     private JPanel gameHistoryPanel;
     private JPanel gameMenuPanel;
-
     private JPanel startingMenuPanel;
+
 
     // Starting Menu
     private JButton startSignUpButton;
     private JButton startLogInButton;
+
 
     // Sign Up
     private JPanel signUpPanel;
@@ -59,7 +63,10 @@ public class ConnectFourView {
     private JTextField signUpPictureField;
     private JButton signBackButton;
 
-    private JButton profDispBackButton;
+    // Game Queue
+    private JPanel queuePanel;
+    private JButton queueCancelButton;
+
 
     private int signPictureVal;
 
@@ -71,7 +78,7 @@ public class ConnectFourView {
     private JButton menuProfileJButton;
     private JButton menuGameHistoryButton;
     private JButton gameQuitButton;
-    private JButton profDispEditButton;
+
     private final int rows;
     private final int columns;
 
@@ -94,18 +101,32 @@ public class ConnectFourView {
         createSignUpPanel();
         createGameOverPanel();
         createDispProfilePanel();
+        createQueuePanel();
 
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
 //         this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
-        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
+//        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(gameOverPanel, BorderLayout.CENTER);
+        this.frame.add(queuePanel, BorderLayout.CENTER);
 
         this.frame.setVisible(true);
 
         this.rows = rows;
         this.columns = columns;
+    }
+
+    private void createQueuePanel() {
+        JPanel gameQueuePanel = new JPanel(new BorderLayout());
+        JLabel gameQueueLabel = new JLabel("Searching for Opponent");
+
+        queueCancelButton = new JButton("Cancel Search");
+        gameQueueLabel.setHorizontalAlignment(JLabel.CENTER);
+        gameQueuePanel.add(gameQueueLabel, BorderLayout.CENTER);
+        gameQueuePanel.add(queueCancelButton, BorderLayout.SOUTH);
+
+        this.queuePanel = gameQueuePanel;
     }
 
     private void createDispProfilePanel() {
@@ -415,6 +436,9 @@ public class ConnectFourView {
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
 
+        // Queue Buttons
+        this.queueCancelButton.addActionListener(listener);
+
         // Game Over Buttons
         gameOverExitButton.addActionListener(listener);
 
@@ -712,15 +736,23 @@ public class ConnectFourView {
 
         constraints.insets.top = 10;
 
-        JLabel profilePicture = new JLabel("PlaceHolder");
+        JLabel profilePicture = new JLabel("Image");
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        profilePicture.setBackground(Color.red);
-        profilePicture.setOpaque(true);
-        profilePicture.setPreferredSize(new Dimension(60, 60));
+        constraints.anchor = GridBagConstraints.WEST;
+//        profilePicture.setBackground(Color.red);
+//        profilePicture.setOpaque(true);
+//        profilePicture.setPreferredSize(new Dimension(60, 60));
 
         profilePanel.add(profilePicture, constraints);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.EAST;
+
+        signUpPictureField = new JTextField(10);
+
+        profilePanel.add(signUpPictureField, constraints);
         constraints.gridwidth = 1;
 
         JLabel nickLabel = new JLabel("Username");
@@ -877,6 +909,10 @@ public class ConnectFourView {
         return this.profEditSubmitButton;
     }
 
+    public JButton queueCancelButton(){
+        return this.queueCancelButton;
+    }
+
     public JButton profEditBackButton() {
         return this.profEditBackButton;
     }
@@ -1031,5 +1067,12 @@ public class ConnectFourView {
 
     public JButton profDispBackButton() {
         return this.profDispBackButton;
+    }
+
+    public void connectFourQueueGame() {
+        this.frame.getContentPane().removeAll();
+        this.frame.add(this.queuePanel, BorderLayout.CENTER);
+        this.frame.repaint();
+        this.frame.revalidate();
     }
 }
