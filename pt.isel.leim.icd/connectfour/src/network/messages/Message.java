@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = AskQueueGameMessage.class, name = "AskQueueGameMessage"),
                 @JsonSubTypes.Type(value = AskGameHistoryMessage.class, name = "AskGameHistoryMessage"),
                 @JsonSubTypes.Type(value = PlayTurnMessage.class, name = "PlayTurnMessage"),
+                @JsonSubTypes.Type(value = SignUpMessage.class, name = "SignUpMessage"),
         }
 )
 @JsonRootName("Message")

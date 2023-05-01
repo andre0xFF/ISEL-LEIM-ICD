@@ -13,6 +13,8 @@
     <xs:include schemaLocation="AskQueueGameMessage.xsd"/>
     <xs:include schemaLocation="CancelQueueGameMessage.xsd"/>
     <xs:include schemaLocation="PlayTurnMessage.xsd"/>
+    <xs:include schemaLocation="SignUpMessage.xsd"/>
+    <xs:include schemaLocation="SignUpAcceptMessage.xsd"/>
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -27,6 +29,9 @@
             <xs:element ref="AskQueueGameMessage"/>
             <xs:element ref="CancelQueueGameMessage"/>
             <xs:element ref="PlayTurnMessage"/>
+            <xs:element ref="SignUpMessage"/>
+
+            <xs:element ref="SignUpAcceptMessage"/>
         </xs:choice>
     </xs:complexType>
 </xs:schema>

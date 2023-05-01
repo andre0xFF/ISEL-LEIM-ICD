@@ -1,7 +1,4 @@
-import network.messages.AskGameHistoryMessage;
-import network.messages.DropTokenMessage;
-import network.messages.LoginMessage;
-import network.messages.UpdateProfileMessage;
+import network.messages.*;
 import models.ConnectFour;
 import network.Client;
 import org.xml.sax.SAXException;
@@ -29,8 +26,13 @@ public class ConnectFourClientModel {
 
     public void updateProfile(String username, char[] password, String nationality, int age) throws IOException, SAXException {
         client.write(new UpdateProfileMessage(username, password, nationality, age));
-
     }
+
+    public void signUp(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
+        client.write(new SignUpMessage(image, username, password, nationality, age));
+    }
+
+
 
     public void connectFourGameHistory() throws IOException, SAXException {
         client.write(new AskGameHistoryMessage());
