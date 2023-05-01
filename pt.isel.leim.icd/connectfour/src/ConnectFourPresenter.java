@@ -144,6 +144,10 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
 
+            if(e.getSource().equals(this.view.gameBoardBackButton())){
+                //TODO send message indicating surrender and update server game stats
+                this.view.connectFourGameMenu();
+            }
 
 
             // GameBoardEvents

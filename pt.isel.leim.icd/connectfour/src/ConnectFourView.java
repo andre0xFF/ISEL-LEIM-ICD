@@ -28,7 +28,6 @@ public class ConnectFourView {
     // Profile Display
 
     private JPanel profileDisplayPanel;
-
     private JLabel profDispImageLabel;
     private JLabel profDispUserNameLabel;
     private JLabel profDispPasswordLabel;
@@ -70,8 +69,9 @@ public class ConnectFourView {
 
     private int signPictureVal;
 
-    // Game History
+    // Game Stats
     private JButton historyBackButton;
+    private JPanel gameStatsPanel;
 
     // Main Menu
     private JButton menuNewGameButton;
@@ -86,7 +86,14 @@ public class ConnectFourView {
     private JPanel gameOverPanel;
     private JButton gameOverExitButton;
     private JLabel gameOverMessageLabel;
+
+    private JButton gameBoardBackButton;
     private ActionListener listener;
+    private JLabel profEditDisplayError;
+    private JLabel profDisplayError;
+    private JLabel signUpDisplayError;
+    private JLabel authDisplayError;
+    private JLabel gameStatsDisplayError;
 
 
     public ConnectFourView(int rows, int columns) {
@@ -106,10 +113,11 @@ public class ConnectFourView {
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
 //         this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
-//        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
+        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(gameOverPanel, BorderLayout.CENTER);
-        this.frame.add(queuePanel, BorderLayout.CENTER);
+//        this.frame.add(queuePanel, BorderLayout.CENTER);
+//        this.frame.add(boardPanel, BorderLayout.CENTER);
 
         this.frame.setVisible(true);
 
@@ -236,7 +244,7 @@ public class ConnectFourView {
         profDispBackButton = new JButton("Back");
 
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.WEST;
 
         profileDisplayPanel.add(profDispBackButton, constraints);
@@ -245,10 +253,19 @@ public class ConnectFourView {
         profDispEditButton= new JButton("Edit");
 
         constraints.gridx = 1;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.EAST;
 
         profileDisplayPanel.add(profDispEditButton, constraints);
+
+        profDisplayError = new JLabel("Error");
+
+
+        constraints.gridx = 0;
+        constraints.gridy = 6;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        profileDisplayPanel.add(profDisplayError, constraints);
 
 
 
@@ -300,7 +317,6 @@ public class ConnectFourView {
         constraints.anchor = GridBagConstraints.WEST;
 
 
-//        signUpPictureLabel.setPreferredSize(new Dimension(60, 60));
 
         signUpPanel.add(signUpPictureLabel, constraints);
 
@@ -368,7 +384,6 @@ public class ConnectFourView {
 
 
         signAgeField = new JTextField(10);
-
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.anchor = GridBagConstraints.EAST;
@@ -378,7 +393,7 @@ public class ConnectFourView {
         signSubmitButton = new JButton("Sign Up");
 
         constraints.gridx = 1;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.EAST;
 
@@ -386,11 +401,22 @@ public class ConnectFourView {
 
         signBackButton = new JButton("Back");
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.WEST;
 
         signUpPanel.add(signBackButton, constraints);
+
+        signUpDisplayError = new JLabel("Error");
+
+        constraints.gridx = 1;
+        constraints.gridy = 6;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+
+        signUpPanel.add(signUpDisplayError, constraints);
+
+
+
 
         this.signUpPanel = signUpPanel;
 
@@ -435,6 +461,9 @@ public class ConnectFourView {
 
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
+
+        // GameBoard Buttons
+        gameBoardBackButton.addActionListener(listener);
 
         // Queue Buttons
         this.queueCancelButton.addActionListener(listener);
@@ -545,9 +574,17 @@ public class ConnectFourView {
 
         authenticationPanel.add(logInBackButton, constraints);
 
-//        this.usernameField = usernameField;
-//        this.passwordField = passwordField;
-//        authenticationPanel.setBackground(Color.PINK);
+        authDisplayError = new JLabel("Error");
+
+
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.anchor = GridBagConstraints.SOUTH;
+
+        authenticationPanel.add(authDisplayError, constraints);
+
         authenticationPanel.setOpaque(true);
     }
 
@@ -617,6 +654,8 @@ public class ConnectFourView {
 
 
     private void createBoardPanel(int rows, int columns) {
+
+        JPanel container = new JPanel(new BorderLayout());
         JPanel boardPanel = new JPanel(new GridLayout(rows, columns));
 
         this.boardTokenCells = new JButton[rows][columns];
@@ -635,8 +674,58 @@ public class ConnectFourView {
                 boardPanel.add(button);
             }
         }
+        container.add(boardPanel, BorderLayout.CENTER);
 
-        this.boardPanel = boardPanel;
+
+        JPanel playerOneInfoContainer = new JPanel(new BorderLayout());
+        playerOneInfoContainer.setPreferredSize(new Dimension(60,60));
+
+        JPanel playerOneGridInfo = new JPanel();
+
+
+        playerOneInfoContainer.add(playerOneGridInfo, BorderLayout.CENTER);
+
+        JLabel imageLabelOne = new JLabel("PlaceHolder");
+        imageLabelOne.setPreferredSize(new Dimension(60, 60));
+        playerOneGridInfo.add(imageLabelOne);
+        playerOneGridInfo.add(new JLabel("Player 1"));
+
+        //Right side
+        JPanel playerTwoInfoContainer = new JPanel(new BorderLayout());
+        playerTwoInfoContainer.setPreferredSize(new Dimension(60,60));
+
+        JPanel playerTwoGridInfo = new JPanel();
+
+        playerTwoInfoContainer.add(playerTwoGridInfo, BorderLayout.CENTER);
+
+        JLabel imageLabelTwo = new JLabel("PlaceHolder");
+        imageLabelTwo.setPreferredSize(new Dimension(60, 60));
+        playerTwoGridInfo.add(imageLabelTwo);
+        playerTwoGridInfo.add(new JLabel("Player 2"));
+
+
+
+        JPanel southContainer = new JPanel(new GridLayout(2,1));
+        gameBoardBackButton = new JButton("Surrender");
+        southContainer.add(gameBoardBackButton);
+
+
+        JLabel boardErrorDisplayLabel = new JLabel("Error");
+        boardErrorDisplayLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        southContainer.add(boardErrorDisplayLabel);
+
+        container.add(playerOneInfoContainer, BorderLayout.WEST);
+        container.add(playerTwoInfoContainer, BorderLayout.EAST);
+
+        container.add(southContainer, BorderLayout.SOUTH);
+
+        JLabel boardTitleLabel = new JLabel("Game Board");
+        boardTitleLabel.setHorizontalAlignment(JLabel.CENTER);
+        container.add(boardTitleLabel, BorderLayout.NORTH);
+
+        this.boardPanel = container;
+
     }
 
     public void createControlPanel(String currentPlayerName) {
@@ -649,61 +738,74 @@ public class ConnectFourView {
         this.frame.add(controlPanel, BorderLayout.SOUTH);
     }
 
+    public void addGameStat(String gameID){
+        JLabel gameStat = new JLabel(gameID);
+        gameStat.setHorizontalAlignment(JLabel.CENTER);
+        this.gameStatsPanel.add(gameStat);
+    }
+
+
     public void createGameHistoryPanel() {
 
-        JPanel gameHistoryPanel = new JPanel();
-
-        GridBagLayout bagLayout = new GridBagLayout();
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        gameHistoryPanel.setLayout(bagLayout);
-
-        JLabel titleLabel = new JLabel("Game History");
-
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weighty = 1;
-        constraints.gridwidth = 3;
-        constraints.anchor = GridBagConstraints.NORTH;
-
-        gameHistoryPanel.add(titleLabel, constraints);
-
-        constraints.gridwidth = 1;
-
-        JLabel gamesLabel = new JLabel("Games");
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.EAST;
-
-        gameHistoryPanel.add(gamesLabel, constraints);
 
 
-        JLabel winsLossesLabel = new JLabel("Wins/Losses");
+        JPanel gameHistoryPanel = new JPanel(new BorderLayout());
 
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.CENTER;
-        constraints.insets.left = 10;
+        JLabel gameStatsTitleLabel = new JLabel("Game Stats");
+        gameStatsTitleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        gameHistoryPanel.add(winsLossesLabel, constraints);
-
-        JLabel gameTimeLabel = new JLabel("Game Time");
-
-        constraints.gridx = 2;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.insets.left = 10;
-
-        gameHistoryPanel.add(gameTimeLabel, constraints);
+        gameHistoryPanel.add(gameStatsTitleLabel, BorderLayout.NORTH);
+        JPanel southContainer = new JPanel(new GridLayout(2,0));
+        gameStatsDisplayError = new JLabel("Error");
+        gameStatsDisplayError.setHorizontalAlignment(JLabel.CENTER);
+        southContainer.add(gameStatsDisplayError);
 
         historyBackButton = new JButton("Back");
+        southContainer.add(historyBackButton);
 
-        constraints.gridx = 1;
-        constraints.gridy = -1;
-        constraints.anchor = GridBagConstraints.SOUTH;
-        constraints.insets.top = 10;
+        gameHistoryPanel.add(southContainer, BorderLayout.SOUTH);
 
-        gameHistoryPanel.add(historyBackButton, constraints);
+
+
+        JPanel centerContainer = new JPanel();
+        BoxLayout boxLayout = new BoxLayout(centerContainer, BoxLayout.Y_AXIS);
+
+        centerContainer.setLayout(boxLayout);
+
+        gameHistoryPanel.add(centerContainer, BorderLayout.CENTER);
+
+
+        gameStatsPanel = new JPanel(new GridLayout(0, 3));
+
+        centerContainer.add(gameStatsPanel, BorderLayout.CENTER);
+
+        JLabel gameStatsGameLabel = new JLabel("GAME");
+        gameStatsGameLabel.setHorizontalAlignment(JLabel.CENTER);
+        gameStatsPanel.add(gameStatsGameLabel);
+
+
+
+        JLabel gameStatsGameResult = new JLabel("RESULT");
+        gameStatsGameResult.setHorizontalAlignment(JLabel.CENTER);
+        gameStatsPanel.add(gameStatsGameResult);
+
+        JLabel gameStatsGameTime = new JLabel("TIME");
+        gameStatsGameTime.setHorizontalAlignment(JLabel.CENTER);
+        gameStatsPanel.add(gameStatsGameTime);
+
+//        JScrollPane  scroll = new JScrollPane(gameStatsPanel);
+//
+//        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
+//        gameStatsPanel.setPreferredSize(new Dimension(200, 200));
+//        scroll.setPreferredSize(new Dimension(scroll.getPreferredSize().width,
+//                scroll.getComponents().length * scroll.getComponents()[0].getPreferredSize().height));
+
+//        gameStatsPanel.add(scroll);
+
+        for(int i = 0; i < 80; i++){
+            addGameStat("Test");
+        }
 
 
         this.gameHistoryPanel = gameHistoryPanel;
@@ -741,9 +843,6 @@ public class ConnectFourView {
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
-//        profilePicture.setBackground(Color.red);
-//        profilePicture.setOpaque(true);
-//        profilePicture.setPreferredSize(new Dimension(60, 60));
 
         profilePanel.add(profilePicture, constraints);
         constraints.gridx = 1;
@@ -827,7 +926,7 @@ public class ConnectFourView {
         profEditBackButton = new JButton("Back");
 
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.WEST;
 
         profilePanel.add(profEditBackButton, constraints);
@@ -836,10 +935,17 @@ public class ConnectFourView {
         profEditSubmitButton = new JButton("Submit");
 
         constraints.gridx = 1;
-        constraints.gridy = 6;
+        constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.EAST;
 
         profilePanel.add(profEditSubmitButton, constraints);
+
+        profEditDisplayError = new JLabel("Error");
+        constraints.gridx = 1;
+        constraints.gridy = 6;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        profilePanel.add(profEditDisplayError, constraints);
+
 
         this.profileEditPanel = profilePanel;
     }
@@ -927,6 +1033,10 @@ public class ConnectFourView {
 
     public JButton menuGameHistoryButton() {
         return this.menuGameHistoryButton;
+    }
+
+    public JButton gameBoardBackButton(){
+        return this.gameBoardBackButton;
     }
 
     public JButton logInBackButton(){
