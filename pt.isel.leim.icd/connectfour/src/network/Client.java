@@ -1,10 +1,10 @@
 package network;
 
 import network.messages.Message;
+import network.schemas.SchemaValidator;
 import network.socket.Listener;
 import network.socket.Socket;
 import org.xml.sax.SAXException;
-import schemas.SchemaValidator;
 
 import java.io.IOException;
 

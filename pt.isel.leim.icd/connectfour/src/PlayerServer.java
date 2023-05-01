@@ -13,6 +13,9 @@ import org.xml.sax.SAXException;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * Represents a player that is connected to the server
+ */
 public class PlayerServer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
@@ -78,6 +81,18 @@ public class PlayerServer implements Listener<Message>, Player {
     }
 
     /**
+     * Sends a message to the client to drop a token
+     */
+    @Override
+    public void playTurn() {
+        try {
+            this.client.write(new PlayTurnMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Sets the player's tokens list
      *
      * @param tokens the tokens list
@@ -89,15 +104,6 @@ public class PlayerServer implements Listener<Message>, Player {
     }
 
     @Override
-    public void playTurn() {
-        try {
-            this.client.write(new PlayTurnMessage());
-        } catch (IOException | SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
     public void gamePlayView(GamePlayView gamePlayView) {
         this.gamePlayView = gamePlayView;
     }
@@ -106,14 +112,13 @@ public class PlayerServer implements Listener<Message>, Player {
     public void onMessage(Message message) {
         if (message instanceof DropTokenMessage dropTokenMessage) {
             onMessage(dropTokenMessage);
-        }
-        if (message instanceof LoginMessage loginMessage) {
+        } else if (message instanceof LoginMessage loginMessage) {
             onMessage(loginMessage);
         }
     }
 
     private void onMessage(DropTokenMessage message) {
-        // ...
+        this.gamePlayView.dropToken(message.column());
     }
 
     private void onMessage(LoginMessage message) {
@@ -125,5 +130,9 @@ public class PlayerServer implements Listener<Message>, Player {
 
     public Boolean isLogged() {
         return this.isLogged;
+    }
+
+    public boolean isConnected() {
+        return this.client.isConnected();
     }
 }

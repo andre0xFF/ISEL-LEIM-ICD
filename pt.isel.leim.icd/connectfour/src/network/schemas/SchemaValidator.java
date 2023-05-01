@@ -1,4 +1,4 @@
-package schemas;
+package network.schemas;
 
 import org.junit.jupiter.api.function.Executable;
 import org.xml.sax.InputSource;

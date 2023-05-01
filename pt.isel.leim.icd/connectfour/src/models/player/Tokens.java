@@ -12,6 +12,12 @@ public class Tokens {
 
     private ArrayList<Token> tokens = new ArrayList<>();
 
+    public Tokens() {
+        for (int i = 0; i < MAX_TOKENS; i++) {
+            this.tokens.add(new Token(Color.RED));
+        }
+    }
+
     public int size() {
         return this.tokens.size();
     }

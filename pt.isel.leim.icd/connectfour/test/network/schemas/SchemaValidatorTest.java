@@ -1,4 +1,4 @@
-package schemas;
+package network.schemas;
 
 import network.messages.MessageTest;
 import network.messages.PingMessageTest;
