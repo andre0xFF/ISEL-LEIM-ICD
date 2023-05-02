@@ -72,6 +72,7 @@ public class ConnectFourPresenter implements ActionListener {
             if (e.getSource().equals(this.view.profEditSubmitButton())) {
                 this.model.updateProfile(
                         //TODO validate nationality input?
+                        "image",
                         this.view.profEditUserNameField().getText(),
                         this.view.profEditPasswordField().getPassword(),
                         this.view.profEditNationalityField().getText(),

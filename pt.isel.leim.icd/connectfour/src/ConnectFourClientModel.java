@@ -7,9 +7,13 @@ import java.io.IOException;
 
 public class ConnectFourClientModel {
     private ConnectFour connectFour;
+
+    private final PlayerClient player;
+
     private final Client client = new Client();
 
     public ConnectFourClientModel() throws IOException {
+        this.player = new PlayerClient(client);
     }
 
     public void dropToken(int column) throws IOException, SAXException {
@@ -21,11 +25,11 @@ public class ConnectFourClientModel {
     }
 
     public void login(String text, char[] password) throws IOException, SAXException {
-        client.write(new LoginMessage(text, password));
+        client.write(new LogInMessage(text, password));
     }
 
-    public void updateProfile(String username, char[] password, String nationality, int age) throws IOException, SAXException {
-        client.write(new UpdateProfileMessage(username, password, nationality, age));
+    public void updateProfile(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
+        client.write(new UpdateProfileMessage(image, username, password, nationality, age));
     }
 
     public void signUp(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {

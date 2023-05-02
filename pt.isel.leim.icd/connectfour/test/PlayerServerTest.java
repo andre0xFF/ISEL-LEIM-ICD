@@ -4,7 +4,7 @@ import models.player.Tokens;
 import network.Client;
 import network.Server;
 import network.messages.DropTokenMessage;
-import network.messages.LoginMessage;
+import network.messages.LogInMessage;
 import network.messages.Message;
 import network.messages.PlayTurnMessage;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +58,7 @@ class PlayerServerTest {
 
     @Test
     void shouldLoginWhenOnMessage() {
-        playerServer.onMessage(new LoginMessage(
+        playerServer.onMessage(new LogInMessage(
                 "johndoe",
                 new char[]{'a', 'b', 'c', '1', '2', '3'})
         );

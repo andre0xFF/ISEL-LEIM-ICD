@@ -4,7 +4,7 @@ import models.player.Token;
 import models.player.Tokens;
 import network.Client;
 import network.messages.DropTokenMessage;
-import network.messages.LoginMessage;
+import network.messages.LogInMessage;
 import network.messages.Message;
 import network.messages.PlayTurnMessage;
 import network.socket.Listener;
@@ -112,7 +112,7 @@ public class PlayerServer implements Listener<Message>, Player {
     public void onMessage(Message message) {
         if (message instanceof DropTokenMessage dropTokenMessage) {
             onMessage(dropTokenMessage);
-        } else if (message instanceof LoginMessage loginMessage) {
+        } else if (message instanceof LogInMessage loginMessage) {
             onMessage(loginMessage);
         }
     }
@@ -121,7 +121,7 @@ public class PlayerServer implements Listener<Message>, Player {
         this.gamePlayView.dropToken(message.column());
     }
 
-    private void onMessage(LoginMessage message) {
+    private void onMessage(LogInMessage message) {
         // TODO: Validate username and password
 
         this.username = message.username();

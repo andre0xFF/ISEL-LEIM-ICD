@@ -5,7 +5,9 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:element name="SignUpAcceptMessage" type="SignUpAcceptMessageType"/>
+    <xs:include schemaLocation="UpdateProfileMessage.xsd"/>
+
+    <xs:element name="SignUpAcceptMessage" type="UpdateProfileMessageType"/>
 
     <xs:complexType name="SignUpAcceptMessageType"/>
 

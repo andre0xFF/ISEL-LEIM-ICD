@@ -2,12 +2,20 @@ import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
 import models.player.Tokens;
+import network.Client;
+import network.messages.LogInAcceptedMessage;
+import network.messages.LogInMessage;
 import network.messages.Message;
 import network.socket.Listener;
 
 import java.awt.*;
 
 public class PlayerClient implements Listener<Message>, Player {
+
+    private GamePlayView gamePlayView;
+    public PlayerClient(Client client){
+        client.listen(this);
+    }
     @Override
     public String username() {
         return null;
@@ -45,11 +53,20 @@ public class PlayerClient implements Listener<Message>, Player {
 
     @Override
     public void gamePlayView(GamePlayView gamePlayView) {
+        this.gamePlayView = gamePlayView;
 
     }
 
     @Override
     public void onMessage(Message message) {
+
+        if(message instanceof LogInMessage logInMessage){
+            onMessage(logInMessage);
+        }
+
+    }
+
+    private void onMessage(LogInAcceptedMessage message){
 
     }
 }

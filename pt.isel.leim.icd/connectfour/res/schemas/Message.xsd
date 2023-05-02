@@ -16,6 +16,11 @@
     <xs:include schemaLocation="SignUpMessage.xsd"/>
     <xs:include schemaLocation="SignUpAcceptMessage.xsd"/>
 
+
+    <xs:include schemaLocation="Profile.xsd"/>
+    <xs:include schemaLocation="GameStatMessage.xsd"/>
+    <xs:include schemaLocation="LogInAcceptedMessage.xsd"/>
+
     <xs:element name="Message" type="MessageTypes"/>
 
     <xs:complexType name="MessageTypes">
@@ -32,6 +37,10 @@
             <xs:element ref="SignUpMessage"/>
 
             <xs:element ref="SignUpAcceptMessage"/>
+<!--testes-->
+            <xs:element ref="profile"/>
+            <xs:element ref="gamestat"/>
+            <xs:element ref="LogInAcceptedMessage"/>
         </xs:choice>
     </xs:complexType>
 </xs:schema>

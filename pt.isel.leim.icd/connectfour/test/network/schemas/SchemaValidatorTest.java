@@ -48,4 +48,19 @@ class SchemaValidatorTest {
     void shouldValidateLoginMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><LoginMessage><username>player1</username><password>pass</password></LoginMessage></Message>"));
     }
+
+    @Test
+    void shouldValidateUpdateGameStat(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><gamestat><gameid>12312</gameid><gameresult>Win</gameresult><time>20:00:00</time></gamestat></Message>"));
+    }
+
+    @Test
+    void shouldValidateProfileMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><profile><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></profile></Message>"));
+    }
+
+    @Test
+    void shouldValidateLogInAcceptedMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<LogInAcceptedMessage><profile><image>asdasda</image><username>xpto</username><password>1234</password><nationality>PT</nationality><age>1231</age></profile><gamestats><gamestat><gameid>12312</gameid><gameresult>Win</gameresult><time>00:30:00</time></gamestat></gamestats></LogInAcceptedMessage>"));
+    }
 }

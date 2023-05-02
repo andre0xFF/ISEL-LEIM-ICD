@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:include schemaLocation="GameStatMessage.xsd"/>
+
+    <xs:element name="gamestats" type="GiveGamehistoryMessageType"/>
+
+    <xs:complexType name="GiveGamehistoryMessageType">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element ref="gamestat"/>
+        </xs:sequence>
+
+
+    </xs:complexType>
+
+</xs:schema>
