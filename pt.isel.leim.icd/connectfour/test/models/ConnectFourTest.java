@@ -22,7 +22,7 @@ class ConnectFourTest {
         player1 = new Player() {
 
             private GamePlayView gamePlayView;
-            private Tokens tokens = new Tokens();
+            private Tokens tokens = new Tokens(Color.RED);
 
             @Override
             public String username() {
@@ -68,7 +68,7 @@ class ConnectFourTest {
         player2 = new Player() {
 
             private GamePlayView gamePlayView;
-            private Tokens tokens = new Tokens();
+            private Tokens tokens = new Tokens(Color.BLUE);
 
             @Override
             public String username() {

@@ -3,7 +3,6 @@ package models;
 import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
-import models.player.Tokens;
 
 import java.awt.*;
 
@@ -30,11 +29,6 @@ public class ConnectFour implements GamePlayView {
     public ConnectFour(Player player1, Player player2) {
         player1.gamePlayView(this);
         player2.gamePlayView(this);
-
-        for (int i = 0; i < Tokens.MAX_TOKENS; i++) {
-            player1.addToken(new Token(Color.ORANGE));
-            player2.addToken(new Token(Color.BLUE));
-        }
 
         this.player1 = player1;
         this.player2 = player2;

@@ -12,6 +12,7 @@ import org.xml.sax.SAXException;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Represents a player that is connected to the server
@@ -20,7 +21,7 @@ public class RemotePlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
     private final Client client;
-    private Tokens tokens = new Tokens();
+    private Tokens tokens;
     private Boolean isLogged = false;
     private String username;
 
@@ -28,6 +29,13 @@ public class RemotePlayer implements Listener<Message>, Player {
         client.listen(this);
 
         this.client = client;
+        this.tokens = new Tokens(
+                new Color(
+                        new Random().nextInt(256),
+                        new Random().nextInt(256),
+                        new Random().nextInt(256)
+                )
+        );
     }
 
     /**

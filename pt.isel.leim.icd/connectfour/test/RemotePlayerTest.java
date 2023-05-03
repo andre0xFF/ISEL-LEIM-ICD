@@ -46,7 +46,7 @@ class RemotePlayerTest {
 
     @Test
     void shouldAddToken() {
-        remotePlayer.tokens(new Tokens());
+        remotePlayer.tokens(new Tokens(remotePlayer.color()));
 
         int actualTokens = remotePlayer.countTokens();
         int expectedTokens = actualTokens + 1;
