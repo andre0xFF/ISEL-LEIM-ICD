@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * Represents a player that is connected to the server
  */
-public class PlayerServer implements Listener<Message>, Player {
+public class RemotePlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
     private final Client client;
@@ -24,7 +24,7 @@ public class PlayerServer implements Listener<Message>, Player {
     private Boolean isLogged = false;
     private String username;
 
-    public PlayerServer(Client client) {
+    public RemotePlayer(Client client) {
         client.listen(this);
 
         this.client = client;

@@ -1,6 +1,6 @@
-import network.messages.*;
 import models.ConnectFour;
 import network.Client;
+import network.messages.*;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
@@ -8,12 +8,12 @@ import java.io.IOException;
 public class ConnectFourClientModel {
     private ConnectFour connectFour;
 
-    private final PlayerClient player;
+    private final LocalPlayer player;
 
     private final Client client = new Client();
 
     public ConnectFourClientModel() throws IOException {
-        this.player = new PlayerClient(client);
+        this.player = new LocalPlayer(client);
     }
 
     public void dropToken(int column) throws IOException, SAXException {

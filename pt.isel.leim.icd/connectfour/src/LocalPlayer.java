@@ -10,12 +10,14 @@ import network.socket.Listener;
 
 import java.awt.*;
 
-public class PlayerClient implements Listener<Message>, Player {
+public class LocalPlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
-    public PlayerClient(Client client){
+
+    public LocalPlayer(Client client) {
         client.listen(this);
     }
+
     @Override
     public String username() {
         return null;

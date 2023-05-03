@@ -1,16 +1,15 @@
 import network.Client;
 import org.junit.jupiter.api.BeforeEach;
 
-public class PlayerClientTest {
+public class LocalPlayerTest {
 
-    private PlayerClient playerClient;
+    private LocalPlayer playerClient;
 
     private Client client;
 
 
-
     @BeforeEach
-    void setUpEach(){
+    void setUpEach() {
 //        Server
     }
 }

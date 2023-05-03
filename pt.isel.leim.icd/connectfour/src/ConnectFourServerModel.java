@@ -10,7 +10,7 @@ public class ConnectFourServerModel implements Runnable {
     public static final int clientsLimit = 2;
     private ConnectFour connectFour;
     private final Server server;
-    private final ArrayList<PlayerServer> players = new ArrayList<>();
+    private final ArrayList<RemotePlayer> players = new ArrayList<>();
 
     public ConnectFourServerModel() throws IOException {
         this(Client.DEFAULT_PORT);
@@ -37,7 +37,7 @@ public class ConnectFourServerModel implements Runnable {
     }
 
     public int loggedPlayersSize() {
-        return (int) this.players.stream().filter(PlayerServer::isLogged).count();
+        return (int) this.players.stream().filter(RemotePlayer::isLogged).count();
     }
 
     /**
@@ -46,10 +46,10 @@ public class ConnectFourServerModel implements Runnable {
      * @param username The username of the player.
      * @return The player with the given username.
      */
-    public PlayerServer player(String username) {
-        for (PlayerServer playerServer : this.players) {
-            if (playerServer.username().equals(username)) {
-                return playerServer;
+    public RemotePlayer player(String username) {
+        for (RemotePlayer remotePlayer : this.players) {
+            if (remotePlayer.username().equals(username)) {
+                return remotePlayer;
             }
         }
 
@@ -61,7 +61,7 @@ public class ConnectFourServerModel implements Runnable {
         try {
             for (int i = 0; i < ConnectFourServerModel.clientsLimit; i++) {
                 Client client = this.server.accept();
-                this.players.add(new PlayerServer(client));
+                this.players.add(new RemotePlayer(client));
             }
 
             this.connectFour = new ConnectFour(

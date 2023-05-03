@@ -16,9 +16,9 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class PlayerServerTest {
+class RemotePlayerTest {
 
-    private PlayerServer playerServer;
+    private RemotePlayer remotePlayer;
     private Client client;
     private boolean tokenDropped = false;
 
@@ -34,10 +34,10 @@ class PlayerServerTest {
             return true;
         };
 
-        this.playerServer = new PlayerServer(client);
-        this.playerServer.gamePlayView(gamePlayView);
+        this.remotePlayer = new RemotePlayer(client);
+        this.remotePlayer.gamePlayView(gamePlayView);
 
-        assertTrue(playerServer.isConnected());
+        assertTrue(remotePlayer.isConnected());
 
         this.client = server.accept();
 
@@ -46,37 +46,37 @@ class PlayerServerTest {
 
     @Test
     void shouldAddToken() {
-        playerServer.tokens(new Tokens());
+        remotePlayer.tokens(new Tokens());
 
-        int actualTokens = playerServer.countTokens();
+        int actualTokens = remotePlayer.countTokens();
         int expectedTokens = actualTokens + 1;
 
-        playerServer.addToken(new Token(playerServer.color()));
+        remotePlayer.addToken(new Token(remotePlayer.color()));
 
-        assertEquals(expectedTokens, playerServer.countTokens());
+        assertEquals(expectedTokens, remotePlayer.countTokens());
     }
 
     @Test
     void shouldLoginWhenOnMessage() {
-        playerServer.onMessage(new LogInMessage(
+        remotePlayer.onMessage(new LogInMessage(
                 "johndoe",
                 new char[]{'a', 'b', 'c', '1', '2', '3'})
         );
 
-        assertTrue(playerServer.isLogged());
-        assertEquals("johndoe", playerServer.username());
+        assertTrue(remotePlayer.isLogged());
+        assertEquals("johndoe", remotePlayer.username());
     }
 
     @Test
     void shouldDropTokenWhenOnMessage() {
-        this.playerServer.onMessage(new DropTokenMessage(1));
+        this.remotePlayer.onMessage(new DropTokenMessage(1));
 
         assertTrue(tokenDropped);
     }
 
     @Test
     void shouldPlayTurnWhenOnMessage() throws IOException, SAXException {
-        this.playerServer.playTurn();
+        this.remotePlayer.playTurn();
 
         Message message = this.client.read();
 
