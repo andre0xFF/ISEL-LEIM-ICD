@@ -14,7 +14,7 @@
 
 
     <xs:include schemaLocation="AskSignUpMessage.xsd"/>
-    <xs:include schemaLocation="GiveSignUpAcceptedMessageType.xsd"/>
+    <xs:include schemaLocation="GiveSignUpAcceptedMessage.xsd"/>
 
     <xs:include schemaLocation="AskLoginMessage.xsd"/>
     <xs:include schemaLocation="GiveLogInAcceptedMessage.xsd"/>
