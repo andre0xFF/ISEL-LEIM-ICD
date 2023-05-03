@@ -14,12 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ConnectFourServerModelTest {
 
     private ConnectFourServerModel model;
+    private static final int SLEEP_TIME = 250;
 
     @BeforeEach
     void setUpEach() throws InterruptedException, IOException {
         this.model = new ConnectFourServerModel(0);
 
-        Thread.sleep(1000);
+        Thread.sleep(ConnectFourServerModelTest.SLEEP_TIME);
     }
 
     @Test
@@ -59,7 +60,7 @@ class ConnectFourServerModelTest {
     void shouldConnectOnePlayer() throws IOException, InterruptedException {
         Client client = new Client("localhost", this.model.port());
 
-        Thread.sleep(1000);
+        Thread.sleep(ConnectFourServerModelTest.SLEEP_TIME);
 
         assertTrue(client.isConnected());
         assertEquals(this.model.playersSize(), 1);
@@ -70,7 +71,7 @@ class ConnectFourServerModelTest {
         Client client1 = new Client("localhost", this.model.port());
         Client client2 = new Client("localhost", this.model.port());
 
-        Thread.sleep(1000);
+        Thread.sleep(ConnectFourServerModelTest.SLEEP_TIME);
 
         assertTrue(client1.isConnected());
         assertTrue(client2.isConnected());
@@ -91,7 +92,7 @@ class ConnectFourServerModelTest {
                 )
         );
 
-        Thread.sleep(1000);
+        Thread.sleep(ConnectFourServerModelTest.SLEEP_TIME);
 
         assertEquals(this.model.loggedPlayersSize(), 1);
         assertNotNull(this.model.player(expectedUsername));
