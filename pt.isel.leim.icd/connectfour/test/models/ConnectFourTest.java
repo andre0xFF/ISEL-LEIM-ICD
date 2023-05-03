@@ -4,7 +4,7 @@ import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
 import models.player.Tokens;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -13,14 +13,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConnectFourTest {
 
-    private static Player player1;
-    private static Player player2;
-    private static ConnectFour connectFour;
+    private Player player1;
+    private Player player2;
+    private ConnectFour connectFour;
 
-    @BeforeAll
-    static void setUp() {
+    @BeforeEach
+    void setUpEach() {
         player1 = new Player() {
-
             private GamePlayView gamePlayView;
             private Tokens tokens = new Tokens(Color.RED);
 
@@ -130,8 +129,6 @@ class ConnectFourTest {
 
     @Test
     void shouldWinGameWhenFourTokensPlacedVertically() {
-        ConnectFour connectFour = new ConnectFour(player1, player2);
-
         connectFour.dropToken(1);
         connectFour.dropToken(2);
         connectFour.dropToken(1);
