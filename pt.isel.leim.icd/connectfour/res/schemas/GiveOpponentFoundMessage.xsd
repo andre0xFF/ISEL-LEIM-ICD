@@ -3,15 +3,13 @@
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
-    <xs:include schemaLocation="Profile.xsd"/>
 
-    <xs:element name="UpdateProfileMessage" type="UpdateProfileMessageType"/>
+    <xs:element name="GiveOpponentFoundMessage" type="GiveOpponentFoundMessageType"/>
 
-    <xs:complexType name="UpdateProfileMessageType">
+    <xs:complexType name="GiveOpponentFoundMessageType">
         <xs:sequence>
-            <xs:element ref="profile"/>
+            <xs:element name="opponentusername" type="xs:string"/>
         </xs:sequence>
     </xs:complexType>
-
 
 </xs:schema>

@@ -1,0 +1,14 @@
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:include schemaLocation="AskUpdateProfileMessage.xsd"/>
+    <xs:include schemaLocation="GiveGamesStatsMessage.xsd"/>
+
+    <xs:element name="GiveLogInAcceptedMessage" type="GiveLogInAcceptedMessageType">
+    </xs:element>
+
+    <xs:complexType name="GiveLogInAcceptedMessageType"/>
+
+
+</xs:schema>

@@ -25,21 +25,21 @@ public class ConnectFourClientModel {
     }
 
     public void login(String text, char[] password) throws IOException, SAXException {
-        client.write(new LogInMessage(text, password));
+        client.write(new AskLogInMessage(text, password));
     }
 
     public void updateProfile(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
-        client.write(new UpdateProfileMessage(image, username, password, nationality, age));
+        client.write(new AskUpdateProfileMessage(image, username, password, nationality, age));
     }
 
     public void signUp(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
-        client.write(new SignUpMessage(image, username, password, nationality, age));
+        client.write(new AskSignUpMessage(image, username, password, nationality, age));
     }
 
 
 
     public void connectFourGameHistory() throws IOException, SAXException {
-        client.write(new AskGameHistoryMessage());
+        client.write(new AskGameStatsMessage());
     }
 
     public void quitGame() throws IOException {

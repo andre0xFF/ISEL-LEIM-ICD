@@ -5,9 +5,9 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:element name="CancelQueueGameMessage" type="CancelQueueGameMessagetype"/>
+    <xs:element name="AskQueueGameCancelMessage" type="AskQueueGameCancelMessageType"/>
 
-    <xs:complexType name="CancelQueueGameMessagetype">
+    <xs:complexType name="AskQueueGameCancelMessageType">
     </xs:complexType>
 
 </xs:schema>

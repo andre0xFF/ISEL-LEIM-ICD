@@ -4,9 +4,9 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:element name="LoginMessage" type="LoginMessageType"/>
+    <xs:element name="AskLogInMessage" type="AskLogInMessageType"/>
 
-    <xs:complexType name="LoginMessageType">
+    <xs:complexType name="AskLogInMessageType">
         <xs:sequence>
             <xs:element name="username" type="xs:string"/>
             <xs:element name="password" type="xs:string"/>

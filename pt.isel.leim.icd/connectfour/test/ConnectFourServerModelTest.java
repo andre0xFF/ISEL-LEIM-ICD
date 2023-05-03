@@ -1,5 +1,5 @@
 import network.Client;
-import network.messages.LogInMessage;
+import network.messages.AskLogInMessage;
 import network.messages.PingMessageTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +85,7 @@ class ConnectFourServerModelTest {
         String expectedUsername = "player1";
 
         client.write(
-                new LogInMessage(
+                new AskLogInMessage(
                         actualUsername,
                         new char[] {'p', 'a', 's', 's'}
                 )

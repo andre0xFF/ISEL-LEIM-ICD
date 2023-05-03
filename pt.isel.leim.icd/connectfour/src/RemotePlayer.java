@@ -3,10 +3,7 @@ import models.player.Player;
 import models.player.Token;
 import models.player.Tokens;
 import network.Client;
-import network.messages.DropTokenMessage;
-import network.messages.LogInMessage;
-import network.messages.Message;
-import network.messages.PlayTurnMessage;
+import network.messages.*;
 import network.socket.Listener;
 import org.xml.sax.SAXException;
 
@@ -120,7 +117,7 @@ public class RemotePlayer implements Listener<Message>, Player {
     public void onMessage(Message message) {
         if (message instanceof DropTokenMessage dropTokenMessage) {
             onMessage(dropTokenMessage);
-        } else if (message instanceof LogInMessage loginMessage) {
+        } else if (message instanceof AskLogInMessage loginMessage) {
             onMessage(loginMessage);
         }
     }
@@ -129,7 +126,7 @@ public class RemotePlayer implements Listener<Message>, Player {
         this.gamePlayView.dropToken(message.column());
     }
 
-    private void onMessage(LogInMessage message) {
+    private void onMessage(AskLogInMessage message) {
         // TODO: Validate username and password
 
         this.username = message.username();

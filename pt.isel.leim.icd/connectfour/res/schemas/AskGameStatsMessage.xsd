@@ -5,8 +5,8 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:element name="AskGameHistoryMessage" type="AskGameHistoryMessageType"/>
+    <xs:element name="AskGameStatsMessage" type="AskGameStatsMessageType"/>
 
-    <xs:complexType name="AskGameHistoryMessageType"/>
+    <xs:complexType name="AskGameStatsMessageType"/>
 
 </xs:schema>

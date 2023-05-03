@@ -7,11 +7,11 @@
 
     <xs:include schemaLocation="GameStatMessage.xsd"/>
 
-    <xs:element name="gamestats" type="GiveGamehistoryMessageType"/>
+    <xs:element name="GiveGameStatsMessage" type="GiveGameStatsMessageType"/>
 
-    <xs:complexType name="GiveGamehistoryMessageType">
+    <xs:complexType name="GiveGameStatsMessageType">
         <xs:sequence maxOccurs="unbounded">
-            <xs:element ref="gamestat"/>
+            <xs:element ref="GameStat"/>
         </xs:sequence>
 
 

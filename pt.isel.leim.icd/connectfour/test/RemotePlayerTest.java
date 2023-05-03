@@ -3,8 +3,9 @@ import models.player.Token;
 import models.player.Tokens;
 import network.Client;
 import network.Server;
+import network.messages.AskLogInMessage;
 import network.messages.DropTokenMessage;
-import network.messages.LogInMessage;
+
 import network.messages.Message;
 import network.messages.PlayTurnMessage;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,7 +59,7 @@ class RemotePlayerTest {
 
     @Test
     void shouldLoginWhenOnMessage() {
-        remotePlayer.onMessage(new LogInMessage(
+        remotePlayer.onMessage(new AskLogInMessage(
                 "johndoe",
                 new char[]{'a', 'b', 'c', '1', '2', '3'})
         );

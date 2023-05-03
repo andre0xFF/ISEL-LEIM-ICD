@@ -6,8 +6,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Time;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Locale;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -32,13 +30,17 @@ public class MessageTest {
     }
 
     @Test
-    void shouldSerializeLogInAcceptedMessageAsXML() throws JsonProcessingException {
-        String actualContent = XMLSerializer.serialize(new LogInAcceptedMessage(
-                new Profile("image","Daniel", new char[]{'1', '2', '3', '4'},"PT", "1337"),
-                new GamesStats(new GameStat[]{new GameStat("123", "Win", time)})));
+    void shouldSerializeAskLogInMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new AskLogInMessage("xpto", new char[]{'1','2','3','4'}));
 
-        assertEquals("<LogInAcceptedMessage><profile><image>asdasda</image><username>xpto</username><password>1234</password><nationality>PT</nationality><age>1231</age></profile><gamestats><gamestat><gameid>12312</gameid><gameresult>Win</gameresult><time>00:30:00</time></gamestat></gamestats></LogInAcceptedMessage>", actualContent);
+        assertEquals("<Message><AskLogInMessage><username>xpto</username><password>1234</password></AskLogInMessage></Message>", actualContent);
+    }
 
+    @Test
+    void shouldSerializeGiveGamesStatsMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new GiveGamesStatsMessage(new GameStat[]{new GameStat("Gamexpto", "win", time), new GameStat("War2", "Loss", time)}));
+
+        assertEquals(String.format("<Message><GiveGamesStatsMessage><GameStat><gameid>Gamexpto</gameid><gameresult>win</gameresult><gametime>%s</gametime></GameStat><GameStat><gameid></gameid><gameresult></gameresult><gametime>%s</gametime></GameStat></GiveGamesStatsMessage></Message>", time, time), actualContent);
     }
 
     @Test

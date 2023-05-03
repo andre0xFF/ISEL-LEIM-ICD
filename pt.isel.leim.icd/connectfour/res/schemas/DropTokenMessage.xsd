@@ -9,7 +9,7 @@
 
     <xs:complexType name="DropTokenMessageType">
         <xs:sequence>
-            <xs:element name="column" type="xs:int"></xs:element>
+            <xs:element name="column" type="xs:int"/>
         </xs:sequence>
     </xs:complexType>
 

@@ -6,20 +6,40 @@
 
     <xs:include schemaLocation="PongMessage.xsd"/>
     <xs:include schemaLocation="PingMessage.xsd"/>
-    <xs:include schemaLocation="LoginMessage.xsd"/>
-    <xs:include schemaLocation="UpdateProfileMessage.xsd"/>
-    <xs:include schemaLocation="AskGameHistoryMessage.xsd"/>
-    <xs:include schemaLocation="DropTokenMessage.xsd"/>
+
+
+
+
+
+
+
+    <xs:include schemaLocation="AskSignUpMessage.xsd"/>
+    <xs:include schemaLocation="GiveSignUpAcceptedMessageType.xsd"/>
+
+    <xs:include schemaLocation="AskLoginMessage.xsd"/>
+    <xs:include schemaLocation="GiveLogInAcceptedMessage.xsd"/>
+
+    <xs:include schemaLocation="AskUpdateProfileMessage.xsd"/>
+    <xs:include schemaLocation="GiveUpdatedProfileMessage.xsd"/>
+
+    <xs:include schemaLocation="AskGameStatsMessage.xsd"/>
+    <xs:include schemaLocation="GiveGamesStatsMessage.xsd"/>
+
     <xs:include schemaLocation="AskQueueGameMessage.xsd"/>
-    <xs:include schemaLocation="CancelQueueGameMessage.xsd"/>
+    <xs:include schemaLocation="AskQueueGameCancelMessage.xsd"/>
+    <xs:include schemaLocation="GiveOpponentFoundMessage.xsd"/>
+
+
+
+    <xs:include schemaLocation="DropTokenMessage.xsd"/>
     <xs:include schemaLocation="PlayTurnMessage.xsd"/>
-    <xs:include schemaLocation="SignUpMessage.xsd"/>
-    <xs:include schemaLocation="SignUpAcceptMessage.xsd"/>
 
 
-    <xs:include schemaLocation="Profile.xsd"/>
-    <xs:include schemaLocation="GameStatMessage.xsd"/>
-    <xs:include schemaLocation="LogInAcceptedMessage.xsd"/>
+
+
+    <xs:include schemaLocation="GameOverMessage.xsd"/>
+
+
 
     <xs:element name="Message" type="MessageTypes"/>
 
@@ -27,20 +47,34 @@
         <xs:choice>
             <xs:element ref="PongMessage"/>
             <xs:element ref="PingMessage"/>
-            <xs:element ref="LoginMessage"/>
-            <xs:element ref="UpdateProfileMessage"/>
-            <xs:element ref="AskGameHistoryMessage"/>
-            <xs:element ref="DropTokenMessage"/>
-            <xs:element ref="AskQueueGameMessage"/>
-            <xs:element ref="CancelQueueGameMessage"/>
-            <xs:element ref="PlayTurnMessage"/>
-            <xs:element ref="SignUpMessage"/>
 
-            <xs:element ref="SignUpAcceptMessage"/>
+            <xs:element ref="AskSignUpMessage"/>
+            <xs:element ref="GiveSignUpAcceptedMessage"/>
+
+            <xs:element ref="AskLogInMessage"/>
+            <xs:element ref="GiveLogInAcceptedMessage"/>
+
+            <xs:element ref="AskUpdateProfileMessage"/>
+            <xs:element ref="GiveUpdatedProfileMessage"/>
+
+            <xs:element ref="AskGameStatsMessage"/>
+            <xs:element ref="GiveGameStatsMessage"/>
+
+            <xs:element ref="GameOverMessage"/>
+
+            <xs:element ref="AskQueueGameMessage"/>
+            <xs:element ref="AskQueueGameCancelMessage"/>
+            <xs:element ref="GiveOpponentFoundMessage"/>
+
+            <xs:element ref="DropTokenMessage"/>
+            <xs:element ref="PlayTurnMessage"/>
+
+
+
 <!--testes-->
-            <xs:element ref="profile"/>
-            <xs:element ref="gamestat"/>
-            <xs:element ref="LogInAcceptedMessage"/>
+            <xs:element ref="GameStat"/>
+
+
         </xs:choice>
     </xs:complexType>
 </xs:schema>

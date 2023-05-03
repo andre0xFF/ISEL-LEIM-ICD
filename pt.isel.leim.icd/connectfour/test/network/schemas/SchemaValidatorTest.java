@@ -35,32 +35,70 @@ class SchemaValidatorTest {
     }
 
     @Test
-    void shouldValidateAskGameHistoryMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameHistoryMessage/></Message>"));
+    void shouldValidateAskSignUpMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskSignUpMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskSignUpMessage></Message>"));
     }
+    @Test
+    void shouldValidateGiveSignUpAcceptedMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveSignUpAcceptedMessage></GiveSignUpAcceptedMessage></Message>"));
+    }
+    @Test
+    void shouldValidateAskLogInMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskLogInMessage><username>player1</username><password>pass</password></AskLogInMessage></Message>"));
+    }
+    @Test
+    void shouldValidateGiveLogInAcceptedMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveLogInAcceptedMessage></GiveLogInAcceptedMessage></Message>"));
+    }
+    @Test
+    void shouldValidateAskUpdateProfileMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskUpdateProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskUpdateProfileMessage></Message>"));
+    }
+    @Test
+    void shouldValidateGiveUpdatedProfileMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveUpdatedProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></GiveUpdatedProfileMessage></Message>"));
+    }
+    @Test
+    void shouldValidateGameOverMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GameOverMessage><info>Game Over</info></GameOverMessage></Message>"));
+    }
+    @Test
+    void shouldValidateAskQueueGameMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskQueueGameMessage></AskQueueGameMessage></Message>"));
+    }
+    @Test
+    void shouldValidateAskQueueGameCancelMessage(){
+        assertDoesNotThrow(() ->schemaValidator.validate("<Message><AskQueueGameCancelMessage></AskQueueGameCancelMessage></Message>"));
+    }
+    @Test
+    void shouldValidateGiveOpponentFoundMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveOpponentFoundMessage><opponentusername>XpTo</opponentusername></GiveOpponentFoundMessage></Message>"));
+    }
+
+    @Test
+    void shouldValidateAskGameStatsMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameStatsMessage></AskGameStatsMessage></Message>"));
+    }
+    @Test
+    void shouldValidateGiveGamesStatsMessage(){
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveGamesStatsMessage><gameid>12312</gameid><gameresult>Win</gameresult><time>20:00:00</time></GiveGamesStatsMessage></Message>"));
+    }
+
+
+
 
     @Test
     void shouldValidatePlayTurnMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><PlayTurnMessage/></Message>"));
     }
 
-    @Test
-    void shouldValidateLoginMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><LoginMessage><username>player1</username><password>pass</password></LoginMessage></Message>"));
-    }
 
-    @Test
-    void shouldValidateUpdateGameStat(){
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><gamestat><gameid>12312</gameid><gameresult>Win</gameresult><time>20:00:00</time></gamestat></Message>"));
-    }
 
-    @Test
-    void shouldValidateProfileMessage(){
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><profile><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></profile></Message>"));
-    }
 
-    @Test
-    void shouldValidateLogInAcceptedMessage(){
-        assertDoesNotThrow(() -> schemaValidator.validate("<LogInAcceptedMessage><profile><image>asdasda</image><username>xpto</username><password>1234</password><nationality>PT</nationality><age>1231</age></profile><gamestats><gamestat><gameid>12312</gameid><gameresult>Win</gameresult><time>00:30:00</time></gamestat></gamestats></LogInAcceptedMessage>"));
-    }
+
+
+
+
+
+
 }

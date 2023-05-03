@@ -1,12 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
+
 
 <xs:schema
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:element name="profile" type="ProfileMessageType"/>
+    <xs:include schemaLocation="AskUpdateProfileMessage.xsd"/>
 
-    <xs:complexType name="ProfileMessageType">
+    <xs:element name="AskSignUpMessage" type="AskSignUpMessageType"/>
+
+    <xs:complexType name="AskSignUpMessageType">
         <xs:sequence>
             <xs:element name="image" type="xs:string"/>
             <xs:element name="username" type="xs:string"/>
