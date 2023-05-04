@@ -8,8 +8,8 @@
 
     <xs:complexType name="GameStatType">
         <xs:sequence>
-            <xs:element name="gameid" type="xs:string"/>
-            <xs:element name="gameresult" type="xs:string"/>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="result" type="xs:string"/>
             <xs:element name="time" type="xs:time"/>
         </xs:sequence>
     </xs:complexType>
