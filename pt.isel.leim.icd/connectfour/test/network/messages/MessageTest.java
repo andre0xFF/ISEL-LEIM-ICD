@@ -19,8 +19,6 @@ public class MessageTest {
     private final LocalDateTime dateTime = LocalDateTime.of(2021, 5, 18, 15, 0, 0);
     private final Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
 
- private final Time time = new Time(new Date().getTime());
-
 
     @Test
     void shouldSerializePingMessageAsXML() throws JsonProcessingException {
@@ -38,7 +36,16 @@ public class MessageTest {
 
     @Test
     void shouldSerializeGiveGamesStatsMessageAsXML() throws JsonProcessingException {
-        String actualContent = XMLSerializer.serialize(new GiveGamesStatsMessage(new GameStat[]{new GameStat("Gamexpto", "win", time), new GameStat("War2", "Loss", time)}));
+        Time time = new Time(new Date().getTime());
+
+        String actualContent = XMLSerializer.serialize(
+                new GiveGamesStatsMessage(
+                        new GiveGamesStatsMessage.GameStat[]{
+                                new GiveGamesStatsMessage.GameStat("Gamexpto", "win", time.toString()),
+                                new GiveGamesStatsMessage.GameStat("War2", "Loss", time.toString())
+                        }
+                )
+        );
 
         assertEquals(String.format("<Message><GiveGamesStatsMessage><GamesStats><GameStat><id>Gamexpto</id><result>win</result><time>%s</time></GameStat><GameStat><id>War2</id><result>Loss</result><time>%s</time></GameStat></GamesStats></GiveGamesStatsMessage></Message>", time, time), actualContent);
     }

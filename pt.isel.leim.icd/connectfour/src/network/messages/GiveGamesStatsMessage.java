@@ -8,4 +8,7 @@ public record GiveGamesStatsMessage(
         @JacksonXmlProperty(localName = "GameStat")
         GameStat[] GamesStats
 ) implements Message {
+
+        public record GameStat(String id, String result, String time) {
+        }
 }
