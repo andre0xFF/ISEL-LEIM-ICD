@@ -21,7 +21,7 @@ class ClientTest {
     private BufferedReader reader;
 
     @BeforeEach
-    void setUp() throws IOException {
+    void setUp() throws IOException, InterruptedException {
         this.javaServerSocket = new ServerSocket(0);
         this.client = new Client(this.javaServerSocket.getLocalPort());
 
@@ -37,6 +37,8 @@ class ClientTest {
         });
 
         thread.start();
+
+        Thread.sleep(250);
     }
 
     @Test

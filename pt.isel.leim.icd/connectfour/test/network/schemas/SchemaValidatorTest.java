@@ -35,70 +35,69 @@ class SchemaValidatorTest {
     }
 
     @Test
-    void shouldValidateAskSignUpMessage(){
+    void shouldValidateAskSignUpMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskSignUpMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskSignUpMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGiveSignUpAcceptedMessage(){
+    void shouldValidateGiveSignUpAcceptedMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveSignUpAcceptedMessage></GiveSignUpAcceptedMessage></Message>"));
     }
+
     @Test
     void shouldValidateAskLogInMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskLogInMessage><username>player1</username><password>pass</password></AskLogInMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGiveLogInAcceptedMessage(){
+    void shouldValidateGiveLogInAcceptedMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveLogInAcceptedMessage></GiveLogInAcceptedMessage></Message>"));
     }
+
     @Test
-    void shouldValidateAskUpdateProfileMessage(){
+    void shouldValidateAskUpdateProfileMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskUpdateProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskUpdateProfileMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGiveUpdatedProfileMessage(){
+    void shouldValidateGiveUpdatedProfileMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveUpdatedProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></GiveUpdatedProfileMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGameOverMessage(){
+    void shouldValidateGameOverMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><GameOverMessage><info>Game Over</info></GameOverMessage></Message>"));
     }
+
     @Test
-    void shouldValidateAskQueueGameMessage(){
+    void shouldValidateAskQueueGameMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskQueueGameMessage></AskQueueGameMessage></Message>"));
     }
+
     @Test
-    void shouldValidateAskQueueGameCancelMessage(){
-        assertDoesNotThrow(() ->schemaValidator.validate("<Message><AskQueueGameCancelMessage></AskQueueGameCancelMessage></Message>"));
+    void shouldValidateAskQueueGameCancelMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskQueueGameCancelMessage></AskQueueGameCancelMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGiveOpponentFoundMessage(){
+    void shouldValidateGiveOpponentFoundMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveOpponentFoundMessage><opponentusername>XpTo</opponentusername></GiveOpponentFoundMessage></Message>"));
     }
 
     @Test
-    void shouldValidateAskGameStatsMessage(){
+    void shouldValidateAskGameStatsMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameStatsMessage></AskGameStatsMessage></Message>"));
     }
+
     @Test
-    void shouldValidateGiveGamesStatsMessage(){
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveGamesStatsMessage><gameid>12312</gameid><gameresult>Win</gameresult><time>20:00:00</time></GiveGamesStatsMessage></Message>"));
+    void shouldValidateGiveGamesStatsMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveGamesStatsMessage><GamesStats><GameStat><id>Gamexpto</id><result>win</result><time>12:53:30</time></GameStat><GameStat><id>War2</id><result>Loss</result><time>12:53:30</time></GameStat></GamesStats></GiveGamesStatsMessage></Message>"));
     }
-
-
-
 
     @Test
     void shouldValidatePlayTurnMessage() {
         assertDoesNotThrow(() -> schemaValidator.validate("<Message><PlayTurnMessage/></Message>"));
     }
-
-
-
-
-
-
-
-
 
 
 }
