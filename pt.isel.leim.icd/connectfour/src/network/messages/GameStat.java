@@ -2,5 +2,5 @@ package network.messages;
 
 import java.sql.Time;
 
-public record GameStat(String gameid, String gameresult, Time time) {
+public record GameStat(String id, String result, Time time) {
 }

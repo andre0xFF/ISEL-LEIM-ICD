@@ -1,6 +1,7 @@
 package network.messages;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -8,9 +9,8 @@ import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class MessageTest {
@@ -40,7 +40,7 @@ public class MessageTest {
     void shouldSerializeGiveGamesStatsMessageAsXML() throws JsonProcessingException {
         String actualContent = XMLSerializer.serialize(new GiveGamesStatsMessage(new GameStat[]{new GameStat("Gamexpto", "win", time), new GameStat("War2", "Loss", time)}));
 
-        assertEquals(String.format("<Message><GiveGamesStatsMessage><GameStat><gameid>Gamexpto</gameid><gameresult>win</gameresult><gametime>%s</gametime></GameStat><GameStat><gameid></gameid><gameresult></gameresult><gametime>%s</gametime></GameStat></GiveGamesStatsMessage></Message>", time, time), actualContent);
+        assertEquals(String.format("<Message><GiveGamesStatsMessage><GamesStats><GameStat><id>Gamexpto</id><result>win</result><time>%s</time></GameStat><GameStat><id>War2</id><result>Loss</result><time>%s</time></GameStat></GamesStats></GiveGamesStatsMessage></Message>", time, time), actualContent);
     }
 
     @Test

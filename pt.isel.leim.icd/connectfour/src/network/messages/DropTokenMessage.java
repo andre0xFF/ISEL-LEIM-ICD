@@ -1,4 +1,4 @@
 package network.messages;
 
-public record DropTokenMessage(int column) implements Message{
+public record DropTokenMessage(int column) implements Message {
 }

@@ -13,8 +13,6 @@
         <xs:sequence maxOccurs="unbounded">
             <xs:element ref="GameStat"/>
         </xs:sequence>
-
-
     </xs:complexType>
 
 </xs:schema>
