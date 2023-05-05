@@ -11,6 +11,8 @@ public class Board {
     private final int totalRows = tokens.length;
     private final int totalColumns = tokens[0].length;
 
+    private int tokenCount = 0;
+
     /**
      * Drops a token into the specified column if the column is not full. If the column is full, a RuntimeException is
      * thrown.
@@ -25,6 +27,7 @@ public class Board {
         for (int row = totalRows - 1; row >= 0; row--) {
             if (tokens[row][column] == null) {
                 tokens[row][column] = token;
+                tokenCount++;
 
                 return row + 1;
             }
@@ -49,6 +52,7 @@ public class Board {
 
     /**
      * Returns the total number of rows in the board.
+     *
      * @return The total number of rows in the board.
      */
     public int totalRows() {
@@ -57,9 +61,14 @@ public class Board {
 
     /**
      * Returns the total number of columns in the board.
+     *
      * @return The total number of columns in the board.
      */
     public int totalColumns() {
         return totalColumns;
+    }
+
+    public boolean isFull() {
+        return tokenCount == totalRows * totalColumns;
     }
 }

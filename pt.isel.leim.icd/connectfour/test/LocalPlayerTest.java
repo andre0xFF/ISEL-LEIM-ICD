@@ -5,11 +5,11 @@ import network.messages.GiveLogInAcceptedMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 
-public class LocalPlayerTest {
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class LocalPlayerTest {
 
     private LocalPlayer localPlayer;
     private ConnectFourPresenter presenter;

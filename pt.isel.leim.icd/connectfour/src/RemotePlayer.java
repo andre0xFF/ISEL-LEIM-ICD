@@ -3,7 +3,10 @@ import models.player.Player;
 import models.player.Token;
 import models.player.Tokens;
 import network.Client;
-import network.messages.*;
+import network.messages.AskLogInMessage;
+import network.messages.DropTokenMessage;
+import network.messages.Message;
+import network.messages.PlayTurnMessage;
 import network.socket.Listener;
 import org.xml.sax.SAXException;
 
@@ -12,7 +15,7 @@ import java.io.IOException;
 import java.util.Random;
 
 /**
- * Represents a player that is connected to the server
+ * Represents a player on the server side
  */
 public class RemotePlayer implements Listener<Message>, Player {
 

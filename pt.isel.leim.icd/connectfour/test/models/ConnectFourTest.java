@@ -143,8 +143,6 @@ class ConnectFourTest {
 
     @Test
     void shouldWinGameWhenFourTokensPlacedHorizontally() {
-        ConnectFour connectFour = new ConnectFour(player1, player2);
-
         connectFour.dropToken(1);
         connectFour.dropToken(1);
         connectFour.dropToken(2);
@@ -159,8 +157,6 @@ class ConnectFourTest {
 
     @Test
     void shouldWinGameWhenFourTokensPlacedDiagonallyFromBottomLeftToTopRight() {
-        ConnectFour connectFour = new ConnectFour(player1, player2);
-
         // Player 1
         connectFour.dropToken(1);
         // Player 2
@@ -187,8 +183,6 @@ class ConnectFourTest {
 
     @Test
     void shouldWinGameWhenFourTokensPlacedDiagonallyFromTopLeftToBottomRight() {
-        ConnectFour connectFour = new ConnectFour(player1, player2);
-
         // Player 1
         connectFour.dropToken(4);
         // Player 2
@@ -214,5 +208,108 @@ class ConnectFourTest {
 
         assertTrue(connectFour.isGameOver());
         assertEquals(player1, connectFour.winner());
+    }
+
+    @Test
+    void shouldDrawOnGame1WhenNoPlayerWins() {
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+        connectFour.dropToken(1);
+        connectFour.dropToken(3);
+        connectFour.dropToken(2);
+        connectFour.dropToken(4);
+        connectFour.dropToken(5);
+        connectFour.dropToken(7);
+        connectFour.dropToken(6);
+
+        assertTrue(this.connectFour.isGameOver());
+        assertNull(this.connectFour.winner());
+        assertTrue(this.connectFour.hasDraw());
+    }
+
+    @Test
+    void shouldDrawOnGame2WhenNoPlayerWins() {
+        connectFour.dropToken(1);
+        connectFour.dropToken(2);
+        connectFour.dropToken(1);
+        connectFour.dropToken(2);
+        connectFour.dropToken(1);
+        connectFour.dropToken(2);
+        connectFour.dropToken(2);
+        connectFour.dropToken(1);
+        connectFour.dropToken(2);
+        connectFour.dropToken(1);
+        connectFour.dropToken(2);
+        connectFour.dropToken(1);
+
+        connectFour.dropToken(3);
+        connectFour.dropToken(4);
+        connectFour.dropToken(3);
+        connectFour.dropToken(4);
+        connectFour.dropToken(4);
+        connectFour.dropToken(3);
+        connectFour.dropToken(4);
+        connectFour.dropToken(3);
+        connectFour.dropToken(3);
+        connectFour.dropToken(4);
+        connectFour.dropToken(3);
+        connectFour.dropToken(4);
+
+        connectFour.dropToken(5);
+        connectFour.dropToken(6);
+        connectFour.dropToken(5);
+        connectFour.dropToken(6);
+        connectFour.dropToken(6);
+        connectFour.dropToken(5);
+        connectFour.dropToken(6);
+        connectFour.dropToken(5);
+        connectFour.dropToken(5);
+        connectFour.dropToken(6);
+        connectFour.dropToken(5);
+        connectFour.dropToken(6);
+
+        connectFour.dropToken(7);
+        connectFour.dropToken(7);
+        connectFour.dropToken(7);
+        connectFour.dropToken(7);
+        connectFour.dropToken(7);
+        connectFour.dropToken(7);
+
+        assertTrue(this.connectFour.isGameOver());
+        assertNull(this.connectFour.winner());
+        assertTrue(this.connectFour.hasDraw());
     }
 }

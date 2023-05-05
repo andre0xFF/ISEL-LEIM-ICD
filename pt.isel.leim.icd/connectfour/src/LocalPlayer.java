@@ -4,12 +4,14 @@ import models.player.Token;
 import models.player.Tokens;
 import network.Client;
 import network.messages.GiveLogInAcceptedMessage;
-import network.messages.AskLogInMessage;
 import network.messages.Message;
 import network.socket.Listener;
 
 import java.awt.*;
 
+/**
+ * Represents a player on the client side
+ */
 public class LocalPlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
@@ -62,7 +64,7 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     public boolean isConnected(){
-       return this.client.isConnected();
+        return this.client.isConnected();
     }
 
     @Override
@@ -75,6 +77,6 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     private void onMessage(GiveLogInAcceptedMessage message){
-        this.gamePlayView.
+
     }
 }

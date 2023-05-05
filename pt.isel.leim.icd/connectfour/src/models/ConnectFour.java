@@ -57,14 +57,27 @@ public class ConnectFour implements GamePlayView {
             return false;
         }
 
-        if (checkWin(row, column, currentPlayer)) {
-            this.winner = this.currentPlayer;
+        // this.player1.token(row, column, this.board.getToken(row, column).color());
+        // this.player2.token(row, column, this.board.getToken(row, column).color());
+
+        if (checkWin(row, column, this.currentPlayer)) {
+            setWinner();
             return true;
         }
 
-        this.currentPlayer = this.currentPlayer == this.player1 ? this.player2 : this.player1;
+        swapCurrentPlayer();
 
         return true;
+    }
+
+    private void swapCurrentPlayer() {
+        this.currentPlayer = this.currentPlayer == this.player1 ? this.player2 : this.player1;
+        this.currentPlayer.playTurn();
+    }
+
+    private void setWinner() {
+        this.winner = this.currentPlayer;
+        // this.player1.winner(this.currentPlayer);
     }
 
     private boolean checkWin(int row, int column, Player player) {
@@ -159,6 +172,19 @@ public class ConnectFour implements GamePlayView {
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
+        return hasWinner() || hasDraw();
+    }
+
+    /**
+     * Checks if the game is a draw
+     *
+     * @return true if the game is a draw, false otherwise
+     */
+    public boolean hasDraw() {
+        return this.board.isFull();
+    }
+
+    public boolean hasWinner() {
         return this.winner != null;
     }
 
@@ -178,5 +204,23 @@ public class ConnectFour implements GamePlayView {
      */
     public Player currentPlayer() {
         return currentPlayer;
+    }
+
+    /**
+     * Returns the total number of rows in the board.
+     *
+     * @return The total number of rows in the board.
+     */
+    public int totalRows() {
+        return this.board.totalRows();
+    }
+
+    /**
+     * Returns the total number of columns in the board.
+     *
+     * @return The total number of columns in the board.
+     */
+    public int totalColumns() {
+        return this.board.totalColumns();
     }
 }

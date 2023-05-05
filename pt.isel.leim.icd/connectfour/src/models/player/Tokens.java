@@ -11,11 +11,14 @@ public class Tokens {
     public static final int MAX_TOKENS = 21;
 
     private ArrayList<Token> tokens = new ArrayList<>();
+    private Color color;
 
     public Tokens(Color color) {
         for (int i = 0; i < MAX_TOKENS; i++) {
             this.tokens.add(new Token(color));
         }
+
+        this.color = color;
     }
 
     public int size() {
@@ -39,6 +42,6 @@ public class Tokens {
     }
 
     public Color color() {
-        return this.tokens.get(0).color();
+        return this.color;
     }
 }
