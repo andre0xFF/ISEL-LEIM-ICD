@@ -56,7 +56,7 @@ public class ConnectFourPresenter implements ActionListener {
             if(e.getSource().equals(this.view.signSubmitButton())){
                 System.out.println("test");
                 BufferedImage image = PhotoManager.downloadImage(this.view.signUpPictureField().getText());
-                image = PhotoManager.ResizeImage(image, 60, 60);
+                image = PhotoManager.resizeImage(image, 60, 60);
 
                 this.model.signUp(
                         PhotoManager.encodeImage(image),
@@ -113,7 +113,7 @@ public class ConnectFourPresenter implements ActionListener {
             // Navigates from Game Menu to Game History
             if (e.getSource().equals(this.view.menuGameHistoryButton())) {
                 this.view.connectFourGameHistoryPanel();
-                this.model.connectFourGameHistory();
+                this.model.connectFourGamesStats();
 
             }
 

@@ -57,7 +57,7 @@
             <xs:element ref="AskUpdateProfileMessage"/>
             <xs:element ref="GiveUpdatedProfileMessage"/>
 
-            <xs:element ref="AskGameStatsMessage"/>
+            <xs:element ref="AskGamesStatsMessage"/>
             <xs:element ref="GiveGamesStatsMessage"/>
 
             <xs:element ref="GameOverMessage"/>

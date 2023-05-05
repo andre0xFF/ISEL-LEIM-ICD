@@ -2,6 +2,7 @@ package network.messages;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import network.GameResult;
 
 public record GiveGamesStatsMessage(
         @JacksonXmlElementWrapper(localName = "GamesStats")
@@ -9,6 +10,6 @@ public record GiveGamesStatsMessage(
         GameStat[] GamesStats
 ) implements Message {
 
-        public record GameStat(String id, String result, String time) {
+        public record GameStat(String id, Enum<GameResult> result, String time) {
         }
 }

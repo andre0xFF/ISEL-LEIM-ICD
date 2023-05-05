@@ -24,7 +24,7 @@ public class PhotoManager {
         return originalImage;
     }
 
-    public static BufferedImage ResizeImage(BufferedImage originalImage, int newWidth, int newHeight) throws MalformedURLException {
+    public static BufferedImage resizeImage(BufferedImage originalImage, int newWidth, int newHeight) throws MalformedURLException {
 
             //scaling
             int originalWidth = originalImage.getWidth();

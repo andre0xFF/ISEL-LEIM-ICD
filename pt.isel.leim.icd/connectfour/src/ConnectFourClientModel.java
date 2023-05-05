@@ -38,8 +38,8 @@ public class ConnectFourClientModel {
 
 
 
-    public void connectFourGameHistory() throws IOException, SAXException {
-        client.write(new AskGameStatsMessage());
+    public void connectFourGamesStats() throws IOException, SAXException {
+        client.write(new AskGamesStatsMessage());
     }
 
     public void quitGame() throws IOException {

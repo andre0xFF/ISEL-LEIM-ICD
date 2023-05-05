@@ -13,8 +13,10 @@ import java.awt.*;
 public class LocalPlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
+    private Client client;
 
     public LocalPlayer(Client client) {
+        this.client = client;
         client.listen(this);
     }
 
@@ -59,6 +61,10 @@ public class LocalPlayer implements Listener<Message>, Player {
 
     }
 
+    public boolean isConnected(){
+       return this.client.isConnected();
+    }
+
     @Override
     public void onMessage(Message message) {
 
@@ -69,6 +75,6 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     private void onMessage(GiveLogInAcceptedMessage message){
-
+        this.gamePlayView.
     }
 }

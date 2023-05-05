@@ -1,6 +1,7 @@
 package network.schemas;
 
 import network.messages.MessageTest;
+import network.messages.MessagesTestContent;
 import network.messages.PingMessageTest;
 import network.messages.PongMessageTest;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ class SchemaValidatorTest {
 
     @Test
     void shouldNotValidateEmptyMessage() {
-        assertThrows(SAXException.class, () -> schemaValidator.validate(MessageTest.messageEmptyContent));
+        assertThrows(SAXException.class, () -> schemaValidator.validate(MessagesTestContent.getEmptyMessageContent()));
     }
 
     @Test
@@ -36,67 +37,68 @@ class SchemaValidatorTest {
 
     @Test
     void shouldValidateAskSignUpMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskSignUpMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskSignUpMessage></Message>"));
+
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskSignUpMessageContent()));
     }
 
     @Test
     void shouldValidateGiveSignUpAcceptedMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveSignUpAcceptedMessage></GiveSignUpAcceptedMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGiveSignUpAcceptedMessageContent()));
     }
 
     @Test
     void shouldValidateAskLogInMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskLogInMessage><username>player1</username><password>pass</password></AskLogInMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskLogInMessageContent()));
     }
 
     @Test
     void shouldValidateGiveLogInAcceptedMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveLogInAcceptedMessage></GiveLogInAcceptedMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGiveLogInAcceptedMessageContent()));
     }
 
     @Test
     void shouldValidateAskUpdateProfileMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskUpdateProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></AskUpdateProfileMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskUpdateProfileMessageContent()));
     }
 
     @Test
     void shouldValidateGiveUpdatedProfileMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveUpdatedProfileMessage><image>12314</image><username>André</username><password>1234</password><nationality>PT</nationality><age>48</age></GiveUpdatedProfileMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGiveUpdateProfileMessageContent()));
     }
 
     @Test
     void shouldValidateGameOverMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GameOverMessage><info>Game Over</info></GameOverMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGameOverMessageContent()));
     }
 
     @Test
     void shouldValidateAskQueueGameMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskQueueGameMessage></AskQueueGameMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskQueueGameMessageContent()));
     }
 
     @Test
     void shouldValidateAskQueueGameCancelMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskQueueGameCancelMessage></AskQueueGameCancelMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskQueueGameCancelMessageContent()));
     }
 
     @Test
     void shouldValidateGiveOpponentFoundMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveOpponentFoundMessage><opponentusername>XpTo</opponentusername></GiveOpponentFoundMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGiveOpponentFoundMessageContent()));
     }
 
     @Test
-    void shouldValidateAskGameStatsMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskGameStatsMessage></AskGameStatsMessage></Message>"));
+    void shouldValidateAskGamesStatsMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getAskGamesStatesMessageContent()));
     }
 
     @Test
     void shouldValidateGiveGamesStatsMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveGamesStatsMessage><GamesStats><GameStat><id>Gamexpto</id><result>win</result><time>12:53:30</time></GameStat><GameStat><id>War2</id><result>Loss</result><time>12:53:30</time></GameStat></GamesStats></GiveGamesStatsMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getGiveGamesStatsMessageContent()));
     }
 
     @Test
     void shouldValidatePlayTurnMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><PlayTurnMessage/></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate(MessagesTestContent.getPlayTurnMessageContent()));
     }
 
 

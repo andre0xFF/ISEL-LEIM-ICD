@@ -22,7 +22,7 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = AskLogInMessage.class, name = "AskLogInMessage"),
                 @JsonSubTypes.Type(value = DropTokenMessage.class, name = "DropTokenMessage"),
 
-                @JsonSubTypes.Type(value = AskGameStatsMessage.class, name = "AskGameStatsMessage"),
+                @JsonSubTypes.Type(value = AskGamesStatsMessage.class, name = "AskGamesStatsMessage"),
                 @JsonSubTypes.Type(value = PlayTurnMessage.class, name = "PlayTurnMessage"),
                 @JsonSubTypes.Type(value = AskSignUpMessage.class, name = "AskSignUpMessage"),
 
