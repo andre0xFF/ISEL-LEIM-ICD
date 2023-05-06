@@ -11,6 +11,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * A message is a data transfer object that is sent over the network.
+ */
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.WRAPPER_OBJECT
@@ -65,66 +68,28 @@ public interface Message {
         }
 
 
+        /**
+         * Deserialize a message from XML.
+         *
+         * @param content The XML content.
+         * @return The deserialized message.
+         * @throws JsonProcessingException If the XML is invalid.
+         */
         @Override
         public Message deserialize(String content) throws JsonProcessingException {
             return xmlMapper.readValue(content, Message.class);
         }
 
+        /**
+         * Serialize a message to XML.
+         *
+         * @param message The message to serialize.
+         * @return The serialized message.
+         * @throws JsonProcessingException If the message cannot be serialized.
+         */
         @Override
         public String serialize(Message message) throws JsonProcessingException {
             return xmlMapper.writeValueAsString(message);
         }
     }
-
-//    record ErrorMessage(String details) implements Message{
-//    }
-//
-//    record SignInMessage(String username, String password) implements Message{
-//
-//    }
-//
-//    record SignUpMessage(String username, String password) implements Message{
-//
-//    }
-//
-//    record SignOutMessage() implements Message{
-//
-//    }
-//
-//    // server response
-//    record GameTurnMessage(GamePlayer currentPlayer, GameBoard board) implements messages.Message{
-//
-//    }
-//
-//    //client move request
-//    record TokenDropMessage(int gameBoardColumn)implements messages.Message{
-//
-//    }
-//
-//    //network.Client move request
-//    record TokenDropResultMessage(Boolean isValidTokenDrop) implements messages.Message{
-//
-//    }
-//
-//    // server response when game's over to both players
-//    record GameOverMessage(Boolean hasWinner, Boolean itsDraw, Player winner) implements messages.Message{
-//
-//    }
-//
-//    record AskGameHistory() implements messages.Message{
-//
-//    }
-//
-//
-//    record GameHistory(int totalVictories, int totalLosses, ArrayList<LocalDateTime, Duration, Player> gamesHistory) implements messages.Message{
-//
-//    }
-//
-//    record AskPlayerProfile() implements messages.Message{
-//
-//    }
-//
-//    record PlayerProfile(Profile profile) implements messages.Message{
-//
-//    }
 }

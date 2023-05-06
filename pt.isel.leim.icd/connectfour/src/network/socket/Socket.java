@@ -26,6 +26,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Creates a new socket. The hostname is set to "localhost" and the port is set to 8000.
+     *
      * @throws IOException If an I/O error occurs when creating the socket.
      */
     public Socket() throws IOException {
@@ -34,6 +35,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Creates a new socket. The hostname is set to "localhost".
+     *
      * @param port The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
@@ -43,6 +45,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Creates a new socket. The port is set to 8000.
+     *
      * @param hostname The hostname.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
@@ -52,8 +55,9 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Creates a new socket.
+     *
      * @param hostname The hostname.
-     * @param port The port.
+     * @param port     The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
     public Socket(String hostname, int port) throws IOException {
@@ -62,6 +66,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Creates a new socket.
+     *
      * @param socket The socket.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
@@ -74,6 +79,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Writes a message to the socket.
+     *
      * @param message The message to be written.
      */
     public void write(String message) {
@@ -92,6 +98,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Checks if the socket is connected.
+     *
      * @return True if the socket is connected, false otherwise.
      */
     public boolean isConnected() {
@@ -100,6 +107,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Checks if the socket is closed.
+     *
      * @return True if the socket is closed, false otherwise.
      */
     public boolean isClosed() {
@@ -108,6 +116,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Closes the socket.
+     *
      * @throws IOException If an I/O error occurs when closing the socket.
      */
     @Override
@@ -119,6 +128,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Returns the hostname.
+     *
      * @return The hostname.
      */
     public String hostname() {
@@ -127,6 +137,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Returns the port.
+     *
      * @return The port.
      */
     public int port() {
@@ -135,6 +146,7 @@ public class Socket implements java.io.Closeable, Runnable {
 
     /**
      * Starts listening for messages.
+     *
      * @param listener The listener to be called when a message is received.
      */
     public void listen(Listener<String> listener) {
@@ -143,7 +155,7 @@ public class Socket implements java.io.Closeable, Runnable {
         if (this.thread != null) {
             return;
         }
-        
+
         this.thread = new Thread(this);
         this.thread.start();
     }
@@ -154,7 +166,7 @@ public class Socket implements java.io.Closeable, Runnable {
     public void ignore() {
         this.listener = null;
     }
-    
+
     @Override
     public void run() {
         try {
