@@ -1,7 +1,7 @@
 import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
-import models.player.Tokens;
+import models.player.TokensStack;
 import network.Client;
 import network.messages.GiveLogInAcceptedMessage;
 import network.messages.Message;
@@ -48,7 +48,7 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     @Override
-    public void tokens(Tokens tokens) {
+    public void tokens(TokensStack tokensStack) {
 
     }
 

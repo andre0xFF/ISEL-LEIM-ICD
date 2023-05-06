@@ -1,11 +1,10 @@
 import models.player.GamePlayView;
 import models.player.Token;
-import models.player.Tokens;
+import models.player.TokensStack;
 import network.Client;
 import network.Server;
 import network.messages.AskLogInMessage;
 import network.messages.DropTokenMessage;
-
 import network.messages.Message;
 import network.messages.PlayTurnMessage;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,7 +46,7 @@ class RemotePlayerTest {
 
     @Test
     void shouldAddToken() {
-        remotePlayer.tokens(new Tokens(remotePlayer.color()));
+        remotePlayer.tokens(new TokensStack(remotePlayer.color()));
 
         int actualTokens = remotePlayer.countTokens();
         int expectedTokens = actualTokens + 1;

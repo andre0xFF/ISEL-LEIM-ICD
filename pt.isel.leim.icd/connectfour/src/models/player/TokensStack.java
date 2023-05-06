@@ -6,14 +6,14 @@ import java.util.ArrayList;
 /**
  * A collection of tokens
  */
-public class Tokens {
+public class TokensStack {
 
     public static final int MAX_TOKENS = 21;
 
     private ArrayList<Token> tokens = new ArrayList<>();
     private Color color;
 
-    public Tokens(Color color) {
+    public TokensStack(Color color) {
         for (int i = 0; i < MAX_TOKENS; i++) {
             this.tokens.add(new Token(color));
         }

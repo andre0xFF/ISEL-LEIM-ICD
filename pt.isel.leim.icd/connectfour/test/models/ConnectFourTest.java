@@ -3,7 +3,7 @@ package models;
 import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
-import models.player.Tokens;
+import models.player.TokensStack;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class ConnectFourTest {
     void setUpEach() {
         player1 = new Player() {
             private GamePlayView gamePlayView;
-            private Tokens tokens = new Tokens(Color.RED);
+            private TokensStack tokensStack = new TokensStack(Color.RED);
 
             @Override
             public String username() {
@@ -30,27 +30,27 @@ class ConnectFourTest {
 
             @Override
             public void addToken(Token token) {
-                this.tokens.add(token);
+                this.tokensStack.add(token);
             }
 
             @Override
             public Token popToken() {
-                return this.tokens.pop();
+                return this.tokensStack.pop();
             }
 
             @Override
             public int countTokens() {
-                return this.tokens.size();
+                return this.tokensStack.size();
             }
 
             @Override
             public Color color() {
-                return this.tokens.color();
+                return this.tokensStack.color();
             }
 
             @Override
-            public void tokens(Tokens tokens) {
-                this.tokens = tokens;
+            public void tokens(TokensStack tokensStack) {
+                this.tokensStack = tokensStack;
             }
 
             @Override
@@ -67,7 +67,7 @@ class ConnectFourTest {
         player2 = new Player() {
 
             private GamePlayView gamePlayView;
-            private Tokens tokens = new Tokens(Color.BLUE);
+            private TokensStack tokensStack = new TokensStack(Color.BLUE);
 
             @Override
             public String username() {
@@ -76,27 +76,27 @@ class ConnectFourTest {
 
             @Override
             public void addToken(Token token) {
-                this.tokens.add(token);
+                this.tokensStack.add(token);
             }
 
             @Override
             public Token popToken() {
-                return this.tokens.pop();
+                return this.tokensStack.pop();
             }
 
             @Override
             public int countTokens() {
-                return this.tokens.size();
+                return this.tokensStack.size();
             }
 
             @Override
             public Color color() {
-                return this.tokens.color();
+                return this.tokensStack.color();
             }
 
             @Override
-            public void tokens(Tokens tokens) {
-                this.tokens = tokens;
+            public void tokens(TokensStack tokensStack) {
+                this.tokensStack = tokensStack;
             }
 
             @Override

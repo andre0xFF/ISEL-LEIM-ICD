@@ -1,7 +1,7 @@
 import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
-import models.player.Tokens;
+import models.player.TokensStack;
 import network.Client;
 import network.messages.AskLogInMessage;
 import network.messages.DropTokenMessage;
@@ -21,7 +21,7 @@ public class RemotePlayer implements Listener<Message>, Player {
 
     private GamePlayView gamePlayView;
     private final Client client;
-    private Tokens tokens;
+    private TokensStack tokensStack;
     private Boolean isLogged = false;
     private String username;
 
@@ -29,7 +29,7 @@ public class RemotePlayer implements Listener<Message>, Player {
         client.listen(this);
 
         this.client = client;
-        this.tokens = new Tokens(
+        this.tokensStack = new TokensStack(
                 new Color(
                         new Random().nextInt(256),
                         new Random().nextInt(256),
@@ -55,7 +55,7 @@ public class RemotePlayer implements Listener<Message>, Player {
      */
     @Override
     public void addToken(Token token) {
-        this.tokens.add(token);
+        this.tokensStack.add(token);
     }
 
     /**
@@ -65,7 +65,7 @@ public class RemotePlayer implements Listener<Message>, Player {
      */
     @Override
     public Token popToken() {
-        return this.tokens.pop();
+        return this.tokensStack.pop();
     }
 
     /**
@@ -75,7 +75,7 @@ public class RemotePlayer implements Listener<Message>, Player {
      */
     @Override
     public int countTokens() {
-        return this.tokens.size();
+        return this.tokensStack.size();
     }
 
     /**
@@ -85,7 +85,7 @@ public class RemotePlayer implements Listener<Message>, Player {
      */
     @Override
     public Color color() {
-        return this.tokens.color();
+        return this.tokensStack.color();
     }
 
     /**
@@ -103,12 +103,12 @@ public class RemotePlayer implements Listener<Message>, Player {
     /**
      * Sets the player's tokens list
      *
-     * @param tokens the tokens list
+     * @param tokensStack the tokens list
      */
     @Override
-    public void tokens(Tokens tokens) {
-        this.tokens.clear();
-        this.tokens = tokens;
+    public void tokens(TokensStack tokensStack) {
+        this.tokensStack.clear();
+        this.tokensStack = tokensStack;
     }
 
     @Override

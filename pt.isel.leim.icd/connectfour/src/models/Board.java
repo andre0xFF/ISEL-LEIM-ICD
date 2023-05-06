@@ -68,7 +68,21 @@ public class Board {
         return totalColumns;
     }
 
+    /**
+     * Returns whether the board is full or not.
+     *
+     * @return True if the board is full, false if not.
+     */
     public boolean isFull() {
         return tokenCount == totalRows * totalColumns;
+    }
+
+    /**
+     * Returns whether the board is empty or not.
+     *
+     * @return True if the board is empty, false if not.
+     */
+    public boolean isEmpty() {
+        return tokenCount == 0;
     }
 }

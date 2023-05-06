@@ -45,9 +45,9 @@ public interface Player {
     /**
      * Sets the player's tokens list
      *
-     * @param tokens the tokens list
+     * @param tokensStack the tokens list
      */
-    void tokens(Tokens tokens);
+    void tokens(TokensStack tokensStack);
 
     /**
      * Plays the player's turn
