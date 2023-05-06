@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class ConnectFourPresenter implements ActionListener {
     private ConnectFourView view;
@@ -25,7 +26,6 @@ public class ConnectFourPresenter implements ActionListener {
             // Navigate from Start Menu to Log In Menu
             if (e.getSource().equals(this.view.startLoginButton())) {
                 this.view.connectFourLogin();
-
             }
 
             // Navigate from SignUp Menu back to Starting Menu
@@ -54,33 +54,70 @@ public class ConnectFourPresenter implements ActionListener {
             // SignUp Events
 
             if(e.getSource().equals(this.view.signSubmitButton())){
-                System.out.println("test");
-                BufferedImage image = PhotoManager.downloadImage(this.view.signUpPictureField().getText());
-                image = PhotoManager.resizeImage(image, 60, 60);
 
-                this.model.signUp(
-                        PhotoManager.encodeImage(image),
-                        this.view.signUserNameField().getText(),
-                        this.view.signPasswordField().getPassword(),
-                        this.view.profEditNationalityField().getText(),
-                        Integer.parseInt(this.view.signAgeField().getText())
-                );
+                BufferedImage image = null;
+                
+                try {
+                    int convertAge = Integer.parseInt(this.view.signAgeField().getText());
 
+                    image = PhotoManager.downloadImage(this.view.signUpPictureField().getText());
+                    image = PhotoManager.resizeImage(image, 60, 60);
+
+                    try{
+                        this.model.signUp(
+                                PhotoManager.encodeImage(image),
+                                this.view.signUserNameField().getText(),
+                                this.view.signPasswordField().getPassword(),
+                                this.view.signNationalityField().getText(),
+                                convertAge
+                        );
+                    }catch (SAXException exception){
+                        this.view.setSignUpDisplayError("Invalid Input");
+                    }
+
+                }catch (NumberFormatException exception){
+                    this.view.setSignUpDisplayError("Invalid Age format");
+
+                }catch (MalformedURLException exception){
+                    this.view.setSignUpDisplayError("Invalid URL");
+                }
             }
+
 
             // Profile Events
             if (e.getSource().equals(this.view.profEditSubmitButton())) {
-                this.model.updateProfile(
-                        //TODO validate nationality input?
-                        "image",
-                        this.view.profEditUserNameField().getText(),
-                        this.view.profEditPasswordField().getPassword(),
-                        this.view.profEditNationalityField().getText(),
-                        Integer.parseInt(this.view.profEditAgeField().getText())
-                );
+
+
+                BufferedImage image = null;
+
+                try {
+                    int convertAge = Integer.parseInt(this.view.profEditAgeField().getText());
+
+                    image = PhotoManager.downloadImage(this.view.profileEditPicture().getText());
+                    image = PhotoManager.resizeImage(image, 60, 60);
+
+                    try{
+                        this.model.updateProfile(
+                                PhotoManager.encodeImage(image),
+                                this.view.profEditUserNameField().getText(),
+                                this.view.profEditPasswordField().getPassword(),
+                                this.view.profEditNationalityField().getText(),
+                                convertAge
+                        );
+                    }catch (SAXException exception){
+                        this.view.setProfileEditDisplayError("Invalid Input");
+                    }
+
+                }catch (NumberFormatException exception){
+                    this.view.setProfileEditDisplayError("Invalid Age format");
+
+                }catch (MalformedURLException exception){
+                    System.out.print(exception.getMessage());
+                    this.view.setProfileEditDisplayError("Invalid URL");
+                }
             }
 
-            if(e.getSource().equals(this.view.profDispEditButton())){
+                if(e.getSource().equals(this.view.profDispEditButton())){
                 this.view.connectFourProfileEdit();
 
             }
@@ -136,12 +173,12 @@ public class ConnectFourPresenter implements ActionListener {
             if (e.getSource().equals(this.view.newGame())) {
                 //TODO criar painel de espera da game queue
                 this.view.connectFourQueueGame();
-//                this.view.connectFourStartGame();
             }
 
             // Navigate from Game Over to Game Main Menu
             if(e.getSource().equals(this.view.gameOverExitButton())){
                 this.view.connectFourGameMenu();
+
             }
 
 
@@ -179,6 +216,32 @@ public class ConnectFourPresenter implements ActionListener {
 //        if (e.getSource().equals(view.dropTokenButton())) {
 //            model.dropToken(view.column());
 //        }
+    }
+
+
+    public void displayLogInError(String errorMsg){
+        this.view.setLoginDisplayError(errorMsg);
+    }
+
+    public void displaySignUpError(String errorMsg){
+
+        this.view.setSignUpDisplayError(errorMsg);
+    }
+
+    public void displayProfileDisplayError(String errorMsg){
+        this.view.setProfileDisplayError(errorMsg);
+    }
+
+    public void displayProfileEditError(String errorMsg){
+        this.view.setProfileEditDisplayError(errorMsg);
+    }
+
+    public void displayGameStatsError(String errorMsg){
+        this.view.setGameStatsDisplayError(errorMsg);
+    }
+
+    public void displayGameBoardError(String errorMsg){
+        this.view.setGameBoardDisplayError(errorMsg);
     }
 
 

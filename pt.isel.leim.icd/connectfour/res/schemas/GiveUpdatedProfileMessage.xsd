@@ -4,18 +4,17 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
+    <xs:include schemaLocation="MessageFieldTypes.xsd"/>
 
     <xs:element name="GiveUpdatedProfileMessage" type="GiveUpdatedProfileMessageType"/>
 
     <xs:complexType name="GiveUpdatedProfileMessageType">
         <xs:sequence>
             <xs:element name="image" type="xs:string"/>
-            <xs:element name="username" type="xs:string"/>
-            <xs:element name="password" type="xs:string"/>
-            <xs:element name="nationality" type="xs:string"/>
-            <xs:element name="age" type="xs:integer"/>
+            <xs:element name="username" type="usernameType"/>
+            <xs:element name="nationality" type="nationalityType"/>
+            <xs:element name="age" type="ageType"/>
         </xs:sequence>
     </xs:complexType>
-
 
 </xs:schema>

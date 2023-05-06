@@ -12,15 +12,13 @@ import java.util.Base64;
 public class PhotoManager {
 
 
-    public static BufferedImage downloadImage(String sourceUrl){
+    public static BufferedImage downloadImage(String sourceUrl) throws IOException{
         BufferedImage originalImage = null;
-        try {
+
             URL imageUrl = new URL(sourceUrl);
             InputStream inputStream = imageUrl.openStream();
             originalImage = ImageIO.read(inputStream);
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+
         return originalImage;
     }
 

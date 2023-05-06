@@ -8,7 +8,11 @@
     <xs:element name="GiveLoginAcceptedMessage" type="GiveLoginAcceptedMessageType">
     </xs:element>
 
-    <xs:complexType name="GiveLoginAcceptedMessageType"/>
+    <xs:complexType name="GiveLoginAcceptedMessageType">
+        <xs:sequence>
+            <xs:element name="authenticated" type="xs:boolean"/>
+        </xs:sequence>
+    </xs:complexType>
 
 
 </xs:schema>

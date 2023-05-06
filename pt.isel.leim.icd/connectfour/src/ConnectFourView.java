@@ -1,9 +1,11 @@
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.text.NumberFormat;
 
 public class ConnectFourView {
 
@@ -45,6 +47,11 @@ public class ConnectFourView {
     private JPanel gameHistoryPanel;
     private JPanel gameMenuPanel;
     private JPanel startingMenuPanel;
+
+    private JLabel displayError;
+    private JLabel profilePicture;
+
+    private JTextField profEditPictureField;
 
 
     // Starting Menu
@@ -94,6 +101,12 @@ public class ConnectFourView {
     private JLabel signUpDisplayError;
     private JLabel authDisplayError;
     private JLabel gameStatsDisplayError;
+    private JLabel boardErrorDisplay;
+
+    private NumberFormat numberFormat;
+
+
+    private JFormattedTextField intFieldTest;
 
 
     public ConnectFourView(int rows, int columns) {
@@ -109,6 +122,24 @@ public class ConnectFourView {
         createGameOverPanel();
         createDispProfilePanel();
         createQueuePanel();
+
+
+        numberFormat = NumberFormat.getIntegerInstance();
+        NumberFormatter integerFormatter = new NumberFormatter(numberFormat);
+        integerFormatter.setValueClass(Integer.class);
+        integerFormatter.setAllowsInvalid(false);
+        integerFormatter.setCommitsOnValidEdit(true);
+
+
+
+
+
+
+
+
+
+
+
 
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
@@ -188,28 +219,10 @@ public class ConnectFourView {
         profileDisplayPanel.add(profDispUserNameLabel, constraints);
 
 
-        JLabel passLabel = new JLabel("Password");
-
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.anchor = GridBagConstraints.WEST;
-
-        profileDisplayPanel.add(passLabel, constraints);
-
-
-        profDispPasswordLabel = new JLabel();
-
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        constraints.anchor = GridBagConstraints.EAST;
-
-        profileDisplayPanel.add(profDispPasswordLabel, constraints);
-
-
         JLabel nationalityLabel = new JLabel("Nationality");
 
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.WEST;
 
         profileDisplayPanel.add(nationalityLabel, constraints);
@@ -218,7 +231,7 @@ public class ConnectFourView {
         profDispNationalityLabel = new JLabel();
 
         constraints.gridx = 1;
-        constraints.gridy = 4;
+        constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.EAST;
 
         profileDisplayPanel.add(profDispNationalityLabel, constraints);
@@ -226,7 +239,7 @@ public class ConnectFourView {
         JLabel ageLabel = new JLabel("Age");
 
         constraints.gridx = 0;
-        constraints.gridy = 5;
+        constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.WEST;
 
         profileDisplayPanel.add(ageLabel, constraints);
@@ -235,7 +248,7 @@ public class ConnectFourView {
         profDispAgeLabel = new JLabel();
 
         constraints.gridx = 1;
-        constraints.gridy = 5;
+        constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.EAST;
 
         profileDisplayPanel.add(profDispAgeLabel, constraints);
@@ -244,7 +257,7 @@ public class ConnectFourView {
         profDispBackButton = new JButton("Back");
 
         constraints.gridx = 0;
-        constraints.gridy = 7;
+        constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.WEST;
 
         profileDisplayPanel.add(profDispBackButton, constraints);
@@ -253,7 +266,7 @@ public class ConnectFourView {
         profDispEditButton= new JButton("Edit");
 
         constraints.gridx = 1;
-        constraints.gridy = 7;
+        constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.EAST;
 
         profileDisplayPanel.add(profDispEditButton, constraints);
@@ -262,11 +275,10 @@ public class ConnectFourView {
 
 
         constraints.gridx = 0;
-        constraints.gridy = 6;
+        constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
         profileDisplayPanel.add(profDisplayError, constraints);
-
 
 
         this.profileDisplayPanel = profileDisplayPanel;
@@ -710,10 +722,10 @@ public class ConnectFourView {
         southContainer.add(gameBoardBackButton);
 
 
-        JLabel boardErrorDisplayLabel = new JLabel("Error");
-        boardErrorDisplayLabel.setHorizontalAlignment(JLabel.CENTER);
+        boardErrorDisplay = new JLabel("Error");
+        boardErrorDisplay.setHorizontalAlignment(JLabel.CENTER);
 
-        southContainer.add(boardErrorDisplayLabel);
+        southContainer.add(boardErrorDisplay);
 
         container.add(playerOneInfoContainer, BorderLayout.WEST);
         container.add(playerTwoInfoContainer, BorderLayout.EAST);
@@ -725,7 +737,6 @@ public class ConnectFourView {
         container.add(boardTitleLabel, BorderLayout.NORTH);
 
         this.boardPanel = container;
-
     }
 
     public void createControlPanel(String currentPlayerName) {
@@ -838,7 +849,7 @@ public class ConnectFourView {
 
         constraints.insets.top = 10;
 
-        JLabel profilePicture = new JLabel("Image");
+        profilePicture = new JLabel("Image");
 
         constraints.gridx = 0;
         constraints.gridy = 1;
@@ -849,9 +860,9 @@ public class ConnectFourView {
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
 
-        signUpPictureField = new JTextField(10);
+        profEditPictureField = new JTextField(10);
 
-        profilePanel.add(signUpPictureField, constraints);
+        profilePanel.add(profEditPictureField, constraints);
         constraints.gridwidth = 1;
 
         JLabel nickLabel = new JLabel("Username");
@@ -914,7 +925,12 @@ public class ConnectFourView {
         profilePanel.add(ageLabel, constraints);
 
 
-        profEditAgeField = new JTextField(10);
+        profEditAgeField = new JFormattedTextField(numberFormat);
+        System.out.println("Test error");
+
+
+
+        profEditAgeField.setColumns(10);
 
         constraints.gridx = 1;
         constraints.gridy = 5;
@@ -941,6 +957,7 @@ public class ConnectFourView {
         profilePanel.add(profEditSubmitButton, constraints);
 
         profEditDisplayError = new JLabel("Error");
+        profEditDisplayError.setForeground(Color.red);
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -1137,6 +1154,12 @@ public class ConnectFourView {
     }
 
 
+
+    public JLabel getProfEditDisplayError(){
+        return this.profEditDisplayError;
+    }
+
+
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(8000);
 
@@ -1160,6 +1183,7 @@ public class ConnectFourView {
     }
 
 
+
     public JLabel gameOverLabel() {
         return this.gameOverMessageLabel;
     }
@@ -1167,6 +1191,7 @@ public class ConnectFourView {
     public JButton profDispEditButton() {
         return this.profDispEditButton;
     }
+
 
     public void connectFourProfileEdit() {
         this.frame.getContentPane().removeAll();
@@ -1184,5 +1209,33 @@ public class ConnectFourView {
         this.frame.add(this.queuePanel, BorderLayout.CENTER);
         this.frame.repaint();
         this.frame.revalidate();
+    }
+
+    public void setSignUpDisplayError(String errorMsg) {
+        this.signUpDisplayError.setText(errorMsg);
+    }
+
+    public void setLoginDisplayError(String errorMsg){
+        this.authDisplayError.setText(errorMsg);
+    }
+
+    public void setProfileDisplayError(String errorMsg){
+        this.profDisplayError.setText(errorMsg);
+    }
+
+    public void setGameStatsDisplayError(String erroMsg){
+        this.gameStatsDisplayError.setText(erroMsg);
+    }
+
+    public void setGameBoardDisplayError(String erroMsg){
+        this.boardErrorDisplay.setText(erroMsg);
+    }
+
+    public void setProfileEditDisplayError(String errorMsg){
+        this.profEditDisplayError.setText(errorMsg);
+    }
+
+    public JTextField profileEditPicture() {
+        return this.profEditPictureField;
     }
 }
