@@ -1,0 +1,11 @@
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:simpleType name="ageType">
+        <xs:restriction base="xs:integer">
+            <xs:pattern value="\d{2}"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

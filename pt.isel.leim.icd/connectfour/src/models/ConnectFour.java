@@ -15,9 +15,8 @@ import static java.lang.Math.min;
 public class ConnectFour implements GamePlayView {
 
     private final Board board = new Board();
-    private final Player player1;
-    private final Player player2;
     private Player currentPlayer;
+    private Player otherPlayer;
     private Player winner;
 
     /**
@@ -30,11 +29,10 @@ public class ConnectFour implements GamePlayView {
         player1.gamePlayView(this);
         player2.gamePlayView(this);
 
-        this.player1 = player1;
-        this.player2 = player2;
         this.currentPlayer = player1;
+        this.otherPlayer = player2;
 
-        this.currentPlayer.playTurn();
+        this.currentPlayer.onPlayTurn();
     }
 
     /**
@@ -46,6 +44,7 @@ public class ConnectFour implements GamePlayView {
     @Override
     public boolean dropToken(int column) {
         if (isGameOver()) {
+            this.currentPlayer.onTokenNotDropped(column);
             return false;
         }
 
@@ -54,11 +53,12 @@ public class ConnectFour implements GamePlayView {
         try {
             row = this.board.dropToken(column, this.currentPlayer.popToken());
         } catch (RuntimeException e) {
+            this.currentPlayer.onTokenNotDropped(column);
             return false;
         }
 
-        // this.player1.token(row, column, this.board.getToken(row, column).color());
-        // this.player2.token(row, column, this.board.getToken(row, column).color());
+        this.currentPlayer.onTokenDropped(column, row, this.board.token(row, column).color());
+        this.otherPlayer.onTokenDropped(column, row, this.board.token(row, column).color());
 
         if (checkWin(row, column, this.currentPlayer)) {
             setWinner();
@@ -71,13 +71,20 @@ public class ConnectFour implements GamePlayView {
     }
 
     private void swapCurrentPlayer() {
-        this.currentPlayer = this.currentPlayer == this.player1 ? this.player2 : this.player1;
-        this.currentPlayer.playTurn();
+        this.currentPlayer.onWaitTurn();
+
+        Player temporaryPlayer = this.currentPlayer;
+        this.currentPlayer = this.otherPlayer;
+        this.otherPlayer = temporaryPlayer;
+
+        this.currentPlayer.onPlayTurn();
     }
 
     private void setWinner() {
         this.winner = this.currentPlayer;
-        // this.player1.winner(this.currentPlayer);
+
+        this.currentPlayer.onWin();
+        this.otherPlayer.onLoss();
     }
 
     private boolean checkWin(int row, int column, Player player) {
@@ -100,7 +107,7 @@ public class ConnectFour implements GamePlayView {
             return false;
         }
 
-        Token currentToken = board.getToken(row, column);
+        Token currentToken = board.token(row, column);
 
         if (currentToken == null || !currentToken.color().equals(playerColor)) {
             return false;
@@ -123,7 +130,7 @@ public class ConnectFour implements GamePlayView {
                 currentRow > max(row - 4, 1);
                 currentRow--
         ) {
-            Token currentToken = board.getToken(currentRow, column);
+            Token currentToken = board.token(currentRow, column);
 
             if (currentToken == null || !currentToken.color().equals(playerColor)) {
                 count = 0;
@@ -149,7 +156,7 @@ public class ConnectFour implements GamePlayView {
                 currentColumn < min(column + 4, board.totalColumns());
                 currentColumn++
         ) {
-            Token currentToken = board.getToken(row, currentColumn);
+            Token currentToken = board.token(row, currentColumn);
 
             if (currentToken == null || !currentToken.color().equals(playerColor)) {
                 count = 0;

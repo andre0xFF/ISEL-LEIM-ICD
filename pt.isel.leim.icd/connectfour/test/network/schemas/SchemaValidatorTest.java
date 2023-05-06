@@ -42,13 +42,13 @@ class SchemaValidatorTest {
     }
 
     @Test
-    void shouldValidateAskLogInMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskLogInMessage><username>Joao</username><password>1234</password></AskLogInMessage></Message>"));
+    void shouldValidateAskLoginMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><AskLoginMessage><username>Joao</username><password>1234</password></AskLoginMessage></Message>"));
     }
 
     @Test
-    void shouldValidateGiveLogInAcceptedMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveLogInAcceptedMessage/></Message>"));
+    void shouldValidateGiveLoginAcceptedMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveLoginResultMessage><authenticated>true</authenticated></GiveLoginResultMessage></Message>"));
     }
 
     @Test
@@ -58,7 +58,7 @@ class SchemaValidatorTest {
 
     @Test
     void shouldValidateGiveUpdatedProfileMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveUpdatedProfileMessage><image>abcd</image><username>Joao</username><password>12345</password><nationality>Portuguese</nationality><age>19</age></GiveUpdatedProfileMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><GiveUpdatedProfileMessage><image>abcd</image><username>Joao</username><nationality>Portuguese</nationality><age>19</age></GiveUpdatedProfileMessage></Message>"));
     }
 
     @Test
@@ -93,6 +93,21 @@ class SchemaValidatorTest {
 
     @Test
     void shouldValidatePlayTurnMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><PlayTurnMessage/></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnPlayTurnMessage/></Message>"));
+    }
+
+    @Test
+    void shouldValidateOnTokenDroppedMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnTokenDroppedMessage><column>1</column><row>1</row><color><red>255</red><green>0</green><blue>0</blue><alpha>255</alpha><rgb>-65536</rgb><colorSpace>whatever</colorSpace></color></OnTokenDroppedMessage></Message>"));
+    }
+
+    @Test
+    void shouldValidateOnTokenNotDropped() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnTokenNotDroppedMessage><column>1</column></OnTokenNotDroppedMessage></Message>"));
+    }
+
+    @Test
+    void shouldValidateOnWaitTurnMessage() {
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnWaitTurnMessage/></Message>"));
     }
 }

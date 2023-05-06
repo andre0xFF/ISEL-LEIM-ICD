@@ -50,9 +50,39 @@ public interface Player {
     void tokens(TokensStack tokensStack);
 
     /**
-     * Plays the player's turn
+     * Called when it's the player's turn
      */
-    void playTurn();
+    void onPlayTurn();
+
+    /**
+     * Called when it's the other player's turn
+     */
+    void onWaitTurn();
+
+    /**
+     * Called when the player won the game
+     */
+    void onWin();
+
+    /**
+     * Called when the player lost the game
+     */
+    void onLoss();
+
+    /**
+     * Called when the player dropped a token
+     *
+     * @param column the column where the token was dropped
+     * @param row    the row where the token was dropped
+     */
+    void onTokenDropped(int column, int row, Color color);
+
+    /**
+     * Called when the player dropped a token in a full column
+     *
+     * @param column the column where the player tried to drop the token
+     */
+    void onTokenNotDropped(int column);
 
     /**
      * Sets the game point view

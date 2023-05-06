@@ -20,21 +20,36 @@ import java.time.format.DateTimeFormatter;
 )
 @JsonSubTypes(
         {
-                @JsonSubTypes.Type(value = PingMessage.class, name = "PingMessage"),
-                @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage"),
-                @JsonSubTypes.Type(value = AskLoginMessage.class, name = "AskLoginMessage"),
-                @JsonSubTypes.Type(value = DropTokenMessage.class, name = "DropTokenMessage"),
+                @JsonSubTypes.Type(value = PingMessage.class),
+                @JsonSubTypes.Type(value = PongMessage.class),
 
-                @JsonSubTypes.Type(value = AskGamesStatsMessage.class, name = "AskGamesStatsMessage"),
-                @JsonSubTypes.Type(value = PlayTurnMessage.class, name = "PlayTurnMessage"),
-                @JsonSubTypes.Type(value = AskSignUpMessage.class, name = "AskSignUpMessage"),
+                @JsonSubTypes.Type(value = DropTokenMessage.class),
+                @JsonSubTypes.Type(value = OnTokenDroppedMessage.class),
+                @JsonSubTypes.Type(value = OnTokenNotDroppedMessage.class),
 
-                @JsonSubTypes.Type(value = GiveLoginAcceptedMessage.class, name = "GiveLoginAcceptedMessage"),
-                @JsonSubTypes.Type(value = AskUpdateProfileMessage.class, name = "AskUpdateProfileMessage"),
-                @JsonSubTypes.Type(value = GiveGamesStatsMessage.class, name = "GiveGamesStatsMessage"),
-                @JsonSubTypes.Type(value = GameOverMessage.class, name = "GameOverMessage"),
-                @JsonSubTypes.Type(value = AskQueueGameMessage.class, name = "AskQueueGameMessage"),
-                @JsonSubTypes.Type(value = GiveOpponentFoundMessage.class, name = "GiveOpponentFoundMessage")
+                @JsonSubTypes.Type(value = OnPlayTurnMessage.class),
+                @JsonSubTypes.Type(value = OnWaitTurnMessage.class),
+
+                @JsonSubTypes.Type(value = OnWinMessage.class),
+                @JsonSubTypes.Type(value = OnLossMessage.class),
+
+                @JsonSubTypes.Type(value = AskSignUpMessage.class),
+                @JsonSubTypes.Type(value = GiveSignUpAcceptedMessage.class),
+
+                @JsonSubTypes.Type(value = AskLoginMessage.class),
+                @JsonSubTypes.Type(value = GiveLoginResultMessage.class),
+
+                @JsonSubTypes.Type(value = AskUpdateProfileMessage.class),
+                @JsonSubTypes.Type(value = GiveUpdatedProfileMessage.class),
+
+                @JsonSubTypes.Type(value = AskGamesStatsMessage.class),
+                @JsonSubTypes.Type(value = GiveGamesStatsMessage.class),
+
+                @JsonSubTypes.Type(value = AskQueueGameMessage.class),
+                @JsonSubTypes.Type(value = AskQueueGameCancelMessage.class),
+                @JsonSubTypes.Type(value = GiveOpponentFoundMessage.class),
+
+                @JsonSubTypes.Type(value = GameOverMessage.class),
         }
 )
 @JsonRootName("Message")
@@ -64,9 +79,8 @@ public interface Message {
                     new LocalDateTimeSerializer(formatter)
             );
 
-            xmlMapper.registerModule(module);
+            this.xmlMapper.registerModule(module);
         }
-
 
         /**
          * Deserialize a message from XML.
@@ -77,7 +91,7 @@ public interface Message {
          */
         @Override
         public Message deserialize(String content) throws JsonProcessingException {
-            return xmlMapper.readValue(content, Message.class);
+            return this.xmlMapper.readValue(content, Message.class);
         }
 
         /**
@@ -89,7 +103,7 @@ public interface Message {
          */
         @Override
         public String serialize(Message message) throws JsonProcessingException {
-            return xmlMapper.writeValueAsString(message);
+            return this.xmlMapper.writeValueAsString(message);
         }
     }
 }

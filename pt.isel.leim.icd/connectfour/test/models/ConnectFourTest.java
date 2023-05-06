@@ -54,7 +54,32 @@ class ConnectFourTest {
             }
 
             @Override
-            public void playTurn() {
+            public void onPlayTurn() {
+
+            }
+
+            @Override
+            public void onWaitTurn() {
+
+            }
+
+            @Override
+            public void onWin() {
+
+            }
+
+            @Override
+            public void onLoss() {
+
+            }
+
+            @Override
+            public void onTokenDropped(int column, int row, Color color) {
+
+            }
+
+            @Override
+            public void onTokenNotDropped(int column) {
 
             }
 
@@ -100,7 +125,32 @@ class ConnectFourTest {
             }
 
             @Override
-            public void playTurn() {
+            public void onPlayTurn() {
+
+            }
+
+            @Override
+            public void onWaitTurn() {
+
+            }
+
+            @Override
+            public void onWin() {
+
+            }
+
+            @Override
+            public void onLoss() {
+
+            }
+
+            @Override
+            public void onTokenDropped(int column, int row, Color color) {
+
+            }
+
+            @Override
+            public void onTokenNotDropped(int column) {
 
             }
 

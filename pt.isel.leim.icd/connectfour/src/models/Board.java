@@ -43,7 +43,7 @@ public class Board {
      * @param column The column of the token in a range of 1 to 7.
      * @return The token at the specified row and column.
      */
-    Token getToken(int row, int column) {
+    Token token(int row, int column) {
         row -= 1;
         column -= 1;
 

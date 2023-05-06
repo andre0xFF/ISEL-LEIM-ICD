@@ -22,6 +22,34 @@ public class MessageTest {
 
 
     @Test
+    void shouldSerializeOnLossMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new OnLossMessage());
+
+        assertEquals("<Message><OnLossMessage/></Message>", actualContent);
+    }
+
+    @Test
+    void shouldSerializeOnWinMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new OnWinMessage());
+
+        assertEquals("<Message><OnWinMessage/></Message>", actualContent);
+    }
+
+    @Test
+    void shouldSerializeOnPlayTurnMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new OnPlayTurnMessage());
+
+        assertEquals("<Message><OnPlayTurnMessage/></Message>", actualContent);
+    }
+
+    @Test
+    void shouldSerializeOnWaitTurnMessageAsXML() throws JsonProcessingException {
+        String actualContent = XMLSerializer.serialize(new OnWaitTurnMessage());
+
+        assertEquals("<Message><OnWaitTurnMessage/></Message>", actualContent);
+    }
+
+    @Test
     void shouldSerializePingMessageAsXML() throws JsonProcessingException {
         String actualContent = XMLSerializer.serialize(new PingMessage(dateTime));
 
@@ -29,11 +57,11 @@ public class MessageTest {
     }
 
     @Test
-    void shouldSerializeAskLogInMessageAsXML() throws JsonProcessingException {
+    void shouldSerializeAskLoginMessageAsXML() throws JsonProcessingException {
         char[] pass = {'1', '2', '3', '4'};
-        String actualContent = XMLSerializer.serialize(new AskLogInMessage("xpto", pass));
+        String actualContent = XMLSerializer.serialize(new AskLoginMessage("xpto", pass));
 
-        String expectedContent = "<Message><AskLogInMessage><username>xpto</username><password>1234</password></AskLogInMessage></Message>";
+        String expectedContent = "<Message><AskLoginMessage><username>xpto</username><password>1234</password></AskLoginMessage></Message>";
 
         assertEquals(expectedContent, actualContent);
     }

@@ -4,7 +4,9 @@
         xmlns:xs="http://www.w3.org/2001/XMLSchema"
         elementFormDefault="qualified">
 
-    <xs:include schemaLocation="MessageFieldTypes.xsd"/>
+    <xs:include schemaLocation="types/Username.xsd"/>
+    <xs:include schemaLocation="types/Nationality.xsd"/>
+    <xs:include schemaLocation="types/Age.xsd"/>
 
     <xs:element name="GiveUpdatedProfileMessage" type="GiveUpdatedProfileMessageType"/>
 

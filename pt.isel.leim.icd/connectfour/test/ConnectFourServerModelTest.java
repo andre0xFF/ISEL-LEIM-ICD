@@ -1,5 +1,5 @@
 import network.Client;
-import network.messages.AskLogInMessage;
+import network.messages.AskLoginMessage;
 import network.messages.PingMessageTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -82,19 +82,16 @@ class ConnectFourServerModelTest {
     void shouldLoginPlayer() throws IOException, SAXException, InterruptedException {
         Client client = new Client("localhost", this.model.port());
 
-        String actualUsername = "player1";
-        String expectedUsername = "player1";
-
         client.write(
-                new AskLogInMessage(
-                        actualUsername,
-                        new char[] {'p', 'a', 's', 's'}
+                new AskLoginMessage(
+                        "janesmith",
+                        new char[]{'p', 'a', 's', 's', '4', '5', '6'}
                 )
         );
 
         Thread.sleep(ConnectFourServerModelTest.SLEEP_TIME);
 
-        assertEquals(this.model.loggedPlayersSize(), 1);
-        assertNotNull(this.model.player(expectedUsername));
+        assertEquals(1, this.model.loggedPlayersSize());
+        assertNotNull(this.model.player("janesmith"));
     }
 }

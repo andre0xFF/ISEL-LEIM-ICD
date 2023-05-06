@@ -38,7 +38,7 @@ class BoardTest {
         int column = 1;
 
         board.dropToken(column, token);
-        assertEquals(token, board.getToken(board.totalRows(), column));
+        assertEquals(token, board.token(board.totalRows(), column));
     }
 
     @Test
@@ -49,6 +49,6 @@ class BoardTest {
 
         board.dropToken(column, token);
 
-        assertEquals(token, board.getToken(board.totalRows(), column));
+        assertEquals(token, board.token(board.totalRows(), column));
     }
 }

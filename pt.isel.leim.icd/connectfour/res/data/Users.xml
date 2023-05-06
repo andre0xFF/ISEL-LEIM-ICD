@@ -1,0 +1,7 @@
+<Model type="Users">
+    <usersNpasswords>
+        <janesmith>pass456</janesmith>
+        <johndoe>abc123</johndoe>
+        <bobsmith>qwerty</bobsmith>
+    </usersNpasswords>
+</Model>

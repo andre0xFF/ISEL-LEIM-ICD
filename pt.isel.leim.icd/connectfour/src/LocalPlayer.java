@@ -3,7 +3,7 @@ import models.player.Player;
 import models.player.Token;
 import models.player.TokensStack;
 import network.Client;
-import network.messages.GiveLoginAcceptedMessage;
+import network.messages.GiveLoginResultMessage;
 import network.messages.Message;
 import network.socket.Listener;
 
@@ -53,7 +53,32 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     @Override
-    public void playTurn() {
+    public void onPlayTurn() {
+
+    }
+
+    @Override
+    public void onWaitTurn() {
+
+    }
+
+    @Override
+    public void onWin() {
+
+    }
+
+    @Override
+    public void onLoss() {
+
+    }
+
+    @Override
+    public void onTokenDropped(int column, int row, Color color) {
+
+    }
+
+    @Override
+    public void onTokenNotDropped(int column) {
 
     }
 
@@ -63,20 +88,20 @@ public class LocalPlayer implements Listener<Message>, Player {
 
     }
 
-    public boolean isConnected(){
+    public boolean isConnected() {
         return this.client.isConnected();
     }
 
     @Override
     public void onMessage(Message message) {
 
-        if (message instanceof GiveLoginAcceptedMessage logInMessage) {
+        if (message instanceof GiveLoginResultMessage logInMessage) {
             onMessage(logInMessage);
         }
 
     }
 
-    private void onMessage(GiveLoginAcceptedMessage message) {
+    private void onMessage(GiveLoginResultMessage message) {
 
     }
 }

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:include schemaLocation="types/Color.xsd"/>
+
+    <xs:element name="OnTokenDroppedMessage" type="OnTokenDroppedMessageType"/>
+
+    <xs:complexType name="OnTokenDroppedMessageType">
+        <xs:sequence>
+            <xs:element name="column" type="xs:int"/>
+            <xs:element name="row" type="xs:int"/>
+            <xs:element name="color" type="ColorType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

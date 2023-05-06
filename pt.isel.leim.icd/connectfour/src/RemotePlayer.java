@@ -1,12 +1,11 @@
+import models.Model;
+import models.Users;
 import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
 import models.player.TokensStack;
 import network.Client;
-import network.messages.AskLoginMessage;
-import network.messages.DropTokenMessage;
-import network.messages.Message;
-import network.messages.PlayTurnMessage;
+import network.messages.*;
 import network.socket.Listener;
 import org.xml.sax.SAXException;
 
@@ -22,8 +21,9 @@ public class RemotePlayer implements Listener<Message>, Player {
     private GamePlayView gamePlayView;
     private final Client client;
     private TokensStack tokensStack;
-    private Boolean isLogged = false;
+    private Boolean authenticated = false;
     private String username;
+    private final Model.Database database = new Model.Database();
 
     public RemotePlayer(Client client) {
         client.listen(this);
@@ -89,18 +89,6 @@ public class RemotePlayer implements Listener<Message>, Player {
     }
 
     /**
-     * Sends a message to the client to drop a token
-     */
-    @Override
-    public void playTurn() {
-        try {
-            this.client.write(new PlayTurnMessage());
-        } catch (IOException | SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
      * Sets the player's tokens list
      *
      * @param tokensStack the tokens list
@@ -116,6 +104,14 @@ public class RemotePlayer implements Listener<Message>, Player {
         this.gamePlayView = gamePlayView;
     }
 
+    public Boolean authenticated() {
+        return this.authenticated;
+    }
+
+    public boolean isConnected() {
+        return this.client.isConnected();
+    }
+
     @Override
     public void onMessage(Message message) {
         if (message instanceof DropTokenMessage dropTokenMessage) {
@@ -129,18 +125,110 @@ public class RemotePlayer implements Listener<Message>, Player {
         this.gamePlayView.dropToken(message.column());
     }
 
-    private void onMessage(AskLoginMessage message) {
-        // TODO: Validate username and password
+    private void onMessage(AskLoginMessage askLoginMessage) {
+        boolean authenticated = login(askLoginMessage.username(), askLoginMessage.password());
 
-        this.username = message.username();
-        this.isLogged = true;
+        try {
+            this.client.write(new GiveLoginResultMessage(authenticated));
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public Boolean isLogged() {
-        return this.isLogged;
+    private boolean login(String username, char[] password) {
+        Users users;
+
+        try {
+            users = (Users) this.database.load(Users.class);
+        } catch (IOException e) {
+            return false;
+        }
+
+        this.authenticated = users.authenticate(username, password);
+
+        if (!this.authenticated) {
+            return false;
+        }
+
+        this.username = username;
+
+        return true;
     }
 
-    public boolean isConnected() {
-        return this.client.isConnected();
+    /**
+     * Called when it's the player's turn
+     */
+    @Override
+    public void onPlayTurn() {
+        try {
+            this.client.write(new OnPlayTurnMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when it's the other player's turn
+     */
+    @Override
+    public void onWaitTurn() {
+        try {
+            this.client.write(new OnWaitTurnMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when the player won the game
+     */
+    @Override
+    public void onWin() {
+        try {
+            this.client.write(new OnWinMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when the player lost the game
+     */
+    @Override
+    public void onLoss() {
+        try {
+            this.client.write(new OnLossMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when the player dropped a token
+     *
+     * @param column the column where the token was dropped
+     * @param row    the row where the token was dropped
+     */
+    @Override
+    public void onTokenDropped(int column, int row, Color color) {
+        try {
+            this.client.write(new OnTokenDroppedMessage(column, row, color));
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when the player dropped a token in a full column
+     *
+     * @param column the column where the player tried to drop the token
+     */
+    @Override
+    public void onTokenNotDropped(int column) {
+        try {
+            this.client.write(new OnTokenNotDroppedMessage(column));
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

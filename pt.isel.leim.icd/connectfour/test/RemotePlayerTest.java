@@ -3,18 +3,14 @@ import models.player.Token;
 import models.player.TokensStack;
 import network.Client;
 import network.Server;
-import network.messages.AskLogInMessage;
-import network.messages.DropTokenMessage;
-import network.messages.Message;
-import network.messages.PlayTurnMessage;
+import network.messages.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RemotePlayerTest {
 
@@ -57,14 +53,24 @@ class RemotePlayerTest {
     }
 
     @Test
-    void shouldLoginWhenOnMessage() {
-        remotePlayer.onMessage(new AskLogInMessage(
-                "johndoe",
-                new char[]{'a', 'b', 'c', '1', '2', '3'})
+    void shouldLoginWhenOnMessage() throws IOException, SAXException {
+        remotePlayer.onMessage(
+                new AskLoginMessage(
+                        "johndoe",
+                        new char[]{'a', 'b', 'c', '1', '2', '3'}
+                )
         );
 
-        assertTrue(remotePlayer.isLogged());
+        assertTrue(remotePlayer.authenticated());
         assertEquals("johndoe", remotePlayer.username());
+
+        Message message = this.client.read();
+
+        assertInstanceOf(GiveLoginResultMessage.class, message);
+
+        GiveLoginResultMessage giveLoginResultMessage = (GiveLoginResultMessage) message;
+
+        assertTrue(giveLoginResultMessage.authenticated());
     }
 
     @Test
@@ -76,10 +82,10 @@ class RemotePlayerTest {
 
     @Test
     void shouldPlayTurnWhenOnMessage() throws IOException, SAXException {
-        this.remotePlayer.playTurn();
+        this.remotePlayer.onPlayTurn();
 
         Message message = this.client.read();
 
-        assertEquals(PlayTurnMessage.class, message.getClass());
+        assertEquals(OnPlayTurnMessage.class, message.getClass());
     }
 }
