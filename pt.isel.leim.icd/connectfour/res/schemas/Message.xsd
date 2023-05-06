@@ -7,12 +7,6 @@
     <xs:include schemaLocation="PongMessage.xsd"/>
     <xs:include schemaLocation="PingMessage.xsd"/>
 
-
-
-
-
-
-
     <xs:include schemaLocation="AskSignUpMessage.xsd"/>
     <xs:include schemaLocation="GiveSignUpAcceptedMessage.xsd"/>
 
@@ -29,17 +23,10 @@
     <xs:include schemaLocation="AskQueueGameCancelMessage.xsd"/>
     <xs:include schemaLocation="GiveOpponentFoundMessage.xsd"/>
 
-
-
     <xs:include schemaLocation="DropTokenMessage.xsd"/>
     <xs:include schemaLocation="PlayTurnMessage.xsd"/>
 
-
-
-
     <xs:include schemaLocation="GameOverMessage.xsd"/>
-
-
 
     <xs:element name="Message" type="MessageTypes"/>
 

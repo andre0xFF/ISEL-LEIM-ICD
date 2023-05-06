@@ -10,7 +10,7 @@
         <xs:sequence>
             <xs:element name="id" type="xs:string"/>
             <xs:element name="result" type="xs:string"/>
-            <xs:element name="time" type="xs:time"/>
+            <xs:element name="dateTime" type="xs:dateTime"/>
         </xs:sequence>
     </xs:complexType>
 
