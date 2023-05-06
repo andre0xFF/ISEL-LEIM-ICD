@@ -1,6 +1,5 @@
 package network.messages;
 
-import network.messages.PingMessage;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

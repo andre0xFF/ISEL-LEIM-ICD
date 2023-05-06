@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Time;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,19 +30,27 @@ public class MessageTest {
 
     @Test
     void shouldSerializeAskLogInMessageAsXML() throws JsonProcessingException {
-        char[] pass ={'1','2','3','4'};
-        String actualContent = XMLSerializer.serialize(new AskLogInMessage("xpto",pass));
+        char[] pass = {'1', '2', '3', '4'};
+        String actualContent = XMLSerializer.serialize(new AskLogInMessage("xpto", pass));
 
-        assertEquals(MessagesTestContent.getAskLogInMessageContent("xpto",pass), actualContent);
+        String expectedContent = "<Message><AskLogInMessage><username>xpto</username><password>1234</password></AskLogInMessage></Message>";
+
+        assertEquals(expectedContent, actualContent);
     }
 
     @Test
     void shouldSerializeGiveGamesStatsMessageAsXML() throws JsonProcessingException {
-        Time time = new Time(new Date().getTime());
-
         GiveGamesStatsMessage.GameStat[] stats = {
-                new GiveGamesStatsMessage.GameStat("Gamexpto", GameResult.WIN, time.toString()),
-                new GiveGamesStatsMessage.GameStat("War2", GameResult.LOSS, time.toString())
+                new GiveGamesStatsMessage.GameStat(
+                        "Gamexpto",
+                        GameResult.WIN,
+                        LocalDateTime.of(2021, 5, 18, 15, 0, 0)
+                ),
+                new GiveGamesStatsMessage.GameStat(
+                        "War2",
+                        GameResult.LOSS,
+                        LocalDateTime.of(2021, 5, 19, 15, 0, 0)
+                )
         };
 
         String actualContent = XMLSerializer.serialize(
@@ -53,7 +59,9 @@ public class MessageTest {
                 )
         );
 
-        assertEquals(MessagesTestContent.getGiveGamesStatsMessageContent(stats), actualContent);
+        String expectedContent = "<Message><GiveGamesStatsMessage><GamesStats><GameStat><id>Gamexpto</id><result>WIN</result><dateTime>2021-05-18T15:00:00</dateTime></GameStat><GameStat><id>War2</id><result>LOSS</result><dateTime>2021-05-19T15:00:00</dateTime></GameStat></GamesStats></GiveGamesStatsMessage></Message>";
+
+        assertEquals(expectedContent, actualContent);
     }
 
     @Test

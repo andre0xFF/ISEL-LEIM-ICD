@@ -1,9 +1,7 @@
 import models.player.GamePlayView;
 import network.Client;
 import network.Server;
-import network.messages.GiveLogInAcceptedMessage;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
@@ -14,8 +12,6 @@ class LocalPlayerTest {
     private LocalPlayer localPlayer;
     private ConnectFourPresenter presenter;
     private boolean tokenDropped = false;
-
-
     private Client client;
 
 
@@ -39,14 +35,5 @@ class LocalPlayerTest {
         this.localPlayer.gamePlayView(gamePlayView);
 
         assertTrue(localPlayer.isConnected());
-
     }
-
-    @Test
-    void shouldLogInWhenGiveOnLogInAcceptedMessage(){
-        this.localPlayer.onMessage(new GiveLogInAcceptedMessage());
-
-    }
-
-
 }
