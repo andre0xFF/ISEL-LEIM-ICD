@@ -3,7 +3,7 @@ import models.player.Player;
 import models.player.Token;
 import models.player.TokensStack;
 import network.Client;
-import network.messages.AskLogInMessage;
+import network.messages.AskLoginMessage;
 import network.messages.DropTokenMessage;
 import network.messages.Message;
 import network.messages.PlayTurnMessage;
@@ -120,8 +120,8 @@ public class RemotePlayer implements Listener<Message>, Player {
     public void onMessage(Message message) {
         if (message instanceof DropTokenMessage dropTokenMessage) {
             onMessage(dropTokenMessage);
-        } else if (message instanceof AskLogInMessage loginMessage) {
-            onMessage(loginMessage);
+        } else if (message instanceof AskLoginMessage askLoginMessage) {
+            onMessage(askLoginMessage);
         }
     }
 
@@ -129,7 +129,7 @@ public class RemotePlayer implements Listener<Message>, Player {
         this.gamePlayView.dropToken(message.column());
     }
 
-    private void onMessage(AskLogInMessage message) {
+    private void onMessage(AskLoginMessage message) {
         // TODO: Validate username and password
 
         this.username = message.username();

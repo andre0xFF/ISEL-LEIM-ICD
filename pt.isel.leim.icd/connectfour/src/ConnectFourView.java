@@ -49,7 +49,7 @@ public class ConnectFourView {
 
     // Starting Menu
     private JButton startSignUpButton;
-    private JButton startLogInButton;
+    private JButton startLoginButton;
 
 
     // Sign Up
@@ -436,12 +436,12 @@ public class ConnectFourView {
         constraints.insets.top = 10;
 
 
-        startLogInButton = new JButton("Log In");
+        startLoginButton = new JButton("Log In");
 
-        startMenuPanel.add(startLogInButton, constraints);
+        startMenuPanel.add(startLoginButton, constraints);
 
 
-        startLogInButton.setPreferredSize(new Dimension(100, 40));
+        startLoginButton.setPreferredSize(new Dimension(100, 40));
 
         startSignUpButton = new JButton("Sign Up");
 
@@ -477,9 +477,9 @@ public class ConnectFourView {
 
         // Start Menu Buttons
         this.startSignUpButton.addActionListener(listener);
-        this.startLogInButton.addActionListener(listener);
+        this.startLoginButton.addActionListener(listener);
 
-        // LogIn Menu Buttons
+        // Login Menu Buttons
         this.loginButton.addActionListener(listener);
         this.logInBackButton.addActionListener(listener);
 
@@ -1063,19 +1063,19 @@ public class ConnectFourView {
         return this.menuNewGameButton;
     }
 
-    public JButton startLogInButton(){
-        return this.startLogInButton;
+    public JButton startLoginButton() {
+        return this.startLoginButton;
     }
 
-    public  JButton  startSignUpButton(){
+    public JButton startSignUpButton() {
         return this.startSignUpButton;
     }
 
-    public JButton signBackButton(){
+    public JButton signBackButton() {
         return this.signBackButton;
     }
 
-    public void connectFourLogIn(){
+    public void connectFourLogin() {
         this.frame.getContentPane().removeAll();
         this.frame.add(authenticationPanel, BorderLayout.CENTER);
         this.frame.repaint();

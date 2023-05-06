@@ -11,7 +11,7 @@
     <xs:include schemaLocation="GiveSignUpAcceptedMessage.xsd"/>
 
     <xs:include schemaLocation="AskLoginMessage.xsd"/>
-    <xs:include schemaLocation="GiveLogInAcceptedMessage.xsd"/>
+    <xs:include schemaLocation="GiveLoginAcceptedMessage.xsd"/>
 
     <xs:include schemaLocation="AskUpdateProfileMessage.xsd"/>
     <xs:include schemaLocation="GiveUpdatedProfileMessage.xsd"/>
@@ -38,8 +38,8 @@
             <xs:element ref="AskSignUpMessage"/>
             <xs:element ref="GiveSignUpAcceptedMessage"/>
 
-            <xs:element ref="AskLogInMessage"/>
-            <xs:element ref="GiveLogInAcceptedMessage"/>
+            <xs:element ref="AskLoginMessage"/>
+            <xs:element ref="GiveLoginAcceptedMessage"/>
 
             <xs:element ref="AskUpdateProfileMessage"/>
             <xs:element ref="GiveUpdatedProfileMessage"/>

@@ -3,7 +3,7 @@ import models.player.Player;
 import models.player.Token;
 import models.player.TokensStack;
 import network.Client;
-import network.messages.GiveLogInAcceptedMessage;
+import network.messages.GiveLoginAcceptedMessage;
 import network.messages.Message;
 import network.socket.Listener;
 
@@ -70,13 +70,13 @@ public class LocalPlayer implements Listener<Message>, Player {
     @Override
     public void onMessage(Message message) {
 
-        if(message instanceof GiveLogInAcceptedMessage logInMessage){
+        if (message instanceof GiveLoginAcceptedMessage logInMessage) {
             onMessage(logInMessage);
         }
 
     }
 
-    private void onMessage(GiveLogInAcceptedMessage message){
+    private void onMessage(GiveLoginAcceptedMessage message) {
 
     }
 }

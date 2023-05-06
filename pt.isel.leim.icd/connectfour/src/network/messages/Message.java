@@ -22,14 +22,14 @@ import java.time.format.DateTimeFormatter;
         {
                 @JsonSubTypes.Type(value = PingMessage.class, name = "PingMessage"),
                 @JsonSubTypes.Type(value = PongMessage.class, name = "PongMessage"),
-                @JsonSubTypes.Type(value = AskLogInMessage.class, name = "AskLogInMessage"),
+                @JsonSubTypes.Type(value = AskLoginMessage.class, name = "AskLoginMessage"),
                 @JsonSubTypes.Type(value = DropTokenMessage.class, name = "DropTokenMessage"),
 
                 @JsonSubTypes.Type(value = AskGamesStatsMessage.class, name = "AskGamesStatsMessage"),
                 @JsonSubTypes.Type(value = PlayTurnMessage.class, name = "PlayTurnMessage"),
                 @JsonSubTypes.Type(value = AskSignUpMessage.class, name = "AskSignUpMessage"),
 
-                @JsonSubTypes.Type(value = GiveLogInAcceptedMessage.class, name = "GiveLogInAcceptedMessage"),
+                @JsonSubTypes.Type(value = GiveLoginAcceptedMessage.class, name = "GiveLoginAcceptedMessage"),
                 @JsonSubTypes.Type(value = AskUpdateProfileMessage.class, name = "AskUpdateProfileMessage"),
                 @JsonSubTypes.Type(value = GiveGamesStatsMessage.class, name = "GiveGamesStatsMessage"),
                 @JsonSubTypes.Type(value = GameOverMessage.class, name = "GameOverMessage"),

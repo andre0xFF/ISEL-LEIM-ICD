@@ -5,12 +5,16 @@ import network.Server;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Represents the server side of the game.
+ */
 public class ConnectFourServerModel implements Runnable {
 
     public static final int clientsLimit = 2;
     private ConnectFour connectFour;
     private final Server server;
     private final ArrayList<RemotePlayer> players = new ArrayList<>();
+    private final ArrayList<Client> clients = new ArrayList<>();
 
     public ConnectFourServerModel() throws IOException {
         this(Client.DEFAULT_PORT);
@@ -61,6 +65,7 @@ public class ConnectFourServerModel implements Runnable {
         try {
             for (int i = 0; i < ConnectFourServerModel.clientsLimit; i++) {
                 Client client = this.server.accept();
+                this.clients.add(client);
                 this.players.add(new RemotePlayer(client));
             }
 

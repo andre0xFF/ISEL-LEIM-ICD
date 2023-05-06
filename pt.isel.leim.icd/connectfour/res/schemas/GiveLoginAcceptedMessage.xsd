@@ -5,10 +5,10 @@
     <xs:include schemaLocation="AskUpdateProfileMessage.xsd"/>
     <xs:include schemaLocation="GiveGamesStatsMessage.xsd"/>
 
-    <xs:element name="GiveLogInAcceptedMessage" type="GiveLogInAcceptedMessageType">
+    <xs:element name="GiveLoginAcceptedMessage" type="GiveLoginAcceptedMessageType">
     </xs:element>
 
-    <xs:complexType name="GiveLogInAcceptedMessageType"/>
+    <xs:complexType name="GiveLoginAcceptedMessageType"/>
 
 
 </xs:schema>

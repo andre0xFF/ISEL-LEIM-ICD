@@ -23,18 +23,18 @@ public class ConnectFourPresenter implements ActionListener {
         try {
 
             // Navigate from Start Menu to Log In Menu
-            if(e.getSource().equals(this.view.startLogInButton())){
-                this.view.connectFourLogIn();
+            if (e.getSource().equals(this.view.startLoginButton())) {
+                this.view.connectFourLogin();
 
             }
 
             // Navigate from SignUp Menu back to Starting Menu
-            if(e.getSource().equals(this.view.signBackButton())){
+            if (e.getSource().equals(this.view.signBackButton())) {
                 this.view.connectFourStartingMenu();
             }
 
             // Navigate from Start Menu to Sign Up Menu
-            if(e.getSource().equals(this.view.startSignUpButton())){
+            if (e.getSource().equals(this.view.startSignUpButton())) {
                 this.view.connectFourSignUp();
             }
 

@@ -25,7 +25,7 @@ public class ConnectFourClientModel {
     }
 
     public void login(String text, char[] password) throws IOException, SAXException {
-        client.write(new AskLogInMessage(text, password));
+        client.write(new AskLoginMessage(text, password));
     }
 
     public void updateProfile(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
@@ -35,7 +35,6 @@ public class ConnectFourClientModel {
     public void signUp(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
         client.write(new AskSignUpMessage(image, username, password, nationality, age));
     }
-
 
 
     public void connectFourGamesStats() throws IOException, SAXException {
