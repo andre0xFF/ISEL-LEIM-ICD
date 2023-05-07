@@ -15,7 +15,8 @@
     <xs:include schemaLocation="OnWaitTurnMessage.xsd"/>
 
     <xs:include schemaLocation="OnWinMessage.xsd"/>
-    <xs:include schemaLocation="OnLossMessage.xsd"/>
+    <xs:include schemaLocation="OnLoseMessage.xsd"/>
+    <xs:include schemaLocation="OnDrawMessage.xsd"/>
 
     <xs:include schemaLocation="AskSignUpMessage.xsd"/>
     <xs:include schemaLocation="GiveSignUpAcceptedMessage.xsd"/>
@@ -50,7 +51,8 @@
             <xs:element ref="OnWaitTurnMessage"/>
 
             <xs:element ref="OnWinMessage"/>
-            <xs:element ref="OnLossMessage"/>
+            <xs:element ref="OnLoseMessage"/>
+            <xs:element ref="OnDrawMessage"/>
 
             <xs:element ref="AskSignUpMessage"/>
             <xs:element ref="GiveSignUpAcceptedMessage"/>

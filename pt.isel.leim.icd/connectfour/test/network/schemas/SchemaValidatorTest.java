@@ -98,7 +98,7 @@ class SchemaValidatorTest {
 
     @Test
     void shouldValidateOnTokenDroppedMessage() {
-        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnTokenDroppedMessage><column>1</column><row>1</row><color><red>255</red><green>0</green><blue>0</blue><alpha>255</alpha><rgb>-65536</rgb><colorSpace>whatever</colorSpace></color></OnTokenDroppedMessage></Message>"));
+        assertDoesNotThrow(() -> schemaValidator.validate("<Message><OnTokenDroppedMessage><column>1</column><row>1</row><color><red>255</red><green>0</green><blue>0</blue></color></OnTokenDroppedMessage></Message>"));
     }
 
     @Test

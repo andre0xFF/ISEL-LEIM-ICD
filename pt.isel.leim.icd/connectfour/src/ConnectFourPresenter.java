@@ -47,23 +47,23 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
             // Navigate from Log In Menu back to Starting Menu
-            if(e.getSource().equals(this.view.logInBackButton())){
+            if (e.getSource().equals(this.view.logInBackButton())) {
                 this.view.connectFourStartingMenu();
             }
 
             // SignUp Events
 
-            if(e.getSource().equals(this.view.signSubmitButton())){
+            if (e.getSource().equals(this.view.signSubmitButton())) {
 
                 BufferedImage image = null;
-                
+
                 try {
                     int convertAge = Integer.parseInt(this.view.signAgeField().getText());
 
                     image = PhotoManager.downloadImage(this.view.signUpPictureField().getText());
                     image = PhotoManager.resizeImage(image, 60, 60);
 
-                    try{
+                    try {
                         this.model.signUp(
                                 PhotoManager.encodeImage(image),
                                 this.view.signUserNameField().getText(),
@@ -71,14 +71,14 @@ public class ConnectFourPresenter implements ActionListener {
                                 this.view.signNationalityField().getText(),
                                 convertAge
                         );
-                    }catch (SAXException exception){
+                    } catch (SAXException exception) {
                         this.view.setSignUpDisplayError("Invalid Input");
                     }
 
-                }catch (NumberFormatException exception){
+                } catch (NumberFormatException exception) {
                     this.view.setSignUpDisplayError("Invalid Age format");
 
-                }catch (MalformedURLException exception){
+                } catch (MalformedURLException exception) {
                     this.view.setSignUpDisplayError("Invalid URL");
                 }
             }
@@ -96,7 +96,7 @@ public class ConnectFourPresenter implements ActionListener {
                     image = PhotoManager.downloadImage(this.view.profileEditPicture().getText());
                     image = PhotoManager.resizeImage(image, 60, 60);
 
-                    try{
+                    try {
                         this.model.updateProfile(
                                 PhotoManager.encodeImage(image),
                                 this.view.profEditUserNameField().getText(),
@@ -104,31 +104,31 @@ public class ConnectFourPresenter implements ActionListener {
                                 this.view.profEditNationalityField().getText(),
                                 convertAge
                         );
-                    }catch (SAXException exception){
+                    } catch (SAXException exception) {
                         this.view.setProfileEditDisplayError("Invalid Input");
                     }
 
-                }catch (NumberFormatException exception){
+                } catch (NumberFormatException exception) {
                     this.view.setProfileEditDisplayError("Invalid Age format");
 
-                }catch (MalformedURLException exception){
+                } catch (MalformedURLException exception) {
                     System.out.print(exception.getMessage());
                     this.view.setProfileEditDisplayError("Invalid URL");
                 }
             }
 
-                if(e.getSource().equals(this.view.profDispEditButton())){
+            if (e.getSource().equals(this.view.profDispEditButton())) {
                 this.view.connectFourProfileEdit();
 
             }
 
-            if(e.getSource().equals(this.view.profDispBackButton())){
+            if (e.getSource().equals(this.view.profDispBackButton())) {
                 this.view.connectFourGameMenu();
 
             }
 
             // Cancel Queue Search
-            if(e.getSource().equals(this.view.queueCancelButton())){
+            if (e.getSource().equals(this.view.queueCancelButton())) {
                 this.view.connectFourGameMenu();
             }
 
@@ -168,7 +168,6 @@ public class ConnectFourPresenter implements ActionListener {
 
             }
 
-
             // Navigate from Game Menu to new Game Board
             if (e.getSource().equals(this.view.newGame())) {
                 //TODO criar painel de espera da game queue
@@ -176,13 +175,12 @@ public class ConnectFourPresenter implements ActionListener {
             }
 
             // Navigate from Game Over to Game Main Menu
-            if(e.getSource().equals(this.view.gameOverExitButton())){
+            if (e.getSource().equals(this.view.gameOverExitButton())) {
                 this.view.connectFourGameMenu();
 
             }
 
-
-            if(e.getSource().equals(this.view.gameBoardBackButton())){
+            if (e.getSource().equals(this.view.gameBoardBackButton())) {
                 //TODO send message indicating surrender and update server game stats
                 this.view.connectFourGameMenu();
             }
@@ -207,8 +205,6 @@ public class ConnectFourPresenter implements ActionListener {
         }
 
 
-
-
 //        if (e.getSource().equals(view.newGameButton())) {
 //
 //        }
@@ -218,43 +214,41 @@ public class ConnectFourPresenter implements ActionListener {
 //        }
     }
 
-
-    public void displayLogInError(String errorMsg){
+    public void displayLogInError(String errorMsg) {
         this.view.setLoginDisplayError(errorMsg);
     }
 
-    public void displaySignUpError(String errorMsg){
+    public void displaySignUpError(String errorMsg) {
 
         this.view.setSignUpDisplayError(errorMsg);
     }
 
-    public void displayProfileDisplayError(String errorMsg){
+    public void displayProfileDisplayError(String errorMsg) {
         this.view.setProfileDisplayError(errorMsg);
     }
 
-    public void displayProfileEditError(String errorMsg){
+    public void displayProfileEditError(String errorMsg) {
         this.view.setProfileEditDisplayError(errorMsg);
     }
 
-    public void displayGameStatsError(String errorMsg){
+    public void displayGameStatsError(String errorMsg) {
         this.view.setGameStatsDisplayError(errorMsg);
     }
 
-    public void displayGameBoardError(String errorMsg){
+    public void displayGameBoardError(String errorMsg) {
         this.view.setGameBoardDisplayError(errorMsg);
     }
 
-
-    public void setGameOverScreen(String message){
+    public void setGameOverScreen(String message) {
         this.view.gameOverLabel().setText(message);
         this.view.connectFourGameOver();
     }
 
-    public void dropToken(int column){
+    public void dropToken(int column) {
         this.view.boardTokenCells();
     }
 
-    public void updateProfile(String image, String username, String password, String nationality, int age){
+    public void updateProfile(String image, String username, String password, String nationality, int age) {
 
     }
 }

@@ -17,15 +17,11 @@ public class MessageTest {
     private final LocalDateTime dateTime = LocalDateTime.of(2021, 5, 18, 15, 0, 0);
     private final Message.XMLSerializer XMLSerializer = new Message.XMLSerializer();
 
-    private static final String giveSignUpAcceptedMessageContent = "<Message><GiveSignUpAcceptedMessage></GiveSignUpAcceptedMessage></Message>";
-    private static final String askSignUpMessageContent = "<Message><AskSignUpMessage><image>%s</image><username>%s</username><password>%s</password><nationality>%s</nationality><age>%s</age></AskSignUpMessage></Message>";
-
-
     @Test
     void shouldSerializeOnLossMessageAsXML() throws JsonProcessingException {
-        String actualContent = XMLSerializer.serialize(new OnLossMessage());
+        String actualContent = XMLSerializer.serialize(new OnLoseMessage());
 
-        assertEquals("<Message><OnLossMessage/></Message>", actualContent);
+        assertEquals("<Message><OnLoseMessage/></Message>", actualContent);
     }
 
     @Test

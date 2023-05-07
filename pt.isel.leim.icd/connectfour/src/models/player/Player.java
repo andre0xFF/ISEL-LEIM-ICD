@@ -67,7 +67,12 @@ public interface Player {
     /**
      * Called when the player lost the game
      */
-    void onLoss();
+    void onLose();
+
+    /**
+     * Called when the game is drawn
+     */
+    void onDraw();
 
     /**
      * Called when the player dropped a token

@@ -68,7 +68,12 @@ public class LocalPlayer implements Listener<Message>, Player {
     }
 
     @Override
-    public void onLoss() {
+    public void onLose() {
+
+    }
+
+    @Override
+    public void onDraw() {
 
     }
 

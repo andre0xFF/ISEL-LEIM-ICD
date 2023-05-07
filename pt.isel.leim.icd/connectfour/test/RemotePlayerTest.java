@@ -1,3 +1,4 @@
+import models.Board;
 import models.player.GamePlayView;
 import models.player.Token;
 import models.player.TokensStack;
@@ -16,7 +17,7 @@ class RemotePlayerTest {
 
     private RemotePlayer remotePlayer;
     private Client client;
-    private boolean tokenDropped = false;
+    private int tokenDroppedColumn = -1;
 
     @BeforeEach
     void setUpEach() throws IOException {
@@ -25,9 +26,16 @@ class RemotePlayerTest {
 
         assertTrue(client.isConnected());
 
-        GamePlayView gamePlayView = column -> {
-            tokenDropped = true;
-            return true;
+        GamePlayView gamePlayView = new GamePlayView() {
+            private final Board board = new Board();
+
+            @Override
+            public boolean dropToken(int column) {
+                tokenDroppedColumn = column;
+                assertTrue(1 <= column && column <= this.board.totalColumns());
+
+                return true;
+            }
         };
 
         this.remotePlayer = new RemotePlayer(client);
@@ -53,8 +61,8 @@ class RemotePlayerTest {
     }
 
     @Test
-    void shouldLoginWhenOnMessage() throws IOException, SAXException {
-        remotePlayer.onMessage(
+    void shouldLoginWhenMessageRead() throws IOException, SAXException {
+        this.remotePlayer.onMessage(
                 new AskLoginMessage(
                         "johndoe",
                         new char[]{'a', 'b', 'c', '1', '2', '3'}
@@ -74,18 +82,82 @@ class RemotePlayerTest {
     }
 
     @Test
-    void shouldDropTokenWhenOnMessage() {
+    void shouldDropTokenWhenMessageRead() {
         this.remotePlayer.onMessage(new DropTokenMessage(1));
 
-        assertTrue(tokenDropped);
+        assertEquals(1, this.tokenDroppedColumn);
     }
 
     @Test
-    void shouldPlayTurnWhenOnMessage() throws IOException, SAXException {
+    void shouldWriteOnTokenDroppedMessageWhenOnTokenDropped() throws IOException, SAXException {
+        this.remotePlayer.onTokenDropped(1, 1, this.remotePlayer.color());
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnTokenDroppedMessage.class, message);
+
+        OnTokenDroppedMessage onTokenDroppedMessage = (OnTokenDroppedMessage) message;
+
+        assertEquals(1, onTokenDroppedMessage.column());
+        assertEquals(1, onTokenDroppedMessage.row());
+        assertEquals(this.remotePlayer.color(), onTokenDroppedMessage.color());
+    }
+
+    @Test
+    void shouldWriteOnTokenNotDroppedMessageWhenOnTokenNotDropped() throws IOException, SAXException {
+        this.remotePlayer.onTokenNotDropped(1);
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnTokenNotDroppedMessage.class, message);
+
+        OnTokenNotDroppedMessage onTokenNotDroppedMessage = (OnTokenNotDroppedMessage) message;
+
+        assertEquals(1, onTokenNotDroppedMessage.column());
+    }
+
+    @Test
+    void shouldWriteOnPlayTurnMessageWhenOnPlayTurn() throws IOException, SAXException {
         this.remotePlayer.onPlayTurn();
 
         Message message = this.client.read();
 
-        assertEquals(OnPlayTurnMessage.class, message.getClass());
+        assertInstanceOf(OnPlayTurnMessage.class, message);
+    }
+
+    @Test
+    void shouldWriteOnWaitTurnMessageWhenOnWaitTurn() throws IOException, SAXException {
+        this.remotePlayer.onWaitTurn();
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnWaitTurnMessage.class, message);
+    }
+
+    @Test
+    void shouldWriteOnLoseMessageWhenOnLose() throws IOException, SAXException {
+        this.remotePlayer.onLose();
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnLoseMessage.class, message);
+    }
+
+    @Test
+    void shouldWriteOnWinMessageWhenOnWin() throws IOException, SAXException {
+        this.remotePlayer.onWin();
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnWinMessage.class, message);
+    }
+
+    @Test
+    void shouldWriteOnDrawMessageWhenOnDraw() throws IOException, SAXException {
+        this.remotePlayer.onDraw();
+
+        Message message = this.client.read();
+
+        assertInstanceOf(OnDrawMessage.class, message);
     }
 }

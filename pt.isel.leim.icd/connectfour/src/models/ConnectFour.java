@@ -45,6 +45,7 @@ public class ConnectFour implements GamePlayView {
     public boolean dropToken(int column) {
         if (isGameOver()) {
             this.currentPlayer.onTokenNotDropped(column);
+
             return false;
         }
 
@@ -54,6 +55,7 @@ public class ConnectFour implements GamePlayView {
             row = this.board.dropToken(column, this.currentPlayer.popToken());
         } catch (RuntimeException e) {
             this.currentPlayer.onTokenNotDropped(column);
+
             return false;
         }
 
@@ -62,6 +64,13 @@ public class ConnectFour implements GamePlayView {
 
         if (checkWin(row, column, this.currentPlayer)) {
             setWinner();
+
+            return true;
+        }
+
+        if (checkDraw()) {
+            setDraw();
+
             return true;
         }
 
@@ -84,7 +93,14 @@ public class ConnectFour implements GamePlayView {
         this.winner = this.currentPlayer;
 
         this.currentPlayer.onWin();
-        this.otherPlayer.onLoss();
+        this.otherPlayer.onLose();
+    }
+
+    private void setDraw() {
+        this.winner = null;
+
+        this.currentPlayer.onDraw();
+        this.otherPlayer.onDraw();
     }
 
     private boolean checkWin(int row, int column, Player player) {
@@ -179,7 +195,7 @@ public class ConnectFour implements GamePlayView {
      * @return true if the game is over, false otherwise
      */
     public boolean isGameOver() {
-        return hasWinner() || hasDraw();
+        return hasWinner() || checkDraw();
     }
 
     /**
@@ -187,7 +203,7 @@ public class ConnectFour implements GamePlayView {
      *
      * @return true if the game is a draw, false otherwise
      */
-    public boolean hasDraw() {
+    public boolean checkDraw() {
         return this.board.isFull();
     }
 

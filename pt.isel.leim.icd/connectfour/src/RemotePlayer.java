@@ -195,9 +195,21 @@ public class RemotePlayer implements Listener<Message>, Player {
      * Called when the player lost the game
      */
     @Override
-    public void onLoss() {
+    public void onLose() {
         try {
-            this.client.write(new OnLossMessage());
+            this.client.write(new OnLoseMessage());
+        } catch (IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Called when the game is drawn
+     */
+    @Override
+    public void onDraw() {
+        try {
+            this.client.write(new OnDrawMessage());
         } catch (IOException | SAXException e) {
             throw new RuntimeException(e);
         }

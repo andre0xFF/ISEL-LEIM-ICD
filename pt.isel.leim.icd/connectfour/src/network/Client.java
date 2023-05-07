@@ -40,6 +40,7 @@ public class Client implements Listener<String> {
 
     /**
      * Checks if the client is connected.
+     *
      * @return True if the client is connected, false otherwise.
      */
     public boolean isConnected() {
@@ -48,8 +49,9 @@ public class Client implements Listener<String> {
 
     /**
      * Writes a message.
+     *
      * @param message The message to be written.
-     * @throws IOException If an I/O error occurs when writing.
+     * @throws IOException  If an I/O error occurs when writing.
      * @throws SAXException If an error occurs when validating the message.
      */
     public void write(Message message) throws IOException, SAXException {
@@ -61,8 +63,9 @@ public class Client implements Listener<String> {
 
     /**
      * Reads a message.
+     *
      * @return The message read.
-     * @throws IOException If an I/O error occurs when reading.
+     * @throws IOException  If an I/O error occurs when reading.
      * @throws SAXException If an error occurs when validating the message.
      */
     public Message read() throws IOException, SAXException {
@@ -77,6 +80,7 @@ public class Client implements Listener<String> {
 
     /**
      * Closes the client.
+     *
      * @throws IOException If an I/O error occurs when closing.
      */
     public void close() throws IOException {
@@ -85,6 +89,7 @@ public class Client implements Listener<String> {
 
     /**
      * Called the listener when a message is received.
+     *
      * @param content The message.
      */
     @Override
@@ -99,6 +104,7 @@ public class Client implements Listener<String> {
 
     /**
      * Starts listening for messages.
+     *
      * @param listener The listener to be called when a message is received.
      */
     public void listen(Listener<Message> listener) {

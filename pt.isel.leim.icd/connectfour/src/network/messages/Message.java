@@ -3,11 +3,19 @@ package network.messages;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
+import java.awt.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -31,7 +39,8 @@ import java.time.format.DateTimeFormatter;
                 @JsonSubTypes.Type(value = OnWaitTurnMessage.class),
 
                 @JsonSubTypes.Type(value = OnWinMessage.class),
-                @JsonSubTypes.Type(value = OnLossMessage.class),
+                @JsonSubTypes.Type(value = OnLoseMessage.class),
+                @JsonSubTypes.Type(value = OnDrawMessage.class),
 
                 @JsonSubTypes.Type(value = AskSignUpMessage.class),
                 @JsonSubTypes.Type(value = GiveSignUpAcceptedMessage.class),
@@ -72,6 +81,11 @@ public interface Message {
         private final XmlMapper xmlMapper = new XmlMapper();
 
         public XMLSerializer() {
+            registerDateTimeModule();
+            registerColorModule();
+        }
+
+        private void registerDateTimeModule() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
             JavaTimeModule module = (JavaTimeModule) new JavaTimeModule().addSerializer(
@@ -80,6 +94,14 @@ public interface Message {
             );
 
             this.xmlMapper.registerModule(module);
+        }
+
+        private void registerColorModule() {
+            this.xmlMapper.registerModule(
+                    new SimpleModule()
+                            .addSerializer(Color.class, new ColorSerializer())
+                            .addDeserializer(Color.class, new ColorDeserializer())
+            );
         }
 
         /**
@@ -104,6 +126,29 @@ public interface Message {
         @Override
         public String serialize(Message message) throws JsonProcessingException {
             return this.xmlMapper.writeValueAsString(message);
+        }
+    }
+
+    class ColorSerializer extends JsonSerializer<Color> {
+        @Override
+        public void serialize(Color color, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws java.io.IOException {
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeNumberField("red", color.getRed());
+            jsonGenerator.writeNumberField("green", color.getGreen());
+            jsonGenerator.writeNumberField("blue", color.getBlue());
+            jsonGenerator.writeEndObject();
+        }
+    }
+
+    class ColorDeserializer extends com.fasterxml.jackson.databind.JsonDeserializer<Color> {
+        @Override
+        public Color deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws java.io.IOException, com.fasterxml.jackson.core.JsonProcessingException {
+            JsonNode node = jsonParser.getCodec().readTree(jsonParser);
+            int red = node.get("red").asInt();
+            int green = node.get("green").asInt();
+            int blue = node.get("blue").asInt();
+
+            return new Color(red, green, blue);
         }
     }
 }

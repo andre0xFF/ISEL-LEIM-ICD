@@ -20,7 +20,6 @@ class ConnectFourTest {
     @BeforeEach
     void setUpEach() {
         player1 = new Player() {
-            private GamePlayView gamePlayView;
             private TokensStack tokensStack = new TokensStack(Color.RED);
 
             @Override
@@ -65,11 +64,15 @@ class ConnectFourTest {
 
             @Override
             public void onWin() {
+            }
+
+            @Override
+            public void onLose() {
 
             }
 
             @Override
-            public void onLoss() {
+            public void onDraw() {
 
             }
 
@@ -85,13 +88,10 @@ class ConnectFourTest {
 
             @Override
             public void gamePlayView(GamePlayView gamePlayView) {
-                this.gamePlayView = gamePlayView;
             }
         };
 
         player2 = new Player() {
-
-            private GamePlayView gamePlayView;
             private TokensStack tokensStack = new TokensStack(Color.BLUE);
 
             @Override
@@ -140,7 +140,12 @@ class ConnectFourTest {
             }
 
             @Override
-            public void onLoss() {
+            public void onLose() {
+
+            }
+
+            @Override
+            public void onDraw() {
 
             }
 
@@ -156,7 +161,6 @@ class ConnectFourTest {
 
             @Override
             public void gamePlayView(GamePlayView gamePlayView) {
-                this.gamePlayView = gamePlayView;
             }
         };
 
@@ -307,7 +311,7 @@ class ConnectFourTest {
 
         assertTrue(this.connectFour.isGameOver());
         assertNull(this.connectFour.winner());
-        assertTrue(this.connectFour.hasDraw());
+        assertTrue(this.connectFour.checkDraw());
     }
 
     @Test
@@ -360,6 +364,6 @@ class ConnectFourTest {
 
         assertTrue(this.connectFour.isGameOver());
         assertNull(this.connectFour.winner());
-        assertTrue(this.connectFour.hasDraw());
+        assertTrue(this.connectFour.checkDraw());
     }
 }
