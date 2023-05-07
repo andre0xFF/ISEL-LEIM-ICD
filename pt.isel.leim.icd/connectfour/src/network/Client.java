@@ -56,9 +56,9 @@ public class Client implements Listener<String> {
      */
     public void write(Message message) throws IOException, SAXException {
         String content = XMLSerializer.serialize(message);
-        schemaValidator.validate(content);
+        this.schemaValidator.validate(content);
 
-        socket.write(content);
+        this.socket.write(content);
     }
 
     /**

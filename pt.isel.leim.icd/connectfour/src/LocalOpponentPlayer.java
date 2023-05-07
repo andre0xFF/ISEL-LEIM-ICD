@@ -2,26 +2,10 @@ import models.player.GamePlayView;
 import models.player.Player;
 import models.player.Token;
 import models.player.TokensStack;
-import network.Client;
-import network.messages.GiveLoginResultMessage;
-import network.messages.Message;
-import network.socket.Listener;
 
 import java.awt.*;
 
-/**
- * Represents a player on the client side
- */
-public class LocalPlayer implements Listener<Message>, Player {
-
-    private GamePlayView gamePlayView;
-    private Client client;
-
-    public LocalPlayer(Client client) {
-        client.listen(this);
-
-        this.client = client;
-    }
+public class LocalOpponentPlayer implements Player {
 
     @Override
     public String username() {
@@ -90,23 +74,6 @@ public class LocalPlayer implements Listener<Message>, Player {
 
     @Override
     public void gamePlayView(GamePlayView gamePlayView) {
-        this.gamePlayView = gamePlayView;
-
-    }
-
-    public boolean isConnected() {
-        return this.client.isConnected();
-    }
-
-    @Override
-    public void onMessage(Message message) {
-        if (message instanceof GiveLoginResultMessage logInMessage) {
-            onMessage(logInMessage);
-        }
-
-    }
-
-    private void onMessage(GiveLoginResultMessage message) {
 
     }
 }

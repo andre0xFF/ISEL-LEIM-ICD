@@ -5,11 +5,17 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
+/**
+ * The client model of the Connect Four game. It is responsible for managing the game, the player and the opponent
+ * player.
+ * An instance of this class connects to the server automatically.
+ */
 public class ConnectFourClientModel {
-    private ConnectFour connectFour;
 
     private final Client client = new Client();
     private final LocalPlayer player = new LocalPlayer(this.client);
+    private final LocalOpponentPlayer opponentPlayer = new LocalOpponentPlayer();
+    private ConnectFour connectFour = new ConnectFour(this.player, this.opponentPlayer);
 
     public ConnectFourClientModel() throws IOException {
     }

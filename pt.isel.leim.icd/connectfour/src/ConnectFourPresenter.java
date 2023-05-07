@@ -21,9 +21,9 @@ public class ConnectFourPresenter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            // Navigate from Start Menu to Log In Menu
+            // Navigate from Start Menu to Login Menu
             if (e.getSource().equals(this.view.startLoginButton())) {
-                this.view.connectFourLogin();
+                this.view.navigateToAuthenticationPanel();
             }
 
             // Navigate from SignUp Menu back to Starting Menu
@@ -178,21 +178,19 @@ public class ConnectFourPresenter implements ActionListener {
 
             // GameBoardEvents
             JButton[][] boardTokenCells = this.view.boardTokenCells();
+
             for (int row = 0; row < boardTokenCells.length; row++) {
                 for (int column = 0; column < boardTokenCells[0].length; column++) {
                     if (e.getSource().equals(boardTokenCells[row][column])) {
-                        //TODO
+                        // TODO ?
                         this.model.dropToken(column);
                         break;
                     }
                 }
             }
-
-
         } catch (IOException | SAXException ex) {
             throw new RuntimeException(ex);
         }
-
 
 //        if (e.getSource().equals(view.newGameButton())) {
 //
@@ -203,7 +201,7 @@ public class ConnectFourPresenter implements ActionListener {
 //        }
     }
 
-    public void displayLogInError(String errorMsg) {
+    public void displayLoginError(String errorMsg) {
         this.view.setLoginDisplayError(errorMsg);
     }
 

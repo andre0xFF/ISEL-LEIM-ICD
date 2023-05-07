@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 /**
  * The server model of the Connect Four game. It is responsible for managing the game and the players.
- * An instance of this class runs in a separate thread automatically when created.
+ * An instance of this class runs in a separate thread automatically when created and listens for clients.
  */
 public class ConnectFourServerModel implements Runnable {
 

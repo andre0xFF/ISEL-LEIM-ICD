@@ -131,11 +131,11 @@ public class ConnectFourView {
         integerFormatter.setCommitsOnValidEdit(true);
 
 
+        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
-//         this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
-        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
-//        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
+//        this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
+//        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(gameOverPanel, BorderLayout.CENTER);
 //        this.frame.add(queuePanel, BorderLayout.CENTER);
 //        this.frame.add(boardPanel, BorderLayout.CENTER);
@@ -1076,7 +1076,7 @@ public class ConnectFourView {
         return this.signBackButton;
     }
 
-    public void connectFourLogin() {
+    public void navigateToAuthenticationPanel() {
         this.frame.getContentPane().removeAll();
         this.frame.add(authenticationPanel, BorderLayout.CENTER);
         this.frame.repaint();
