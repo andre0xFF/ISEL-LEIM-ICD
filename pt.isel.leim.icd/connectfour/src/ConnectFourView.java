@@ -1,10 +1,11 @@
+import models.Board;
+
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.text.NumberFormat;
 
 public class ConnectFourView {
@@ -12,14 +13,12 @@ public class ConnectFourView {
     private static final int BUTTON_SIZE = 60;
     private JFrame frame;
     private JPanel authenticationPanel;
-    private JTextField authUsernameField;
+    private JTextField authenticationUsernameField;
+    private JPasswordField authenticationPasswordField;
+    private JTextField profileUserNameField;
+    private JPasswordField profilePasswordField;
 
-    private JPasswordField authPasswordField;
-
-    private JTextField profUserNameField;
-    private JPasswordField profPasswordField;
-
-    //Log In
+    // Login
     private JButton logInBackButton;
     private JButton loginButton;
     private JPanel boardPanel;
@@ -28,22 +27,20 @@ public class ConnectFourView {
     private JPanel profileEditPanel;
 
     // Profile Display
-
     private JPanel profileDisplayPanel;
-    private JLabel profDispImageLabel;
-    private JLabel profDispUserNameLabel;
-    private JLabel profDispPasswordLabel;
-    private JLabel profDispNationalityLabel;
-    private JLabel profDispAgeLabel;
-    private JButton profDispBackButton;
-    private JButton profDispEditButton;
-
+    private JLabel profileDisplayImageLabel;
+    private JLabel profileDisplayUserNameLabel;
+    private JLabel profileDisplayPasswordLabel;
+    private JLabel profileDisplayNationalityLabel;
+    private JLabel profileDisplayAgeLabel;
+    private JButton profileDisplayBackButton;
+    private JButton profileDisplayEditButton;
 
     // Profile Edit
-    private JTextField profEditnationalityField;
-    private JTextField profEditAgeField;
-    private JButton profEditBackButton;
-    private JButton profEditSubmitButton;
+    private JTextField profileEditNationalityField;
+    private JTextField profileEditAgeField;
+    private JButton profileEditBackButton;
+    private JButton profileEditSubmitButton;
     private JPanel gameHistoryPanel;
     private JPanel gameMenuPanel;
     private JPanel startingMenuPanel;
@@ -51,7 +48,7 @@ public class ConnectFourView {
     private JLabel displayError;
     private JLabel profilePicture;
 
-    private JTextField profEditPictureField;
+    private JTextField profileEditPictureField;
 
 
     // Starting Menu
@@ -96,10 +93,10 @@ public class ConnectFourView {
 
     private JButton gameBoardBackButton;
     private ActionListener listener;
-    private JLabel profEditDisplayError;
-    private JLabel profDisplayError;
+    private JLabel profileEditDisplayError;
+    private JLabel profileDisplayError;
     private JLabel signUpDisplayError;
-    private JLabel authDisplayError;
+    private JLabel authenticationDisplayError;
     private JLabel gameStatsDisplayError;
     private JLabel boardErrorDisplay;
 
@@ -109,7 +106,10 @@ public class ConnectFourView {
     private JFormattedTextField intFieldTest;
 
 
-    public ConnectFourView(int rows, int columns) {
+    public ConnectFourView() {
+        int rows = Board.ROWS;
+        int columns = Board.COLUMNS;
+
         createFrame(rows, columns);
 
         createAuthenticationPanel();
@@ -129,16 +129,6 @@ public class ConnectFourView {
         integerFormatter.setValueClass(Integer.class);
         integerFormatter.setAllowsInvalid(false);
         integerFormatter.setCommitsOnValidEdit(true);
-
-
-
-
-
-
-
-
-
-
 
 
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
@@ -192,15 +182,15 @@ public class ConnectFourView {
 
         constraints.insets.top = 10;
 
-        profDispImageLabel = new JLabel();
+        profileDisplayImageLabel = new JLabel();
 
         constraints.gridx = 0;
         constraints.gridy = 1;
-        profDispImageLabel.setBackground(Color.red);
-        profDispImageLabel.setOpaque(true);
-        profDispImageLabel.setPreferredSize(new Dimension(60, 60));
+        profileDisplayImageLabel.setBackground(Color.red);
+        profileDisplayImageLabel.setOpaque(true);
+        profileDisplayImageLabel.setPreferredSize(new Dimension(60, 60));
 
-        profileDisplayPanel.add(profDispImageLabel, constraints);
+        profileDisplayPanel.add(profileDisplayImageLabel, constraints);
         constraints.gridwidth = 1;
 
         JLabel nickLabel = new JLabel("Username");
@@ -211,12 +201,12 @@ public class ConnectFourView {
         profileDisplayPanel.add(nickLabel, constraints);
 
 
-        profDispUserNameLabel = new JLabel();
+        profileDisplayUserNameLabel = new JLabel();
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profileDisplayPanel.add(profDispUserNameLabel, constraints);
+        profileDisplayPanel.add(profileDisplayUserNameLabel, constraints);
 
 
         JLabel nationalityLabel = new JLabel("Nationality");
@@ -228,13 +218,13 @@ public class ConnectFourView {
         profileDisplayPanel.add(nationalityLabel, constraints);
 
 
-        profDispNationalityLabel = new JLabel();
+        profileDisplayNationalityLabel = new JLabel();
 
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profileDisplayPanel.add(profDispNationalityLabel, constraints);
+        profileDisplayPanel.add(profileDisplayNationalityLabel, constraints);
 
         JLabel ageLabel = new JLabel("Age");
 
@@ -245,40 +235,40 @@ public class ConnectFourView {
         profileDisplayPanel.add(ageLabel, constraints);
 
 
-        profDispAgeLabel = new JLabel();
+        profileDisplayAgeLabel = new JLabel();
 
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profileDisplayPanel.add(profDispAgeLabel, constraints);
+        profileDisplayPanel.add(profileDisplayAgeLabel, constraints);
 
 
-        profDispBackButton = new JButton("Back");
+        profileDisplayBackButton = new JButton("Back");
 
         constraints.gridx = 0;
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.WEST;
 
-        profileDisplayPanel.add(profDispBackButton, constraints);
+        profileDisplayPanel.add(profileDisplayBackButton, constraints);
 
 
-        profDispEditButton= new JButton("Edit");
+        profileDisplayEditButton = new JButton("Edit");
 
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profileDisplayPanel.add(profDispEditButton, constraints);
+        profileDisplayPanel.add(profileDisplayEditButton, constraints);
 
-        profDisplayError = new JLabel("Error");
+        profileDisplayError = new JLabel("Error");
 
 
         constraints.gridx = 0;
         constraints.gridy = 5;
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
-        profileDisplayPanel.add(profDisplayError, constraints);
+        profileDisplayPanel.add(profileDisplayError, constraints);
 
 
         this.profileDisplayPanel = profileDisplayPanel;
@@ -320,14 +310,12 @@ public class ConnectFourView {
         signUpPanel.add(titleLabel, constraints);
 
 
-
         JLabel signUpPictureLabel = new JLabel("Image");
 
         constraints.gridwidth = 1;
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
-
 
 
         signUpPanel.add(signUpPictureLabel, constraints);
@@ -428,8 +416,6 @@ public class ConnectFourView {
         signUpPanel.add(signUpDisplayError, constraints);
 
 
-
-
         this.signUpPanel = signUpPanel;
 
     }
@@ -471,17 +457,22 @@ public class ConnectFourView {
     }
 
 
+    /**
+     * Sets the action listener for the buttons
+     *
+     * @param listener the action listener
+     */
     public void setActionListener(ActionListener listener) {
         this.listener = listener;
 
         // GameBoard Buttons
-        gameBoardBackButton.addActionListener(listener);
+        this.gameBoardBackButton.addActionListener(listener);
 
         // Queue Buttons
         this.queueCancelButton.addActionListener(listener);
 
         // Game Over Buttons
-        gameOverExitButton.addActionListener(listener);
+        this.gameOverExitButton.addActionListener(listener);
 
         // Sign Up Buttons
         signSubmitButton.addActionListener(listener);
@@ -502,11 +493,11 @@ public class ConnectFourView {
         this.gameQuitButton.addActionListener(listener);
 
         //Profile Buttons
-        this.profEditBackButton.addActionListener(listener);
-        this.profEditSubmitButton.addActionListener(listener);
+        this.profileEditBackButton.addActionListener(listener);
+        this.profileEditSubmitButton.addActionListener(listener);
 
-        this.profDispBackButton.addActionListener(listener);
-        this.profDispEditButton.addActionListener(listener);
+        this.profileDisplayBackButton.addActionListener(listener);
+        this.profileDisplayEditButton.addActionListener(listener);
 
         //Game History Buttons
         this.historyBackButton.addActionListener(listener);
@@ -527,7 +518,7 @@ public class ConnectFourView {
     }
 
     private void createAuthenticationPanel() {
-                JPanel authenticationPanel = new JPanel();
+        JPanel authenticationPanel = new JPanel();
 
         GridBagLayout bagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -542,14 +533,14 @@ public class ConnectFourView {
 
         authenticationPanel.add(usernameLabel, constraints);
 
-        authUsernameField = new JTextField(10);
+        authenticationUsernameField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets.top = 10;
 
-        authenticationPanel.add(authUsernameField, constraints);
+        authenticationPanel.add(authenticationUsernameField, constraints);
 
         JLabel passwordLabel = new JLabel("Password: ");
 
@@ -559,13 +550,13 @@ public class ConnectFourView {
         constraints.insets.bottom = 10;
         authenticationPanel.add(passwordLabel, constraints);
 
-        authPasswordField = new JPasswordField(10);
+        authenticationPasswordField = new JPasswordField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
         constraints.insets.bottom = 10;
-        authenticationPanel.add(authPasswordField, constraints);
+        authenticationPanel.add(authenticationPasswordField, constraints);
 
         loginButton = new JButton("Login");
 
@@ -586,8 +577,7 @@ public class ConnectFourView {
 
         authenticationPanel.add(logInBackButton, constraints);
 
-        authDisplayError = new JLabel("Error");
-
+        authenticationDisplayError = new JLabel("Error");
 
 
         constraints.gridx = 1;
@@ -595,7 +585,7 @@ public class ConnectFourView {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.SOUTH;
 
-        authenticationPanel.add(authDisplayError, constraints);
+        authenticationPanel.add(authenticationDisplayError, constraints);
 
         authenticationPanel.setOpaque(true);
     }
@@ -690,7 +680,7 @@ public class ConnectFourView {
 
 
         JPanel playerOneInfoContainer = new JPanel(new BorderLayout());
-        playerOneInfoContainer.setPreferredSize(new Dimension(60,60));
+        playerOneInfoContainer.setPreferredSize(new Dimension(60, 60));
 
         JPanel playerOneGridInfo = new JPanel();
 
@@ -704,7 +694,7 @@ public class ConnectFourView {
 
         //Right side
         JPanel playerTwoInfoContainer = new JPanel(new BorderLayout());
-        playerTwoInfoContainer.setPreferredSize(new Dimension(60,60));
+        playerTwoInfoContainer.setPreferredSize(new Dimension(60, 60));
 
         JPanel playerTwoGridInfo = new JPanel();
 
@@ -716,8 +706,7 @@ public class ConnectFourView {
         playerTwoGridInfo.add(new JLabel("Player 2"));
 
 
-
-        JPanel southContainer = new JPanel(new GridLayout(2,1));
+        JPanel southContainer = new JPanel(new GridLayout(2, 1));
         gameBoardBackButton = new JButton("Surrender");
         southContainer.add(gameBoardBackButton);
 
@@ -749,7 +738,7 @@ public class ConnectFourView {
         this.frame.add(controlPanel, BorderLayout.SOUTH);
     }
 
-    public void addGameStat(String gameID){
+    public void addGameStat(String gameID) {
         JLabel gameStat = new JLabel(gameID);
         gameStat.setHorizontalAlignment(JLabel.CENTER);
         this.gameStatsPanel.add(gameStat);
@@ -759,14 +748,13 @@ public class ConnectFourView {
     public void createGameHistoryPanel() {
 
 
-
         JPanel gameHistoryPanel = new JPanel(new BorderLayout());
 
         JLabel gameStatsTitleLabel = new JLabel("Game Stats");
         gameStatsTitleLabel.setHorizontalAlignment(JLabel.CENTER);
 
         gameHistoryPanel.add(gameStatsTitleLabel, BorderLayout.NORTH);
-        JPanel southContainer = new JPanel(new GridLayout(2,0));
+        JPanel southContainer = new JPanel(new GridLayout(2, 0));
         gameStatsDisplayError = new JLabel("Error");
         gameStatsDisplayError.setHorizontalAlignment(JLabel.CENTER);
         southContainer.add(gameStatsDisplayError);
@@ -775,7 +763,6 @@ public class ConnectFourView {
         southContainer.add(historyBackButton);
 
         gameHistoryPanel.add(southContainer, BorderLayout.SOUTH);
-
 
 
         JPanel centerContainer = new JPanel();
@@ -793,7 +780,6 @@ public class ConnectFourView {
         JLabel gameStatsGameLabel = new JLabel("GAME");
         gameStatsGameLabel.setHorizontalAlignment(JLabel.CENTER);
         gameStatsPanel.add(gameStatsGameLabel);
-
 
 
         JLabel gameStatsGameResult = new JLabel("RESULT");
@@ -814,7 +800,7 @@ public class ConnectFourView {
 
 //        gameStatsPanel.add(scroll);
 
-        for(int i = 0; i < 80; i++){
+        for (int i = 0; i < 80; i++) {
             addGameStat("Test");
         }
 
@@ -860,9 +846,9 @@ public class ConnectFourView {
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profEditPictureField = new JTextField(10);
+        profileEditPictureField = new JTextField(10);
 
-        profilePanel.add(profEditPictureField, constraints);
+        profilePanel.add(profileEditPictureField, constraints);
         constraints.gridwidth = 1;
 
         JLabel nickLabel = new JLabel("Username");
@@ -873,12 +859,12 @@ public class ConnectFourView {
         profilePanel.add(nickLabel, constraints);
 
 
-        profUserNameField = new JTextField(10);
+        profileUserNameField = new JTextField(10);
         constraints.gridx = 1;
         constraints.gridy = 2;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(profUserNameField, constraints);
+        profilePanel.add(profileUserNameField, constraints);
 
 
         JLabel passLabel = new JLabel("Password");
@@ -890,13 +876,13 @@ public class ConnectFourView {
         profilePanel.add(passLabel, constraints);
 
 
-        profPasswordField = new JPasswordField(10);
+        profilePasswordField = new JPasswordField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 3;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(profPasswordField, constraints);
+        profilePanel.add(profilePasswordField, constraints);
 
 
         JLabel nationalityLabel = new JLabel("Nationality");
@@ -908,13 +894,13 @@ public class ConnectFourView {
         profilePanel.add(nationalityLabel, constraints);
 
 
-        profEditnationalityField = new JTextField(10);
+        profileEditNationalityField = new JTextField(10);
 
         constraints.gridx = 1;
         constraints.gridy = 4;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(profEditnationalityField, constraints);
+        profilePanel.add(profileEditNationalityField, constraints);
 
         JLabel ageLabel = new JLabel("Age");
 
@@ -925,43 +911,42 @@ public class ConnectFourView {
         profilePanel.add(ageLabel, constraints);
 
 
-        profEditAgeField = new JFormattedTextField(numberFormat);
+        profileEditAgeField = new JFormattedTextField(numberFormat);
         System.out.println("Test error");
 
 
-
-        profEditAgeField.setColumns(10);
+        profileEditAgeField.setColumns(10);
 
         constraints.gridx = 1;
         constraints.gridy = 5;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(profEditAgeField, constraints);
+        profilePanel.add(profileEditAgeField, constraints);
 
 
-        profEditBackButton = new JButton("Back");
+        profileEditBackButton = new JButton("Back");
 
         constraints.gridx = 0;
         constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.WEST;
 
-        profilePanel.add(profEditBackButton, constraints);
+        profilePanel.add(profileEditBackButton, constraints);
 
 
-        profEditSubmitButton = new JButton("Submit");
+        profileEditSubmitButton = new JButton("Submit");
 
         constraints.gridx = 1;
         constraints.gridy = 7;
         constraints.anchor = GridBagConstraints.EAST;
 
-        profilePanel.add(profEditSubmitButton, constraints);
+        profilePanel.add(profileEditSubmitButton, constraints);
 
-        profEditDisplayError = new JLabel("Error");
-        profEditDisplayError.setForeground(Color.red);
+        profileEditDisplayError = new JLabel("Error");
+        profileEditDisplayError.setForeground(Color.red);
         constraints.gridx = 1;
         constraints.gridy = 6;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        profilePanel.add(profEditDisplayError, constraints);
+        profilePanel.add(profileEditDisplayError, constraints);
 
 
         this.profileEditPanel = profilePanel;
@@ -976,11 +961,11 @@ public class ConnectFourView {
     }
 
     public JTextField authUsernameField() {
-        return this.authUsernameField;
+        return this.authenticationUsernameField;
     }
 
     public JPasswordField authPasswordField() {
-        return this.authPasswordField;
+        return this.authenticationPasswordField;
     }
 
     public JButton loginButton() {
@@ -989,55 +974,54 @@ public class ConnectFourView {
 
     // Sign Up
 
-    public JTextField signUserNameField(){
+    public JTextField signUserNameField() {
         return this.signUserNameField;
     }
 
-    public JPasswordField signPasswordField(){
+    public JPasswordField signPasswordField() {
         return this.signPasswordField;
     }
 
-    public  JTextField signNationalityField(){
+    public JTextField signNationalityField() {
         return this.signNationalityField;
     }
 
-    public JTextField signAgeField(){
+    public JTextField signAgeField() {
         return this.signAgeField;
     }
 
-    public JTextField signUpPictureField(){
+    public JTextField signUpPictureField() {
         return this.signUpPictureField;
     }
 
 
-
     // profile
     public JTextField profEditUserNameField() {
-        return this.profUserNameField;
+        return this.profileUserNameField;
     }
 
     public JPasswordField profEditPasswordField() {
-        return this.profPasswordField;
+        return this.profilePasswordField;
     }
 
     public JTextField profEditNationalityField() {
-        return this.profEditnationalityField;
+        return this.profileEditNationalityField;
     }
 
     public JTextField profEditAgeField() {
-        return this.profEditAgeField;
+        return this.profileEditAgeField;
     }
 
     public JButton profEditSubmitButton() {
-        return this.profEditSubmitButton;
+        return this.profileEditSubmitButton;
     }
 
-    public JButton queueCancelButton(){
+    public JButton queueCancelButton() {
         return this.queueCancelButton;
     }
 
     public JButton profEditBackButton() {
-        return this.profEditBackButton;
+        return this.profileEditBackButton;
     }
 
     public JButton historyBackButton() {
@@ -1052,19 +1036,19 @@ public class ConnectFourView {
         return this.menuGameHistoryButton;
     }
 
-    public JButton gameBoardBackButton(){
+    public JButton gameBoardBackButton() {
         return this.gameBoardBackButton;
     }
 
-    public JButton logInBackButton(){
+    public JButton logInBackButton() {
         return this.logInBackButton;
     }
 
-    public JButton signSubmitButton(){
+    public JButton signSubmitButton() {
         return this.signSubmitButton;
     }
 
-    public JButton gameOverExitButton(){
+    public JButton gameOverExitButton() {
         return this.gameOverExitButton;
     }
 
@@ -1099,14 +1083,14 @@ public class ConnectFourView {
         this.frame.validate();
     }
 
-    public void connectFourSignUp(){
+    public void connectFourSignUp() {
         this.frame.getContentPane().removeAll();
         this.frame.add(signUpPanel, BorderLayout.CENTER);
         this.frame.repaint();
         this.frame.validate();
     }
 
-    public void connectFourStartingMenu(){
+    public void connectFourStartingMenu() {
         this.frame.getContentPane().removeAll();
         this.frame.add(startingMenuPanel, BorderLayout.CENTER);
         this.frame.repaint();
@@ -1134,7 +1118,7 @@ public class ConnectFourView {
         this.frame.validate();
     }
 
-    public void connectFourGameOver(){
+    public void connectFourGameOver() {
         this.frame.getContentPane().removeAll();
         this.frame.add(this.gameOverPanel, BorderLayout.CENTER);
         this.frame.repaint();
@@ -1154,18 +1138,15 @@ public class ConnectFourView {
     }
 
 
-
-    public JLabel getProfEditDisplayError(){
-        return this.profEditDisplayError;
+    public JLabel getProfileEditDisplayError() {
+        return this.profileEditDisplayError;
     }
 
 
     public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(8000);
-
-        ConnectFourView connectFourView = new ConnectFourView(6, 7);
-        ConnectFourClientModel clientModel = new ConnectFourClientModel();
-        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, clientModel);
+        ConnectFourView connectFourView = new ConnectFourView();
+        ConnectFourClientModel connectFourClientModel = new ConnectFourClientModel();
+        ConnectFourPresenter presenter = new ConnectFourPresenter(connectFourView, connectFourClientModel);
 
 //        try {
 //            Thread.sleep(5000);
@@ -1182,14 +1163,12 @@ public class ConnectFourView {
         // createControlPanel("André");
     }
 
-
-
     public JLabel gameOverLabel() {
         return this.gameOverMessageLabel;
     }
 
     public JButton profDispEditButton() {
-        return this.profDispEditButton;
+        return this.profileDisplayEditButton;
     }
 
 
@@ -1201,7 +1180,7 @@ public class ConnectFourView {
     }
 
     public JButton profDispBackButton() {
-        return this.profDispBackButton;
+        return this.profileDisplayBackButton;
     }
 
     public void connectFourQueueGame() {
@@ -1215,27 +1194,27 @@ public class ConnectFourView {
         this.signUpDisplayError.setText(errorMsg);
     }
 
-    public void setLoginDisplayError(String errorMsg){
-        this.authDisplayError.setText(errorMsg);
+    public void setLoginDisplayError(String errorMsg) {
+        this.authenticationDisplayError.setText(errorMsg);
     }
 
-    public void setProfileDisplayError(String errorMsg){
-        this.profDisplayError.setText(errorMsg);
+    public void setProfileDisplayError(String errorMsg) {
+        this.profileDisplayError.setText(errorMsg);
     }
 
-    public void setGameStatsDisplayError(String erroMsg){
+    public void setGameStatsDisplayError(String erroMsg) {
         this.gameStatsDisplayError.setText(erroMsg);
     }
 
-    public void setGameBoardDisplayError(String erroMsg){
+    public void setGameBoardDisplayError(String erroMsg) {
         this.boardErrorDisplay.setText(erroMsg);
     }
 
-    public void setProfileEditDisplayError(String errorMsg){
-        this.profEditDisplayError.setText(errorMsg);
+    public void setProfileEditDisplayError(String errorMsg) {
+        this.profileEditDisplayError.setText(errorMsg);
     }
 
     public JTextField profileEditPicture() {
-        return this.profEditPictureField;
+        return this.profileEditPictureField;
     }
 }

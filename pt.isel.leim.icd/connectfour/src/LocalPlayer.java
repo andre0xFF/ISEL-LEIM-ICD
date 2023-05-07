@@ -18,8 +18,9 @@ public class LocalPlayer implements Listener<Message>, Player {
     private Client client;
 
     public LocalPlayer(Client client) {
-        this.client = client;
         client.listen(this);
+
+        this.client = client;
     }
 
     @Override

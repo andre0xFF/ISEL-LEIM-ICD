@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 /**
- * Represents the server side of the game.
+ * The server model of the Connect Four game. It is responsible for managing the game and the players.
+ * An instance of this class runs in a separate thread automatically when created.
  */
 public class ConnectFourServerModel implements Runnable {
 
@@ -15,10 +16,22 @@ public class ConnectFourServerModel implements Runnable {
     private final Server server;
     private final ArrayList<RemotePlayer> players = new ArrayList<>();
 
+
+    /**
+     * Creates a new instance of the ConnectFourServerModel class.
+     *
+     * @throws IOException If an I/O error occurs when creating the server.
+     */
     public ConnectFourServerModel() throws IOException {
         this(Client.DEFAULT_PORT);
     }
 
+    /**
+     * Creates a new instance of the ConnectFourServerModel class.
+     *
+     * @param port The port of the server.
+     * @throws IOException If an I/O error occurs when creating the server.
+     */
     public ConnectFourServerModel(int port) throws IOException {
         this.server = new Server(port);
         Thread thread = new Thread(this);
@@ -79,5 +92,9 @@ public class ConnectFourServerModel implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void main(String[] args) throws IOException {
+        ConnectFourServerModel server = new ConnectFourServerModel();
     }
 }

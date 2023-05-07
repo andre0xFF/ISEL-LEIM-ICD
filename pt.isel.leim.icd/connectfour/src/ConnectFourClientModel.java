@@ -8,37 +8,35 @@ import java.io.IOException;
 public class ConnectFourClientModel {
     private ConnectFour connectFour;
 
-    private final LocalPlayer player;
-
     private final Client client = new Client();
+    private final LocalPlayer player = new LocalPlayer(this.client);
 
     public ConnectFourClientModel() throws IOException {
-        this.player = new LocalPlayer(client);
     }
 
     public void dropToken(int column) throws IOException, SAXException {
         boolean dropped = connectFour.dropToken(column);
 
         if (dropped) {
-            client.write(new DropTokenMessage(column));
+            this.client.write(new DropTokenMessage(column));
         }
     }
 
     public void login(String text, char[] password) throws IOException, SAXException {
-        client.write(new AskLoginMessage(text, password));
+        this.client.write(new AskLoginMessage(text, password));
     }
 
     public void updateProfile(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
-        client.write(new AskUpdateProfileMessage(image, username, password, nationality, age));
+        this.client.write(new AskUpdateProfileMessage(image, username, password, nationality, age));
     }
 
     public void signUp(String image, String username, char[] password, String nationality, int age) throws IOException, SAXException {
-        client.write(new AskSignUpMessage(image, username, password, nationality, age));
+        this.client.write(new AskSignUpMessage(image, username, password, nationality, age));
     }
 
 
     public void connectFourGamesStats() throws IOException, SAXException {
-        client.write(new AskGamesStatsMessage());
+        this.client.write(new AskGamesStatsMessage());
     }
 
     public void quitGame() throws IOException {

@@ -22,13 +22,12 @@ class LocalPlayerTest {
 
         assertTrue(client.isConnected());
 
-
         GamePlayView gamePlayView = column -> {
             tokenDropped = true;
             return true;
         };
 
-        ConnectFourView view = new ConnectFourView(6,6);
+        ConnectFourView view = new ConnectFourView();
         ConnectFourClientModel model = new ConnectFourClientModel();
         this.presenter = new ConnectFourPresenter(view, model);
         this.localPlayer = new LocalPlayer(client);

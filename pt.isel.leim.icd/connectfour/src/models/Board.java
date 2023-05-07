@@ -6,10 +6,12 @@ import models.player.Token;
  * Represents the Connect Four board in the game.
  */
 public class Board {
+    public static final int ROWS = 6;
+    public static final int COLUMNS = 7;
 
-    private final Token[][] tokens = new Token[6][7];
-    private final int totalRows = tokens.length;
-    private final int totalColumns = tokens[0].length;
+    private final Token[][] tokens = new Token[ROWS][COLUMNS];
+    private final int totalRows = this.tokens.length;
+    private final int totalColumns = this.tokens[0].length;
 
     private int tokenCount = 0;
 

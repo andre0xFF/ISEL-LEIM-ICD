@@ -20,9 +20,7 @@ public class ConnectFourPresenter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         try {
-
             // Navigate from Start Menu to Log In Menu
             if (e.getSource().equals(this.view.startLoginButton())) {
                 this.view.connectFourLogin();
@@ -54,7 +52,6 @@ public class ConnectFourPresenter implements ActionListener {
             // SignUp Events
 
             if (e.getSource().equals(this.view.signSubmitButton())) {
-
                 BufferedImage image = null;
 
                 try {
@@ -74,7 +71,6 @@ public class ConnectFourPresenter implements ActionListener {
                     } catch (SAXException exception) {
                         this.view.setSignUpDisplayError("Invalid Input");
                     }
-
                 } catch (NumberFormatException exception) {
                     this.view.setSignUpDisplayError("Invalid Age format");
 
@@ -86,8 +82,6 @@ public class ConnectFourPresenter implements ActionListener {
 
             // Profile Events
             if (e.getSource().equals(this.view.profEditSubmitButton())) {
-
-
                 BufferedImage image = null;
 
                 try {
@@ -119,12 +113,10 @@ public class ConnectFourPresenter implements ActionListener {
 
             if (e.getSource().equals(this.view.profDispEditButton())) {
                 this.view.connectFourProfileEdit();
-
             }
 
             if (e.getSource().equals(this.view.profDispBackButton())) {
                 this.view.connectFourGameMenu();
-
             }
 
             // Cancel Queue Search
@@ -165,7 +157,6 @@ public class ConnectFourPresenter implements ActionListener {
             if (e.getSource().equals(this.view.quitButton())) {
                 this.model.quitGame();
                 this.view.connetFourCloseUI();
-
             }
 
             // Navigate from Game Menu to new Game Board
@@ -177,7 +168,6 @@ public class ConnectFourPresenter implements ActionListener {
             // Navigate from Game Over to Game Main Menu
             if (e.getSource().equals(this.view.gameOverExitButton())) {
                 this.view.connectFourGameMenu();
-
             }
 
             if (e.getSource().equals(this.view.gameBoardBackButton())) {
@@ -200,7 +190,6 @@ public class ConnectFourPresenter implements ActionListener {
 
 
         } catch (IOException | SAXException ex) {
-
             throw new RuntimeException(ex);
         }
 
@@ -219,7 +208,6 @@ public class ConnectFourPresenter implements ActionListener {
     }
 
     public void displaySignUpError(String errorMsg) {
-
         this.view.setSignUpDisplayError(errorMsg);
     }
 
