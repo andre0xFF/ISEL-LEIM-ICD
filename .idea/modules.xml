@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/battleship/client/client.iml" filepath="$PROJECT_DIR$/battleship/client/client.iml" />
       <module fileurl="file://$PROJECT_DIR$/pt.isel.leim.icd/connectfour/connectfour.iml" filepath="$PROJECT_DIR$/pt.isel.leim.icd/connectfour/connectfour.iml" />
-      <module fileurl="file://$PROJECT_DIR$/icd.iml" filepath="$PROJECT_DIR$/icd.iml" />
       <module fileurl="file://$PROJECT_DIR$/battleship/protocol/protocol.iml" filepath="$PROJECT_DIR$/battleship/protocol/protocol.iml" />
-      <module fileurl="file://$PROJECT_DIR$/pt.isel.leim.icd/pt.isel.leim.icd.iml" filepath="$PROJECT_DIR$/pt.isel.leim.icd/pt.isel.leim.icd.iml" />
-      <module fileurl="file://$PROJECT_DIR$/battleship/server/server.iml" filepath="$PROJECT_DIR$/battleship/server/server.iml" />
     </modules>
   </component>
 </project>

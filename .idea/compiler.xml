@@ -11,6 +11,7 @@
     <bytecodeTargetLevel>
       <module name="battleship" target="1.5" />
       <module name="client" target="11" />
+      <module name="icd" target="11" />
       <module name="protocol" target="11" />
       <module name="server" target="11" />
     </bytecodeTargetLevel>
