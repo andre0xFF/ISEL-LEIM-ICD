@@ -131,13 +131,13 @@ public class ConnectFourView {
         integerFormatter.setCommitsOnValidEdit(true);
 
 
-        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
+//        this.frame.add(startingMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(authenticationPanel, BorderLayout.CENTER);
 //        this.frame.add(profilePanel, BorderLayout.CENTER);
 //        this.frame.add(gameHistoryPanel, BorderLayout.CENTER);
 //        this.frame.add(gameMenuPanel, BorderLayout.CENTER);
 //        this.frame.add(gameOverPanel, BorderLayout.CENTER);
-//        this.frame.add(queuePanel, BorderLayout.CENTER);
+        this.frame.add(queuePanel, BorderLayout.CENTER);
 //        this.frame.add(boardPanel, BorderLayout.CENTER);
 
         this.frame.setVisible(true);
@@ -591,64 +591,78 @@ public class ConnectFourView {
     }
 
     private void createGameMenuPanel() {
-        JPanel gameMenuPanel = new JPanel();
+        JPanel gameMenuPanel = new JPanel(new BorderLayout());
+
+        JPanel containerTop = new JPanel();
+
+        JPanel containerMiddle = new JPanel();
+
         GridBagLayout bagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
 
-        gameMenuPanel.setLayout(bagLayout);
+        containerTop.setLayout(bagLayout);
 
-        JLabel menuTitleLabel = new JLabel("MENU", JLabel.CENTER);
+        containerMiddle.setLayout(bagLayout);
 
-        constraints.anchor = GridBagConstraints.NORTH;
+
+        JLabel menuTitleLabel = new JLabel("MENU");
+
+        menuTitleLabel.setHorizontalAlignment(JLabel.CENTER);
+
+
+
+
+
+        containerTop.add(menuTitleLabel);
+
+
+
+        gameMenuPanel.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.WEST);
+        gameMenuPanel.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.EAST);
+
 
         constraints.gridx = 0;
         constraints.gridy = 0;
-        constraints.gridwidth = 4;
-        constraints.weighty = 1;
-
-
-        gameMenuPanel.add(menuTitleLabel, constraints);
-
-        constraints.weighty = 0;
-
-
+        constraints.weightx = 1;
         menuNewGameButton = new JButton("NEW GAME");
+        menuNewGameButton.setPreferredSize(new Dimension(150, 30));
 
-        constraints.gridx = 0;
+
+        containerMiddle.add(menuNewGameButton, constraints);
+
+
         constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.NORTH;
-        constraints.insets.top = 5;
-
-        gameMenuPanel.add(menuNewGameButton, constraints);
 
         menuProfileJButton = new JButton("PROFILE");
+        menuProfileJButton.setPreferredSize(new Dimension(150, 30));
 
-        constraints.gridx = 0;
+
+
+
+        containerMiddle.add(menuProfileJButton, constraints);
+
         constraints.gridy = 2;
-        constraints.anchor = GridBagConstraints.WEST;
-
-
-        gameMenuPanel.add(menuProfileJButton, constraints);
 
         menuGameHistoryButton = new JButton("GAME STATS");
+        menuGameHistoryButton.setPreferredSize(new Dimension(150, 30));
 
 
-        constraints.gridx = 0;
+
+
+        containerMiddle.add(menuGameHistoryButton, constraints);
+
         constraints.gridy = 3;
 
-
-        gameMenuPanel.add(menuGameHistoryButton, constraints);
-
-
         gameQuitButton = new JButton("QUIT GAME");
+        gameQuitButton.setPreferredSize(new Dimension(150, 30));
 
-        constraints.gridx = 0;
-        constraints.gridy = 4;
 
-        constraints.insets.top = 20;
+        containerMiddle.add(gameQuitButton, constraints);
 
-        gameMenuPanel.add(gameQuitButton, constraints);
+        gameMenuPanel.add(containerMiddle, BorderLayout.CENTER);
 
+
+        gameMenuPanel.add(containerTop, BorderLayout.NORTH);
 
         this.gameMenuPanel = gameMenuPanel;
 
@@ -1138,9 +1152,6 @@ public class ConnectFourView {
     }
 
 
-    public JLabel getProfileEditDisplayError() {
-        return this.profileEditDisplayError;
-    }
 
 
     public static void main(String[] args) throws IOException {
