@@ -8,5 +8,8 @@
 <p>Invoke HTML rendered by Servlet: <a href="ExampleOne" target="_blank">here</a></p>
 <p>Java in static page: <a href="ExampleTwo.jsp" target="_blank">here</a></p>
 <p>Java injected by Servlet: <a href="ExampleThree?message=hello!" target="_blank">here</a></p>
+<p> Controller Servlet: <a href="GridBoard.jsp" target="_blank">Controller</a></p>
+
+
 </body>
 </html>

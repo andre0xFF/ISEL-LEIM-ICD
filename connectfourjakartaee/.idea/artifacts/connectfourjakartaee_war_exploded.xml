@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" build-on-make="true" name="connectfourjakartaee:war exploded">
+    <output-path>$PROJECT_DIR$/out/connectfourjakartaee-1.0-SNAPSHOT</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="jakarta.servlet.api" />
+          <element id="library" level="project" name="javax.servlet.api" />
+        </element>
+        <element id="directory" name="classes">
+          <element id="module-output" name="connectfourjakartaee" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="connectfourjakartaee/web/Web" />
+    </root>
+  </artifact>
+</component>

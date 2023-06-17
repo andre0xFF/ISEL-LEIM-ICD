@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="connectfourjakartaee:war">
+    <output-path>$PROJECT_DIR$/out</output-path>
+    <root id="archive" name="connectfourjakartaee-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="connectfourjakartaee:war exploded" />
+    </root>
+  </artifact>
+</component>
