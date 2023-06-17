@@ -2,9 +2,8 @@ version: "3"
 
 services:
   tomcat:
-    image: tomcat:latest
+    image: tomcat:jre17
     ports:
       - "8080:8080"
     volumes:
-      # - ./out/connectfourjakartaee-1.0-SNAPSHOT.war:/usr/local/tomcat/webapps/connectfourjakartaee-1.0-SNAPSHOT.war
-      - ./out/connectfourjakartaee-1.0-SNAPSHOT:/usr/local/tomcat/webapps/connectfourjakartaee-1.0-SNAPSHOT
+      - ${ARTIFACT_DIR}/${ARTIFACT_FILE}:/usr/local/tomcat/webapps/${ARTIFACT_FILE}
