@@ -51,8 +51,8 @@ public class XMLSerializer<T> implements Serializer<T> {
      * @throws JsonProcessingException If the XML is invalid.
      */
     @Override
-    public <K extends T> K deserialize(String content, Class<K> messageClass) throws JsonProcessingException {
-        return xmlMapper.readValue(content, messageClass);
+    public <K extends T> K deserialize(String content, Class<T> messageClass) throws JsonProcessingException {
+        return ((K) xmlMapper.readValue(content, messageClass));
     }
 
     /**

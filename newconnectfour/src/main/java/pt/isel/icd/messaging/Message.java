@@ -1,6 +1,7 @@
 package pt.isel.icd.messaging;
 
 import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
@@ -11,6 +12,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         include = JsonTypeInfo.As.WRAPPER_OBJECT
 )
 @JsonRootName("Message")
+@JsonSubTypes(
+        {
+                @JsonSubTypes.Type(value = PingMessage.class),
+                @JsonSubTypes.Type(value = PongMessage.class),
+        }
+)
 public interface Message {
 
 }

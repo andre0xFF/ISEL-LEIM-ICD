@@ -16,7 +16,7 @@ public interface Serializer<T> {
      * @param <K> The subtype of the message <T>.
      * @throws JsonProcessingException If the string is invalid.
      */
-    <K extends T> K deserialize(String content, Class<K> messageClass) throws JsonProcessingException;
+    <K extends T> K deserialize(String content, Class<T> messageClass) throws JsonProcessingException;
 
     /**
      * Serialize a message to a string.

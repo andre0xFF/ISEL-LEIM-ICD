@@ -23,7 +23,7 @@ public class PingMessageTest {
     
     @Test
     public void shouldDeserializeSuccessfully() throws JsonProcessingException {
-        PingMessage pingMessage = XMLSerializer.deserialize(serializedPingMessage, PingMessage.class);
+        var pingMessage = XMLSerializer.deserialize(serializedPingMessage, Message.class);
         
         assertInstanceOf(PingMessage.class, pingMessage);
         assertInstanceOf(Message.class, pingMessage);
