@@ -1,5 +1,0 @@
-version: '3'
-
-services:
-  connectfour:
-    image: tomcat:10-jdk17
