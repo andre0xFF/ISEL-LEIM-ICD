@@ -1,0 +1,120 @@
+package pt.isel.icd.othello;
+
+public class Othello {
+    public static final int BOARD_SIZE = 8;
+    private BoardCharacter[][] board;
+
+    public Othello() {
+        initBoard();
+    }
+
+    private void initBoard() {
+        board = new BoardCharacter[BOARD_SIZE][BOARD_SIZE];
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                setPiece(i, j, BoardCharacter.EMPTY);
+            }
+        }
+
+        setPiece(3, 3, board[4][4] = BoardCharacter.X);
+        setPiece(3, 4, board[4][3] = BoardCharacter.O);
+    }
+
+    public boolean makeMove(int row, int column, BoardCharacter player) {
+        boolean validMove = validateMove(row, column, player);
+
+        if (!validMove) {
+            return false;
+        }
+
+        flipPieces(row, column, player);
+        setPiece(row, column, player);
+
+        return true;
+    }
+
+    public boolean makeMove(MakeMoveCommand request) {
+        return makeMove(request.row(), request.column(), request.playerCharacter());
+    }
+
+    private void setPiece(int row, int column, BoardCharacter player) {
+        board[row][column] = player;
+    }
+
+    /**
+     * Validates if the move is valid
+     * @param row the row
+     * @param column the column
+     * @param playerCharacter the playerCharacter character
+     * @return true if the move is valid, false otherwise
+     */
+    private boolean validateMove(int row, int column, BoardCharacter playerCharacter) {
+        if (board[row][column] != BoardCharacter.EMPTY) {
+            return false;
+        }
+
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                if (checkDirection(row, column, dr, dc, playerCharacter)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean checkDirection(int row, int column, int dr, int dc, BoardCharacter playerCharacter) {
+        int r = row + dr;
+        int c = column + dc;
+
+        BoardCharacter opponentCharacter = playerCharacter == BoardCharacter.X ? BoardCharacter.O : BoardCharacter.X;
+
+        while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
+            if (board[r][c] == BoardCharacter.EMPTY) {
+                return false;
+            }
+
+            if (board[r][c] == playerCharacter) {
+                return true;
+            }
+
+            r += dr;
+            c += dc;
+        }
+
+        return false;
+    }
+
+    private void flipPieces(int x, int y, BoardCharacter player) {
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                if (checkDirection(x, y, dr, dc, player)) {
+                    flipDirection(x, y, dr, dc, player);
+                }
+            }
+        }
+    }
+
+    private void flipDirection(int x, int y, int dr, int dc, BoardCharacter player) {
+        int r = x + dr;
+        int c = y + dc;
+
+        BoardCharacter opponent = player == BoardCharacter.X ? BoardCharacter.O : BoardCharacter.X;
+
+        while (board[r][c] == opponent) {
+            setPiece(r, c, player);
+            r += dr;
+            c += dc;
+        }
+    }
+}
