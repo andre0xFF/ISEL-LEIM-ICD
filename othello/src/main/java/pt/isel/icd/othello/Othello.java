@@ -3,6 +3,7 @@ package pt.isel.icd.othello;
 public class Othello {
     public static final int BOARD_SIZE = 8;
     private BoardCharacter[][] board;
+    private int totalPieces;
 
     public Othello() {
         initBoard();
@@ -17,14 +18,14 @@ public class Othello {
             }
         }
 
-        setPiece(3, 3, board[4][4] = BoardCharacter.X);
-        setPiece(3, 4, board[4][3] = BoardCharacter.O);
+        setPiece(3, 3, BoardCharacter.X);
+        setPiece(4, 4, BoardCharacter.X);
+        setPiece(3, 4, BoardCharacter.O);
+        setPiece(4, 3, BoardCharacter.O);
     }
 
     public boolean makeMove(int row, int column, BoardCharacter player) {
-        boolean validMove = validateMove(row, column, player);
-
-        if (!validMove) {
+        if (!isMoveValid(row, column, player)) {
             return false;
         }
 
@@ -39,6 +40,10 @@ public class Othello {
     }
 
     private void setPiece(int row, int column, BoardCharacter player) {
+        if (player != BoardCharacter.EMPTY) {
+            totalPieces++;
+        }
+
         board[row][column] = player;
     }
 
@@ -49,7 +54,11 @@ public class Othello {
      * @param playerCharacter the playerCharacter character
      * @return true if the move is valid, false otherwise
      */
-    private boolean validateMove(int row, int column, BoardCharacter playerCharacter) {
+    private boolean isMoveValid(int row, int column, BoardCharacter playerCharacter) {
+        if (checkEndGame()) {
+            return false;
+        }
+
         if (board[row][column] != BoardCharacter.EMPTY) {
             return false;
         }
@@ -67,6 +76,22 @@ public class Othello {
         }
 
         return false;
+    }
+
+    private boolean checkEndGame() {
+        if (totalPieces != BOARD_SIZE * BOARD_SIZE) {
+            return false;
+        }
+
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (isMoveValid(i, j, BoardCharacter.X) || isMoveValid(i, j, BoardCharacter.O)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     private boolean checkDirection(int row, int column, int dr, int dc, BoardCharacter playerCharacter) {
