@@ -98,8 +98,6 @@ public class Othello {
         int r = row + dr;
         int c = column + dc;
 
-        BoardCharacter opponentCharacter = playerCharacter == BoardCharacter.X ? BoardCharacter.O : BoardCharacter.X;
-
         while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
             if (board[r][c] == BoardCharacter.EMPTY) {
                 return false;
