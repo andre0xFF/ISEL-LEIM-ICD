@@ -1,6 +1,7 @@
 package pt.isel.icd.othello;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class OthelloTest {
-    // test<MethodName>_<ConditionOrStateUnderTest>_<ExpectedBehavior>
+    // test<MethodName><ConditionOrStateUnderTest><ExpectedBehavior>
 
-    Othello othello;
+    private Othello othello;
 
     @BeforeEach
     void setUp() {
@@ -23,7 +24,8 @@ class OthelloTest {
             "3, 3", "3, 4",
             "4, 3", "4, 4",
     })
-    void initializeBoard_CenterPieces_ArePlayerPieces(int row, int column) {
+    @DisplayName("When the board is initialized, the center pieces are player pieces")
+    void initializeBoardCenterPiecesArePlayerPieces(int row, int column) {
         assertNotEquals(BoardCharacter.EMPTY, othello.getPiece(row, column));
     }
 
@@ -38,26 +40,31 @@ class OthelloTest {
             "6, 0", "6, 1", "6, 2", "6, 3", "6, 4", "6, 5", "6, 6", "6, 7",
             "7, 0", "7, 1", "7, 2", "7, 3", "7, 4", "7, 5", "7, 6", "7, 7"
     })
-    void initializeBoard_OuterCenterPieces_AreEmpty(int row, int column) {
+    @DisplayName("When the board is initialized, the outer center pieces are empty")
+    void initializeBoardOuterCenterPiecesAreEmpty(int row, int column) {
         assertEquals(BoardCharacter.EMPTY, othello.getPiece(row, column));
     }
 
     @Test
-    void makeMove_ValidMove_Succeeds() {
+    @DisplayName("When making a valid move, the move succeeds")
+    void makeMoveValidMoveSucceeds() {
         assertTrue(othello.makeMove(2, 3, BoardCharacter.X));
     }
 
     @Test
-    void makeMove_InvalidMove_Fails() {
+    @DisplayName("When making an invalid move, the move fails")
+    void makeMoveInvalidMoveFails() {
         assertFalse(othello.makeMove(0, 0, BoardCharacter.O));
     }
 
     @Test
-    void checkEndGame_BoardFull_GameEnded() {
+    void checkEndGameBoardFullGameEnded() {
+        // TODO: Implement test checkEndGameBoardFullGameEnded
     }
 
     @Test
-    void makeMove_ValidMove_FlipsPieces() {
+    @DisplayName("When making a valid move, the opponent's pieces are flipped")
+    void makeMoveValidMoveFlipsPieces() {
         othello.makeMove(2, 3, BoardCharacter.X);
         assertEquals(BoardCharacter.X, othello.getPiece(2, 3));
         assertEquals(BoardCharacter.X, othello.getPiece(3, 3));
