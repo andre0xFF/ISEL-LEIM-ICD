@@ -56,9 +56,9 @@ public class Othello {
      * @return true if the move is valid, false otherwise
      */
     private boolean isMoveValid(int row, int column, BoardCharacter playerCharacter) {
-        if (checkEndGame()) {
-            return false;
-        }
+//        if (checkEndGame()) {
+//            return false;
+//        }
 
         if (board[row][column] != BoardCharacter.EMPTY) {
             return false;
@@ -81,8 +81,12 @@ public class Othello {
     }
 
     public boolean checkEndGame() {
-        if (totalPieces != BOARD_SIZE * BOARD_SIZE) {
-            return false;
+//        if (totalPieces != BOARD_SIZE * BOARD_SIZE) {
+//            return false;
+//        }
+
+        if(totalPieces == BOARD_SIZE * BOARD_SIZE){
+            return true;
         }
 
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -99,15 +103,22 @@ public class Othello {
     private boolean checkDirection(int row, int column, int dr, int dc, BoardCharacter playerCharacter) {
         int r = row + dr;
         int c = column + dc;
+        boolean validDir = false;
+
 
         while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
             if (board[r][c] == BoardCharacter.EMPTY) {
                 return false;
             }
 
-            if (board[r][c] == playerCharacter) {
+            if (board[r][c] != playerCharacter) {
+                validDir = true;
+            }
+
+            if (board[r][c] == playerCharacter && validDir) {
                 return true;
             }
+
 
             r += dr;
             c += dc;

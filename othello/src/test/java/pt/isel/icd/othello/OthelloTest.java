@@ -48,7 +48,7 @@ class OthelloTest {
     @Test
     @DisplayName("When making a valid move, the move succeeds")
     void makeMoveValidMoveSucceeds() {
-        assertTrue(othello.makeMove(2, 3, BoardCharacter.X));
+        assertTrue(othello.makeMove(2, 3, BoardCharacter.O));
     }
 
     @Test
@@ -65,8 +65,8 @@ class OthelloTest {
     @Test
     @DisplayName("When making a valid move, the opponent's pieces are flipped")
     void makeMoveValidMoveFlipsPieces() {
-        othello.makeMove(2, 3, BoardCharacter.X);
-        assertEquals(BoardCharacter.X, othello.getPiece(3, 3));
-        assertEquals(BoardCharacter.X, othello.getPiece(4, 3));
+        othello.makeMove(2, 3, BoardCharacter.O);
+        assertEquals(BoardCharacter.O, othello.getPiece(3, 3));
+        assertEquals(BoardCharacter.O, othello.getPiece(4, 3));
     }
 }
