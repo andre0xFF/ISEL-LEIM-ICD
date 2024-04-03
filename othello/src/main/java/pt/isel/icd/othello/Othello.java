@@ -6,10 +6,10 @@ public class Othello {
     private int totalPieces;
 
     public Othello() {
-        initBoard();
+        initializeBoard();
     }
 
-    private void initBoard() {
+    private void initializeBoard() {
         board = new BoardCharacter[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -49,8 +49,9 @@ public class Othello {
 
     /**
      * Validates if the move is valid
-     * @param row the row
-     * @param column the column
+     *
+     * @param row             the row
+     * @param column          the column
      * @param playerCharacter the playerCharacter character
      * @return true if the move is valid, false otherwise
      */
@@ -78,7 +79,7 @@ public class Othello {
         return false;
     }
 
-    private boolean checkEndGame() {
+    public boolean checkEndGame() {
         if (totalPieces != BOARD_SIZE * BOARD_SIZE) {
             return false;
         }
@@ -139,5 +140,9 @@ public class Othello {
             r += dr;
             c += dc;
         }
+    }
+
+    public BoardCharacter getPiece(int row, int column) {
+        return board[row][column];
     }
 }
