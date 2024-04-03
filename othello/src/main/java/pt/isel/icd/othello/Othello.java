@@ -19,9 +19,9 @@ public class Othello {
         }
 
         setPiece(3, 3, BoardCharacter.X);
-        setPiece(4, 4, BoardCharacter.X);
         setPiece(3, 4, BoardCharacter.O);
         setPiece(4, 3, BoardCharacter.O);
+        setPiece(4, 4, BoardCharacter.X);
     }
 
     public boolean makeMove(int row, int column, BoardCharacter player) {
@@ -66,6 +66,7 @@ public class Othello {
 
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
+                // Skip the current position
                 if (dr == 0 && dc == 0) {
                     continue;
                 }
@@ -94,7 +95,7 @@ public class Othello {
 
         return true;
     }
-
+    
     private boolean checkDirection(int row, int column, int dr, int dc, BoardCharacter playerCharacter) {
         int r = row + dr;
         int c = column + dc;

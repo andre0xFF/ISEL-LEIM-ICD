@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class OthelloTest {
-    // test<MethodName><ConditionOrStateUnderTest><ExpectedBehavior>
+    // <MethodName><ConditionOrStateUnderTest><ExpectedBehavior>
 
     private Othello othello;
 
@@ -66,7 +66,7 @@ class OthelloTest {
     @DisplayName("When making a valid move, the opponent's pieces are flipped")
     void makeMoveValidMoveFlipsPieces() {
         othello.makeMove(2, 3, BoardCharacter.X);
-        assertEquals(BoardCharacter.X, othello.getPiece(2, 3));
         assertEquals(BoardCharacter.X, othello.getPiece(3, 3));
+        assertEquals(BoardCharacter.X, othello.getPiece(4, 3));
     }
 }
