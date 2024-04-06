@@ -15,8 +15,7 @@ import pt.isel.icd.serialization.XMLSerializer;
  * Represents a client.
  */
 public class Client implements Publisher<Message>, Subscriber<String> {
-    public static final int DEFAULT_PORT = SocketAdapter.DEFAULT_PORT;
-    private final SocketAdapter socket;
+    private final SocketFacade socket;
     private final Serializer<Message> serializer = new XMLSerializer<>();
     private final SchemaValidator schemaValidator = new SchemaValidator();
     private Subscriber<Message> subscriber;
@@ -24,25 +23,25 @@ public class Client implements Publisher<Message>, Subscriber<String> {
     private Message lastReadMessage;
 
     public Client() throws IOException {
-        this(SocketAdapter.DEFAULT_HOSTNAME, SocketAdapter.DEFAULT_PORT);
+        this(SocketFacade.DEFAULT_HOSTNAME, SocketFacade.DEFAULT_PORT);
     }
 
     public Client(int port) throws IOException {
-        this(SocketAdapter.DEFAULT_HOSTNAME, port);
+        this(SocketFacade.DEFAULT_HOSTNAME, port);
     }
 
     public Client(String hostname) throws IOException {
-        this(hostname, SocketAdapter.DEFAULT_PORT);
+        this(hostname, SocketFacade.DEFAULT_PORT);
     }
 
     public Client(String hostname, int port) throws IOException {
-        this(new SocketAdapter(hostname, port));
+        this(new SocketFacade(hostname, port));
     }
 
-    public Client(SocketAdapter socket) {
+    public Client(SocketFacade socket) {
         this.socket = socket;
 
-        this.socket.subscribe(this);
+        socket.subscribe(this);
     }
 
     /**
@@ -51,7 +50,7 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      * @return True if the client is connected, false otherwise.
      */
     public boolean isConnected() {
-        return this.socket.isConnected();
+        return socket.isConnected();
     }
 
     /**
@@ -62,10 +61,10 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      * @throws SAXException If an error occurs when validating the message.
      */
     public void write(Message message) throws IOException, SAXException {
-        String content = XMLSerializer.serialize(message);
-        this.schemaValidator.validate(content);
+        String content = serializer.serialize(message);
+        schemaValidator.validate(content);
 
-        this.socket.write(content);
+        socket.write(content);
     }
 
     /**
@@ -82,7 +81,7 @@ public class Client implements Publisher<Message>, Subscriber<String> {
     private Message read(String content) throws IOException, SAXException {
         schemaValidator.validate(content);
 
-        return XMLSerializer.deserialize(content);
+        return serializer.deserialize(content, Message.class);
     }
 
     /**
@@ -91,37 +90,22 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      * @throws IOException If an I/O error occurs when closing.
      */
     public void close() throws IOException {
-        this.socket.close();
-    }
-
-    /**
-     * Called the subscriber when a message is received.
-     *
-     * @param content The message.
-     */
-    @Override
-    public void onMessage(String content) {
-        try {
-            Message message = read(content);
-            subscriber.update(message);
-        } catch (IOException | SAXException e) {
-            e.printStackTrace();
-        }
+        socket.close();
     }
 
     @Override
     public void subscribe(Subscriber<Message> subscriber) {
-        this.subscribers.add(subscriber);
+        subscribers.add(subscriber);
     }
 
     @Override
     public void unsubscribe(Subscriber<Message> subscriber) {
-        this.subscribers.remove(subscriber);
+        subscribers.remove(subscriber);
     }
 
     @Override
     public void publish() {
-        for (Subscriber<Message> subscriber : this.subscribers) {
+        for (Subscriber<Message> subscriber : subscribers) {
             if (lastReadMessage != null) {
                 subscriber.update(lastReadMessage);
             }
@@ -130,6 +114,8 @@ public class Client implements Publisher<Message>, Subscriber<String> {
 
     @Override
     public void update(String context) {
-        Message message = read(context);
+        lastReadMessage = read(context);
+
+        publish();
     }
 }

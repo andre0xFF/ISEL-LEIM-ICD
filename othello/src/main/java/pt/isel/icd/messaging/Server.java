@@ -10,7 +10,7 @@ public class Server {
     private final ServerSocket serverSocket;
 
     public Server() throws IOException {
-        this(SocketAdapter.DEFAULT_PORT);
+        this(SocketFacade.DEFAULT_PORT);
     }
 
     public Server(int port) throws IOException {
@@ -19,6 +19,7 @@ public class Server {
 
     /**
      * Returns the port of the server.
+     *
      * @return The port of the server.
      */
     public int port() {
@@ -32,7 +33,7 @@ public class Server {
      * @throws IOException If an I/O error occurs when accepting the client.
      */
     public Client accept() throws IOException {
-        SocketAdapter socket = new SocketAdapter(serverSocket.accept());
+        SocketFacade socket = new SocketFacade(serverSocket.accept());
 
         return new Client(socket);
     }

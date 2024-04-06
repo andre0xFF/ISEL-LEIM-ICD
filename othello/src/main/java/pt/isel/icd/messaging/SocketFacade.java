@@ -9,8 +9,8 @@ import java.net.Socket;
 /**
  * A simple wrapper around java.net.Socket with thread, read and write functionality.
  */
-public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
-    
+public class SocketFacade implements Publisher<String>, Closeable, Runnable {
+
     public static final int DEFAULT_PORT = 8000;
     public static final String DEFAULT_HOSTNAME = "localhost";
     private final Socket socket;
@@ -25,7 +25,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      *
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SocketAdapter() throws IOException {
+    public SocketFacade() throws IOException {
         this(DEFAULT_HOSTNAME, DEFAULT_PORT);
     }
 
@@ -35,7 +35,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @param port The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SocketAdapter(int port) throws IOException {
+    public SocketFacade(int port) throws IOException {
         this(DEFAULT_HOSTNAME, port);
     }
 
@@ -45,7 +45,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @param hostname The hostname.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SocketAdapter(String hostname) throws IOException {
+    public SocketFacade(String hostname) throws IOException {
         this(hostname, DEFAULT_PORT);
     }
 
@@ -56,20 +56,20 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @param port     The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SocketAdapter(String hostname, int port) throws IOException {
+    public SocketFacade(String hostname, int port) throws IOException {
         this(new Socket(hostname, port));
     }
 
     /**
      * Creates a new socket.
      *
-     * @param socket The socket.
+     * @param existingSocket The socket.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SocketAdapter(Socket socket) throws IOException {
-        this.writer = new PrintWriter(socket.getOutputStream(), true);
-        this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.socket = socket;
+    public SocketFacade(Socket existingSocket) throws IOException {
+        socket = existingSocket;
+        writer = new PrintWriter(socket.getOutputStream(), true);
+        reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     /**
@@ -78,7 +78,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @param message The message to be written.
      */
     public void write(String message) {
-        this.writer.println(message);
+        writer.println(message);
     }
 
     /**
@@ -88,7 +88,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @throws IOException If an I/O error occurs when reading from the socket.
      */
     public String read() throws IOException {
-        return this.reader.readLine();
+        return reader.readLine();
     }
 
     /**
@@ -97,7 +97,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @return True if the socket is connected, false otherwise.
      */
     public boolean isConnected() {
-        return this.socket.isConnected() && !this.socket.isClosed();
+        return socket.isConnected() && !socket.isClosed();
     }
 
     /**
@@ -106,7 +106,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @return True if the socket is closed, false otherwise.
      */
     public boolean isClosed() {
-        return this.socket.isClosed();
+        return socket.isClosed();
     }
 
     /**
@@ -116,9 +116,9 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      */
     @Override
     public void close() throws IOException {
-        this.reader.close();
-        this.writer.close();
-        this.socket.close();
+        reader.close();
+        writer.close();
+        socket.close();
     }
 
     /**
@@ -127,7 +127,7 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @return The hostname.
      */
     public String hostname() {
-        return this.socket.getInetAddress().getHostName();
+        return socket.getInetAddress().getHostName();
     }
 
     /**
@@ -136,13 +136,13 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
      * @return The port.
      */
     public int port() {
-        return this.socket.getPort();
+        return socket.getPort();
     }
 
     @Override
     public void run() {
         try {
-            while (!this.socket.isClosed()) {
+            while (!socket.isClosed()) {
                 String message = read();
 
                 // The end of the stream has been reached.
@@ -152,9 +152,9 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
                 }
 
                 // Subscriber may have unsubscribed while reading a message.
-                if (this.subscriber != null) {
-                    this.lastReadMessage = message;
-                    this.publish();
+                if (subscriber != null) {
+                    lastReadMessage = message;
+                    publish();
                 }
             }
         } catch (IOException e) {
@@ -164,24 +164,24 @@ public class SocketAdapter implements Publisher<String>, Closeable, Runnable {
     }
 
     @Override
-    public void subscribe(Subscriber<String> subscriber) {
-        this.subscriber = subscriber;
+    public void subscribe(Subscriber<String> newSubscriber) {
+        subscriber = newSubscriber;
 
-        if (this.thread != null) {
+        if (thread != null) {
             return;
         }
 
-        this.thread = new Thread(this);
-        this.thread.start();
+        thread = new Thread(this);
+        thread.start();
     }
 
     @Override
     public void unsubscribe(Subscriber<String> subscriber) {
-        this.subscriber = null;
+        subscriber = null;
     }
 
     @Override
     public void publish() {
-        this.subscriber.update(this.lastReadMessage);
+        subscriber.update(lastReadMessage);
     }
 }
