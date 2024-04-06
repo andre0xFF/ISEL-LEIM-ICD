@@ -10,5 +10,4 @@ public interface Publisher<T> {
     void unsubscribe(Subscriber<T> subscriber);
 
     void publish();
-
 }

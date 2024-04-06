@@ -1,7 +1,6 @@
 package pt.isel.icd.messaging;
 
 import pt.isel.icd.messaging.messages.Message;
-import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,10 +39,10 @@ public class Client implements Publisher<Message>, Subscriber<String> {
         this(new SocketFacade(hostname, port));
     }
 
-    public Client(SocketFacade socket) {
-        this.socket = socket;
+    public Client(SocketFacade existingSocket) {
+        socket = existingSocket;
 
-        socket.subscribe(this);
+        existingSocket.subscribe(this);
     }
 
     /**
@@ -72,17 +71,18 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      * Reads a message.
      *
      * @return The message read.
-     * @throws IOException  If an I/O error occurs when reading.
-     * @throws SAXException If an error occurs when validating the message.
+     * @throws IOException If an I/O error occurs when reading.
      */
-    public Message read() throws IOException, SAXException {
+    public Message read() throws IOException {
         return read(socket.read());
     }
 
     private Message read(String content) throws IOException {
         schemaValidator.validate(content);
 
-        return serializer.deserialize(content, Message.class);
+        lastReadMessage = serializer.deserialize(content, Message.class);
+
+        return lastReadMessage;
     }
 
     /**
@@ -108,7 +108,7 @@ public class Client implements Publisher<Message>, Subscriber<String> {
         defaultSubscribers.remove(subscriber);
     }
 
-    public void unsubscribe(Subscriber<Message> subscriber, Class<? extends Message> messageType) {
+    public void unsubscribe(Class<? extends Message> messageType) {
         specificSubscribers.remove(messageType);
     }
 
@@ -125,11 +125,17 @@ public class Client implements Publisher<Message>, Subscriber<String> {
         for (Subscriber<Message> subscribers : defaultSubscribers) {
             subscribers.update(lastReadMessage);
         }
+
+        lastReadMessage = null;
     }
 
     @Override
     public void update(String context) {
-        lastReadMessage = read(context);
+        try {
+            read(context);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         publish();
     }
