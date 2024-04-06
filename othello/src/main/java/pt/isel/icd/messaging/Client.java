@@ -59,10 +59,9 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      * Writes a message.
      *
      * @param message The message to be written.
-     * @throws IOException  If an I/O error occurs when writing.
-     * @throws SAXException If an error occurs when validating the message.
+     * @throws IOException If an I/O error occurs when writing.
      */
-    public void write(Message message) throws IOException, SAXException {
+    public void write(Message message) throws IOException {
         String content = serializer.serialize(message);
         schemaValidator.validate(content);
 
@@ -80,7 +79,7 @@ public class Client implements Publisher<Message>, Subscriber<String> {
         return read(socket.read());
     }
 
-    private Message read(String content) throws IOException, SAXException {
+    private Message read(String content) throws IOException {
         schemaValidator.validate(content);
 
         return serializer.deserialize(content, Message.class);
@@ -115,10 +114,16 @@ public class Client implements Publisher<Message>, Subscriber<String> {
 
     @Override
     public void publish() {
-        for (Subscriber<Message> subscriber : specificSubscribers) {
-            if (lastReadMessage != null) {
-                subscriber.update(lastReadMessage);
-            }
+        if (lastReadMessage == null) {
+            return;
+        }
+
+        Subscriber<Message> specificMessageSubscriber = specificSubscribers.get(lastReadMessage.getClass());
+
+        specificMessageSubscriber.update(lastReadMessage);
+
+        for (Subscriber<Message> subscribers : defaultSubscribers) {
+            subscribers.update(lastReadMessage);
         }
     }
 
