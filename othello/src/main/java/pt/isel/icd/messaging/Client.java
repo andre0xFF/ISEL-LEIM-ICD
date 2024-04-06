@@ -5,6 +5,8 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import pt.isel.icd.patterns.observer.Publisher;
 import pt.isel.icd.patterns.observer.Subscriber;
@@ -18,8 +20,8 @@ public class Client implements Publisher<Message>, Subscriber<String> {
     private final SocketFacade socket;
     private final Serializer<Message> serializer = new XMLSerializer<>();
     private final SchemaValidator schemaValidator = new SchemaValidator();
-    private Subscriber<Message> subscriber;
-    private final ArrayList<Subscriber<Message>> subscribers = new ArrayList<>();
+    private final Map<Class<? extends Message>, Subscriber<Message>> specificSubscribers = new HashMap<>();
+    private final ArrayList<Subscriber<Message>> defaultSubscribers = new ArrayList<>();
     private Message lastReadMessage;
 
     public Client() throws IOException {
@@ -95,17 +97,25 @@ public class Client implements Publisher<Message>, Subscriber<String> {
 
     @Override
     public void subscribe(Subscriber<Message> subscriber) {
-        subscribers.add(subscriber);
+        defaultSubscribers.add(subscriber);
+    }
+
+    public void subscribe(Subscriber<Message> subscriber, Class<? extends Message> messageType) {
+        specificSubscribers.put(messageType, subscriber);
     }
 
     @Override
     public void unsubscribe(Subscriber<Message> subscriber) {
-        subscribers.remove(subscriber);
+        defaultSubscribers.remove(subscriber);
+    }
+
+    public void unsubscribe(Subscriber<Message> subscriber, Class<? extends Message> messageType) {
+        specificSubscribers.remove(messageType);
     }
 
     @Override
     public void publish() {
-        for (Subscriber<Message> subscriber : subscribers) {
+        for (Subscriber<Message> subscriber : specificSubscribers) {
             if (lastReadMessage != null) {
                 subscriber.update(lastReadMessage);
             }
