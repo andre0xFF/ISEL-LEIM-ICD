@@ -16,41 +16,46 @@ import java.nio.file.Paths;
 
 public class SchemaValidator {
     public static final String DEFAULT_XSD_SCHEMAS_PATH = "resources/schemas/Message.xsd";
-    private final Path xsdPath;
+    private final Validator validator;
 
     /**
-     * Creates a new SchemaValidator that validates against the default xsd schema
+     * Creates a new SchemaValidator that validates against the default XSD schema
      */
     public SchemaValidator() {
         this(Paths.get(DEFAULT_XSD_SCHEMAS_PATH));
     }
 
     /**
-     * Creates a new SchemaValidator that validates against the given xsd schema
+     * Creates a new SchemaValidator that validates against the given XSD schema
      *
-     * @param xsdPath the path to the xsd schema
+     * @param xsdPath the path to the XSD schema
      */
     public SchemaValidator(Path xsdPath) {
-        this.xsdPath = xsdPath;
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        File schemaFile = new File(xsdPath.toString());
+
+        Schema schema = null;
+
+        try {
+            schema = schemaFactory.newSchema(schemaFile);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
+
+        validator = schema.newValidator();
     }
 
     /**
-     * Validates the given xml content against the xsd schema
+     * Validates the given XML content against the XSD schema
      *
-     * @param xmlContent the xml content to validate
-     * @return null if the xml content is valid, otherwise an Executable that throws an exception
-     * @throws IOException  if the xml content is not valid
-     * @throws SAXException if the xml content is not valid
+     * @param xmlContent the XML content to validate
      */
-    public void validate(String xmlContent) {
-        File schemaFile = new File(xsdPath.toString());
-
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        Schema schema = schemaFactory.newSchema(schemaFile);
-
-        Validator validator = schema.newValidator();
-        validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
-
-        return true;
+    public boolean validate(String xmlContent) {
+        try {
+            validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
+            return true;
+        } catch (IOException | SAXException e) {
+            return false;
+        }
     }
 }
