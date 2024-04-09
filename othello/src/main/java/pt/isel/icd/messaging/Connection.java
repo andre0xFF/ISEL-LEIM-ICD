@@ -1,5 +1,6 @@
 package pt.isel.icd.messaging;
 
+import org.xml.sax.SAXException;
 import pt.isel.icd.messaging.messages.Message;
 
 import java.io.IOException;
@@ -9,37 +10,37 @@ import java.util.Map;
 
 import pt.isel.icd.patterns.observer.Publisher;
 import pt.isel.icd.patterns.observer.Subscriber;
-import pt.isel.icd.serialization.Serializer;
 import pt.isel.icd.serialization.XMLSerializer;
 
 /**
- * Represents a client.
+ * Represents a connection.
  */
-public class Client implements Publisher<Message>, Subscriber<String> {
+public class Connection implements Publisher<Message>, Subscriber<String> {
     private final SocketFacade socket;
-    private final Serializer<Message> serializer = new XMLSerializer<>();
+    private final XMLSerializer<Message> serializer = new XMLSerializer<>();
     private final SchemaValidator schemaValidator = new SchemaValidator();
     private final Map<Class<? extends Message>, Subscriber<Message>> specificSubscribers = new HashMap<>();
     private final ArrayList<Subscriber<Message>> defaultSubscribers = new ArrayList<>();
     private Message lastReadMessage;
+    private final static boolean VALIDATE_SCHEMAS = false;
 
-    public Client() throws IOException {
+    public Connection() throws IOException {
         this(SocketFacade.DEFAULT_HOSTNAME, SocketFacade.DEFAULT_PORT);
     }
 
-    public Client(int port) throws IOException {
+    public Connection(int port) throws IOException {
         this(SocketFacade.DEFAULT_HOSTNAME, port);
     }
 
-    public Client(String hostname) throws IOException {
+    public Connection(String hostname) throws IOException {
         this(hostname, SocketFacade.DEFAULT_PORT);
     }
 
-    public Client(String hostname, int port) throws IOException {
+    public Connection(String hostname, int port) throws IOException {
         this(new SocketFacade(hostname, port));
     }
 
-    public Client(SocketFacade existingSocket) {
+    public Connection(SocketFacade existingSocket) {
         socket = existingSocket;
 
         existingSocket.subscribe(this);
@@ -62,7 +63,12 @@ public class Client implements Publisher<Message>, Subscriber<String> {
      */
     public void write(Message message) throws IOException {
         String content = serializer.serialize(message);
-        schemaValidator.validate(content);
+
+        try {
+            schemaValidator.validate(content);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
 
         socket.write(content);
     }
@@ -78,7 +84,13 @@ public class Client implements Publisher<Message>, Subscriber<String> {
     }
 
     private Message read(String content) throws IOException {
-        schemaValidator.validate(content);
+        try {
+            if (VALIDATE_SCHEMAS) {
+                schemaValidator.validate(content);
+            }
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
 
         lastReadMessage = serializer.deserialize(content, Message.class);
 

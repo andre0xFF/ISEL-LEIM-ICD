@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class SchemaValidator {
-    public static final String DEFAULT_XSD_SCHEMAS_PATH = "resources/schemas/Message.xsd";
+    public static final String DEFAULT_XSD_SCHEMAS_PATH = "src/main/resources/schemas/Message.xsd";
     private final Validator validator;
 
     /**
@@ -50,12 +50,7 @@ public class SchemaValidator {
      *
      * @param xmlContent the XML content to validate
      */
-    public boolean validate(String xmlContent) {
-        try {
-            validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
-            return true;
-        } catch (IOException | SAXException e) {
-            return false;
-        }
+    public void validate(String xmlContent) throws IOException, SAXException {
+        validator.validate(new SAXSource(new InputSource(new StringReader(xmlContent))));
     }
 }

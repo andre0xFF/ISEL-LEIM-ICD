@@ -32,9 +32,9 @@ public class Server {
      * @return The client.
      * @throws IOException If an I/O error occurs when accepting the client.
      */
-    public Client accept() throws IOException {
+    public Connection accept() throws IOException {
         SocketFacade socket = new SocketFacade(serverSocket.accept());
 
-        return new Client(socket);
+        return new Connection(socket);
     }
 }

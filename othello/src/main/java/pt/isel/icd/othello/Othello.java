@@ -99,7 +99,7 @@ public class Othello {
 
         return true;
     }
-    
+
     private boolean checkDirection(int row, int column, int dr, int dc, BoardCharacter playerCharacter) {
         int r = row + dr;
         int c = column + dc;
