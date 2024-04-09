@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+
+    <xs:include schemaLocation="PingMessage.xsd"/>
+    <xs:include schemaLocation="PongMessage.xsd"/>
+
+    <xs:element name="Message" type="MessageTypes"/>
+
+    <xs:complexType name="MessageTypes">
+        <xs:choice>
+            <xs:element ref="PongMessage"/>
+            <xs:element ref="PingMessage"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>
