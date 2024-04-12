@@ -116,9 +116,9 @@ public class SocketFacade implements Publisher<String>, Closeable, Runnable {
      */
     @Override
     public void close() throws IOException {
-        reader.close();
-        writer.close();
         socket.close();
+        writer.close();
+        reader.close();
     }
 
     /**
