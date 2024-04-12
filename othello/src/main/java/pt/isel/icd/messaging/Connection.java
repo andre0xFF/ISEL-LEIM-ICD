@@ -8,18 +8,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import pt.isel.icd.patterns.observer.Publisher;
 import pt.isel.icd.patterns.observer.Subscriber;
 import pt.isel.icd.serialization.XMLSerializer;
 
 /**
- * Represents a connection.
+ * Representation of a connection that has the ability to read from and write to a socket. It ensures the messages adhere to a certain schema and contains an inbuilt router to direct messages to the correct subscribers.
  */
-public class Connection implements Publisher<Message>, Subscriber<String> {
+public class Connection implements ConnectionPublisher, Subscriber<String> {
     private final SocketFacade socket;
     private final XMLSerializer<Message> serializer = new XMLSerializer<>();
     private final SchemaValidator schemaValidator = new SchemaValidator();
-    private final Map<Class<? extends Message>, Subscriber<Message>> specificSubscribers = new HashMap<>();
+    private final Map<Class<? extends Message>, ConnectionSubscriber> connectionSubscribers = new HashMap<>();
     private final ArrayList<Subscriber<Message>> defaultSubscribers = new ArrayList<>();
     private Message lastReadMessage;
     private final static boolean VALIDATE_SCHEMAS = false;
@@ -53,6 +52,15 @@ public class Connection implements Publisher<Message>, Subscriber<String> {
      */
     public boolean isConnected() {
         return socket.isConnected();
+    }
+
+    /**
+     * Checks if the client is closed.
+     *
+     * @return True if the client is closed, false otherwise.
+     */
+    public boolean isClosed() {
+        return socket.isClosed();
     }
 
     /**
@@ -106,41 +114,91 @@ public class Connection implements Publisher<Message>, Subscriber<String> {
         socket.close();
     }
 
+    /**
+     * Subscribes a subscriber. Default subscribers are notified of all messages.
+     *
+     * @param subscriber The subscriber to be subscribed.
+     */
     @Override
     public void subscribe(Subscriber<Message> subscriber) {
         defaultSubscribers.add(subscriber);
     }
 
-    public void subscribe(Subscriber<Message> subscriber, Class<? extends Message> messageType) {
-        specificSubscribers.put(messageType, subscriber);
-    }
-
+    /**
+     * Unsubscribes a subscriber.
+     *
+     * @param subscriber The subscriber to be unsubscribed.
+     */
     @Override
     public void unsubscribe(Subscriber<Message> subscriber) {
         defaultSubscribers.remove(subscriber);
     }
 
-    public void unsubscribe(Class<? extends Message> messageType) {
-        specificSubscribers.remove(messageType);
+    /**
+     * Subscribes a connection subscriber. Connection subscribers are notified of messages of specific types.
+     *
+     * @param subscriber The subscriber to be subscribed.
+     */
+    @Override
+    public void subscribe(ConnectionSubscriber subscriber) {
+        for (Class<? extends Message> messageType : subscriber.messageTypes()) {
+            connectionSubscribers.put(messageType, subscriber);
+        }
     }
 
+    /**
+     * Unsubscribes a connection subscriber.
+     *
+     * @param subscriber The subscriber to be unsubscribed.
+     */
+    @Override
+    public void unsubscribe(ConnectionSubscriber subscriber) {
+        for (Class<? extends Message> messageType : subscriber.messageTypes()) {
+            connectionSubscribers.remove(messageType);
+        }
+    }
+
+    /**
+     * Returns the total number of subscribers.
+     *
+     * @return The total number of subscribers.
+     */
+    @Override
+    public int connectionSubscribersTotal() {
+        return connectionSubscribers.size();
+    }
+
+    /**
+     * Publishes the last read message.
+     */
     @Override
     public void publish() {
         if (lastReadMessage == null) {
             return;
         }
 
-        Subscriber<Message> specificMessageSubscriber = specificSubscribers.get(lastReadMessage.getClass());
-
-        specificMessageSubscriber.update(lastReadMessage);
-
-        for (Subscriber<Message> subscribers : defaultSubscribers) {
-            subscribers.update(lastReadMessage);
-        }
+        route(lastReadMessage);
 
         lastReadMessage = null;
     }
 
+    private void route(Message message) {
+        ConnectionSubscriber connectionSubscriber = connectionSubscribers.get(message.getClass());
+
+        if (connectionSubscriber != null) {
+            connectionSubscriber.update(message);
+        }
+
+        for (Subscriber<Message> subscribers : defaultSubscribers) {
+            subscribers.update(message);
+        }
+    }
+
+    /**
+     * Connection update. Reads the message and publishes it.
+     *
+     * @param context The context.
+     */
     @Override
     public void update(String context) {
         try {
