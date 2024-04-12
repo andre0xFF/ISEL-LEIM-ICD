@@ -35,7 +35,7 @@ public class Othello {
         return true;
     }
 
-    public boolean makeMove(MakeMoveCommand request) {
+    public boolean makeMove(MakeMove request) {
         return makeMove(request.row(), request.column(), request.playerCharacter());
     }
 
@@ -118,7 +118,6 @@ public class Othello {
             if (board[r][c] == playerCharacter && validDir) {
                 return true;
             }
-
 
             r += dr;
             c += dc;

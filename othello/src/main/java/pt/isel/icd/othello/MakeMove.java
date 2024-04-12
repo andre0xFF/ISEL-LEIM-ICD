@@ -1,7 +1,7 @@
 package pt.isel.icd.othello;
 
-public record MakeMoveCommand(int row, int column, BoardCharacter playerCharacter) {
-    public MakeMoveCommand {
+public record MakeMove(int row, int column, BoardCharacter playerCharacter) {
+    public MakeMove {
         if (!validate()) {
             throw new IllegalArgumentException("Invalid row or column");
         }
