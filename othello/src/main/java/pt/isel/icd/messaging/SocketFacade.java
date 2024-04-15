@@ -139,6 +139,10 @@ public class SocketFacade implements Publisher<String>, Closeable, Runnable {
         return socket.getPort();
     }
 
+
+    /**
+     * Reads messages from the socket, and publishes them to the subscriber.
+     */
     @Override
     public void run() {
         try {
@@ -163,6 +167,11 @@ public class SocketFacade implements Publisher<String>, Closeable, Runnable {
         }
     }
 
+    /**
+     * Starts reading messages from the socket in a separate thread, and subscribes the subscriber to the messages.
+     *
+     * @param newSubscriber The new subscriber.
+     */
     @Override
     public void subscribe(Subscriber<String> newSubscriber) {
         subscriber = newSubscriber;
@@ -175,11 +184,19 @@ public class SocketFacade implements Publisher<String>, Closeable, Runnable {
         thread.start();
     }
 
+    /**
+     * Unsubscribes the subscriber from the messages.
+     *
+     * @param subscriber The subscriber.
+     */
     @Override
     public void unsubscribe(Subscriber<String> subscriber) {
         subscriber = null;
     }
 
+    /**
+     * Publishes the last read message to the subscriber.
+     */
     @Override
     public void publish() {
         subscriber.update(lastReadMessage);
