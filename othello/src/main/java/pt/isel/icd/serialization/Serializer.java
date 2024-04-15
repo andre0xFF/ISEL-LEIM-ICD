@@ -13,12 +13,12 @@ public interface Serializer<T> {
      * Deserialize a message from a string.
      *
      * @param content      The string content.
-     * @param messageClass The class of the message.
-     * @param <K>          The subtype of the message <T>.
+     * @param commandClass The class of the command.
+     * @param <K>          The subtype of the command <T>.
      * @return The deserialized message.
      * @throws JsonProcessingException If the string is invalid.
      */
-    <K extends T> K deserialize(String content, Class<T> messageClass) throws JsonProcessingException;
+    <K extends T> K deserialize(String content, Class<T> commandClass) throws JsonProcessingException;
 
     /**
      * Serialize a message to a string.

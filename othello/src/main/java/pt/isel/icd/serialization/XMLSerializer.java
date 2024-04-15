@@ -45,14 +45,14 @@ public class XMLSerializer<T> implements Serializer<T> {
      * Deserialize a message from XML.
      *
      * @param content   The XML content.
-     * @param messageClass The class of the message.
+     * @param commandClass The class of the message.
      * @return The deserialized message.
      * @param <K> The subtype of the message <T>.
      * @throws JsonProcessingException If the XML is invalid.
      */
     @Override
-    public <K extends T> K deserialize(String content, Class<T> messageClass) throws JsonProcessingException {
-        return ((K) xmlMapper.readValue(content, messageClass));
+    public <K extends T> K deserialize(String content, Class<T> commandClass) throws JsonProcessingException {
+        return ((K) xmlMapper.readValue(content, commandClass));
     }
 
     /**

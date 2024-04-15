@@ -1,7 +1,7 @@
 package pt.isel.icd.service.server;
 
-import pt.isel.icd.messaging.Connection;
-import pt.isel.icd.messaging.messages.Message;
+import pt.isel.icd.communication.Connection;
+import pt.isel.icd.communication.commands.Command;
 
 import java.io.IOException;
 
@@ -13,11 +13,11 @@ public class User {
         connection = existingConnection;
     }
 
-    public void write(Message message) throws IOException {
-        connection.write(message);
+    public void write(Command command) throws IOException {
+        connection.write(command);
     }
 
-    public Message read() throws IOException {
+    public Command read() throws IOException {
         return connection.read();
     }
 

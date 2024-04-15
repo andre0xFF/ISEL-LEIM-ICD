@@ -1,10 +1,10 @@
 package pt.isel.icd.service.server;
 
-import pt.isel.icd.messaging.Connection;
-import pt.isel.icd.messaging.SocketFacade;
-import pt.isel.icd.service.server.controllers.AuthenticationController;
-import pt.isel.icd.service.server.controllers.LobbyController;
-import pt.isel.icd.service.server.controllers.RegistrationController;
+import pt.isel.icd.communication.Connection;
+import pt.isel.icd.communication.SocketFacade;
+import pt.isel.icd.service.server.controllers.UserController;
+import pt.isel.icd.service.server.controllers.GameController;
+import pt.isel.icd.service.server.controllers.GameListController;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Represents a server.
  */
-public class Server {
+public class Server implements Runnable {
     private final ServerSocket serverSocket;
     private final ArrayList<User> users = new ArrayList<>();
     private final ArrayList<ServerController> controllers = new ArrayList<>();
@@ -25,9 +25,9 @@ public class Server {
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
 
-        controllers.add(new LobbyController());
-        controllers.add(new AuthenticationController());
-        controllers.add(new RegistrationController());
+        controllers.add(new GameController());
+        controllers.add(new UserController());
+        controllers.add(new GameListController());
     }
 
     /**
@@ -40,24 +40,23 @@ public class Server {
     }
 
     /**
-     * Accepts a connection.
-     *
-     * @return The connection.
-     * @throws IOException If an I/O error occurs when accepting the connection.
+     * Starts accepting connections in separate thread.
      */
-    public Connection accept() throws IOException {
-        SocketFacade socket = new SocketFacade(serverSocket.accept());
-
-        return new Connection(socket);
+    public void accept() {
+        new Thread(this).start();
     }
 
     /**
      * Runs the server. Creates a user for each new connection.
      */
+    @Override
     public void run() {
         while (true) {
             try {
-                addUser(accept());
+                SocketFacade socket = new SocketFacade(serverSocket.accept());
+                Connection connection = new Connection(socket);
+
+                addUser(connection);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -80,5 +79,9 @@ public class Server {
         }
 
         users.remove(user);
+    }
+
+    public int usersTotal() {
+        return users.size();
     }
 }
