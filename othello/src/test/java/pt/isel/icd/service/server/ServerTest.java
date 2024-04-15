@@ -2,7 +2,7 @@ package pt.isel.icd.service.server;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pt.isel.icd.messaging.Connection;
+import pt.isel.icd.communication.Connection;
 
 import java.io.IOException;
 

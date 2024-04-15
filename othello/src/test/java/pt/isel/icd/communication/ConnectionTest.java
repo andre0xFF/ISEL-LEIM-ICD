@@ -1,10 +1,10 @@
-package pt.isel.icd.messaging;
+package pt.isel.icd.communication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import pt.isel.icd.messaging.messages.Command;
-import pt.isel.icd.messaging.messages.PingCommand;
-import pt.isel.icd.messaging.messages.PongCommand;
+import pt.isel.icd.communication.commands.Command;
+import pt.isel.icd.communication.commands.PingCommand;
+import pt.isel.icd.communication.commands.PongCommand;
 import pt.isel.icd.patterns.observer.Subscriber;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class ConnectionTest {
         private int messages = 0;
 
         @Override
-        public Class<? extends Command>[] messageTypes() {
+        public Class<? extends Command>[] commandTypes() {
             return new Class[]{
                     PingCommand.class,
             };
@@ -89,13 +89,13 @@ public class ConnectionTest {
         // The TestSubscriber will be subscribed to all message types.
         connection.subscribe(testSubscriber);
 
-        // The TestConnectionSubscriber will be subscribed to PingMessage.
+        // The TestConnectionSubscriber will be subscribed to PingCommand.
         connection.subscribe(testConnectionSubscriber);
 
         assertEquals(1, connection.connectionSubscribersTotal());
 
-        connection.update("<Message><PingMessage><dateTime>2021-05-18T15:00:00</dateTime></PingMessage></Message>");
-        connection.update("<Message><PongMessage><dateTime>2021-05-18T15:00:00</dateTime></PongMessage></Message>");
+        connection.update("<Command><PingCommand><dateTime>2021-05-18T15:00:00</dateTime></PingCommand></Command>");
+        connection.update("<Command><PongCommand><dateTime>2021-05-18T15:00:00</dateTime></PongCommand></Command>");
 
         assertEquals(2, testSubscriber.messages());
         assertEquals(1, testConnectionSubscriber.messages());

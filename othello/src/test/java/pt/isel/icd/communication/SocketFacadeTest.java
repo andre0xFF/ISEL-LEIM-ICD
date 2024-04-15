@@ -1,4 +1,4 @@
-package pt.isel.icd.messaging;
+package pt.isel.icd.communication;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,13 +38,13 @@ class SocketFacadeTest {
 
     @Test
     public void writeAndRead() throws IOException {
-        String testMessage = "Hello, World!";
-        socketFacade.write(testMessage);
+        String testCommand = "Hello, World!";
+        socketFacade.write(testCommand);
 
         Socket serviceSideSocket = serverSocket.accept();
         BufferedReader serverSideReader = new BufferedReader(new InputStreamReader(serviceSideSocket.getInputStream()));
 
-        String receivedMessage = serverSideReader.readLine();
-        assertEquals(testMessage, receivedMessage);
+        String receivedCommand = serverSideReader.readLine();
+        assertEquals(testCommand, receivedCommand);
     }
 }
