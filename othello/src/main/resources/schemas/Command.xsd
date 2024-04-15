@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xs:schema
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified">
+
+    <xs:include schemaLocation="PingCommand.xsd"/>
+    <xs:include schemaLocation="PongCommand.xsd"/>
+
+    <xs:element name="Command" type="CommandTypes"/>
+
+    <xs:complexType name="CommandTypes">
+        <xs:choice>
+            <xs:element ref="PongCommand"/>
+            <xs:element ref="PingCommand"/>
+        </xs:choice>
+    </xs:complexType>
+</xs:schema>
