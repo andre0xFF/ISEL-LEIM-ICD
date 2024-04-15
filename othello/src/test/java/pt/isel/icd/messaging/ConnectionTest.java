@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConnectionTest {
+public class ConnectionTest {
 
     private Connection connection;
     private PingMessage message;
