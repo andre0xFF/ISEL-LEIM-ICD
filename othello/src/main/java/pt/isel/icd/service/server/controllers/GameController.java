@@ -1,21 +1,25 @@
 package pt.isel.icd.service.server.controllers;
 
+import pt.isel.icd.communication.Connection;
 import pt.isel.icd.communication.commands.Command;
 import pt.isel.icd.patterns.modelviewcontroller.Model;
 import pt.isel.icd.patterns.observer.Subscriber;
 import pt.isel.icd.service.server.ServerController;
 import pt.isel.icd.service.server.User;
 
+import java.util.HashMap;
+
 public class GameController implements ServerController {
 
-    @Override
-    public void addUser(User user) {
+    private GameListController gameListController;
+    private HashMap<Connection, User> connectionUserMap = new HashMap<>();
 
+    public GameController(HashMap<Connection, User> connectionUsers) {
+        this(connectionUsers, null);
     }
 
-    @Override
-    public void removeUser(User user) {
-
+    public GameController(HashMap<Connection, User> connectionUsers, GameListController existingGameListController) {
+        gameListController = existingGameListController;
     }
 
     @Override
@@ -26,6 +30,11 @@ public class GameController implements ServerController {
     @Override
     public void update(Command context) {
 
+    }
+
+    @Override
+    public void update(Connection sourceConnection, Command command) {
+        User user = connectionUserMap.get(sourceConnection);
     }
 
 

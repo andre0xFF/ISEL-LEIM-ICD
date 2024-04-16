@@ -9,13 +9,14 @@ import pt.isel.icd.service.server.controllers.GameListController;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Represents a server.
  */
 public class Server implements Runnable {
     private final ServerSocket serverSocket;
-    private final ArrayList<User> users = new ArrayList<>();
+    private final HashMap<Connection, User> connectionUsers = new HashMap<>();
     private final ArrayList<ServerController> controllers = new ArrayList<>();
 
     public Server() throws IOException {
@@ -25,9 +26,13 @@ public class Server implements Runnable {
     public Server(int port) throws IOException {
         serverSocket = new ServerSocket(port);
 
-        controllers.add(new GameController());
-        controllers.add(new UserController());
-        controllers.add(new GameListController());
+        UserController userController = new UserController(connectionUsers);
+        GameListController gameListController = new GameListController(connectionUsers);
+        GameController gameController = new GameController(connectionUsers, gameListController);
+
+        controllers.add(userController);
+        controllers.add(gameListController);
+        controllers.add(gameController);
     }
 
     /**
@@ -56,32 +61,14 @@ public class Server implements Runnable {
                 SocketFacade socket = new SocketFacade(serverSocket.accept());
                 Connection connection = new Connection(socket);
 
-                addUser(connection);
+                connectionUsers.put(connection, new User());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void addUser(Connection connection) {
-        User user = new User(connection);
-
-        users.add(user);
-
-        for (ServerController controller : controllers) {
-            controller.addUser(user);
-        }
-    }
-
-    private void removeUser(User user) {
-        for (ServerController controller : controllers) {
-            controller.removeUser(user);
-        }
-
-        users.remove(user);
-    }
-
-    public int usersTotal() {
-        return users.size();
+    public int connectionsTotal() {
+        return connectionUsers.size();
     }
 }

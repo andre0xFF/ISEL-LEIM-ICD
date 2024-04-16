@@ -186,7 +186,7 @@ public class Connection implements ConnectionPublisher, Subscriber<String> {
         ConnectionSubscriber connectionSubscriber = connectionSubscribers.get(command.getClass());
 
         if (connectionSubscriber != null) {
-            connectionSubscriber.update(command);
+            connectionSubscriber.update(this, command);
         }
 
         for (Subscriber<Command> subscribers : defaultSubscribers) {

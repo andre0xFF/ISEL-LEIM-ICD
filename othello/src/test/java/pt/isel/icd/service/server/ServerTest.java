@@ -28,6 +28,6 @@ public class ServerTest {
         Thread.sleep(500);
 
         assertTrue(connection.isConnected());
-        assertEquals(1, server.usersTotal());
+        assertEquals(1, server.connectionsTotal());
     }
 }
