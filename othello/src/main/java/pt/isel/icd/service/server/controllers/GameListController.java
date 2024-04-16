@@ -6,6 +6,7 @@ import pt.isel.icd.patterns.modelviewcontroller.Model;
 import pt.isel.icd.patterns.observer.Subscriber;
 import pt.isel.icd.service.server.ServerController;
 import pt.isel.icd.service.server.User;
+import pt.isel.icd.service.server.commands.ListGames;
 
 import java.util.HashMap;
 
@@ -16,7 +17,9 @@ public class GameListController implements ServerController {
 
     @Override
     public Class<? extends Command>[] commandTypes() {
-        return new Class[0];
+        return new Class[] {
+                ListGames.class
+        };
     }
 
     @Override

@@ -6,6 +6,7 @@ import pt.isel.icd.patterns.modelviewcontroller.Model;
 import pt.isel.icd.patterns.observer.Subscriber;
 import pt.isel.icd.service.server.ServerController;
 import pt.isel.icd.service.server.User;
+import pt.isel.icd.service.server.commands.*;
 
 import java.util.HashMap;
 
@@ -17,7 +18,15 @@ public class UserController implements ServerController {
 
     @Override
     public Class<? extends Command>[] commandTypes() {
-        return new Class[0];
+        return new Class[]{
+                LogInFailure.class,
+                LogInSuccess.class,
+                LogOutSuccess.class,
+                RegisterFailure.class,
+                RegisterSuccess.class,
+                UpdateProfileFailure.class,
+                UpdateProfileSuccess.class,
+        };
     }
 
     @Override
