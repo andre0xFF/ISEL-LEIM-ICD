@@ -6,14 +6,15 @@ import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class UserClientController implements Controller {
+public class UserClientController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
 
     public UserClientController(ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
 
-//        connectionManager.addMiddleware(new AuthenticationMiddleware());
+        connectionManager.addMiddleware(new AuthenticationMiddleware(this));
     }
 
     @Override
@@ -23,5 +24,11 @@ public class UserClientController implements Controller {
 
             }
         };
+    }
+
+    @Override
+    public boolean isAuthenticated(UUID connectionIdentifier) {
+        // TODO verify authentication
+        return false;
     }
 }

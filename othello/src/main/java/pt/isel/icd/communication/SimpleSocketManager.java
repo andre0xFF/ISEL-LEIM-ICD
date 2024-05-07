@@ -1,7 +1,5 @@
 package pt.isel.icd.communication;
 
-import pt.isel.icd.patterns.chainofresponsability.Handler;
-
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -69,13 +67,13 @@ public class SimpleSocketManager implements ConnectionManager {
         }
     }
 
-//    @Override
-//    public void addMiddleware(Middleware<? extends Receiver> middleware) {
-//        router.addMiddleware(middleware);
-//    }
-//
-//    @Override
-//    public void removeMiddleware(Middleware<? extends Receiver> middleware) {
-//
-//    }
+    @Override
+    public void addMiddleware(Middleware middleware) {
+        router.addMiddleware(middleware);
+    }
+
+    @Override
+    public void removeMiddleware(Middleware middleware) {
+        router.removeMiddleware(middleware);
+    }
 }

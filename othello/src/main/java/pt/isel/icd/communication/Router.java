@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Router implements Invoker<Receiver> {
 
     private final HashMap<Class<? extends Command<? extends Receiver>>, Receiver> controllers = new HashMap<>();
-    private final ArrayList<Middleware<? extends Receiver>> middlewares = new ArrayList<>();
+    private final ArrayList<Middleware> middlewares = new ArrayList<>();
     private Command<Receiver> command;
 
     public void addReceiver(Class<? extends Command<? extends Receiver>> commandType, Receiver controller) {
@@ -22,13 +22,13 @@ public class Router implements Invoker<Receiver> {
         controllers.remove(commandType);
     }
 
-//    public void addMiddleware(Middleware<? extends Receiver> middleware) {
-//        middlewares.add(middleware);
-//    }
-//
-//    public void removeMiddleware(Middleware<? extends Receiver> middleware) {
-//        middlewares.remove(middleware);
-//    }
+    public void addMiddleware(Middleware middleware) {
+        middlewares.add(middleware);
+    }
+
+    public void removeMiddleware(Middleware middleware) {
+        middlewares.remove(middleware);
+    }
 
     public void route(Command<Receiver> newCommand) {
         setCommand(newCommand);
@@ -49,9 +49,9 @@ public class Router implements Invoker<Receiver> {
             return;
         }
 
-//        for (Middleware<? extends Receiver> middleware : middlewares) {
-//            middleware.handle(receiver, command);
-//        }
+        for (Middleware middleware : middlewares) {
+            middleware.handle(command);
+        }
 
         command.setReceiver(receiver);
         command.execute();

@@ -8,13 +8,13 @@ import pt.isel.icd.patterns.verticals.Controller;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class UserServerController implements Controller {
+public class UserServerController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
 
     public UserServerController(ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
 
-//        connectionManager.addMiddleware(new AuthenticationMiddleware());
+        connectionManager.addMiddleware(new AuthenticationMiddleware(this));
     }
 
     @Override
@@ -36,5 +36,11 @@ public class UserServerController implements Controller {
 
     public void deleteUser(UUID connectionIdentifier) {
 
+    }
+
+    @Override
+    public boolean isAuthenticated(UUID connectionIdentifier) {
+        // TODO verify authentication
+        return false;
     }
 }
