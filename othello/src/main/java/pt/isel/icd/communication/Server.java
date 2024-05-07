@@ -7,10 +7,10 @@ import java.net.ServerSocket;
 
 public class Server {
 
-    private final SocketService socketService;
+    private final SimpleSocketManager simpleSocketManager;
 
-    public Server(SocketService existingSocketService) {
-        socketService = existingSocketService;
+    public Server(SimpleSocketManager existingSimpleSocketManager) {
+        simpleSocketManager = existingSimpleSocketManager;
     }
 
     public void listen() throws IOException {
@@ -18,15 +18,15 @@ public class Server {
 
         while (true) {
             SimpleSocket clientSocket = new SimpleSocket(serverSocket.accept());
-            ClientHandler clientHandler = new ClientHandler(socketService, clientSocket);
+            ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket);
         }
     }
 
     public void addController(Controller controller) {
-        socketService.addController(controller);
+        simpleSocketManager.addController(controller);
     }
 
     public void removeController(Controller controller) {
-        socketService.removeController(controller);
+        simpleSocketManager.removeController(controller);
     }
 }

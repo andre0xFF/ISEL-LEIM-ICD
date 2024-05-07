@@ -1,5 +1,6 @@
 package pt.isel.icd.game.management;
 
+import pt.isel.icd.communication.ClientsManager;
 import pt.isel.icd.communication.ConnectCommand;
 import pt.isel.icd.communication.DisconnectCommand;
 import pt.isel.icd.patterns.command.Command;
@@ -9,7 +10,13 @@ import pt.isel.icd.patterns.verticals.Controller;
 import java.util.ArrayList;
 
 public class GameServerController implements Controller {
-    private final GameController gameController = new GameController();
+    private final GameController gameController;
+    private final ClientsManager clientsManager;
+
+    public GameServerController(ClientsManager existingClientsManager) {
+        clientsManager = existingClientsManager;
+        gameController = new GameController(existingClientsManager);
+    }
 
     @Override
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
@@ -23,5 +30,8 @@ public class GameServerController implements Controller {
                 add(MakeMoveCommand.class);
             }
         };
+    }
+
+    public void joinGame() {
     }
 }

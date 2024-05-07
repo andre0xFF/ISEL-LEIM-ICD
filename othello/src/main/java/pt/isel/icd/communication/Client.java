@@ -6,22 +6,22 @@ import java.io.IOException;
 
 public class Client {
 
-    private final SocketService socketService;
+    private final SimpleSocketManager simpleSocketManager;
 
-    public Client(SocketService existingSocketService) {
-        socketService = existingSocketService;
+    public Client(SimpleSocketManager existingSimpleSocketManager) {
+        simpleSocketManager = existingSimpleSocketManager;
     }
 
     public void connect() throws IOException {
         SimpleSocket simpleSocket = new SimpleSocket();
-        ClientHandler clientHandler = new ClientHandler(socketService, simpleSocket);
+        ClientHandler clientHandler = new ClientHandler(simpleSocketManager, simpleSocket);
     }
 
     public void addController(Controller controller) {
-        socketService.addController(controller);
+        simpleSocketManager.addController(controller);
     }
 
     public void removeController(Controller controller) {
-        socketService.removeController(controller);
+        simpleSocketManager.removeController(controller);
     }
 }

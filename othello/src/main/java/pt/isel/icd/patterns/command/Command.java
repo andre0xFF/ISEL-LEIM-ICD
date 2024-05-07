@@ -7,12 +7,4 @@ public interface Command<T extends Receiver> {
 
     void setReceiver(T receiver);
     void execute();
-
-    static Command<Receiver> fromXml(String xml) {
-        throw new UnsupportedOperationException("fromXml not implemented");
-    }
-
-    default String toXml() {
-        throw new UnsupportedOperationException("toXml not implemented");
-    }
 }

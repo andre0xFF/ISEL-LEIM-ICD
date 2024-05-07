@@ -1,5 +1,6 @@
 package pt.isel.icd.user.management;
 
+import pt.isel.icd.communication.ClientsManager;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -7,6 +8,11 @@ import pt.isel.icd.patterns.verticals.Controller;
 import java.util.ArrayList;
 
 public class UserServerController implements Controller {
+    private final ClientsManager clientsManager;
+
+    public UserServerController(ClientsManager existingClientsManager) {
+        clientsManager = existingClientsManager;
+    }
 
     @Override
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {

@@ -1,5 +1,6 @@
 package pt.isel.icd.patterns.verticals;
 
+
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 

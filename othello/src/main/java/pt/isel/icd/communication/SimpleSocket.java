@@ -4,9 +4,10 @@ import pt.isel.icd.patterns.observer.Subscriber;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.UUID;
 
 /**
- * A simple wrapper around java.net.Socket with thread, read and write functionality.
+ * A simple wrapper around java.net.Socket with read and write functionality.
  */
 public class SimpleSocket implements Closeable {
     public static final int DEFAULT_PORT = 8000;
@@ -14,9 +15,7 @@ public class SimpleSocket implements Closeable {
     private final Socket socket;
     private final PrintWriter writer;
     private final BufferedReader reader;
-    private Subscriber<String> subscriber;
-    private Thread thread;
-    private String message;
+    private final UUID identifier = UUID.randomUUID();
 
     /**
      * Creates a new socket. The hostname is set to "localhost" and the port is set to 8000.
@@ -135,5 +134,9 @@ public class SimpleSocket implements Closeable {
      */
     public int port() {
         return socket.getPort();
+    }
+
+    public UUID identifier() {
+        return identifier;
     }
 }

@@ -1,11 +1,11 @@
 package pt.isel.icd.communication;
 
 import pt.isel.icd.patterns.command.Command;
-import pt.isel.icd.game.management.GameClientController;
+import pt.isel.icd.patterns.command.Receiver;
 
-public class PingCommand implements Command<GameClientController> {
+public class PingCommand implements Command<Receiver> {
     @Override
-    public void setReceiver(GameClientController receiver) {
+    public void setReceiver(Receiver receiver) {
 
     }
 
@@ -13,4 +13,5 @@ public class PingCommand implements Command<GameClientController> {
     public void execute() {
 
     }
+
 }

@@ -1,5 +1,6 @@
 package pt.isel.icd.communication;
 
+
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Invoker;
 import pt.isel.icd.patterns.command.Receiver;

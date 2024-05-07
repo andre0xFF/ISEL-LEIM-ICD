@@ -7,14 +7,14 @@ import java.io.IOException;
 
 public class ClientHandler implements Runnable {
     private final SimpleSocket simpleSocket;
-    private final SocketService socketService;
+    private final SimpleSocketManager simpleSocketManager;
     private final Thread thread;
 
-    public ClientHandler(SocketService existingSocketService, SimpleSocket existingSimpleSocket) {
-        socketService = existingSocketService;
+    public ClientHandler(SimpleSocketManager existingSimpleSocketManager, SimpleSocket existingSimpleSocket) {
+        simpleSocketManager = existingSimpleSocketManager;
         simpleSocket = existingSimpleSocket;
 
-        socketService.connectClient(simpleSocket);
+        simpleSocketManager.connectClient(simpleSocket);
 
         thread = new Thread(this);
         thread.start();
@@ -22,26 +22,26 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        socketService.route(new ConnectCommand());
+        simpleSocketManager.route(new ConnectCommand());
 
         try {
             String line = simpleSocket.readLine();
 
             // The end of the stream has been reached.
             if (line == null) {
-                socketService.route(new DisconnectCommand());
-
+                simpleSocketManager.route(new DisconnectCommand());
                 simpleSocket.close();
             }
             else {
                 // TODO convert to command
-                Command<Receiver> command = Command.fromXml(line);
+                // Command<Receiver> command = Command.fromXml(line);
                 // command.setOriginSimpleSocket(simpleSocket);
+                Command<Receiver> command = null;
 
-                socketService.route(command);
+                simpleSocketManager.route(command);
             }
         } catch (IOException e) {
-            socketService.route(new DisconnectCommand());
+            simpleSocketManager.route(new DisconnectCommand());
 
             throw new RuntimeException(e);
         }
