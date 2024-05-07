@@ -1,9 +1,12 @@
 package pt.isel.icd.game.management;
 
-import pt.isel.icd.patterns.command.Command;
+import pt.isel.icd.communication.ConnectionCommand;
 
-public class LeaveGameCommand implements Command<GameServerController> {
+import java.util.UUID;
+
+public class LeaveGameCommand implements ConnectionCommand<GameServerController> {
     private GameServerController gameServerController;
+    private UUID connectionIdentifier;
 
     @Override
     public void setReceiver(GameServerController existingGameServerController) {
@@ -12,6 +15,11 @@ public class LeaveGameCommand implements Command<GameServerController> {
 
     @Override
     public void execute() {
+        gameServerController.leaveGame(connectionIdentifier);
+    }
 
+    @Override
+    public void connectionIdentifier(UUID existingConnectionIdentifier) {
+        connectionIdentifier = existingConnectionIdentifier;
     }
 }

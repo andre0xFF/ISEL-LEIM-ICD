@@ -1,6 +1,6 @@
 package pt.isel.icd.game.management;
 
-import pt.isel.icd.communication.ClientsManager;
+import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.ConnectCommand;
 import pt.isel.icd.communication.DisconnectCommand;
 import pt.isel.icd.patterns.command.Command;
@@ -8,14 +8,15 @@ import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class GameServerController implements Controller {
     private final GameController gameController;
-    private final ClientsManager clientsManager;
+    private final ConnectionManager connectionManager;
 
-    public GameServerController(ClientsManager existingClientsManager) {
-        clientsManager = existingClientsManager;
-        gameController = new GameController(existingClientsManager);
+    public GameServerController(ConnectionManager existingConnectionManager) {
+        connectionManager = existingConnectionManager;
+        gameController = new GameController(existingConnectionManager);
     }
 
     @Override
@@ -27,11 +28,24 @@ public class GameServerController implements Controller {
                 add(ShowBoardCommand.class);
                 add(JoinGameCommand.class);
                 add(LeaveGameCommand.class);
-                add(MakeMoveCommand.class);
+                add(PlacePieceCommand.class);
             }
         };
     }
 
-    public void joinGame() {
+    public void joinGame(UUID connectionIdentifier) {
+
+    }
+
+    public void leaveGame(UUID connectionIdentifier) {
+
+    }
+
+    public void placePiece(UUID connectionIdentifier) {
+
+    }
+
+    public void showBoard(UUID connectionIdentifier) {
+
     }
 }

@@ -1,7 +1,7 @@
 package pt.isel.icd.game.management;
 
 
-import pt.isel.icd.communication.ClientsManager;
+import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.ConnectCommand;
 import pt.isel.icd.communication.DisconnectCommand;
 import pt.isel.icd.patterns.command.Command;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 
 public class GameClientController implements Controller {
     private final GameController gameController;
-    private final ClientsManager clientsManager;
+    private final ConnectionManager connectionManager;
 
-    public GameClientController(ClientsManager existingClientsManager) {
-        clientsManager = existingClientsManager;
-        gameController = new GameController(existingClientsManager);
+    public GameClientController(ConnectionManager existingConnectionManager) {
+        connectionManager = existingConnectionManager;
+        gameController = new GameController(existingConnectionManager);
     }
 
     @Override
@@ -27,5 +27,9 @@ public class GameClientController implements Controller {
                 add(DisconnectCommand.class);
             }
         };
+    }
+
+    public void updateBoard() {
+
     }
 }

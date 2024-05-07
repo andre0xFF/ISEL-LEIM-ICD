@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
                 simpleSocket.close();
             }
             else {
-                // TODO convert to command
+                // TODO deserialize command and set connection identifier
                 // Command<Receiver> command = Command.fromXml(line);
                 // command.setOriginSimpleSocket(simpleSocket);
                 Command<Receiver> command = null;

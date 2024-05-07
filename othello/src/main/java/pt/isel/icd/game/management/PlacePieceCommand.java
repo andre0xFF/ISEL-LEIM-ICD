@@ -4,18 +4,18 @@ import pt.isel.icd.communication.ConnectionCommand;
 
 import java.util.UUID;
 
-public class UpdateBoardCommand implements ConnectionCommand<GameClientController> {
-    private GameClientController gameClientController;
+public class PlacePieceCommand implements ConnectionCommand<GameServerController> {
+    private GameServerController gameServerController;
     private UUID connectionIdentifier;
 
     @Override
-    public void setReceiver(GameClientController existingGameClientController) {
-        gameClientController = existingGameClientController;
+    public void setReceiver(GameServerController existingGameServerController) {
+        gameServerController = existingGameServerController;
     }
 
     @Override
     public void execute() {
-        gameClientController.updateBoard();
+        gameServerController.placePiece(connectionIdentifier);
     }
 
     @Override

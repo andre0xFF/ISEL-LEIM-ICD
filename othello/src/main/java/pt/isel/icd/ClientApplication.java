@@ -11,9 +11,11 @@ public class ClientApplication {
     public static void main(String[] args) throws IOException {
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         Client client = new Client(simpleSocketManager);
+        GameClientController gameClientController = new GameClientController(simpleSocketManager);
+        UserClientController userClientController = new UserClientController(simpleSocketManager);
 
-        client.addController(new GameClientController(simpleSocketManager));
-        client.addController(new UserClientController(simpleSocketManager));
+        client.addController(gameClientController);
+        client.addController(userClientController);
 
         client.connect();
     }

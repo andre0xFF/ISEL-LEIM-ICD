@@ -11,9 +11,11 @@ public class ServerApplication {
     public static void main(String[] args) throws IOException {
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         Server server = new Server(simpleSocketManager);
+        GameServerController gameServerController = new GameServerController(simpleSocketManager);
+        UserServerController userServerController = new UserServerController(simpleSocketManager);
 
-        server.addController(new GameServerController(simpleSocketManager));
-        server.addController(new UserServerController(simpleSocketManager));
+        server.addController(gameServerController);
+        server.addController(userServerController);
 
         server.listen();
     }
