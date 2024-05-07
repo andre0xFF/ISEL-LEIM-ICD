@@ -5,9 +5,9 @@ package pt.isel.icd.patterns.observer;
  */
 public interface Publisher<T> {
 
-    void subscribe(Subscriber<T> subscriber);
+    void subscribe(Class<? extends T> eventType, Subscriber<T> subscriber);
 
-    void unsubscribe(Subscriber<T> subscriber);
+    void unsubscribe(Class<? extends T> eventType, Subscriber<T> subscriber);
 
     void publish();
 }
