@@ -12,9 +12,8 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * A serializer that can serialize and deserialize messages to and from XML.
- * @param <T> The type of the message.
  */
-public class XMLSerializer<T> implements Serializer<T> {
+public class XMLSerializer implements Serializer {
     private final XmlMapper xmlMapper = new XmlMapper();
 
     public XMLSerializer() {
@@ -41,29 +40,29 @@ public class XMLSerializer<T> implements Serializer<T> {
         );
     }
 
+
     /**
-     * Deserialize a message from XML.
-     *
-     * @param content   The XML content.
-     * @param commandClass The class of the message.
-     * @return The deserialized message.
-     * @param <K> The subtype of the message <T>.
-     * @throws JsonProcessingException If the XML is invalid.
+     * Deserialize an XML string to an object.
+     * @param content The XML string content.
+     * @param type The class of the object.
+     * @return The deserialized object.
+     * @param <T> The type of the object <T>.
+     * @throws JsonProcessingException If the XML string is invalid.
      */
     @Override
-    public <K extends T> K deserialize(String content, Class<T> commandClass) throws JsonProcessingException {
-        return ((K) xmlMapper.readValue(content, commandClass));
+    public <T> T deserialize(String content, Class<T> type) throws JsonProcessingException {
+        return xmlMapper.readValue(content, type);
     }
 
     /**
-     * Serialize a message to XML.
-     * @param message The message to serialize.
-     * @return The serialized message.
-     * @param <K> The subtype of the message <T>.
-     * @throws JsonProcessingException If the message cannot be serialized.
+     * Serialize an object to an XML string.
+     * @param object The object to serialize.
+     * @return The serialized XML string.
+     * @param <T> The type of the object <T>.
+     * @throws JsonProcessingException If the object is invalid.
      */
     @Override
-    public <K extends T> String serialize(K message) throws JsonProcessingException {
-        return xmlMapper.writeValueAsString(message);
+    public <T> String serialize(T object) throws JsonProcessingException {
+        return xmlMapper.writeValueAsString(object);
     }
 }

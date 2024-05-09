@@ -1,5 +1,6 @@
 package pt.isel.icd.user.management;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.isel.icd.communication.ConnectionCommand;
 
 import java.util.UUID;
@@ -7,6 +8,13 @@ import java.util.UUID;
 public class DeleteUserCommand implements ConnectionCommand<UserServerController> {
     private UserServerController userServerController;
     private UUID connectionIdentifier;
+
+    @JsonProperty
+    private final String username;
+
+    public DeleteUserCommand(@JsonProperty("username") String existingUsername) {
+        username = existingUsername;
+    }
 
     @Override
     public void setReceiver(UserServerController existingUserServerController) {
@@ -16,6 +24,11 @@ public class DeleteUserCommand implements ConnectionCommand<UserServerController
     @Override
     public void execute() {
         userServerController.deleteUser(connectionIdentifier);
+    }
+
+    @Override
+    public UUID connectionIdentifier() {
+        return connectionIdentifier;
     }
 
     @Override

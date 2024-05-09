@@ -21,7 +21,7 @@ public class UserClientController implements Controller, Authenticator {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>() {
             {
-
+                add(UpdateUserCommand.class);
             }
         };
     }

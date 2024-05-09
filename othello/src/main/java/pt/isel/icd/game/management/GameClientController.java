@@ -23,8 +23,7 @@ public class GameClientController implements Controller {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>(gameController.commandsList()) {
             {
-                add(ConnectCommand.class);
-                add(DisconnectCommand.class);
+                add(UpdateBoardCommand.class);
             }
         };
     }

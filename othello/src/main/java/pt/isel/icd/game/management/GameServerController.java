@@ -1,8 +1,6 @@
 package pt.isel.icd.game.management;
 
 import pt.isel.icd.communication.ConnectionManager;
-import pt.isel.icd.communication.ConnectCommand;
-import pt.isel.icd.communication.DisconnectCommand;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -23,8 +21,6 @@ public class GameServerController implements Controller {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>(gameController.commandsList()) {
             {
-                add(ConnectCommand.class);
-                add(DisconnectCommand.class);
                 add(ShowBoardCommand.class);
                 add(JoinGameCommand.class);
                 add(LeaveGameCommand.class);

@@ -1,7 +1,7 @@
 package pt.isel.icd.user.management;
 
+import pt.isel.icd.communication.ConnectionCommand;
 import pt.isel.icd.communication.Middleware;
-import pt.isel.icd.patterns.command.Command;
 
 class AuthenticationMiddleware implements Middleware {
 
@@ -12,7 +12,11 @@ class AuthenticationMiddleware implements Middleware {
     }
 
     @Override
-    public void handle(Command<?> request) {
+    public boolean handle(ConnectionCommand<?> command) {
+        if (!command.requiresAuthentication()) {
+            return true;
+        }
 
+        return authenticator.isAuthenticated(command.connectionIdentifier());
     }
 }

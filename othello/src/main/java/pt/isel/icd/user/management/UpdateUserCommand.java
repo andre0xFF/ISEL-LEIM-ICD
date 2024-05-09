@@ -18,6 +18,12 @@ public class UpdateUserCommand implements ConnectionCommand<UserClientController
     }
 
     @Override
+    public UUID connectionIdentifier() {
+        return connectionIdentifier;
+    }
+
+    @Override
     public void connectionIdentifier(UUID existingConnectionIdentifier) {
+        connectionIdentifier = existingConnectionIdentifier;
     }
 }

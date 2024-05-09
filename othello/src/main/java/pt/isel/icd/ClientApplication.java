@@ -3,14 +3,18 @@ package pt.isel.icd;
 import pt.isel.icd.communication.Client;
 import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.game.management.GameClientController;
+import pt.isel.icd.serialization.XMLSerializer;
+import pt.isel.icd.user.management.AuthenticateUserCommand;
+import pt.isel.icd.user.management.Authenticator;
 import pt.isel.icd.user.management.UserClientController;
 
 import java.io.IOException;
 
 public class ClientApplication {
     public static void main(String[] args) throws IOException {
-        SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
-        Client client = new Client(simpleSocketManager);
+        XMLSerializer xmlSerializer = new XMLSerializer();
+        SimpleSocketManager simpleSocketManager = new SimpleSocketManager(xmlSerializer);
+        Client client = new Client(simpleSocketManager, xmlSerializer);
         GameClientController gameClientController = new GameClientController(simpleSocketManager);
         UserClientController userClientController = new UserClientController(simpleSocketManager);
 
@@ -18,5 +22,7 @@ public class ClientApplication {
         client.addController(userClientController);
 
         client.connect();
+
+        client.sendCommand(new AuthenticateUserCommand("user", "da23e"));
     }
 }

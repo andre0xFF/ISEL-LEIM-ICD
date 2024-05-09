@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  *
  * @param <T> The type of the message.
  */
-public interface Serializer<T> {
+public interface Serializer {
 
     /**
      * Deserialize a message from a string.
@@ -18,7 +18,7 @@ public interface Serializer<T> {
      * @return The deserialized message.
      * @throws JsonProcessingException If the string is invalid.
      */
-    <K extends T> K deserialize(String content, Class<T> commandClass) throws JsonProcessingException;
+    <T> T deserialize(String content, Class<T> commandClass) throws JsonProcessingException;
 
     /**
      * Serialize a message to a string.
@@ -28,5 +28,5 @@ public interface Serializer<T> {
      * @return The serialized message.
      * @throws JsonProcessingException If the message is invalid.
      */
-    <K extends T> String serialize(K message) throws JsonProcessingException;
+    <T> String serialize(T message) throws JsonProcessingException;
 }

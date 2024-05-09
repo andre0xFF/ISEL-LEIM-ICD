@@ -19,6 +19,11 @@ public class PlacePieceCommand implements ConnectionCommand<GameServerController
     }
 
     @Override
+    public UUID connectionIdentifier() {
+        return connectionIdentifier;
+    }
+
+    @Override
     public void connectionIdentifier(UUID existingConnectionIdentifier) {
         connectionIdentifier = existingConnectionIdentifier;
     }

@@ -21,7 +21,9 @@ public class UserServerController implements Controller, Authenticator {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>() {
             {
-
+                add(AuthenticateUserCommand.class);
+                add(CreateUserCommand.class);
+                add(DeleteUserCommand.class);
             }
         };
     }
