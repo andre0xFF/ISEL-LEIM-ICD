@@ -1,5 +1,6 @@
 package pt.isel.icd.communication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -66,8 +67,7 @@ public class SimpleSocketManager implements ConnectionManager {
 //        throw new IllegalArgumentException("Client not found");
 //    }
 
-    @Override
-    public void sendCommand(UUID clientIdentifier, Command<?> command) {
+    protected void sendCommand(UUID clientIdentifier, Command<?> command) {
         for (SimpleSocket simpleSocket : simpleSockets) {
             if (simpleSocket.identifier().equals(clientIdentifier)) {
                 // TODO Serialize message and write to simple socket
@@ -78,11 +78,11 @@ public class SimpleSocketManager implements ConnectionManager {
     }
 
     @Override
-    public void sendCommand(Command<?> command) {
+    public void sendCommand(Command<?> command) throws JsonProcessingException {
         for (SimpleSocket simpleSocket : simpleSockets) {
-            // TODO Serialize message and write to simple socket
-            // String message = command.serialize();
-            // simpleSocket.write(message);
+            String line = serializer.serialize(command);
+
+            simpleSocket.write(line);
         }
     }
 

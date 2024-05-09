@@ -39,6 +39,7 @@ public class ClientHandler implements Runnable {
                 simpleSocket.close();
             }
             else {
+                // TODO validate schema.
                 ConnectionCommand<Receiver> command = serializer.deserialize(line, ConnectionCommand.class);
 
                 command.connectionIdentifier(simpleSocket.identifier());

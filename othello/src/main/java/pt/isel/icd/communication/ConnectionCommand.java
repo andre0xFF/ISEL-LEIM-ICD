@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import pt.isel.icd.game.management.*;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
+import pt.isel.icd.user.management.AuthenticateUserCommand;
 import pt.isel.icd.user.management.CreateUserCommand;
 import pt.isel.icd.user.management.DeleteUserCommand;
 import pt.isel.icd.user.management.UpdateUserCommand;
@@ -27,6 +28,7 @@ import java.util.UUID;
                 @JsonSubTypes.Type(value = UpdateBoardCommand.class),
 
                 // User Management Commands
+                @JsonSubTypes.Type(value = AuthenticateUserCommand.class),
                 @JsonSubTypes.Type(value = CreateUserCommand.class),
                 @JsonSubTypes.Type(value = DeleteUserCommand.class),
                 @JsonSubTypes.Type(value = UpdateUserCommand.class),

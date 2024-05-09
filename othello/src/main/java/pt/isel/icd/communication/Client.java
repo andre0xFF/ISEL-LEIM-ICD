@@ -1,5 +1,6 @@
 package pt.isel.icd.communication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.patterns.verticals.Controller;
 import pt.isel.icd.serialization.Serializer;
 
@@ -26,5 +27,9 @@ public class Client {
 
     public void removeController(Controller controller) {
         simpleSocketManager.removeController(controller);
+    }
+
+    public void sendCommand(ConnectionCommand<?> connectionCommand) throws JsonProcessingException {
+        simpleSocketManager.sendCommand(connectionCommand);
     }
 }
