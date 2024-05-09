@@ -2,31 +2,31 @@ package pt.isel.icd.game.logic;
 
 import pt.isel.icd.patterns.verticals.Entity;
 
-public class Game implements Entity {
+public class GameEntity implements Entity {
     public static final int BOARD_SIZE = 8;
-    private Piece[][] board;
+    private PieceEntity[][] board;
     private int totalPieces;
 
-    public Game() {
+    public GameEntity() {
         initializeBoard();
     }
 
     private void initializeBoard() {
-        board = new Piece[BOARD_SIZE][BOARD_SIZE];
+        board = new PieceEntity[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                setPiece(i, j, Piece.EMPTY);
+                setPiece(i, j, PieceEntity.EMPTY);
             }
         }
 
-        setPiece(3, 3, Piece.X);
-        setPiece(3, 4, Piece.O);
-        setPiece(4, 3, Piece.O);
-        setPiece(4, 4, Piece.X);
+        setPiece(3, 3, PieceEntity.X);
+        setPiece(3, 4, PieceEntity.O);
+        setPiece(4, 3, PieceEntity.O);
+        setPiece(4, 4, PieceEntity.X);
     }
 
-    public boolean makeMove(int row, int column, Piece player) {
+    public boolean makeMove(int row, int column, PieceEntity player) {
         if (!isMoveValid(row, column, player)) {
             return false;
         }
@@ -37,8 +37,8 @@ public class Game implements Entity {
         return true;
     }
 
-    private void setPiece(int row, int column, Piece player) {
-        if (player != Piece.EMPTY) {
+    private void setPiece(int row, int column, PieceEntity player) {
+        if (player != PieceEntity.EMPTY) {
             totalPieces++;
         }
 
@@ -53,12 +53,12 @@ public class Game implements Entity {
      * @param playerCharacter the playerCharacter character
      * @return true if the move is valid, false otherwise
      */
-    private boolean isMoveValid(int row, int column, Piece playerCharacter) {
+    private boolean isMoveValid(int row, int column, PieceEntity playerCharacter) {
 //        if (checkEndGame()) {
 //            return false;
 //        }
 
-        if (board[row][column] != Piece.EMPTY) {
+        if (board[row][column] != PieceEntity.EMPTY) {
             return false;
         }
 
@@ -89,7 +89,7 @@ public class Game implements Entity {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (isMoveValid(i, j, Piece.X) || isMoveValid(i, j, Piece.O)) {
+                if (isMoveValid(i, j, PieceEntity.X) || isMoveValid(i, j, PieceEntity.O)) {
                     return false;
                 }
             }
@@ -98,14 +98,14 @@ public class Game implements Entity {
         return true;
     }
 
-    private boolean checkDirection(int row, int column, int dr, int dc, Piece playerCharacter) {
+    private boolean checkDirection(int row, int column, int dr, int dc, PieceEntity playerCharacter) {
         int r = row + dr;
         int c = column + dc;
         boolean validDir = false;
 
 
         while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
-            if (board[r][c] == Piece.EMPTY) {
+            if (board[r][c] == PieceEntity.EMPTY) {
                 return false;
             }
 
@@ -124,7 +124,7 @@ public class Game implements Entity {
         return false;
     }
 
-    private void flipPieces(int x, int y, Piece player) {
+    private void flipPieces(int x, int y, PieceEntity player) {
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
                 if (dr == 0 && dc == 0) {
@@ -138,11 +138,11 @@ public class Game implements Entity {
         }
     }
 
-    private void flipDirection(int x, int y, int dr, int dc, Piece player) {
+    private void flipDirection(int x, int y, int dr, int dc, PieceEntity player) {
         int r = x + dr;
         int c = y + dc;
 
-        Piece opponent = player == Piece.X ? Piece.O : Piece.X;
+        PieceEntity opponent = player == PieceEntity.X ? PieceEntity.O : PieceEntity.X;
 
         while (board[r][c] == opponent) {
             setPiece(r, c, player);
@@ -151,7 +151,7 @@ public class Game implements Entity {
         }
     }
 
-    public Piece getPiece(int row, int column) {
+    public PieceEntity getPiece(int row, int column) {
         return board[row][column];
     }
 }
