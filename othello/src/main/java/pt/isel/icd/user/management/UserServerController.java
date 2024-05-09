@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserServerController implements Controller, Authenticator {
+    private final UserServerService userServerService;
     private final ConnectionManager connectionManager;
 
-    public UserServerController(ConnectionManager existingConnectionManager) {
+    public UserServerController(UserServerService existingUserServerService, ConnectionManager existingConnectionManager) {
+        userServerService = existingUserServerService;
         connectionManager = existingConnectionManager;
 
         connectionManager.addMiddleware(new AuthenticationMiddleware(this));
@@ -29,7 +31,7 @@ public class UserServerController implements Controller, Authenticator {
     }
 
     public void authenticate(UUID connectionIdentifier, String username, String password) {
-
+        User user = userServerService.authenticate(username, password);
     }
 
     public void createUser(UUID connectionIdentifier, String username, String password) {

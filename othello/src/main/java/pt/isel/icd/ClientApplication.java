@@ -5,7 +5,6 @@ import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.game.management.GameClientController;
 import pt.isel.icd.serialization.XMLSerializer;
 import pt.isel.icd.user.management.AuthenticateUserCommand;
-import pt.isel.icd.user.management.Authenticator;
 import pt.isel.icd.user.management.UserClientController;
 
 import java.io.IOException;
@@ -15,8 +14,8 @@ public class ClientApplication {
         XMLSerializer xmlSerializer = new XMLSerializer();
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager(xmlSerializer);
         Client client = new Client(simpleSocketManager, xmlSerializer);
-        GameClientController gameClientController = new GameClientController(simpleSocketManager);
         UserClientController userClientController = new UserClientController(simpleSocketManager);
+        GameClientController gameClientController = new GameClientController(simpleSocketManager);
 
         client.addController(gameClientController);
         client.addController(userClientController);

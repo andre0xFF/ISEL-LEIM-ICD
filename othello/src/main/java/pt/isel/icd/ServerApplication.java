@@ -4,7 +4,9 @@ import pt.isel.icd.communication.Server;
 import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.game.management.GameServerController;
 import pt.isel.icd.serialization.XMLSerializer;
+import pt.isel.icd.user.management.UserServerRepository;
 import pt.isel.icd.user.management.UserServerController;
+import pt.isel.icd.user.management.UserServerService;
 
 import java.io.IOException;
 
@@ -13,8 +15,10 @@ public class ServerApplication {
         XMLSerializer xmlSerializer = new XMLSerializer();
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager(xmlSerializer);
         Server server = new Server(simpleSocketManager, xmlSerializer);
+        UserServerRepository userServerRepository = new UserServerRepository();
+        UserServerService userServerService = new UserServerService(userServerRepository);
+        UserServerController userServerController = new UserServerController(userServerService, simpleSocketManager);
         GameServerController gameServerController = new GameServerController(simpleSocketManager);
-        UserServerController userServerController = new UserServerController(simpleSocketManager);
 
         server.addController(gameServerController);
         server.addController(userServerController);

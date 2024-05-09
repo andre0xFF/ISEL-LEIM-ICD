@@ -16,7 +16,7 @@ public class SimpleSocket implements Closeable {
     private final UUID identifier = UUID.randomUUID();
 
     /**
-     * Creates a new socket. The hostname is set to "localhost" and the port is set to 8000.
+     * Creates a new socket.
      *
      * @throws IOException If an I/O error occurs when creating the socket.
      */
@@ -25,7 +25,7 @@ public class SimpleSocket implements Closeable {
     }
 
     /**
-     * Creates a new socket. The hostname is set to "localhost".
+     * Creates a new socket.
      *
      * @param port The port.
      * @throws IOException If an I/O error occurs when creating the socket.
@@ -35,7 +35,7 @@ public class SimpleSocket implements Closeable {
     }
 
     /**
-     * Creates a new socket. The port is set to 8000.
+     * Creates a new socket.
      *
      * @param hostname The hostname.
      * @throws IOException If an I/O error occurs when creating the socket.
