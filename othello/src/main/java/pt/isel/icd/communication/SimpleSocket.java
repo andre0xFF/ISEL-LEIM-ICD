@@ -84,7 +84,7 @@ public class SimpleSocket implements Closeable {
      * @return The message read, or null if the end of the stream has been reached.
      * @throws IOException If an I/O error occurs when reading from the socket.
      */
-    public String readLine() throws IOException {
+    public synchronized String readLine() throws IOException {
         return reader.readLine();
     }
 

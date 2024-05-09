@@ -1,22 +1,28 @@
 package pt.isel.icd.communication;
 
-import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
+import pt.isel.icd.serialization.Serializer;
 
 import java.io.IOException;
 
 public class ClientHandler implements Runnable {
     private final SimpleSocket simpleSocket;
     private final SimpleSocketManager simpleSocketManager;
-    private final Thread thread;
+    private final Serializer serializer;
 
-    public ClientHandler(SimpleSocketManager existingSimpleSocketManager, SimpleSocket existingSimpleSocket) {
+    public ClientHandler(
+            SimpleSocketManager existingSimpleSocketManager,
+            SimpleSocket existingSimpleSocket,
+            Serializer existingSerializer
+    ) {
         simpleSocketManager = existingSimpleSocketManager;
         simpleSocket = existingSimpleSocket;
+        serializer = existingSerializer;
 
         simpleSocketManager.connectClient(simpleSocket);
 
-        thread = new Thread(this);
+        Thread thread = new Thread(this);
+
         thread.start();
     }
 
@@ -33,10 +39,9 @@ public class ClientHandler implements Runnable {
                 simpleSocket.close();
             }
             else {
-                // TODO deserialize command and set connection identifier
-                // Command<Receiver> command = Command.fromXml(line);
-                // command.setOriginSimpleSocket(simpleSocket);
-                Command<Receiver> command = null;
+                ConnectionCommand<Receiver> command = serializer.deserialize(line, ConnectionCommand.class);
+
+                command.connectionIdentifier(simpleSocket.identifier());
 
                 simpleSocketManager.route(command);
             }

@@ -3,6 +3,7 @@ package pt.isel.icd.communication;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
+import pt.isel.icd.serialization.Serializer;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -10,6 +11,11 @@ import java.util.UUID;
 public class SimpleSocketManager implements ConnectionManager {
     private final Router router = new Router();
     private final ArrayList<SimpleSocket> simpleSockets = new ArrayList<>();
+    private final Serializer serializer;
+
+    public SimpleSocketManager(Serializer existingSerializer) {
+        serializer = existingSerializer;
+    }
 
     protected void connectClient(SimpleSocket client) {
         simpleSockets.add(client);
@@ -46,6 +52,19 @@ public class SimpleSocketManager implements ConnectionManager {
     protected void route(Command<Receiver> command) {
         router.route(command);
     }
+
+//    @Override
+//    public Command<?> readCommand(UUID clientIdentifier) throws IOException, IllegalArgumentException {
+//        for (SimpleSocket simpleSocket : simpleSockets) {
+//            if (simpleSocket.identifier().equals(clientIdentifier)) {
+//                String line = simpleSocket.readLine();
+//
+//                return serializer.deserialize(line, Command.class);
+//            }
+//        }
+//
+//        throw new IllegalArgumentException("Client not found");
+//    }
 
     @Override
     public void sendCommand(UUID clientIdentifier, Command<?> command) {

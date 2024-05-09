@@ -40,6 +40,10 @@ public class Router implements Invoker<Receiver> {
         command = newCommand;
     }
 
+    public void setConnectionCommand(ConnectionCommand<Receiver> newCommand) {
+        command = newCommand;
+    }
+
     @Override
     public void executeCommand() {
         Class<?> commandType = command.getClass();
@@ -49,8 +53,15 @@ public class Router implements Invoker<Receiver> {
             return;
         }
 
-        for (Middleware middleware : middlewares) {
-            middleware.handle(command);
+        // TODO: Shame! This is a hack to allow the middleware to handle the connection command.
+        if (command instanceof ConnectionCommand<Receiver>) {
+            for (Middleware middleware : middlewares) {
+                boolean isHandled = middleware.handle((ConnectionCommand<?>) command);
+
+                if (!isHandled) {
+                    return;
+                }
+            }
         }
 
         command.setReceiver(receiver);

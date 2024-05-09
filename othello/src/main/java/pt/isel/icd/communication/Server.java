@@ -1,6 +1,7 @@
 package pt.isel.icd.communication;
 
 import pt.isel.icd.patterns.verticals.Controller;
+import pt.isel.icd.serialization.Serializer;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -8,9 +9,11 @@ import java.net.ServerSocket;
 public class Server {
 
     private final SimpleSocketManager simpleSocketManager;
+    private final Serializer serializer;
 
-    public Server(SimpleSocketManager existingSimpleSocketManager) {
+    public Server(SimpleSocketManager existingSimpleSocketManager, Serializer existingSerializer) {
         simpleSocketManager = existingSimpleSocketManager;
+        serializer = existingSerializer;
     }
 
     public void listen() throws IOException {
@@ -18,7 +21,7 @@ public class Server {
 
         while (true) {
             SimpleSocket clientSocket = new SimpleSocket(serverSocket.accept());
-            ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket);
+            ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket, serializer);
         }
     }
 
