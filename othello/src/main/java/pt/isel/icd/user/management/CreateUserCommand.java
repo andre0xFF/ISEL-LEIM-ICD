@@ -1,11 +1,11 @@
 package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import pt.isel.icd.communication.ConnectionCommand;
+import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class CreateUserCommand implements ConnectionCommand<UserServerController> {
+public class CreateUserCommand implements SimpleSocketCommand<UserServerController> {
     private UserServerController userServerController;
     private UUID connectionIdentifier;
 

@@ -17,7 +17,7 @@ public class Client {
     }
 
     public void connect() throws IOException {
-        SimpleSocket simpleSocket = new SimpleSocket();
+        SimpleSocket simpleSocket = new SimpleSocket(serializer);
         ClientHandler clientHandler = new ClientHandler(simpleSocketManager, simpleSocket, serializer);
     }
 
@@ -29,7 +29,7 @@ public class Client {
         simpleSocketManager.removeController(controller);
     }
 
-    public void sendCommand(ConnectionCommand<?> connectionCommand) throws JsonProcessingException {
-        simpleSocketManager.sendCommand(connectionCommand);
+    public void sendCommand(SimpleSocketCommand<?> simpleSocketCommand) throws JsonProcessingException {
+        simpleSocketManager.write(simpleSocketCommand);
     }
 }

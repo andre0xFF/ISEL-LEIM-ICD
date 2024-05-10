@@ -1,10 +1,10 @@
 package pt.isel.icd.game.management;
 
-import pt.isel.icd.communication.ConnectionCommand;
+import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class PlacePieceCommand implements ConnectionCommand<GameServerController> {
+public class PlacePieceCommand implements SimpleSocketCommand<GameServerController> {
     private GameServerController gameServerController;
     private UUID connectionIdentifier;
 

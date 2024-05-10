@@ -28,26 +28,23 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        simpleSocketManager.route(new ConnectCommand());
+        simpleSocketManager.route(new ConnectedCommand());
 
         try {
-            String line = simpleSocket.readLine();
+            SimpleSocketCommand<Receiver> simpleSocketCommand = simpleSocket.read();
 
-            // The end of the stream has been reached.
-            if (line == null) {
-                simpleSocketManager.route(new DisconnectCommand());
+            if (simpleSocketCommand == null) {
+                simpleSocketManager.route(new DisconnectedCommand());
+
                 simpleSocket.close();
             }
             else {
-                // TODO validate schema.
-                ConnectionCommand<Receiver> command = serializer.deserialize(line, ConnectionCommand.class);
+                simpleSocketCommand.connectionIdentifier(simpleSocket.identifier());
 
-                command.connectionIdentifier(simpleSocket.identifier());
-
-                simpleSocketManager.route(command);
+                simpleSocketManager.route(simpleSocketCommand);
             }
         } catch (IOException e) {
-            simpleSocketManager.route(new DisconnectCommand());
+            simpleSocketManager.route(new DisconnectedCommand());
 
             throw new RuntimeException(e);
         }

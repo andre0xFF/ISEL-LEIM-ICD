@@ -8,10 +8,10 @@ import pt.isel.icd.patterns.command.Receiver;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Router implements Invoker<Receiver> {
+public class SimpleSocketRouter implements Invoker<Receiver> {
 
     private final HashMap<Class<? extends Command<? extends Receiver>>, Receiver> controllers = new HashMap<>();
-    private final ArrayList<Middleware> middlewares = new ArrayList<>();
+    private final ArrayList<SimpleSocketMiddleware> simpleSocketMiddlewares = new ArrayList<>();
     private Command<Receiver> command;
 
     public void addReceiver(Class<? extends Command<? extends Receiver>> commandType, Receiver controller) {
@@ -22,12 +22,12 @@ public class Router implements Invoker<Receiver> {
         controllers.remove(commandType);
     }
 
-    public void addMiddleware(Middleware middleware) {
-        middlewares.add(middleware);
+    public void addMiddleware(SimpleSocketMiddleware simpleSocketMiddleware) {
+        simpleSocketMiddlewares.add(simpleSocketMiddleware);
     }
 
-    public void removeMiddleware(Middleware middleware) {
-        middlewares.remove(middleware);
+    public void removeMiddleware(SimpleSocketMiddleware simpleSocketMiddleware) {
+        simpleSocketMiddlewares.remove(simpleSocketMiddleware);
     }
 
     public void route(Command<Receiver> newCommand) {
@@ -40,7 +40,7 @@ public class Router implements Invoker<Receiver> {
         command = newCommand;
     }
 
-    public void setConnectionCommand(ConnectionCommand<Receiver> newCommand) {
+    public void setConnectionCommand(SimpleSocketCommand<Receiver> newCommand) {
         command = newCommand;
     }
 
@@ -54,9 +54,9 @@ public class Router implements Invoker<Receiver> {
         }
 
         // TODO: Shame! This is a hack to allow the middleware to handle the connection command.
-        if (command instanceof ConnectionCommand<Receiver>) {
-            for (Middleware middleware : middlewares) {
-                boolean isHandled = middleware.handle((ConnectionCommand<?>) command);
+        if (command instanceof SimpleSocketCommand<Receiver>) {
+            for (SimpleSocketMiddleware simpleSocketMiddleware : simpleSocketMiddlewares) {
+                boolean isHandled = simpleSocketMiddleware.handle((SimpleSocketCommand<?>) command);
 
                 if (!isHandled) {
                     return;

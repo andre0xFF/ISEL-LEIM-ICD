@@ -11,17 +11,15 @@ import java.io.IOException;
 
 public class ClientApplication {
     public static void main(String[] args) throws IOException {
+        SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         XMLSerializer xmlSerializer = new XMLSerializer();
-        SimpleSocketManager simpleSocketManager = new SimpleSocketManager(xmlSerializer);
         Client client = new Client(simpleSocketManager, xmlSerializer);
         UserClientController userClientController = new UserClientController(simpleSocketManager);
         GameClientController gameClientController = new GameClientController(simpleSocketManager);
 
         client.addController(gameClientController);
         client.addController(userClientController);
-
         client.connect();
-
-        client.sendCommand(new AuthenticateUserCommand("user", "da23e"));
+        client.sendCommand(new AuthenticateUserCommand("user", "12345678ab"));
     }
 }

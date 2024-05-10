@@ -43,6 +43,7 @@ public class XMLSerializer implements Serializer {
 
     /**
      * Deserialize an XML string to an object.
+     *
      * @param content The XML string content.
      * @param type The class of the object.
      * @return The deserialized object.
@@ -56,6 +57,7 @@ public class XMLSerializer implements Serializer {
 
     /**
      * Serialize an object to an XML string.
+     *
      * @param object The object to serialize.
      * @return The serialized XML string.
      * @param <T> The type of the object <T>.

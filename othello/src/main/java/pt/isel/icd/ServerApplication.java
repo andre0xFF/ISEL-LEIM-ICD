@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class ServerApplication {
     public static void main(String[] args) throws IOException {
+        SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         XMLSerializer xmlSerializer = new XMLSerializer();
-        SimpleSocketManager simpleSocketManager = new SimpleSocketManager(xmlSerializer);
         Server server = new Server(simpleSocketManager, xmlSerializer);
         UserServerRepository userServerRepository = new UserServerRepository();
         UserServerService userServerService = new UserServerService(userServerRepository);
@@ -22,7 +22,6 @@ public class ServerApplication {
 
         server.addController(gameServerController);
         server.addController(userServerController);
-
         server.listen();
     }
 }

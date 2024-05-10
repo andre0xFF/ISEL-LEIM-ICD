@@ -7,6 +7,7 @@ import java.util.HashMap;
 public class UserServerRepository implements Repository {
     private final HashMap<String, User> users = new HashMap<>();
 
+
     public User findUserbyUsername(String username) {
         return users.get(username);
     }

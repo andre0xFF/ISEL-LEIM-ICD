@@ -14,7 +14,7 @@ public class UserClientController implements Controller, Authenticator {
     public UserClientController(ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
 
-        connectionManager.addMiddleware(new AuthenticationMiddleware(this));
+        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(this));
     }
 
     @Override

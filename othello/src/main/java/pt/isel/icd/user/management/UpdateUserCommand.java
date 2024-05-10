@@ -1,10 +1,10 @@
 package pt.isel.icd.user.management;
 
-import pt.isel.icd.communication.ConnectionCommand;
+import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class UpdateUserCommand implements ConnectionCommand<UserClientController> {
+public class UpdateUserCommand implements SimpleSocketCommand<UserClientController> {
     private UserClientController userServerController;
     private UUID connectionIdentifier;
 

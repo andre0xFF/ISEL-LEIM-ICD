@@ -20,7 +20,7 @@ public class Server {
         ServerSocket serverSocket = new ServerSocket(SimpleSocket.DEFAULT_PORT);
 
         while (true) {
-            SimpleSocket clientSocket = new SimpleSocket(serverSocket.accept());
+            SimpleSocket clientSocket = new SimpleSocket(serializer, serverSocket.accept());
             ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket, serializer);
         }
     }

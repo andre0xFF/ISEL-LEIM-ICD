@@ -16,7 +16,7 @@ public class UserServerController implements Controller, Authenticator {
         userServerService = existingUserServerService;
         connectionManager = existingConnectionManager;
 
-        connectionManager.addMiddleware(new AuthenticationMiddleware(this));
+        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(this));
     }
 
     @Override

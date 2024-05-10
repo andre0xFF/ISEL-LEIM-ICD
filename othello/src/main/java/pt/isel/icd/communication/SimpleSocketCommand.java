@@ -34,7 +34,7 @@ import java.util.UUID;
                 @JsonSubTypes.Type(value = UpdateUserCommand.class),
         }
 )
-public interface ConnectionCommand<T extends Receiver> extends Command<T> {
+public interface SimpleSocketCommand<T extends Receiver> extends Command<T> {
 
     UUID connectionIdentifier();
     void connectionIdentifier(UUID connectionIdentifier);

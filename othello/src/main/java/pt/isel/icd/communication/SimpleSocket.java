@@ -1,5 +1,9 @@
 package pt.isel.icd.communication;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import pt.isel.icd.patterns.command.Receiver;
+import pt.isel.icd.serialization.Serializer;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.UUID;
@@ -14,14 +18,15 @@ public class SimpleSocket implements Closeable {
     private final PrintWriter writer;
     private final BufferedReader reader;
     private final UUID identifier = UUID.randomUUID();
+    private final Serializer serializer;
 
     /**
      * Creates a new socket.
      *
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SimpleSocket() throws IOException {
-        this(DEFAULT_HOSTNAME, DEFAULT_PORT);
+    public SimpleSocket(Serializer existingSerializer) throws IOException {
+        this(existingSerializer, DEFAULT_HOSTNAME, DEFAULT_PORT);
     }
 
     /**
@@ -30,8 +35,8 @@ public class SimpleSocket implements Closeable {
      * @param port The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SimpleSocket(int port) throws IOException {
-        this(DEFAULT_HOSTNAME, port);
+    public SimpleSocket(Serializer existingSerializer, int port) throws IOException {
+        this(existingSerializer, DEFAULT_HOSTNAME, port);
     }
 
     /**
@@ -40,8 +45,8 @@ public class SimpleSocket implements Closeable {
      * @param hostname The hostname.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SimpleSocket(String hostname) throws IOException {
-        this(hostname, DEFAULT_PORT);
+    public SimpleSocket(Serializer existingSerializer, String hostname) throws IOException {
+        this(existingSerializer, hostname, DEFAULT_PORT);
     }
 
     /**
@@ -51,8 +56,8 @@ public class SimpleSocket implements Closeable {
      * @param port     The port.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SimpleSocket(String hostname, int port) throws IOException {
-        this(new Socket(hostname, port));
+    public SimpleSocket(Serializer existingSerializer, String hostname, int port) throws IOException {
+        this(existingSerializer, new Socket(hostname, port));
     }
 
     /**
@@ -61,7 +66,8 @@ public class SimpleSocket implements Closeable {
      * @param existingSocket The socket.
      * @throws IOException If an I/O error occurs when creating the socket.
      */
-    public SimpleSocket(Socket existingSocket) throws IOException {
+    public SimpleSocket(Serializer existingSerializer, Socket existingSocket) throws IOException {
+        serializer = existingSerializer;
         socket = existingSocket;
         writer = new PrintWriter(socket.getOutputStream(), true);
         reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -76,14 +82,31 @@ public class SimpleSocket implements Closeable {
         writer.println(message);
     }
 
+    public void write(SimpleSocketCommand<?> command) throws JsonProcessingException {
+        writer.println(serializer.serialize(command));
+    }
+
     /**
      * Reads a message from the socket.
      *
      * @return The message read, or null if the end of the stream has been reached.
      * @throws IOException If an I/O error occurs when reading from the socket.
      */
-    public synchronized String readLine() throws IOException {
+    public String readLine() throws IOException {
         return reader.readLine();
+    }
+
+    public SimpleSocketCommand<Receiver> read() throws IOException {
+        String line = readLine();
+
+        if (line == null) {
+            // The end of the stream has been reached.
+            return null;
+        }
+
+        // TODO validate schema.
+
+        return serializer.deserialize(line, SimpleSocketCommand.class);
     }
 
     /**
