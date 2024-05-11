@@ -2,6 +2,9 @@ package pt.isel.icd.serialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * A serializer that can serialize and deserialize objects to and from a string format.
  *
@@ -20,6 +23,7 @@ public interface Serializer {
      */
     <T> T deserialize(String content, Class<T> type) throws JsonProcessingException;
 
+    <T> T deserialize(File file, Class<T> type) throws IOException;
     /**
      * Serialize an object to an XML string.
      *
@@ -29,4 +33,6 @@ public interface Serializer {
      * @throws JsonProcessingException If the object is invalid.
      */
     <T> String serialize(T object) throws JsonProcessingException;
+
+    <T> void serialize(File file, T object) throws IOException;
 }

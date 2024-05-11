@@ -42,9 +42,7 @@ public class UserServerService implements Service {
             throw new IllegalArgumentException("User already exists");
         }
 
-        User user = new User(username, password);
-
-        return userServerRepository.addUser(user);
+        return userServerRepository.addUser(username, password);
     }
 
     public User deleteUser(String username) {

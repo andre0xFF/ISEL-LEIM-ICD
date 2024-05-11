@@ -32,6 +32,10 @@ public class UserServerController implements Controller, Authenticator {
 
     public void authenticate(UUID connectionIdentifier, String username, String password) {
         User user = userServerService.authenticate(username, password);
+
+        // TODO write authentication response
+        // SimpleSocketCommand<?> simpleSocketCommand = user == null ? new AuthenticationResponseCommand(false) : new AuthenticationResponseCommand(true);
+        // connectionManager.write(connectionIdentifier, simpleSocketCommand);
     }
 
     public void createUser(UUID connectionIdentifier, String username, String password) {

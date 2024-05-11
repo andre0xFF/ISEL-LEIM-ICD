@@ -1,12 +1,15 @@
 package pt.isel.icd.serialization;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -55,6 +58,11 @@ public class XMLSerializer implements Serializer {
         return xmlMapper.readValue(content, type);
     }
 
+    @Override
+    public <T> T deserialize(File file, Class<T> type) throws IOException {
+        return xmlMapper.readValue(file, type);
+    }
+
     /**
      * Serialize an object to an XML string.
      *
@@ -66,5 +74,10 @@ public class XMLSerializer implements Serializer {
     @Override
     public <T> String serialize(T object) throws JsonProcessingException {
         return xmlMapper.writeValueAsString(object);
+    }
+
+    @Override
+    public <T> void serialize(File file, T object) throws IOException {
+        xmlMapper.writeValue(file, object);
     }
 }
