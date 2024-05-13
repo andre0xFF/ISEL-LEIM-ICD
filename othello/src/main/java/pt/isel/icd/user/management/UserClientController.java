@@ -8,27 +8,27 @@ import pt.isel.icd.patterns.verticals.Controller;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class UserClientController implements Controller, Authenticator {
+public class UserClientController implements Controller {
     private final ConnectionManager connectionManager;
+    private final UserClientService userClientService;
 
-    public UserClientController(ConnectionManager existingConnectionManager) {
+    public UserClientController(ConnectionManager existingConnectionManager, UserClientService existingUserClientService) {
         connectionManager = existingConnectionManager;
+        userClientService = existingUserClientService;
 
-        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(this));
+        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(existingUserClientService));
     }
 
     @Override
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>() {
             {
-                add(UpdateUserCommand.class);
+                add(AuthenticateUserResponseCommand.class);
             }
         };
     }
 
-    @Override
-    public boolean isAuthenticated(UUID connectionIdentifier) {
-        // TODO verify authentication
-        return false;
+    public void authenticate(UUID connectionIdentifier, boolean isAuthenticated) {
+        userClientService.authenticate(connectionIdentifier, isAuthenticated);
     }
 }

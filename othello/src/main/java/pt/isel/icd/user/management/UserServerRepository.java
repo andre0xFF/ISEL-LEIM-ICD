@@ -7,29 +7,20 @@ import java.io.File;
 import java.io.IOException;
 
 public class UserServerRepository implements Repository {
-    // private final HashMap<String, User> users = new HashMap<>();
     private final Serializer serializer;
     private Users users = new Users();
-    private File file;
 
     public UserServerRepository(Serializer existingSerializer) {
         this.serializer = existingSerializer;
     }
 
     public void load(File existingFile) throws IOException {
-        file = existingFile;
 
         if (!existingFile.exists()) {
             throw new IllegalStateException("File does not exist");
         }
 
         users = serializer.deserialize(existingFile, Users.class);
-
-//        users.clear();
-//        usersList.forEach(userMap -> {
-//            User user = new User(userMap.get("username"), userMap.get("password"));
-//            users.put(user.username(), user);
-//        });
     }
 
     public void save(File file) throws IOException {

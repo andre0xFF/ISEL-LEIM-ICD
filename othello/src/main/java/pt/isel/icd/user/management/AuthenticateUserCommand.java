@@ -2,6 +2,7 @@ package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
@@ -32,7 +33,11 @@ public class AuthenticateUserCommand implements SimpleSocketCommand<UserServerCo
 
     @Override
     public void execute() {
-        userServerController.authenticate(connectionIdentifier, username, password);
+        try {
+            userServerController.authenticate(connectionIdentifier, username, password);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

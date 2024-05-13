@@ -1,5 +1,6 @@
 package pt.isel.icd.user.management;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
@@ -8,7 +9,7 @@ import pt.isel.icd.patterns.verticals.Controller;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class UserServerController implements Controller, Authenticator {
+public class UserServerController implements Controller {
     private final UserServerService userServerService;
     private final ConnectionManager connectionManager;
 
@@ -16,7 +17,7 @@ public class UserServerController implements Controller, Authenticator {
         userServerService = existingUserServerService;
         connectionManager = existingConnectionManager;
 
-        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(this));
+        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userServerService));
     }
 
     @Override
@@ -30,12 +31,16 @@ public class UserServerController implements Controller, Authenticator {
         };
     }
 
-    public void authenticate(UUID connectionIdentifier, String username, String password) {
+    public void authenticate(UUID connectionIdentifier, String username, String password) throws JsonProcessingException {
+        boolean isAuthenticated = false;
         User user = userServerService.authenticate(username, password);
 
-        // TODO write authentication response
-        // SimpleSocketCommand<?> simpleSocketCommand = user == null ? new AuthenticationResponseCommand(false) : new AuthenticationResponseCommand(true);
-        // connectionManager.write(connectionIdentifier, simpleSocketCommand);
+        if (user != null) {
+            isAuthenticated = true;
+        }
+
+        userServerService.authenticate(connectionIdentifier, isAuthenticated);
+        connectionManager.write(connectionIdentifier, new AuthenticateUserResponseCommand(isAuthenticated));
     }
 
     public void createUser(UUID connectionIdentifier, String username, String password) {
@@ -44,11 +49,5 @@ public class UserServerController implements Controller, Authenticator {
 
     public void deleteUser(UUID connectionIdentifier) {
 
-    }
-
-    @Override
-    public boolean isAuthenticated(UUID connectionIdentifier) {
-        // TODO verify authentication
-        return false;
     }
 }

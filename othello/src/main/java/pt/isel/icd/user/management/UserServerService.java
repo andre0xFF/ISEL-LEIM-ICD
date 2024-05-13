@@ -2,19 +2,24 @@ package pt.isel.icd.user.management;
 
 import pt.isel.icd.patterns.verticals.Service;
 
-public class UserServerService implements Service {
+import java.util.HashMap;
+import java.util.UUID;
+
+public class UserServerService implements Service, Authenticator {
     private final UserServerRepository userServerRepository;
+    private final HashMap<UUID, Boolean> areAuthenticated = new HashMap<>();
+    private final UserService userService = new UserService();
 
     public UserServerService(UserServerRepository existingUserServerRepository) {
         userServerRepository = existingUserServerRepository;
     }
 
     public User authenticate(String username, String password) {
-        if (!validateUsername(username)) {
+        if (!userService.validateUsername(username)) {
             throw new IllegalArgumentException("Invalid username");
         }
 
-        if (!validatePassword(password)) {
+        if (!userService.validatePassword(password)) {
             throw new IllegalArgumentException("Invalid password");
         }
 
@@ -27,12 +32,17 @@ public class UserServerService implements Service {
         return user;
     }
 
+    @Override
+    public void authenticate(UUID connectionIdentifier, boolean isAuthenticated) {
+        areAuthenticated.put(connectionIdentifier, isAuthenticated);
+    }
+
     public User createUser(String username, String password) {
-        if (!validateUsername(username)) {
+        if (!userService.validateUsername(username)) {
             throw new IllegalArgumentException("Invalid username");
         }
 
-        if (!validatePassword(password)) {
+        if (!userService.validatePassword(password)) {
             throw new IllegalArgumentException("Invalid password");
         }
 
@@ -46,7 +56,7 @@ public class UserServerService implements Service {
     }
 
     public User deleteUser(String username) {
-        if (validateUsername(username)) {
+        if (userService.validateUsername(username)) {
             throw new IllegalArgumentException("Invalid username");
         }
 
@@ -59,15 +69,8 @@ public class UserServerService implements Service {
         return userServerRepository.removeUser(username);
     }
 
-    private boolean validateUsername(String username) {
-        return username != null
-                && username.trim().length() >= 3
-                && username.trim().length() <= 20;
-    }
-
-    private boolean validatePassword(String password) {
-        return password != null
-                && password.trim().length() >= 8
-                && password.trim().length() <= 20;
+    @Override
+    public boolean isAuthenticated(UUID connectionIdentifier) {
+        return areAuthenticated.get(connectionIdentifier);
     }
 }
