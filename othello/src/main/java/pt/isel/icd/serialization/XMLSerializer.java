@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -25,14 +27,22 @@ public class XMLSerializer implements Serializer {
     }
 
     private void registerDateTimeModule() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+//
+//        JavaTimeModule module = (JavaTimeModule) new JavaTimeModule().addSerializer(
+//                LocalDateTime.class,
+//                new LocalDateTimeSerializer(formatter)
+//        );
+//
+//        xmlMapper.registerModule(module);
 
-        JavaTimeModule module = (JavaTimeModule) new JavaTimeModule().addSerializer(
-                LocalDateTime.class,
-                new LocalDateTimeSerializer(formatter)
+        xmlMapper.registerModule(
+                new JavaTimeModule()
+                        .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_DATE_TIME))
+                        .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME))
         );
 
-        xmlMapper.registerModule(module);
+        xmlMapper.disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE);
     }
 
     private void registerColorModule() {
@@ -43,14 +53,22 @@ public class XMLSerializer implements Serializer {
         );
     }
 
+    private void registerBufferedImageModule() {
+        xmlMapper.registerModule(
+                new SimpleModule()
+                        .addSerializer(BufferedImage.class, new BufferedImageSerializer())
+                        .addDeserializer(BufferedImage.class, new BufferedImageDeserializer())
+        );
+    }
+
 
     /**
      * Deserialize an XML string to an object.
      *
      * @param content The XML string content.
-     * @param type The class of the object.
+     * @param type    The class of the object.
+     * @param <T>     The type of the object <T>.
      * @return The deserialized object.
-     * @param <T> The type of the object <T>.
      * @throws JsonProcessingException If the XML string is invalid.
      */
     @Override
@@ -67,8 +85,8 @@ public class XMLSerializer implements Serializer {
      * Serialize an object to an XML string.
      *
      * @param object The object to serialize.
+     * @param <T>    The type of the object <T>.
      * @return The serialized XML string.
-     * @param <T> The type of the object <T>.
      * @throws JsonProcessingException If the object is invalid.
      */
     @Override
