@@ -31,17 +31,16 @@ public class ClientHandler implements Runnable {
         simpleSocketManager.route(new ConnectedCommand());
 
         try {
-            SimpleSocketCommand<Receiver> simpleSocketCommand = simpleSocket.read();
+            while (simpleSocket.isConnected()) {
+                SimpleSocketCommand<Receiver> simpleSocketCommand = simpleSocket.read();
 
-            if (simpleSocketCommand == null) {
-                simpleSocketManager.route(new DisconnectedCommand());
-
-                simpleSocket.close();
-            }
-            else {
-                simpleSocketCommand.connectionIdentifier(simpleSocket.identifier());
-
-                simpleSocketManager.route(simpleSocketCommand);
+                if (simpleSocketCommand == null) {
+                    simpleSocketManager.route(new DisconnectedCommand());
+                    simpleSocket.close();
+                } else {
+                    simpleSocketCommand.connectionIdentifier(simpleSocket.identifier());
+                    simpleSocketManager.route(simpleSocketCommand);
+                }
             }
         } catch (IOException e) {
             simpleSocketManager.route(new DisconnectedCommand());
