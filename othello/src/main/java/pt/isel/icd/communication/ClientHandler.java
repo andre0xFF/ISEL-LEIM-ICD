@@ -1,23 +1,19 @@
 package pt.isel.icd.communication;
 
 import pt.isel.icd.patterns.command.Receiver;
-import pt.isel.icd.serialization.Serializer;
 
 import java.io.IOException;
 
 public class ClientHandler implements Runnable {
     private final SimpleSocket simpleSocket;
     private final SimpleSocketManager simpleSocketManager;
-    private final Serializer serializer;
 
     public ClientHandler(
             SimpleSocketManager existingSimpleSocketManager,
-            SimpleSocket existingSimpleSocket,
-            Serializer existingSerializer
+            SimpleSocket existingSimpleSocket
     ) {
         simpleSocketManager = existingSimpleSocketManager;
         simpleSocket = existingSimpleSocket;
-        serializer = existingSerializer;
 
         simpleSocketManager.connectClient(simpleSocket);
 

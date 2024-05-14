@@ -26,27 +26,54 @@ public class UserClientController implements Controller {
             {
                 add(AuthenticateUserResponseCommand.class);
                 add(CreateUserResponseCommand.class);
+                // add(DeleteUserResponseCommand.class);
+                add(ReadProfileResponseCommand.class);
             }
         };
     }
 
-    public void authenticate(String username, String password) throws JsonProcessingException {
-        connectionManager.write(new AuthenticateUserCommand(username, password));
+    public void authenticate(User user) throws JsonProcessingException {
+        connectionManager.write(new AuthenticateUserCommand(user));
     }
 
-    public void handleAuthenticationResponse(UUID connectionIdentifier, boolean isAuthenticated) {
-        userClientService.authenticate(connectionIdentifier, isAuthenticated);
+    public void handleAuthenticationResponse(UUID connectionIdentifier, User user, boolean isAuthenticated) {
+        if (isAuthenticated) {
+            userClientService.authenticate(connectionIdentifier, user);
+        }
 
         // TODO: Implement this method
         System.out.printf("User %s %s%n", connectionIdentifier, isAuthenticated ? "authenticated" : "not authenticated");
     }
 
-    public void createUser(String username, String password) throws JsonProcessingException {
-        connectionManager.write(new CreateUserCommand(username, password));
+    public void createUser(User user) throws JsonProcessingException {
+        connectionManager.write(new CreateUserCommand(user));
     }
 
-    public void handleCreateUserResponse(UUID connectionIdentifier, boolean isRegistered) {
+    public void handleCreateUserResponse(UUID connectionIdentifier, User user, boolean isRegistered) {
+        if (isRegistered) {
+            userClientService.authenticate(connectionIdentifier, user);
+        }
+
         // TODO: Implement this method
-        System.out.printf("User %s %s%n", connectionIdentifier, isRegistered ? "created" : "not created");
+        System.out.printf("User %s %s%n", connectionIdentifier, isRegistered ? "registered" : "not registered");
+    }
+
+    public void deleteUser() throws JsonProcessingException {
+        // TODO: Implement this method
+        // connectionManager.write(new DeleteUserCommand(username));
+    }
+
+    public void handleDeleteUserResponse(UUID connectionIdentifier, boolean isDeleted) {
+        // TODO: Implement this method
+        System.out.printf("User %s %s%n", connectionIdentifier, isDeleted ? "deleted" : "not deleted");
+    }
+
+    public void readProfile() throws JsonProcessingException {
+        connectionManager.write(new ReadProfileCommand(userClientService.user().username()));
+    }
+
+    public void handleReadProfileResponse(UUID connectionIdentifier, Profile profile, boolean hasProfile) {
+        // TODO: Implement this method
+        System.out.printf("User %s %s%n", connectionIdentifier, hasProfile ? "has profile" : "does not have profile");
     }
 }

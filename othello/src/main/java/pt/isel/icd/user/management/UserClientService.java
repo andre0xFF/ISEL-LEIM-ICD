@@ -6,15 +6,25 @@ import java.util.UUID;
 
 public class UserClientService implements Service, Authenticator {
 
+    private final UserClientRepository userClientRepository;
     private boolean isAuthenticated;
+
+    public UserClientService(UserClientRepository existingUserClientRepository) {
+        userClientRepository = existingUserClientRepository;
+    }
 
     @Override
     public boolean isAuthenticated(UUID connectionIdentifier) {
         return isAuthenticated;
     }
 
-    @Override
-    public void authenticate(UUID connectionIdentifier, boolean existingIsAuthenticated) {
-        isAuthenticated = existingIsAuthenticated;
+    public void authenticate(UUID connectionIdentifier, User user) {
+        isAuthenticated = true;
+
+        userClientRepository.addUser(user);
+    }
+
+    public User user() {
+        return userClientRepository.user();
     }
 }

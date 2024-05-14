@@ -1,28 +1,34 @@
 package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class AuthenticateUserResponseCommand implements SimpleSocketCommand<UserClientController> {
+public class ReadProfileResponseCommand implements SimpleSocketCommand<UserClientController>  {
     private UUID connectionIdentifier;
     private UserClientController userClientController;
 
     @JsonProperty
-    private final boolean isAutenticated;
+    private final boolean hasProfile;
 
     @JsonProperty
-    private final String username;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Profile profile;
 
     @JsonCreator
-    public AuthenticateUserResponseCommand(
-            @JsonProperty("username") String existingUsername,
-            @JsonProperty("isAuthenticated") boolean existingIsAutenticated
+    public ReadProfileResponseCommand(
+            @JsonProperty("profile")
+            Profile existingProfile,
+
+            @JsonProperty("hasProfile")
+            boolean existingHasProfile
     ) {
-        username = existingUsername;
-        isAutenticated = existingIsAutenticated;
+        hasProfile = existingHasProfile;
+        profile = existingProfile;
     }
 
     @Override
@@ -42,15 +48,6 @@ public class AuthenticateUserResponseCommand implements SimpleSocketCommand<User
 
     @Override
     public void execute() {
-        userClientController.handleAuthenticationResponse(
-                connectionIdentifier,
-                new User(username, ""),
-                isAutenticated
-        );
-    }
-
-    @Override
-    public boolean requiresAuthentication() {
-        return false;
+        userClientController.handleReadProfileResponse(connectionIdentifier, profile, hasProfile);
     }
 }

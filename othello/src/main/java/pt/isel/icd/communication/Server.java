@@ -21,7 +21,7 @@ public class Server {
 
         while (true) {
             SimpleSocket clientSocket = new SimpleSocket(serializer, serverSocket.accept());
-            ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket, serializer);
+            ClientHandler clientHandler = new ClientHandler(simpleSocketManager, clientSocket);
         }
     }
 

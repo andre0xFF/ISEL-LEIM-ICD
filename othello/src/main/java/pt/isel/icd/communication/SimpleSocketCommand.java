@@ -29,9 +29,10 @@ import java.util.UUID;
                 @JsonSubTypes.Type(value = AuthenticateUserResponseCommand.class),
                 @JsonSubTypes.Type(value = CreateUserCommand.class),
                 @JsonSubTypes.Type(value = CreateUserResponseCommand.class),
-                @JsonSubTypes.Type(value = CreateUserCommand.class),
                 @JsonSubTypes.Type(value = DeleteUserCommand.class),
                 @JsonSubTypes.Type(value = UpdateUserCommand.class),
+                @JsonSubTypes.Type(value = ReadProfileCommand.class),
+                @JsonSubTypes.Type(value = ReadProfileResponseCommand.class)
         }
 )
 public interface SimpleSocketCommand<T extends Receiver> extends Command<T> {

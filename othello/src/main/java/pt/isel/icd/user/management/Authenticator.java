@@ -7,6 +7,4 @@ import java.util.UUID;
 public interface Authenticator extends Receiver {
 
     boolean isAuthenticated(UUID connectionIdentifier);
-
-    void authenticate(UUID connectionIdentifier, boolean isAuthenticated);
 }

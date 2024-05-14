@@ -2,75 +2,84 @@ package pt.isel.icd.user.management;
 
 import pt.isel.icd.patterns.verticals.Service;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserServerService implements Service, Authenticator {
     private final UserServerRepository userServerRepository;
-    private final HashMap<UUID, Boolean> areAuthenticated = new HashMap<>();
+    private final ArrayList<UUID> areAuthenticated = new ArrayList<>();
     private final UserService userService = new UserService();
 
     public UserServerService(UserServerRepository existingUserServerRepository) {
         userServerRepository = existingUserServerRepository;
     }
 
-    public User authenticate(String username, String password) {
-        if (!userService.validateUsername(username)) {
+    public void authenticate(UUID connectionIdentifier, User user) {
+        if (!userService.validateUsername(user.username())) {
             throw new IllegalArgumentException("Invalid username");
         }
 
-        if (!userService.validatePassword(password)) {
+        if (!userService.validatePassword(user.password())) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        User user = userServerRepository.findUserbyUsername(username);
+        User existingUser = userServerRepository.readUser(user.username());
 
-        if (user == null || !password.equals(user.password())) {
+        if (existingUser == null || !user.password().equals(existingUser.password())) {
             throw new IllegalArgumentException("Wrong username or password");
         }
 
-        return user;
+        areAuthenticated.add(connectionIdentifier);
     }
 
-    @Override
-    public void authenticate(UUID connectionIdentifier, boolean isAuthenticated) {
-        areAuthenticated.put(connectionIdentifier, isAuthenticated);
-    }
-
-    public User createUser(String username, String password) {
-        if (!userService.validateUsername(username)) {
+    public void createUser(User user) {
+        if (!userService.validateUsername(user.username())) {
             throw new IllegalArgumentException("Invalid username");
         }
 
-        if (!userService.validatePassword(password)) {
+        if (!userService.validatePassword(user.password())) {
             throw new IllegalArgumentException("Invalid password");
         }
 
-        User existingUser = userServerRepository.findUserbyUsername(username);
-
-        if (existingUser != null) {
+        if (userServerRepository.readUser(user.username()) != null) {
             throw new IllegalArgumentException("User already exists");
         }
 
-        return userServerRepository.addUser(username, password);
+        userServerRepository.addUser(user);
     }
 
-    public User deleteUser(String username) {
-        if (userService.validateUsername(username)) {
+    public void deleteUser(User user) {
+        if (userService.validateUsername(user.username())) {
             throw new IllegalArgumentException("Invalid username");
         }
 
-        User existingUser = userServerRepository.findUserbyUsername(username);
+        User existingUser = userServerRepository.readUser(user.username());
 
         if (existingUser == null) {
             throw new IllegalArgumentException("User does not exist");
         }
 
-        return userServerRepository.removeUser(username);
+        userServerRepository.removeUser(user);
     }
 
     @Override
     public boolean isAuthenticated(UUID connectionIdentifier) {
-        return areAuthenticated.get(connectionIdentifier);
+        return areAuthenticated.contains(connectionIdentifier);
+    }
+
+    public Profile readProfile(String username) {
+        return userServerRepository.readProfile(username);
+    }
+
+    public void addProfile(Profile profile) {
+        userServerRepository.addProfile(profile);
+    }
+
+    public void updateProfile(Profile profile) {
+        userServerRepository.updateProfile(profile);
+    }
+
+    public void removeProfile(Profile profile) {
+        userServerRepository.removeProfile(profile);
     }
 }

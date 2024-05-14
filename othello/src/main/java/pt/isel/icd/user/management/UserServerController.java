@@ -27,39 +27,55 @@ public class UserServerController implements Controller {
                 add(AuthenticateUserCommand.class);
                 add(CreateUserCommand.class);
                 add(DeleteUserCommand.class);
+                add(ReadProfileCommand.class);
             }
         };
     }
 
-    public void authenticate(UUID connectionIdentifier, String username, String password) throws JsonProcessingException {
+    public void authenticate(UUID connectionIdentifier, User user) throws JsonProcessingException {
         boolean isAuthenticated = false;
 
         try {
-            User user = userServerService.authenticate(username, password);
+            userServerService.authenticate(connectionIdentifier, user);
 
-            if (user != null) {
-                isAuthenticated = true;
-            }
+            isAuthenticated = true;
         } catch (IllegalArgumentException ignored) {}
 
-        connectionManager.write(connectionIdentifier, new AuthenticateUserResponseCommand(isAuthenticated));
+        AuthenticateUserResponseCommand authenticateUserResponseCommand = new AuthenticateUserResponseCommand(
+                user.username(),
+                isAuthenticated
+        );
+
+        connectionManager.write(connectionIdentifier, authenticateUserResponseCommand);
     }
 
-    public void createUser(UUID connectionIdentifier, String username, String password) throws JsonProcessingException {
+    public void createUser(UUID connectionIdentifier, User user) throws JsonProcessingException {
         boolean isRegistered = false;
 
         try {
-            User user = userServerService.createUser(username, password);
+            userServerService.createUser(user);
 
-            if (user != null) {
-                isRegistered = true;
-            }
+            isRegistered = true;
         } catch (IllegalArgumentException ignored) {}
 
-        connectionManager.write(connectionIdentifier, new CreateUserResponseCommand(isRegistered));
+        CreateUserResponseCommand createUserResponseCommand = new CreateUserResponseCommand(user.username(), isRegistered);
+
+        connectionManager.write(connectionIdentifier, createUserResponseCommand);
     }
 
     public void deleteUser(UUID connectionIdentifier) {
 
+    }
+
+    public void readProfile(UUID connectionIdentifier, String username) throws JsonProcessingException {
+        Profile profile = null;
+
+        try {
+            profile = userServerService.readProfile(username);
+        } catch (IllegalArgumentException ignored) {}
+
+        ReadProfileResponseCommand readProfileResponseCommand = new ReadProfileResponseCommand(profile, profile != null);
+
+        connectionManager.write(connectionIdentifier, readProfileResponseCommand);
     }
 }

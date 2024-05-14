@@ -18,7 +18,7 @@ public class Client {
 
     public void connect() throws IOException {
         SimpleSocket simpleSocket = new SimpleSocket(serializer);
-        ClientHandler clientHandler = new ClientHandler(simpleSocketManager, simpleSocket, serializer);
+        ClientHandler clientHandler = new ClientHandler(simpleSocketManager, simpleSocket);
     }
 
     public void addController(Controller controller) {

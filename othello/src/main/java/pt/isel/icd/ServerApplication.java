@@ -21,7 +21,10 @@ public class ServerApplication {
         UserServerController userServerController = new UserServerController(userServerService, simpleSocketManager);
         GameServerController gameServerController = new GameServerController(simpleSocketManager);
 
-        userServerRepository.load(new File("src/main/resources/user/management/UserServerRepository.xml"));
+        userServerRepository.addFile("users", new File("src/main/resources/user/management/Users.xml"));
+        userServerRepository.addFile("profiles", new File("src/main/resources/user/management/Profiles.xml"));
+        userServerRepository.loadUsers();
+        userServerRepository.loadProfiles();
 
         server.addController(gameServerController);
         server.addController(userServerController);

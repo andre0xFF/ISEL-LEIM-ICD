@@ -12,18 +12,13 @@ public class AuthenticateUserCommand implements SimpleSocketCommand<UserServerCo
     private UUID connectionIdentifier;
 
     @JsonProperty
-    private final String username;
-
-    @JsonProperty
-    private final String password;
+    private final User user;
 
     @JsonCreator
     public AuthenticateUserCommand(
-            @JsonProperty("username") String existingUsername,
-            @JsonProperty("password") String existingPassword
+            @JsonProperty("user") User existingUser
     ) {
-        username = existingUsername;
-        password = existingPassword;
+        user = existingUser;
     }
 
     @Override
@@ -34,7 +29,7 @@ public class AuthenticateUserCommand implements SimpleSocketCommand<UserServerCo
     @Override
     public void execute() {
         try {
-            userServerController.authenticate(connectionIdentifier, username, password);
+            userServerController.authenticate(connectionIdentifier, user);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

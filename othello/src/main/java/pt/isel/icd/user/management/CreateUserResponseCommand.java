@@ -12,9 +12,14 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
     @JsonProperty
     private final boolean isRegistered;
 
+    @JsonProperty
+    private final String username;
+
     public CreateUserResponseCommand(
+            @JsonProperty("username") String existingUsername,
             @JsonProperty("isRegistered") boolean existingIsRegistered
     ) {
+        username = existingUsername;
         isRegistered = existingIsRegistered;
     }
 
@@ -35,7 +40,11 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
 
     @Override
     public void execute() {
-        userClientController.handleCreateUserResponse(connectionIdentifier, isRegistered);
+        userClientController.handleCreateUserResponse(
+                connectionIdentifier,
+                new User(username, ""),
+                isRegistered
+        );
     }
 
     @Override
