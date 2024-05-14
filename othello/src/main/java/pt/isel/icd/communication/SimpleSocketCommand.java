@@ -28,6 +28,8 @@ import java.util.UUID;
                 @JsonSubTypes.Type(value = AuthenticateUserCommand.class),
                 @JsonSubTypes.Type(value = AuthenticateUserResponseCommand.class),
                 @JsonSubTypes.Type(value = CreateUserCommand.class),
+                @JsonSubTypes.Type(value = CreateUserResponseCommand.class),
+                @JsonSubTypes.Type(value = CreateUserCommand.class),
                 @JsonSubTypes.Type(value = DeleteUserCommand.class),
                 @JsonSubTypes.Type(value = UpdateUserCommand.class),
         }

@@ -9,12 +9,14 @@ import java.io.IOException;
 public class UserServerRepository implements Repository {
     private final Serializer serializer;
     private Users users = new Users();
+    private File file;
 
     public UserServerRepository(Serializer existingSerializer) {
         this.serializer = existingSerializer;
     }
 
     public void load(File existingFile) throws IOException {
+        file = existingFile;
 
         if (!existingFile.exists()) {
             throw new IllegalStateException("File does not exist");
@@ -32,7 +34,15 @@ public class UserServerRepository implements Repository {
     }
 
     public User addUser(String username, String password) {
-        return users.add(username, password);
+        User user = users.add(username, password);
+
+        try {
+            save(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return user;
     }
 
     public User removeUser(String username) {

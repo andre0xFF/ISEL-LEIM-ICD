@@ -1,23 +1,21 @@
 package pt.isel.icd.user.management;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class AuthenticateUserResponseCommand implements SimpleSocketCommand<UserClientController> {
+public class CreateUserResponseCommand implements SimpleSocketCommand<UserClientController> {
     private UUID connectionIdentifier;
     private UserClientController userClientController;
 
     @JsonProperty
-    private final boolean isAutenticated;
+    private final boolean isRegistered;
 
-    @JsonCreator
-    public AuthenticateUserResponseCommand(
-            @JsonProperty("isAuthenticated") boolean existingIsAutenticated
+    public CreateUserResponseCommand(
+            @JsonProperty("isRegistered") boolean existingIsRegistered
     ) {
-        isAutenticated = existingIsAutenticated;
+        isRegistered = existingIsRegistered;
     }
 
     @Override
@@ -37,7 +35,7 @@ public class AuthenticateUserResponseCommand implements SimpleSocketCommand<User
 
     @Override
     public void execute() {
-        userClientController.handleAuthenticationResponse(connectionIdentifier, isAutenticated);
+        userClientController.handleCreateUserResponse(connectionIdentifier, isRegistered);
     }
 
     @Override

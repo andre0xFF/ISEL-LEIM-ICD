@@ -33,18 +33,30 @@ public class UserServerController implements Controller {
 
     public void authenticate(UUID connectionIdentifier, String username, String password) throws JsonProcessingException {
         boolean isAuthenticated = false;
-        User user = userServerService.authenticate(username, password);
 
-        if (user != null) {
-            isAuthenticated = true;
-        }
+        try {
+            User user = userServerService.authenticate(username, password);
 
-        userServerService.authenticate(connectionIdentifier, isAuthenticated);
+            if (user != null) {
+                isAuthenticated = true;
+            }
+        } catch (IllegalArgumentException ignored) {}
+
         connectionManager.write(connectionIdentifier, new AuthenticateUserResponseCommand(isAuthenticated));
     }
 
-    public void createUser(UUID connectionIdentifier, String username, String password) {
+    public void createUser(UUID connectionIdentifier, String username, String password) throws JsonProcessingException {
+        boolean isRegistered = false;
 
+        try {
+            User user = userServerService.createUser(username, password);
+
+            if (user != null) {
+                isRegistered = true;
+            }
+        } catch (IllegalArgumentException ignored) {}
+
+        connectionManager.write(connectionIdentifier, new CreateUserResponseCommand(isRegistered));
     }
 
     public void deleteUser(UUID connectionIdentifier) {
