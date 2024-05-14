@@ -9,14 +9,14 @@ import java.awt.event.WindowEvent;
 /**
  * View with options: New Game, Profile, History, and Quit.
  */
-public class MenuClientView extends JPanel {
+public class MenuClientView {
 
     public MenuClientView(Frame frame, UserClientController userClientController){
 
 
 
-        //        JPanel gameMenuPanel = new JPanel(new BorderLayout());
-                this.setLayout(new BorderLayout());
+                JPanel menuViewPanel = new JPanel();
+                menuViewPanel.setLayout(new BorderLayout());
 
                 JPanel containerTop = new JPanel();
 
@@ -42,8 +42,8 @@ public class MenuClientView extends JPanel {
 
 
 
-                this.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.WEST);
-                this.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.EAST);
+                menuViewPanel.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.WEST);
+                menuViewPanel.add(Box.createRigidArea(new Dimension(100, 5)), BorderLayout.EAST);
 
 
                 constraints.gridx = 0;
@@ -106,10 +106,10 @@ public class MenuClientView extends JPanel {
 
                 containerMiddle.add(gameQuitButton, constraints);
 
-                this.add(containerMiddle, BorderLayout.CENTER);
+                menuViewPanel.add(containerMiddle, BorderLayout.CENTER);
 
 
-                this.add(containerTop, BorderLayout.NORTH);
+                menuViewPanel.add(containerTop, BorderLayout.NORTH);
 
     }
 }

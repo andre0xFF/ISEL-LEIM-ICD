@@ -10,7 +10,7 @@ import java.text.NumberFormat;
 /**
  * View with user profile.
  */
-public class ProfileClientView extends JPanel{
+public class ProfileClientView{
 
     JTextField profileEditPictureField;
     JTextField profileUserNameField;
@@ -33,21 +33,23 @@ public class ProfileClientView extends JPanel{
 
     public ProfileClientView(Frame frame, UserClientController userClientController){
 
-        this.setLayout(new BorderLayout());
+        JPanel profileViewPanel = new JPanel();
+
+        profileViewPanel.setLayout(new BorderLayout());
 
         GridBagLayout bagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
 
         JPanel southPanel = new JPanel();
-        this.add(southPanel, BorderLayout.SOUTH);
+        profileViewPanel.add(southPanel, BorderLayout.SOUTH);
         JPanel midPanel = new JPanel(new BorderLayout());
-        this.add(midPanel, BorderLayout.CENTER);
+        profileViewPanel.add(midPanel, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel();
 
         topPanel.add(new JLabel("Profile"));
 
-        this.add(topPanel, BorderLayout.NORTH);
+        profileViewPanel.add(topPanel, BorderLayout.NORTH);
 
         JPanel imagePanel = new JPanel();
         GridBagLayout panelLayout = new GridBagLayout();
@@ -249,7 +251,7 @@ public class ProfileClientView extends JPanel{
 
         southPanel.add(profileEditSubmitButton);
 
-        frame.add(this);
+        frame.add(profileViewPanel);
     }
 
     public void toggleEditButtons(boolean editStatus){

@@ -8,17 +8,20 @@ import java.awt.event.ActionListener;
 /**
  * View with the player game history.
  */
-public class HistoryClientView extends JPanel {
+public class HistoryClientView {
 
     JPanel gameStatsPanel;
 
     public HistoryClientView(JFrame frame, UserClientController userClientController){
-        this.setLayout(new BorderLayout());
+
+        JPanel historyViewPanel = new JPanel();
+
+        historyViewPanel.setLayout(new BorderLayout());
 
         JLabel gameStatsTitleLabel = new JLabel("Game Stats");
         gameStatsTitleLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        this.add(gameStatsTitleLabel, BorderLayout.NORTH);
+        historyViewPanel.add(gameStatsTitleLabel, BorderLayout.NORTH);
         JPanel southContainer = new JPanel(new GridLayout(2, 0));
         JLabel gameStatsDisplayError = new JLabel("Error");
         gameStatsDisplayError.setHorizontalAlignment(JLabel.CENTER);
@@ -34,7 +37,7 @@ public class HistoryClientView extends JPanel {
         });
         southContainer.add(historyBackButton);
 
-        this.add(southContainer, BorderLayout.SOUTH);
+        historyViewPanel.add(southContainer, BorderLayout.SOUTH);
 
 
         JPanel centerContainer = new JPanel();
@@ -42,7 +45,7 @@ public class HistoryClientView extends JPanel {
 
         centerContainer.setLayout(boxLayout);
 
-        this.add(centerContainer, BorderLayout.CENTER);
+        historyViewPanel.add(centerContainer, BorderLayout.CENTER);
 
 
         gameStatsPanel = new JPanel(new GridLayout(0, 3));
@@ -68,7 +71,7 @@ public class HistoryClientView extends JPanel {
         }
 
 
-
+        frame.add(historyViewPanel);
     }
 
     public void addGameStat(String gameID) {
