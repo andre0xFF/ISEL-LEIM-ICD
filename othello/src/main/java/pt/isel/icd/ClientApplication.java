@@ -18,7 +18,11 @@ public class ClientApplication {
         UserClientRepository userClientRepository = new UserClientRepository();
         UserClientService userClientService = new UserClientService(userClientRepository);
         UserClientController userClientController = new UserClientController(simpleSocketManager, userClientService);
-//        GameClientController gameClientController = new GameClientController(simpleSocketManager);
+        GameClientController gameClientController = new GameClientController(simpleSocketManager);
+
+        client.addController(gameClientController);
+        client.addController(userClientController);
+        client.connect();
 
         JFrame frame = new JFrame("Othello");
         int BUTTON_SIZE = 60;
@@ -29,13 +33,8 @@ public class ClientApplication {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         StartClientView startClientView = new StartClientView(frame, userClientController);
 
-        
         frame.setVisible(true);
 
-//        client.addController(gameClientController);
-//        client.addController(userClientController);
-//        client.connect();
-//
 //        userClientController.authenticate(new User("user11", "password1234"));
 //        Thread.sleep(250);
 //        userClientController.readProfile();

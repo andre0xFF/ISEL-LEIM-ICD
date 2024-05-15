@@ -1,7 +1,5 @@
 package pt.isel.icd.user.management;
 
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,20 +8,17 @@ import java.awt.event.ActionListener;
 /**
  * View with login and registration options.
  */
-public class StartClientView{
+public class StartClientView {
 
-    JTextField username;
-    JLabel passLabel;
-
-    JPasswordField passwordField;
-
+    private JTextField username;
+    private JLabel passwordLabel;
+    private JPasswordField passwordField;
 
     public StartClientView(JFrame frame, UserClientController userClientController) {
-
         JPanel startViewPanel = new JPanel();
-
         GridBagLayout bagLayout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
+
         startViewPanel.setLayout(bagLayout);
 
 //        constraints.gridx = 0;
@@ -31,16 +26,13 @@ public class StartClientView{
 //        constraints.anchor = GridBagConstraints.WEST;
 //        constraints.insets.top = 10;
 
-
-
-        JLabel nickLabel = new JLabel("Username");
+        JLabel usernameLabel = new JLabel("Username");
         constraints.weighty = 0;
         constraints.gridx = 0;
         constraints.gridy = 0;
         constraints.anchor = GridBagConstraints.WEST;
 
-
-        startViewPanel.add(nickLabel, constraints);
+        startViewPanel.add(usernameLabel, constraints);
 
         username = new JTextField(20);
 //        nickLabel.setEnabled(false);
@@ -51,15 +43,13 @@ public class StartClientView{
 
         startViewPanel.add(username, constraints);
 
-
-        passLabel = new JLabel("Password");
+        passwordLabel = new JLabel("Password");
 
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.WEST;
 
-        startViewPanel.add(passLabel, constraints);
-
+        startViewPanel.add(passwordLabel, constraints);
 
         passwordField = new JPasswordField(20);
         passwordField.setEnabled(false);
@@ -75,21 +65,18 @@ public class StartClientView{
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.insets.top = 10;
         JButton startLoginButton = new JButton("Log In");
+
         startLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO inform controller to change current panel to LogIn JPanel
+                //TODO: inform controller to change current panel to LogIn JPanel
 
 //                controller.updateView(frame, (OthelloView) getTransitionMachine().getNextState(Event.CLICK_LOGIN));
 
-
-
             }
-
         });
 
         startViewPanel.add(startLoginButton, constraints);
-
 
         startLoginButton.setPreferredSize(new Dimension(100, 40));
 
@@ -99,10 +86,9 @@ public class StartClientView{
 
         JButton startSignUpButton = new JButton("Sign Up");
         startSignUpButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                //TODO inform controller to change current panel to SignUp JPanel
+                //TODO: inform controller to change current panel to SignUp JPanel
 //                controller.updateView(frame, (OthelloView) getTransitionMachine().getNextState(Event.CLICK_SIGNUP));
             }
         });
@@ -110,7 +96,6 @@ public class StartClientView{
 //        constraints.gridx = 0;
 //        constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.EAST;
-
 
         startViewPanel.add(startSignUpButton, constraints);
         startSignUpButton.setPreferredSize(new Dimension(100, 40));
@@ -123,9 +108,7 @@ public class StartClientView{
         displayMessage.setForeground(Color.red);
         startViewPanel.add(displayMessage, constraints);
 
-
         frame.add(startViewPanel);
 //        frame.setVisible(true);
-
     }
 }
