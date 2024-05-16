@@ -1,15 +1,11 @@
-package pt.isel.icd.user.management;
+package pt.isel.icd.user.logic;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import pt.isel.icd.patterns.verticals.Entity;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.UUID;
 
 @JacksonXmlRootElement(localName = "profiles")
 public class Profiles implements Entity {
@@ -18,9 +14,9 @@ public class Profiles implements Entity {
     @JacksonXmlElementWrapper(useWrapping = false)
     private final ArrayList<Profile> profiles = new ArrayList<>();
 
-    public Profile read(String username) {
+    public Profile read(User user) {
         return profiles.stream()
-                .filter(profile -> profile.username().equals(username))
+                .filter(profile -> profile.username().equals(user.username()))
                 .findFirst()
                 .orElse(null);
     }
@@ -29,24 +25,21 @@ public class Profiles implements Entity {
         profiles.add(profile);
     }
 
-    public void update(Profile profile) {
-        Profile existingProfile = read(profile.username());
+    public void remove(Profile profile) {
+        Profile existingProfile = profiles.stream()
+                .filter(p -> p.username().equals(profile.username()))
+                .findFirst()
+                .orElse(null);
 
         if (existingProfile == null) {
             throw new IllegalArgumentException("Profile does not exist");
         }
 
         profiles.remove(existingProfile);
-        profiles.add(profile);
     }
 
-    public void remove(Profile profile) {
-        Profile existingProfile = read(profile.username());
-
-        if (existingProfile == null) {
-            throw new IllegalArgumentException("Profile does not exist");
-        }
-
-        profiles.remove(existingProfile);
+    public void update(Profile profile) {
+        remove(profile);
+        add(profile);
     }
 }

@@ -21,27 +21,27 @@ public class GameServerController implements Controller {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>(gameController.commandsList()) {
             {
-                add(ShowBoardCommand.class);
+                add(ShowGameBoardCommand.class);
                 add(JoinGameCommand.class);
                 add(LeaveGameCommand.class);
-                add(PlacePieceCommand.class);
+                add(PlaceGamePieceCommand.class);
             }
         };
     }
 
     public void joinGame(UUID connectionIdentifier) {
-
+        // TODO: Implement method
     }
 
     public void leaveGame(UUID connectionIdentifier) {
-
+        // TODO: Implement method
     }
 
-    public void placePiece(UUID connectionIdentifier) {
-
+    public void placeGamePiece(UUID connectionIdentifier, int row, int column) {
+        // TODO: Implement method
     }
 
-    public void showBoard(UUID connectionIdentifier) {
-
+    public void showGameBoard(UUID connectionIdentifier) {
+        // TODO: Implement method
     }
 }

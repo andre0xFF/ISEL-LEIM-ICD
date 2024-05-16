@@ -4,7 +4,7 @@ import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class ShowBoardCommand implements SimpleSocketCommand<GameServerController> {
+public class ShowGameBoardCommand implements SimpleSocketCommand<GameServerController> {
     private GameServerController gameServerController;
     private UUID connectionIdentifier;
 

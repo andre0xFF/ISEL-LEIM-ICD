@@ -1,12 +1,10 @@
-package pt.isel.icd.user.management;
+package pt.isel.icd.user.logic;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import pt.isel.icd.patterns.verticals.Entity;
 
-import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.UUID;
 
 @JacksonXmlRootElement(localName = "profile")
 public record Profile(

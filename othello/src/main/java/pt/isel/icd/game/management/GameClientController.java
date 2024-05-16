@@ -1,6 +1,7 @@
 package pt.isel.icd.game.management;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
@@ -21,12 +22,40 @@ public class GameClientController implements Controller {
     public ArrayList<Class<? extends Command<? extends Receiver>>> commandsList() {
         return new ArrayList<>(gameController.commandsList()) {
             {
-                add(UpdateBoardCommand.class);
+                add(UpdateGameBoardCommand.class);
             }
         };
     }
 
-    public void updateBoard() {
+    public void joinGame() throws JsonProcessingException {
+        connectionManager.write(new JoinGameCommand());
+    }
 
+    public void handleJoinGameResponse() {
+        // TODO: Implement method
+    }
+
+    public void leaveGame() throws JsonProcessingException {
+        connectionManager.write(new LeaveGameCommand());
+    }
+
+    public void handleLeaveGameResponse() {
+        // TODO: Implement method
+    }
+
+    public void placeGamePiece(int row, int column) throws JsonProcessingException {
+        connectionManager.write(new PlaceGamePieceCommand(row, column));
+    }
+
+    public void handlePlaceGamePieceResponse() {
+        // TODO: Implement method
+    }
+
+    public void showGameBoard() throws JsonProcessingException {
+        connectionManager.write(new ShowGameBoardCommand());
+    }
+
+    public void handleShowGameBoardResponse() {
+        // TODO: Implement method
     }
 }

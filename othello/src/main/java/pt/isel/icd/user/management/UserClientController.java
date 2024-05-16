@@ -46,8 +46,8 @@ public class UserClientController implements Controller {
         // TODO: Implement method
     }
 
-    public void deauthenticateUser() {
-        // TODO: Implement method
+    public void deauthenticateUser() throws JsonProcessingException {
+        connectionManager.write(new DeauthenticateUserCommand());
     }
 
     public void handleDeauthenticateUserResponse() {
@@ -77,7 +77,7 @@ public class UserClientController implements Controller {
     }
 
     public void readUserProfile() throws JsonProcessingException {
-        connectionManager.write(new ReadUserProfileCommand(userClientService.user().username()));
+        connectionManager.write(new ReadUserProfileCommand());
     }
 
     public void handleReadUserProfileResponse(UUID connectionIdentifier, Profile profile, boolean hasProfile) {

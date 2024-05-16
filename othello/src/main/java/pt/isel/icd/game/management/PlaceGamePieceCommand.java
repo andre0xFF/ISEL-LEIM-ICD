@@ -4,9 +4,17 @@ import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class PlacePieceCommand implements SimpleSocketCommand<GameServerController> {
+public class PlaceGamePieceCommand implements SimpleSocketCommand<GameServerController> {
+    private final int row;
+    private final int column;
+
     private GameServerController gameServerController;
     private UUID connectionIdentifier;
+
+    public PlaceGamePieceCommand(int existingRow, int existingColumn) {
+        row = existingRow;
+        column = existingColumn;
+    }
 
     @Override
     public void setReceiver(GameServerController existingGameServerController) {
@@ -15,7 +23,7 @@ public class PlacePieceCommand implements SimpleSocketCommand<GameServerControll
 
     @Override
     public void execute() {
-        gameServerController.placePiece(connectionIdentifier);
+        gameServerController.placeGamePiece(connectionIdentifier, row, column);
     }
 
     @Override

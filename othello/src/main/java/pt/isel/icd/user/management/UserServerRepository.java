@@ -71,8 +71,8 @@ public class UserServerRepository implements Repository {
         users.remove(user);
     }
 
-    public Profile readProfile(String username) {
-        return profiles.read(username);
+    public Profile readProfile(User user) {
+        return profiles.read(user);
     }
 
     public void addProfile(Profile profile) {

@@ -75,17 +75,18 @@ public class UserServerController implements Controller {
         // TODO: Implement method
     }
 
-    public void readProfile(UUID connectionIdentifier, String username) throws JsonProcessingException {
+    public void readUserProfile(UUID connectionIdentifier) throws JsonProcessingException {
         Profile profile = null;
+        User user = userServerService.fetchUser(connectionIdentifier);
 
         try {
-            profile = userServerService.readProfile(username);
+            profile = userServerService.readUserProfile(user);
         } catch (IllegalArgumentException ignored) {
         }
 
-        ReadUserProfileResponseCommand readProfileResponseCommand = new ReadUserProfileResponseCommand(profile, profile != null);
+        ReadUserProfileResponseCommand readUserProfileResponseCommand = new ReadUserProfileResponseCommand(profile, profile != null);
 
-        connectionManager.write(connectionIdentifier, readProfileResponseCommand);
+        connectionManager.write(connectionIdentifier, readUserProfileResponseCommand);
     }
 
     public void readUserStats() {

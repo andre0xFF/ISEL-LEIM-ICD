@@ -2,31 +2,31 @@ package pt.isel.icd.game.logic;
 
 import pt.isel.icd.patterns.verticals.Entity;
 
-public class GameEntity implements Entity {
+public class Game implements Entity {
     public static final int BOARD_SIZE = 8;
-    private PieceEntity[][] board;
+    private Piece[][] board;
     private int totalPieces;
 
-    public GameEntity() {
+    public Game() {
         initializeBoard();
     }
 
     private void initializeBoard() {
-        board = new PieceEntity[BOARD_SIZE][BOARD_SIZE];
+        board = new Piece[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                setPiece(i, j, PieceEntity.EMPTY);
+                setPiece(i, j, Piece.EMPTY);
             }
         }
 
-        setPiece(3, 3, PieceEntity.X);
-        setPiece(3, 4, PieceEntity.O);
-        setPiece(4, 3, PieceEntity.O);
-        setPiece(4, 4, PieceEntity.X);
+        setPiece(3, 3, Piece.X);
+        setPiece(3, 4, Piece.O);
+        setPiece(4, 3, Piece.O);
+        setPiece(4, 4, Piece.X);
     }
 
-    public boolean makeMove(int row, int column, PieceEntity player) {
+    public boolean makeMove(int row, int column, Piece player) {
         if (!isMoveValid(row, column, player)) {
             return false;
         }
@@ -37,8 +37,8 @@ public class GameEntity implements Entity {
         return true;
     }
 
-    private void setPiece(int row, int column, PieceEntity player) {
-        if (player != PieceEntity.EMPTY) {
+    private void setPiece(int row, int column, Piece player) {
+        if (player != Piece.EMPTY) {
             totalPieces++;
         }
 
@@ -53,12 +53,12 @@ public class GameEntity implements Entity {
      * @param playerCharacter the playerCharacter character
      * @return true if the move is valid, false otherwise
      */
-    private boolean isMoveValid(int row, int column, PieceEntity playerCharacter) {
+    private boolean isMoveValid(int row, int column, Piece playerCharacter) {
 //        if (checkEndGame()) {
 //            return false;
 //        }
 
-        if (board[row][column] != PieceEntity.EMPTY) {
+        if (board[row][column] != Piece.EMPTY) {
             return false;
         }
 
@@ -89,7 +89,7 @@ public class GameEntity implements Entity {
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (isMoveValid(i, j, PieceEntity.X) || isMoveValid(i, j, PieceEntity.O)) {
+                if (isMoveValid(i, j, Piece.X) || isMoveValid(i, j, Piece.O)) {
                     return false;
                 }
             }
@@ -98,14 +98,14 @@ public class GameEntity implements Entity {
         return true;
     }
 
-    private boolean checkDirection(int row, int column, int dr, int dc, PieceEntity playerCharacter) {
+    private boolean checkDirection(int row, int column, int dr, int dc, Piece playerCharacter) {
         int r = row + dr;
         int c = column + dc;
         boolean validDir = false;
 
 
         while (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
-            if (board[r][c] == PieceEntity.EMPTY) {
+            if (board[r][c] == Piece.EMPTY) {
                 return false;
             }
 
@@ -124,7 +124,7 @@ public class GameEntity implements Entity {
         return false;
     }
 
-    private void flipPieces(int x, int y, PieceEntity player) {
+    private void flipPieces(int x, int y, Piece player) {
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
                 if (dr == 0 && dc == 0) {
@@ -138,11 +138,11 @@ public class GameEntity implements Entity {
         }
     }
 
-    private void flipDirection(int x, int y, int dr, int dc, PieceEntity player) {
+    private void flipDirection(int x, int y, int dr, int dc, Piece player) {
         int r = x + dr;
         int c = y + dc;
 
-        PieceEntity opponent = player == PieceEntity.X ? PieceEntity.O : PieceEntity.X;
+        Piece opponent = player == Piece.X ? Piece.O : Piece.X;
 
         while (board[r][c] == opponent) {
             setPiece(r, c, player);
@@ -151,7 +151,7 @@ public class GameEntity implements Entity {
         }
     }
 
-    public PieceEntity getPiece(int row, int column) {
+    public Piece getPiece(int row, int column) {
         return board[row][column];
     }
 }

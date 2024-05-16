@@ -4,19 +4,19 @@ import pt.isel.icd.patterns.verticals.Service;
 import pt.isel.icd.user.logic.Profile;
 import pt.isel.icd.user.logic.User;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 public class UserServerService implements Service, Authenticator {
     private final UserServerRepository userServerRepository;
-    private final ArrayList<UUID> areAuthenticated = new ArrayList<>();
+    private final HashMap<UUID, User> areAuthenticated = new HashMap<>();
     private final UserService userService = new UserService();
 
     public UserServerService(UserServerRepository existingUserServerRepository) {
         userServerRepository = existingUserServerRepository;
     }
 
-    public void authenticate(UUID connectionIdentifier, User user) {
+    public void authenticate(UUID userIdentifier, User user) {
         if (!userService.validateUsername(user.username())) {
             throw new IllegalArgumentException("Invalid username");
         }
@@ -31,7 +31,7 @@ public class UserServerService implements Service, Authenticator {
             throw new IllegalArgumentException("Wrong username or password");
         }
 
-        areAuthenticated.add(connectionIdentifier);
+        areAuthenticated.put(userIdentifier, user);
     }
 
     public void createUser(User user) {
@@ -65,12 +65,12 @@ public class UserServerService implements Service, Authenticator {
     }
 
     @Override
-    public boolean isAuthenticated(UUID connectionIdentifier) {
-        return areAuthenticated.contains(connectionIdentifier);
+    public boolean isAuthenticated(UUID userIdentifier) {
+        return areAuthenticated.containsKey(userIdentifier);
     }
 
-    public Profile readProfile(String username) {
-        return userServerRepository.readProfile(username);
+    public Profile readUserProfile(User user) {
+        return userServerRepository.readProfile(user);
     }
 
     public void addProfile(Profile profile) {
@@ -83,5 +83,9 @@ public class UserServerService implements Service, Authenticator {
 
     public void removeProfile(Profile profile) {
         userServerRepository.removeProfile(profile);
+    }
+
+    public User fetchUser(UUID userIdentifier) {
+        return areAuthenticated.get(userIdentifier);
     }
 }
