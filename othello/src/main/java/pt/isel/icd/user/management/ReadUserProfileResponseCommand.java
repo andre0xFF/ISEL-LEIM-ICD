@@ -3,12 +3,12 @@ package pt.isel.icd.user.management;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import pt.isel.icd.communication.SimpleSocketCommand;
+import pt.isel.icd.user.logic.Profile;
 
 import java.util.UUID;
 
-public class ReadProfileResponseCommand implements SimpleSocketCommand<UserClientController>  {
+public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserClientController> {
     private UUID connectionIdentifier;
     private UserClientController userClientController;
 
@@ -20,7 +20,7 @@ public class ReadProfileResponseCommand implements SimpleSocketCommand<UserClien
     private Profile profile;
 
     @JsonCreator
-    public ReadProfileResponseCommand(
+    public ReadUserProfileResponseCommand(
             @JsonProperty("profile")
             Profile existingProfile,
 
@@ -48,6 +48,6 @@ public class ReadProfileResponseCommand implements SimpleSocketCommand<UserClien
 
     @Override
     public void execute() {
-        userClientController.handleReadProfileResponse(connectionIdentifier, profile, hasProfile);
+        userClientController.handleReadUserProfileResponse(connectionIdentifier, profile, hasProfile);
     }
 }

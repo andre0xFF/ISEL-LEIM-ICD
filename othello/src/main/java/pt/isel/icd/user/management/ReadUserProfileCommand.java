@@ -6,14 +6,14 @@ import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
-public class ReadProfileCommand implements SimpleSocketCommand<UserServerController> {
+public class ReadUserProfileCommand implements SimpleSocketCommand<UserServerController> {
     private UUID connectionIdentifier;
     private UserServerController userServerController;
 
     @JsonProperty
     private final String username;
 
-    public ReadProfileCommand(
+    public ReadUserProfileCommand(
             @JsonProperty("username") String existingUsername
     ) {
         username = existingUsername;

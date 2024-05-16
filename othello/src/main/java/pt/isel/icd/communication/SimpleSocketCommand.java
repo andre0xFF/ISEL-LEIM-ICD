@@ -20,9 +20,9 @@ import java.util.UUID;
                 // Game Management Commands
                 @JsonSubTypes.Type(value = JoinGameCommand.class),
                 @JsonSubTypes.Type(value = LeaveGameCommand.class),
-                @JsonSubTypes.Type(value = PlacePieceCommand.class),
-                @JsonSubTypes.Type(value = ShowBoardCommand.class),
-                @JsonSubTypes.Type(value = UpdateBoardCommand.class),
+                @JsonSubTypes.Type(value = PlaceGamePieceCommand.class),
+                @JsonSubTypes.Type(value = ShowGameBoardCommand.class),
+                @JsonSubTypes.Type(value = UpdateGameBoardCommand.class),
 
                 // User Management Commands
                 @JsonSubTypes.Type(value = AuthenticateUserCommand.class),
@@ -31,8 +31,8 @@ import java.util.UUID;
                 @JsonSubTypes.Type(value = CreateUserResponseCommand.class),
                 @JsonSubTypes.Type(value = DeleteUserCommand.class),
                 @JsonSubTypes.Type(value = UpdateUserCommand.class),
-                @JsonSubTypes.Type(value = ReadProfileCommand.class),
-                @JsonSubTypes.Type(value = ReadProfileResponseCommand.class)
+                @JsonSubTypes.Type(value = ReadUserProfileCommand.class),
+                @JsonSubTypes.Type(value = ReadUserProfileResponseCommand.class)
         }
 )
 public interface SimpleSocketCommand<T extends Receiver> extends Command<T> {

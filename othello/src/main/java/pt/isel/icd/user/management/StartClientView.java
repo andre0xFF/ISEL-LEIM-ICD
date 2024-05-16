@@ -1,6 +1,7 @@
 package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import pt.isel.icd.user.logic.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,11 +18,14 @@ public class StartClientView {
     private JPasswordField passwordField;
     private JLabel notificationLabel;
 
-    public StartClientView(JFrame frame, UserClientController userClientController) {
+    public StartClientView(UserFrame userFrame, UserClientController userClientController) {
         this.userClientController = userClientController;
 
+        JFrame frame = userFrame.getFrame();
         JPanel startViewPanel = createStartViewPanel();
+
         frame.add(startViewPanel);
+        frame.setVisible(true);
     }
 
     private JPanel createStartViewPanel() {
@@ -121,7 +125,7 @@ public class StartClientView {
         String password = new String(passwordField.getPassword());
 
         try {
-            userClientController.authenticate(new User(username, password));
+            userClientController.authenticateUser(new User(username, password));
         } catch (JsonProcessingException ex) {
             notificationLabel.setText("Error authenticating user");
         }

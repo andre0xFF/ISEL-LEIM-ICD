@@ -2,8 +2,11 @@ package pt.isel.icd.user.management;
 
 import pt.isel.icd.patterns.verticals.Repository;
 import pt.isel.icd.serialization.Serializer;
+import pt.isel.icd.user.logic.Profile;
+import pt.isel.icd.user.logic.Profiles;
+import pt.isel.icd.user.logic.User;
+import pt.isel.icd.user.logic.Users;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;

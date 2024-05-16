@@ -1,6 +1,8 @@
 package pt.isel.icd.user.management;
 
 import pt.isel.icd.patterns.verticals.Service;
+import pt.isel.icd.user.logic.Profile;
+import pt.isel.icd.user.logic.User;
 
 import java.util.ArrayList;
 import java.util.UUID;
