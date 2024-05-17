@@ -3,7 +3,7 @@ package pt.isel.icd.user.management;
 import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.communication.SimpleSocketMiddleware;
 
-class AuthenticationSimpleSocketMiddleware implements SimpleSocketMiddleware {
+public class AuthenticationSimpleSocketMiddleware implements SimpleSocketMiddleware {
 
     private final Authenticator authenticator;
 

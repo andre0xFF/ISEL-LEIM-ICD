@@ -9,17 +9,17 @@ import pt.isel.icd.user.logic.Profile;
 import pt.isel.icd.user.logic.User;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
-public class UserServerController implements Controller {
-    private final UserServerService userServerService;
+public class UserServerController implements Controller, Authenticator {
+    private final UserServerRepository userServerRepository;
     private final ConnectionManager connectionManager;
+    private final HashMap<UUID, User> areAuthenticated = new HashMap<>();
 
-    public UserServerController(UserServerService existingUserServerService, ConnectionManager existingConnectionManager) {
-        userServerService = existingUserServerService;
+    public UserServerController(UserServerRepository existingUserServerRepository, ConnectionManager existingConnectionManager) {
+        userServerRepository = existingUserServerRepository;
         connectionManager = existingConnectionManager;
-
-        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userServerService));
     }
 
     @Override
@@ -35,18 +35,15 @@ public class UserServerController implements Controller {
     }
 
     public void authenticateUser(UUID connectionIdentifier, User user) throws JsonProcessingException {
-        boolean isAuthenticated = false;
+        User existingUser = userServerRepository.readUser(user.username());
 
-        try {
-            userServerService.authenticateUser(connectionIdentifier, user);
-
-            isAuthenticated = true;
-        } catch (IllegalArgumentException ignored) {
+        if (user.password().equals(existingUser.password())) {
+            areAuthenticated.put(connectionIdentifier, user);
         }
 
         AuthenticateUserResponseCommand authenticateUserResponseCommand = new AuthenticateUserResponseCommand(
                 user.username(),
-                isAuthenticated
+                areAuthenticated.containsKey(connectionIdentifier)
         );
 
         connectionManager.write(connectionIdentifier, authenticateUserResponseCommand);
@@ -57,16 +54,14 @@ public class UserServerController implements Controller {
     }
 
     public void createUser(UUID connectionIdentifier, User user) throws JsonProcessingException {
-        boolean isRegistered = false;
-
-        try {
-            userServerService.createUser(user);
-
-            isRegistered = true;
-        } catch (IllegalArgumentException ignored) {
+        if (userServerRepository.readUser(user.username()) == null) {
+            userServerRepository.addUser(user);
         }
 
-        CreateUserResponseCommand createUserResponseCommand = new CreateUserResponseCommand(user.username(), isRegistered);
+        CreateUserResponseCommand createUserResponseCommand = new CreateUserResponseCommand(
+                user.username(),
+                userServerRepository.readUser(user.username()) != null
+        );
 
         connectionManager.write(connectionIdentifier, createUserResponseCommand);
     }
@@ -77,14 +72,13 @@ public class UserServerController implements Controller {
 
     public void readUserProfile(UUID connectionIdentifier) throws JsonProcessingException {
         Profile profile = null;
-        User user = userServerService.fetchUser(connectionIdentifier);
+        User user = areAuthenticated.get(connectionIdentifier);
+        profile = userServerRepository.readProfile(user);
 
-        try {
-            profile = userServerService.readUserProfile(user);
-        } catch (IllegalArgumentException ignored) {
-        }
-
-        ReadUserProfileResponseCommand readUserProfileResponseCommand = new ReadUserProfileResponseCommand(profile, profile != null);
+        ReadUserProfileResponseCommand readUserProfileResponseCommand = new ReadUserProfileResponseCommand(
+                profile,
+                profile != null
+        );
 
         connectionManager.write(connectionIdentifier, readUserProfileResponseCommand);
     }
@@ -99,5 +93,10 @@ public class UserServerController implements Controller {
 
     public void leaveGame() {
         // TODO: Implement method
+    }
+
+    @Override
+    public boolean isAuthenticated(UUID connectionIdentifier) {
+        return areAuthenticated.containsKey(connectionIdentifier);
     }
 }

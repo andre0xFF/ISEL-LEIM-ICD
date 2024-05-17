@@ -11,15 +11,15 @@ import pt.isel.icd.user.logic.User;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class UserClientController implements Controller {
+public class UserClientController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
-    private final UserClientService userClientService;
+    private final UserClientRepository userClientRepository;
+    private final boolean isAuthenticated;
 
-    public UserClientController(ConnectionManager existingConnectionManager, UserClientService existingUserClientService) {
+    public UserClientController(UserClientRepository existingUserClientRepository, ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
-        userClientService = existingUserClientService;
-
-        connectionManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(existingUserClientService));
+        userClientRepository = existingUserClientRepository;
+        isAuthenticated = false;
     }
 
     @Override
@@ -34,13 +34,19 @@ public class UserClientController implements Controller {
         };
     }
 
+    @Override
+    public boolean isAuthenticated(UUID connectionIdentifier) {
+        return isAuthenticated;
+    }
+
     public void authenticateUser(User user) throws JsonProcessingException {
         connectionManager.write(new AuthenticateUserCommand(user));
     }
 
     public void handleAuthenticateUserResponse(UUID connectionIdentifier, String username, boolean isAuthenticated) {
         if (isAuthenticated) {
-            userClientService.authenticateUser(connectionIdentifier, username);
+            isAuthenticated = true;
+            userClientRepository.username(username);
         }
 
         // TODO: Implement method
@@ -60,7 +66,6 @@ public class UserClientController implements Controller {
 
     public void handleCreateUserResponse(UUID connectionIdentifier, String username, boolean isRegistered) {
         if (isRegistered) {
-            userClientService.authenticateUser(connectionIdentifier, username);
         }
 
         // TODO: Implement method

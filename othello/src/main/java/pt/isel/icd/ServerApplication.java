@@ -5,9 +5,9 @@ import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.database.XmlFileStore;
 import pt.isel.icd.game.management.GameServerController;
 import pt.isel.icd.serialization.XMLSerializer;
+import pt.isel.icd.user.management.AuthenticationSimpleSocketMiddleware;
 import pt.isel.icd.user.management.UserServerRepository;
 import pt.isel.icd.user.management.UserServerController;
-import pt.isel.icd.user.management.UserServerService;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +19,11 @@ public class ServerApplication {
         Server server = new Server(simpleSocketManager, xmlSerializer);
         XmlFileStore xmlFileStore = new XmlFileStore(xmlSerializer);
         UserServerRepository userServerRepository = new UserServerRepository(xmlFileStore);
-        UserServerService userServerService = new UserServerService(userServerRepository);
-        UserServerController userServerController = new UserServerController(userServerService, simpleSocketManager);
+        UserServerController userServerController = new UserServerController(userServerRepository, simpleSocketManager);
         GameServerController gameServerController = new GameServerController(simpleSocketManager);
+        AuthenticationSimpleSocketMiddleware authenticationSimpleSocketMiddleware = new AuthenticationSimpleSocketMiddleware(userServerController);
+
+        simpleSocketManager.addMiddleware(authenticationSimpleSocketMiddleware);
 
         userServerRepository.addFile("users", new File("src/main/resources/user/management/Users.xml"));
         userServerRepository.addFile("profiles", new File("src/main/resources/user/management/Profiles.xml"));
