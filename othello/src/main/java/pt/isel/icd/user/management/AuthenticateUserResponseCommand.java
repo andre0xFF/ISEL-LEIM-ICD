@@ -31,8 +31,8 @@ public class AuthenticateUserResponseCommand implements SimpleSocketCommand<User
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class AuthenticateUserResponseCommand implements SimpleSocketCommand<User
 
     @Override
     public void execute() {
-        userClientController.handleAuthenticateUserResponse(socketId, username, isAutenticated);
+        userClientController.handleAuthenticateUserResponse(username, isAutenticated);
     }
 
     @Override

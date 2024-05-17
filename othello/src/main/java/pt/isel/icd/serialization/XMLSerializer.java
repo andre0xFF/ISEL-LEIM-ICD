@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import pt.isel.icd.game.logic.Piece;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,6 +25,7 @@ public class XMLSerializer implements Serializer {
     public XMLSerializer() {
         registerDateTimeModule();
         registerColorModule();
+        registerBufferedImageModule();
     }
 
     private void registerDateTimeModule() {

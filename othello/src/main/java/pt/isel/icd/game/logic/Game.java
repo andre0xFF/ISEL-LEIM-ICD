@@ -4,40 +4,49 @@ import pt.isel.icd.database.Entity;
 
 public class Game implements Entity {
     public static final int BOARD_SIZE = 8;
+
+    private boolean isOpen;
+    private final Player[] players = new Player[2];
+
     private Piece[][] board;
     private int totalPieces;
-
-    public Game() {
-        initializeBoard();
-    }
+    private Player currentPlayer;
 
     private void initializeBoard() {
         board = new Piece[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                setPiece(i, j, Piece.EMPTY);
+                placePiece(i, j, Piece.EMPTY);
             }
         }
 
-        setPiece(3, 3, Piece.X);
-        setPiece(3, 4, Piece.O);
-        setPiece(4, 3, Piece.O);
-        setPiece(4, 4, Piece.X);
+        placePiece(3, 3, players[0].playPiece());
+        placePiece(3, 4, players[1].playPiece());
+        placePiece(4, 3, players[0].playPiece());
+        placePiece(4, 4, players[1].playPiece());
     }
 
-    public boolean makeMove(int row, int column, Piece player) {
-        if (!isMoveValid(row, column, player)) {
+    public boolean placePiece(Player player, int row, int column) {
+        if (!isPlayerTurn(player)) {
             return false;
         }
 
-        flipPieces(row, column, player);
-        setPiece(row, column, player);
+        Piece piece = player.playPiece();
+
+        if (!isMoveValid(row, column, piece)) {
+            return false;
+        }
+
+        flipPieces(row, column, piece);
+        placePiece(row, column, piece);
+
+        currentPlayer = player == players[0] ? players[1] : players[0];
 
         return true;
     }
 
-    private void setPiece(int row, int column, Piece player) {
+    private void placePiece(int row, int column, Piece player) {
         if (player != Piece.EMPTY) {
             totalPieces++;
         }
@@ -78,7 +87,7 @@ public class Game implements Entity {
         return false;
     }
 
-    public boolean checkEndGame() {
+    public boolean isGameOver() {
 //        if (totalPieces != BOARD_SIZE * BOARD_SIZE) {
 //            return false;
 //        }
@@ -145,7 +154,7 @@ public class Game implements Entity {
         Piece opponent = player == Piece.X ? Piece.O : Piece.X;
 
         while (board[r][c] == opponent) {
-            setPiece(r, c, player);
+            placePiece(r, c, player);
             r += dr;
             c += dc;
         }
@@ -153,5 +162,72 @@ public class Game implements Entity {
 
     public Piece getPiece(int row, int column) {
         return board[row][column];
+    }
+
+    public boolean isClosed() {
+        return !isOpen;
+    }
+
+    public void open() {
+        isOpen = true;
+
+        initializeBoard();
+    }
+
+    public boolean isAcceptingPlayers() {
+        return isOpen && players[0] == null || players[1] == null;
+    }
+
+    public boolean join(Player player) {
+        if (!isAcceptingPlayers()) {
+            return false;
+        }
+
+        if (players[0] == null) {
+            players[0] = player;
+            currentPlayer = player;
+        } else {
+            players[1] = player;
+        }
+
+        return true;
+    }
+
+    public boolean isBeingPlayed() {
+        return isOpen && players[0] != null && players[1] != null;
+    }
+
+    public boolean leave(Player player) {
+        if (!isBeingPlayed()) {
+            return false;
+        }
+
+        if (players[0] == player) {
+            players[0] = null;
+
+            return true;
+        }
+
+        if (players[1] == player) {
+            players[1] = null;
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public void close() {
+        players[0] = null;
+        players[1] = null;
+        isOpen = false;
+    }
+
+    public boolean isPlayerTurn(Player player) {
+        return isBeingPlayed() && player.equals(currentPlayer);
+    }
+
+    public Piece[][] board() {
+        return board;
     }
 }

@@ -14,8 +14,7 @@ public class ClientApplication {
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         XMLSerializer xmlSerializer = new XMLSerializer();
         Client client = new Client(simpleSocketManager, xmlSerializer);
-        UserClientRepository userClientRepository = new UserClientRepository();
-        UserClientController userClientController = new UserClientController(userClientRepository, simpleSocketManager);
+        UserClientController userClientController = new UserClientController(simpleSocketManager);
         GameClientController gameClientController = new GameClientController(simpleSocketManager);
         UserFrame userFrame = new UserFrame();
         StartClientView startClientView = new StartClientView(userFrame, userClientController);
@@ -27,5 +26,14 @@ public class ClientApplication {
         client.connect();
 
         userClientController.authenticateUser(new User("user11", "password1234"));
+
+        gameClientController.joinGame();
+
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        gameClientController.placePiece(1, 1);
     }
 }

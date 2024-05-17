@@ -15,8 +15,8 @@ public class DeauthenticateUserCommand implements SimpleSocketCommand<UserServer
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 
     @Override

@@ -1,10 +1,12 @@
 package pt.isel.icd.game.management;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.SimpleSocketCommand;
 
 import java.util.UUID;
 
 public class LeaveGameCommand implements SimpleSocketCommand<GameServerController> {
+
     private GameServerController gameServerController;
     private UUID socketId;
 
@@ -15,7 +17,11 @@ public class LeaveGameCommand implements SimpleSocketCommand<GameServerControlle
 
     @Override
     public void execute() {
-        gameServerController.leaveGame(socketId);
+        try {
+            gameServerController.leaveGame(socketId);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -24,7 +30,7 @@ public class LeaveGameCommand implements SimpleSocketCommand<GameServerControlle
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 }

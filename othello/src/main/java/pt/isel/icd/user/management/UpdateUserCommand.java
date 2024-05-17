@@ -23,7 +23,7 @@ public class UpdateUserCommand implements SimpleSocketCommand<UserClientControll
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 }

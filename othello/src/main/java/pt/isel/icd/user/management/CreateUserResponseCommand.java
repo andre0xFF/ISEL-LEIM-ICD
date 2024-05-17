@@ -29,8 +29,8 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
 
     @Override
     public void execute() {
-        userClientController.handleCreateUserResponse(socketId, username, isRegistered);
+        userClientController.handleCreateUserResponse(username, isRegistered);
     }
 
     @Override

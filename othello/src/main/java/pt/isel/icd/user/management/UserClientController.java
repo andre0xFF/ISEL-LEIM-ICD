@@ -2,8 +2,6 @@ package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.ConnectionManager;
-import pt.isel.icd.game.management.JoinGameCommand;
-import pt.isel.icd.game.management.LeaveGameCommand;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -15,11 +13,11 @@ import java.util.UUID;
 
 public class UserClientController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
-    private final UserClientRepository userClientRepository;
 
-    public UserClientController(UserClientRepository existingUserClientRepository, ConnectionManager existingConnectionManager) {
+    private String username;
+
+    public UserClientController(ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
-        userClientRepository = existingUserClientRepository;
     }
 
     @Override
@@ -36,16 +34,16 @@ public class UserClientController implements Controller, Authenticator {
 
     @Override
     public boolean isAuthenticated(UUID socketId) {
-        return userClientRepository.username() != null;
+        return !username.isEmpty();
     }
 
     public void authenticateUser(User user) throws JsonProcessingException {
         connectionManager.write(new AuthenticateUserCommand(user));
     }
 
-    protected void handleAuthenticateUserResponse(UUID socketId, String username, boolean isAuthenticated) {
+    protected void handleAuthenticateUserResponse(String existingUsername, boolean isAuthenticated) {
         if (isAuthenticated) {
-            userClientRepository.username(username);
+            username = existingUsername;
         }
 
         // TODO: Implement method
@@ -63,7 +61,7 @@ public class UserClientController implements Controller, Authenticator {
         connectionManager.write(new CreateUserCommand(user));
     }
 
-    protected void handleCreateUserResponse(UUID socketId, String username, boolean isRegistered) {
+    protected void handleCreateUserResponse(String username, boolean isRegistered) {
         if (isRegistered) {
         }
 
@@ -75,18 +73,18 @@ public class UserClientController implements Controller, Authenticator {
         // connectionManager.write(new DeleteUserCommand(username));
     }
 
-    protected void handleDeleteUserResponse(UUID socketId, boolean isDeleted) {
+    protected void handleDeleteUserResponse(boolean isDeleted) {
         // TODO: Implement method
-        System.out.printf("User %s %s%n", socketId, isDeleted ? "deleted" : "not deleted");
+        System.out.printf("User %s%n", isDeleted ? "deleted" : "not deleted");
     }
 
     public void readUserProfile() throws JsonProcessingException {
         connectionManager.write(new ReadUserProfileCommand());
     }
 
-    protected void handleReadUserProfileResponse(UUID socketId, Profile profile, boolean hasProfile) {
+    protected void handleReadUserProfileResponse(Profile profile, boolean hasProfile) {
         // TODO: Implement method
-        System.out.printf("User %s %s%n", socketId, hasProfile ? "has profile" : "does not have profile");
+        System.out.printf("User %s%n", hasProfile ? "has profile" : "does not have profile");
     }
 
     public void readUserStatistics() {

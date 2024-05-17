@@ -40,8 +40,8 @@ public class CreateUserCommand implements SimpleSocketCommand<UserServerControll
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 
     @Override

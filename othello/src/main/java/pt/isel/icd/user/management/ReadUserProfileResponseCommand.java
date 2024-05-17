@@ -37,8 +37,8 @@ public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserC
     }
 
     @Override
-    public void socketId(UUID existingsocketId) {
-        socketId = existingsocketId;
+    public void socketId(UUID existingSocketId) {
+        socketId = existingSocketId;
     }
 
     @Override
@@ -48,6 +48,6 @@ public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserC
 
     @Override
     public void execute() {
-        userClientController.handleReadUserProfileResponse(socketId, profile, hasProfile);
+        userClientController.handleReadUserProfileResponse(profile, hasProfile);
     }
 }

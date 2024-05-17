@@ -19,10 +19,11 @@ import java.util.UUID;
         {
                 // Game Management Commands
                 @JsonSubTypes.Type(value = JoinGameCommand.class),
+                @JsonSubTypes.Type(value = JoinGameResponseCommand.class),
                 @JsonSubTypes.Type(value = LeaveGameCommand.class),
-                @JsonSubTypes.Type(value = PlaceGamePieceCommand.class),
-                @JsonSubTypes.Type(value = ShowGameBoardCommand.class),
-                @JsonSubTypes.Type(value = UpdateGameBoardCommand.class),
+                @JsonSubTypes.Type(value = LeaveGameResponseCommand.class),
+                @JsonSubTypes.Type(value = PlacePieceCommand.class),
+                @JsonSubTypes.Type(value = PlacePieceResponseCommand.class),
 
                 // User Management Commands
                 @JsonSubTypes.Type(value = AuthenticateUserCommand.class),
@@ -38,6 +39,7 @@ import java.util.UUID;
 public interface SimpleSocketCommand<T extends Receiver> extends Command<T> {
 
     UUID socketId();
+
     void socketId(UUID socketId);
 
     default boolean requiresAuthentication() {
