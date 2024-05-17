@@ -34,7 +34,7 @@ public class ClientHandler implements Runnable {
                     simpleSocketManager.route(new DisconnectedCommand());
                     simpleSocket.close();
                 } else {
-                    simpleSocketCommand.connectionIdentifier(simpleSocket.identifier());
+                    simpleSocketCommand.socketId(simpleSocket.identifier());
                     simpleSocketManager.route(simpleSocketCommand);
                 }
             }

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class AuthenticateUserCommand implements SimpleSocketCommand<UserServerController> {
     private UserServerController userServerController;
-    private UUID connectionIdentifier;
+    private UUID socketId;
 
     @JsonProperty
     private final User user;
@@ -30,20 +30,20 @@ public class AuthenticateUserCommand implements SimpleSocketCommand<UserServerCo
     @Override
     public void execute() {
         try {
-            userServerController.authenticateUser(connectionIdentifier, user);
+            userServerController.authenticateUser(socketId, user);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public UUID connectionIdentifier() {
-        return connectionIdentifier;
+    public UUID socketId() {
+        return socketId;
     }
 
     @Override
-    public void connectionIdentifier(UUID existingConnectionIdentifier) {
-        connectionIdentifier = existingConnectionIdentifier;
+    public void socketId(UUID existingsocketId) {
+        socketId = existingsocketId;
     }
 
     @Override

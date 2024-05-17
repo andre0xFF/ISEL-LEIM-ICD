@@ -6,7 +6,7 @@ import pt.isel.icd.communication.SimpleSocketCommand;
 import java.util.UUID;
 
 public class CreateUserResponseCommand implements SimpleSocketCommand<UserClientController> {
-    private UUID connectionIdentifier;
+    private UUID socketId;
     private UserClientController userClientController;
 
     @JsonProperty
@@ -24,13 +24,13 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
     }
 
     @Override
-    public UUID connectionIdentifier() {
-        return connectionIdentifier;
+    public UUID socketId() {
+        return socketId;
     }
 
     @Override
-    public void connectionIdentifier(UUID existingConnectionIdentifier) {
-        connectionIdentifier = existingConnectionIdentifier;
+    public void socketId(UUID existingsocketId) {
+        socketId = existingsocketId;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
 
     @Override
     public void execute() {
-        userClientController.handleCreateUserResponse(connectionIdentifier, username, isRegistered);
+        userClientController.handleCreateUserResponse(socketId, username, isRegistered);
     }
 
     @Override

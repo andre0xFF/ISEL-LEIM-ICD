@@ -31,7 +31,7 @@ public class GameClientController implements Controller {
         connectionManager.write(new JoinGameCommand());
     }
 
-    public void handleJoinGameResponse() {
+    protected void handleJoinGameResponse() {
         // TODO: Implement method
     }
 
@@ -39,7 +39,7 @@ public class GameClientController implements Controller {
         connectionManager.write(new LeaveGameCommand());
     }
 
-    public void handleLeaveGameResponse() {
+    protected void handleLeaveGameResponse() {
         // TODO: Implement method
     }
 
@@ -47,7 +47,7 @@ public class GameClientController implements Controller {
         connectionManager.write(new PlaceGamePieceCommand(row, column));
     }
 
-    public void handlePlaceGamePieceResponse() {
+    protected void handlePlaceGamePieceResponse() {
         // TODO: Implement method
     }
 
@@ -55,7 +55,7 @@ public class GameClientController implements Controller {
         connectionManager.write(new ShowGameBoardCommand());
     }
 
-    public void handleShowGameBoardResponse() {
+    protected void handleShowGameBoardResponse() {
         // TODO: Implement method
     }
 }

@@ -17,6 +17,6 @@ public class AuthenticationSimpleSocketMiddleware implements SimpleSocketMiddlew
             return true;
         }
 
-        return authenticator.isAuthenticated(command.connectionIdentifier());
+        return authenticator.isAuthenticated(command.socketId());
     }
 }

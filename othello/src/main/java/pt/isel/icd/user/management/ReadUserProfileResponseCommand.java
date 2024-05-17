@@ -9,7 +9,7 @@ import pt.isel.icd.user.logic.Profile;
 import java.util.UUID;
 
 public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserClientController> {
-    private UUID connectionIdentifier;
+    private UUID socketId;
     private UserClientController userClientController;
 
     @JsonProperty
@@ -32,13 +32,13 @@ public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserC
     }
 
     @Override
-    public UUID connectionIdentifier() {
-        return connectionIdentifier;
+    public UUID socketId() {
+        return socketId;
     }
 
     @Override
-    public void connectionIdentifier(UUID existingConnectionIdentifier) {
-        connectionIdentifier = existingConnectionIdentifier;
+    public void socketId(UUID existingsocketId) {
+        socketId = existingsocketId;
     }
 
     @Override
@@ -48,6 +48,6 @@ public class ReadUserProfileResponseCommand implements SimpleSocketCommand<UserC
 
     @Override
     public void execute() {
-        userClientController.handleReadUserProfileResponse(connectionIdentifier, profile, hasProfile);
+        userClientController.handleReadUserProfileResponse(socketId, profile, hasProfile);
     }
 }

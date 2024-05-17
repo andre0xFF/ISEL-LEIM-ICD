@@ -2,6 +2,8 @@ package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.ConnectionManager;
+import pt.isel.icd.game.management.JoinGameCommand;
+import pt.isel.icd.game.management.LeaveGameCommand;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
@@ -14,8 +16,6 @@ import java.util.UUID;
 public class UserClientController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
     private final UserClientRepository userClientRepository;
-
-    private boolean isAuthenticated;
 
     public UserClientController(UserClientRepository existingUserClientRepository, ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
@@ -35,17 +35,15 @@ public class UserClientController implements Controller, Authenticator {
     }
 
     @Override
-    public boolean isAuthenticated(UUID connectionIdentifier) {
-        return isAuthenticated;
+    public boolean isAuthenticated(UUID socketId) {
+        return userClientRepository.username() != null;
     }
 
     public void authenticateUser(User user) throws JsonProcessingException {
         connectionManager.write(new AuthenticateUserCommand(user));
     }
 
-    public void handleAuthenticateUserResponse(UUID connectionIdentifier, String username, boolean existingIsAuthenticated) {
-        isAuthenticated = existingIsAuthenticated;
-
+    protected void handleAuthenticateUserResponse(UUID socketId, String username, boolean isAuthenticated) {
         if (isAuthenticated) {
             userClientRepository.username(username);
         }
@@ -57,7 +55,7 @@ public class UserClientController implements Controller, Authenticator {
         connectionManager.write(new DeauthenticateUserCommand());
     }
 
-    public void handleDeauthenticateUserResponse() {
+    protected void handleDeauthenticateUserResponse() {
         // TODO: Implement method
     }
 
@@ -65,7 +63,7 @@ public class UserClientController implements Controller, Authenticator {
         connectionManager.write(new CreateUserCommand(user));
     }
 
-    public void handleCreateUserResponse(UUID connectionIdentifier, String username, boolean isRegistered) {
+    protected void handleCreateUserResponse(UUID socketId, String username, boolean isRegistered) {
         if (isRegistered) {
         }
 
@@ -77,41 +75,25 @@ public class UserClientController implements Controller, Authenticator {
         // connectionManager.write(new DeleteUserCommand(username));
     }
 
-    public void handleDeleteUserResponse(UUID connectionIdentifier, boolean isDeleted) {
+    protected void handleDeleteUserResponse(UUID socketId, boolean isDeleted) {
         // TODO: Implement method
-        System.out.printf("User %s %s%n", connectionIdentifier, isDeleted ? "deleted" : "not deleted");
+        System.out.printf("User %s %s%n", socketId, isDeleted ? "deleted" : "not deleted");
     }
 
     public void readUserProfile() throws JsonProcessingException {
         connectionManager.write(new ReadUserProfileCommand());
     }
 
-    public void handleReadUserProfileResponse(UUID connectionIdentifier, Profile profile, boolean hasProfile) {
+    protected void handleReadUserProfileResponse(UUID socketId, Profile profile, boolean hasProfile) {
         // TODO: Implement method
-        System.out.printf("User %s %s%n", connectionIdentifier, hasProfile ? "has profile" : "does not have profile");
+        System.out.printf("User %s %s%n", socketId, hasProfile ? "has profile" : "does not have profile");
     }
 
     public void readUserStatistics() {
         // TODO: Implement method
     }
 
-    public void handleReadUserStatisticsResponse() {
-        // TODO: Implement method
-    }
-
-    public void joinGame() {
-        // TODO: Implement method
-    }
-
-    public void handleJoinGameResponse() {
-        // TODO: Implement method
-    }
-
-    public void leaveGame() {
-        // TODO: Implement method
-    }
-
-    public void leaveGameResponse() {
+    protected void handleReadUserStatisticsResponse() {
         // TODO: Implement method
     }
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
 public class UserServerController implements Controller, Authenticator {
     private final UserServerRepository userServerRepository;
     private final ConnectionManager connectionManager;
-    private final HashMap<UUID, User> areAuthenticated = new HashMap<>();
+    private final HashMap<UUID, User> users = new HashMap<>();
 
     public UserServerController(UserServerRepository existingUserServerRepository, ConnectionManager existingConnectionManager) {
         userServerRepository = existingUserServerRepository;
@@ -27,6 +27,7 @@ public class UserServerController implements Controller, Authenticator {
         return new ArrayList<>() {
             {
                 add(AuthenticateUserCommand.class);
+                add(DeauthenticateUserCommand.class);
                 add(CreateUserCommand.class);
                 add(DeleteUserCommand.class);
                 add(ReadUserProfileCommand.class);
@@ -34,26 +35,26 @@ public class UserServerController implements Controller, Authenticator {
         };
     }
 
-    public void authenticateUser(UUID connectionIdentifier, User user) throws JsonProcessingException {
+    public void authenticateUser(UUID socketId, User user) throws JsonProcessingException {
         User existingUser = userServerRepository.readUser(user.username());
 
         if (user.password().equals(existingUser.password())) {
-            areAuthenticated.put(connectionIdentifier, user);
+            users.put(socketId, user);
         }
 
         AuthenticateUserResponseCommand authenticateUserResponseCommand = new AuthenticateUserResponseCommand(
                 user.username(),
-                areAuthenticated.containsKey(connectionIdentifier)
+                users.containsKey(socketId)
         );
 
-        connectionManager.write(connectionIdentifier, authenticateUserResponseCommand);
+        connectionManager.write(socketId, authenticateUserResponseCommand);
     }
 
-    public void deauthenticateUser() {
+    public void deauthenticateUser(UUID socketId) {
         // TODO: Implement method
     }
 
-    public void createUser(UUID connectionIdentifier, User user) throws JsonProcessingException {
+    public void createUser(UUID socketId, User user) throws JsonProcessingException {
         if (userServerRepository.readUser(user.username()) == null) {
             userServerRepository.addUser(user);
         }
@@ -63,16 +64,16 @@ public class UserServerController implements Controller, Authenticator {
                 userServerRepository.readUser(user.username()) != null
         );
 
-        connectionManager.write(connectionIdentifier, createUserResponseCommand);
+        connectionManager.write(socketId, createUserResponseCommand);
     }
 
-    public void deleteUser(UUID connectionIdentifier) {
+    public void deleteUser(UUID socketId) {
         // TODO: Implement method
     }
 
-    public void readUserProfile(UUID connectionIdentifier) throws JsonProcessingException {
+    public void readUserProfile(UUID socketId) throws JsonProcessingException {
         Profile profile = null;
-        User user = areAuthenticated.get(connectionIdentifier);
+        User user = users.get(socketId);
         profile = userServerRepository.readProfile(user);
 
         ReadUserProfileResponseCommand readUserProfileResponseCommand = new ReadUserProfileResponseCommand(
@@ -80,23 +81,15 @@ public class UserServerController implements Controller, Authenticator {
                 profile != null
         );
 
-        connectionManager.write(connectionIdentifier, readUserProfileResponseCommand);
+        connectionManager.write(socketId, readUserProfileResponseCommand);
     }
 
-    public void readUserStatistics() {
-        // TODO: Implement method
-    }
-
-    public void joinGame() {
-        // TODO: Implement method
-    }
-
-    public void leaveGame() {
+    public void readUserStatistics(UUID socketId) {
         // TODO: Implement method
     }
 
     @Override
-    public boolean isAuthenticated(UUID connectionIdentifier) {
-        return areAuthenticated.containsKey(connectionIdentifier);
+    public boolean isAuthenticated(UUID socketId) {
+        return users.containsKey(socketId);
     }
 }

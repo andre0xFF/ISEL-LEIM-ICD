@@ -29,19 +29,19 @@ public class GameServerController implements Controller {
         };
     }
 
-    public void joinGame(UUID connectionIdentifier) {
+    public void joinGame(UUID socketId) {
         // TODO: Implement method
     }
 
-    public void leaveGame(UUID connectionIdentifier) {
+    public void leaveGame(UUID socketId) {
         // TODO: Implement method
     }
 
-    public void placeGamePiece(UUID connectionIdentifier, int row, int column) {
+    public void placeGamePiece(UUID socketId, int row, int column) {
         // TODO: Implement method
     }
 
-    public void showGameBoard(UUID connectionIdentifier) {
+    public void showGameBoard(UUID socketId) {
         // TODO: Implement method
     }
 }

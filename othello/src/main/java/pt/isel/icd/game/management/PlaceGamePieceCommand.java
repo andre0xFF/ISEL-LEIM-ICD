@@ -9,7 +9,7 @@ public class PlaceGamePieceCommand implements SimpleSocketCommand<GameServerCont
     private final int column;
 
     private GameServerController gameServerController;
-    private UUID connectionIdentifier;
+    private UUID socketId;
 
     public PlaceGamePieceCommand(int existingRow, int existingColumn) {
         row = existingRow;
@@ -23,16 +23,16 @@ public class PlaceGamePieceCommand implements SimpleSocketCommand<GameServerCont
 
     @Override
     public void execute() {
-        gameServerController.placeGamePiece(connectionIdentifier, row, column);
+        gameServerController.placeGamePiece(socketId, row, column);
     }
 
     @Override
-    public UUID connectionIdentifier() {
-        return connectionIdentifier;
+    public UUID socketId() {
+        return socketId;
     }
 
     @Override
-    public void connectionIdentifier(UUID existingConnectionIdentifier) {
-        connectionIdentifier = existingConnectionIdentifier;
+    public void socketId(UUID existingsocketId) {
+        socketId = existingsocketId;
     }
 }

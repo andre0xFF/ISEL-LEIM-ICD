@@ -37,8 +37,8 @@ import java.util.UUID;
 )
 public interface SimpleSocketCommand<T extends Receiver> extends Command<T> {
 
-    UUID connectionIdentifier();
-    void connectionIdentifier(UUID connectionIdentifier);
+    UUID socketId();
+    void socketId(UUID socketId);
 
     default boolean requiresAuthentication() {
         return true;

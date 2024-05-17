@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class UpdateGameBoardCommand implements SimpleSocketCommand<GameClientController> {
     private GameClientController gameClientController;
-    private UUID connectionIdentifier;
+    private UUID socketId;
 
     @Override
     public void setReceiver(GameClientController existingGameClientController) {
@@ -18,12 +18,12 @@ public class UpdateGameBoardCommand implements SimpleSocketCommand<GameClientCon
     }
 
     @Override
-    public UUID connectionIdentifier() {
-        return connectionIdentifier;
+    public UUID socketId() {
+        return socketId;
     }
 
     @Override
-    public void connectionIdentifier(UUID existingConnectionIdentifier) {
-        connectionIdentifier = existingConnectionIdentifier;
+    public void socketId(UUID existingsocketId) {
+        socketId = existingsocketId;
     }
 }
