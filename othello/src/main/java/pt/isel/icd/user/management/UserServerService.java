@@ -10,21 +10,12 @@ import java.util.UUID;
 public class UserServerService implements Service, Authenticator {
     private final UserServerRepository userServerRepository;
     private final HashMap<UUID, User> areAuthenticated = new HashMap<>();
-    private final UserService userService = new UserService();
 
     public UserServerService(UserServerRepository existingUserServerRepository) {
         userServerRepository = existingUserServerRepository;
     }
 
-    public void authenticate(UUID userIdentifier, User user) {
-        if (!userService.validateUsername(user.username())) {
-            throw new IllegalArgumentException("Invalid username");
-        }
-
-        if (!userService.validatePassword(user.password())) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-
+    public void authenticateUser(UUID userIdentifier, User user) {
         User existingUser = userServerRepository.readUser(user.username());
 
         if (existingUser == null || !user.password().equals(existingUser.password())) {
@@ -35,14 +26,6 @@ public class UserServerService implements Service, Authenticator {
     }
 
     public void createUser(User user) {
-        if (!userService.validateUsername(user.username())) {
-            throw new IllegalArgumentException("Invalid username");
-        }
-
-        if (!userService.validatePassword(user.password())) {
-            throw new IllegalArgumentException("Invalid password");
-        }
-
         if (userServerRepository.readUser(user.username()) != null) {
             throw new IllegalArgumentException("User already exists");
         }
@@ -51,10 +34,6 @@ public class UserServerService implements Service, Authenticator {
     }
 
     public void deleteUser(User user) {
-        if (userService.validateUsername(user.username())) {
-            throw new IllegalArgumentException("Invalid username");
-        }
-
         User existingUser = userServerRepository.readUser(user.username());
 
         if (existingUser == null) {

@@ -3,7 +3,6 @@ package pt.isel.icd.user.management;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.isel.icd.communication.SimpleSocketCommand;
-import pt.isel.icd.user.logic.User;
 
 import java.util.UUID;
 
@@ -43,11 +42,7 @@ public class AuthenticateUserResponseCommand implements SimpleSocketCommand<User
 
     @Override
     public void execute() {
-        userClientController.handleAuthenticateUserResponse(
-                connectionIdentifier,
-                new User(username, ""),
-                isAutenticated
-        );
+        userClientController.handleAuthenticateUserResponse(connectionIdentifier, username, isAutenticated);
     }
 
     @Override

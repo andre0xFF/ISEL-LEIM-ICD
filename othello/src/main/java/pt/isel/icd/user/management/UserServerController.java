@@ -38,7 +38,7 @@ public class UserServerController implements Controller {
         boolean isAuthenticated = false;
 
         try {
-            userServerService.authenticate(connectionIdentifier, user);
+            userServerService.authenticateUser(connectionIdentifier, user);
 
             isAuthenticated = true;
         } catch (IllegalArgumentException ignored) {
@@ -89,7 +89,7 @@ public class UserServerController implements Controller {
         connectionManager.write(connectionIdentifier, readUserProfileResponseCommand);
     }
 
-    public void readUserStats() {
+    public void readUserStatistics() {
         // TODO: Implement method
     }
 

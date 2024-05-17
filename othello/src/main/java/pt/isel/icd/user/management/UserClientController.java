@@ -38,9 +38,9 @@ public class UserClientController implements Controller {
         connectionManager.write(new AuthenticateUserCommand(user));
     }
 
-    public void handleAuthenticateUserResponse(UUID connectionIdentifier, User user, boolean isAuthenticated) {
+    public void handleAuthenticateUserResponse(UUID connectionIdentifier, String username, boolean isAuthenticated) {
         if (isAuthenticated) {
-            userClientService.authenticate(connectionIdentifier, user);
+            userClientService.authenticateUser(connectionIdentifier, username);
         }
 
         // TODO: Implement method
@@ -58,9 +58,9 @@ public class UserClientController implements Controller {
         connectionManager.write(new CreateUserCommand(user));
     }
 
-    public void handleCreateUserResponse(UUID connectionIdentifier, User user, boolean isRegistered) {
+    public void handleCreateUserResponse(UUID connectionIdentifier, String username, boolean isRegistered) {
         if (isRegistered) {
-            userClientService.authenticate(connectionIdentifier, user);
+            userClientService.authenticateUser(connectionIdentifier, username);
         }
 
         // TODO: Implement method
@@ -85,11 +85,11 @@ public class UserClientController implements Controller {
         System.out.printf("User %s %s%n", connectionIdentifier, hasProfile ? "has profile" : "does not have profile");
     }
 
-    public void readUserStats() {
+    public void readUserStatistics() {
         // TODO: Implement method
     }
 
-    public void handleReadUserStatsResponse() {
+    public void handleReadUserStatisticsResponse() {
         // TODO: Implement method
     }
 

@@ -2,6 +2,7 @@ package pt.isel.icd;
 
 import pt.isel.icd.communication.Server;
 import pt.isel.icd.communication.SimpleSocketManager;
+import pt.isel.icd.database.XmlFileStore;
 import pt.isel.icd.game.management.GameServerController;
 import pt.isel.icd.serialization.XMLSerializer;
 import pt.isel.icd.user.management.UserServerRepository;
@@ -16,7 +17,8 @@ public class ServerApplication {
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         XMLSerializer xmlSerializer = new XMLSerializer();
         Server server = new Server(simpleSocketManager, xmlSerializer);
-        UserServerRepository userServerRepository = new UserServerRepository(xmlSerializer);
+        XmlFileStore xmlFileStore = new XmlFileStore(xmlSerializer);
+        UserServerRepository userServerRepository = new UserServerRepository(xmlFileStore);
         UserServerService userServerService = new UserServerService(userServerRepository);
         UserServerController userServerController = new UserServerController(userServerService, simpleSocketManager);
         GameServerController gameServerController = new GameServerController(simpleSocketManager);

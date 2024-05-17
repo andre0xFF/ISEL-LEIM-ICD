@@ -3,7 +3,7 @@ package pt.isel.icd.user.logic;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import pt.isel.icd.patterns.verticals.Entity;
+import pt.isel.icd.database.Entity;
 
 import java.util.ArrayList;
 

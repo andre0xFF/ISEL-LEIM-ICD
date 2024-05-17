@@ -15,7 +15,6 @@ public class UpdateGameBoardCommand implements SimpleSocketCommand<GameClientCon
 
     @Override
     public void execute() {
-        gameClientController.updateBoard();
     }
 
     @Override

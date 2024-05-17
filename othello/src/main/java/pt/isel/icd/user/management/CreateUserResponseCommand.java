@@ -2,7 +2,6 @@ package pt.isel.icd.user.management;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import pt.isel.icd.communication.SimpleSocketCommand;
-import pt.isel.icd.user.logic.User;
 
 import java.util.UUID;
 
@@ -41,11 +40,7 @@ public class CreateUserResponseCommand implements SimpleSocketCommand<UserClient
 
     @Override
     public void execute() {
-        userClientController.handleCreateUserResponse(
-                connectionIdentifier,
-                new User(username, ""),
-                isRegistered
-        );
+        userClientController.handleCreateUserResponse(connectionIdentifier, username, isRegistered);
     }
 
     @Override

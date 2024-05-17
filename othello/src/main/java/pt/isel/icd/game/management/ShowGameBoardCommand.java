@@ -15,7 +15,6 @@ public class ShowGameBoardCommand implements SimpleSocketCommand<GameServerContr
 
     @Override
     public void execute() {
-        gameServerController.showBoard(connectionIdentifier);
     }
 
     @Override

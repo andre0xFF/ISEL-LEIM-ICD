@@ -1,6 +1,6 @@
 package pt.isel.icd.game.logic;
 
-import pt.isel.icd.patterns.verticals.Entity;
+import pt.isel.icd.database.Entity;
 
 public class Game implements Entity {
     public static final int BOARD_SIZE = 8;

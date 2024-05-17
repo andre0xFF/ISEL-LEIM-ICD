@@ -1,7 +1,6 @@
 package pt.isel.icd.user.management;
 
 import pt.isel.icd.patterns.verticals.Service;
-import pt.isel.icd.user.logic.User;
 
 import java.util.UUID;
 
@@ -19,13 +18,13 @@ public class UserClientService implements Service, Authenticator {
         return isAuthenticated;
     }
 
-    public void authenticate(UUID connectionIdentifier, User user) {
+    public void authenticateUser(UUID connectionIdentifier, String username) {
         isAuthenticated = true;
 
-        userClientRepository.addUser(user);
+        userClientRepository.username(username);
     }
 
-    public User user() {
-        return userClientRepository.user();
+    public String user() {
+        return userClientRepository.username();
     }
 }

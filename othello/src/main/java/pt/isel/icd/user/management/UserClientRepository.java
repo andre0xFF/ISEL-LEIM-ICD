@@ -1,15 +1,13 @@
 package pt.isel.icd.user.management;
 
-import pt.isel.icd.user.logic.User;
-
 public class UserClientRepository {
-    private User user;
+    private String username;
 
-    public void addUser(User existingUser) {
-        user = existingUser;
+    public void username(String existingUsername) {
+        username = existingUsername;
     }
 
-    public User user() {
-        return user;
+    public String username() {
+        return username;
     }
 }
