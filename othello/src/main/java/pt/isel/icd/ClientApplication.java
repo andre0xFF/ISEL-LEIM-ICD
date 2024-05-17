@@ -21,6 +21,7 @@ public class ClientApplication {
         StartClientView startClientView = new StartClientView(userFrame, userClientController);
 
         simpleSocketManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userClientController));
+
         client.addController(gameClientController);
         client.addController(userClientController);
         client.connect();

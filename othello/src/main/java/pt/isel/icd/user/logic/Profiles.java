@@ -42,4 +42,9 @@ public class Profiles implements Entity {
         remove(profile);
         add(profile);
     }
+
+    @Override
+    public String name() {
+        return "user/management/profiles";
+    }
 }

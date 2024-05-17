@@ -9,7 +9,6 @@ import pt.isel.icd.user.management.AuthenticationSimpleSocketMiddleware;
 import pt.isel.icd.user.management.UserServerRepository;
 import pt.isel.icd.user.management.UserServerController;
 
-import java.io.File;
 import java.io.IOException;
 
 public class ServerApplication {
@@ -23,10 +22,10 @@ public class ServerApplication {
         GameServerController gameServerController = new GameServerController(simpleSocketManager);
         AuthenticationSimpleSocketMiddleware authenticationSimpleSocketMiddleware = new AuthenticationSimpleSocketMiddleware(userServerController);
 
+        xmlFileStore.setFileStorePath("src/main/resources/");
+
         simpleSocketManager.addMiddleware(authenticationSimpleSocketMiddleware);
 
-        userServerRepository.addFile("users", new File("src/main/resources/user/management/Users.xml"));
-        userServerRepository.addFile("profiles", new File("src/main/resources/user/management/Profiles.xml"));
         userServerRepository.loadUsers();
         userServerRepository.loadProfiles();
 

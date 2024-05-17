@@ -14,12 +14,12 @@ import java.util.UUID;
 public class UserClientController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
     private final UserClientRepository userClientRepository;
-    private final boolean isAuthenticated;
+
+    private boolean isAuthenticated;
 
     public UserClientController(UserClientRepository existingUserClientRepository, ConnectionManager existingConnectionManager) {
         connectionManager = existingConnectionManager;
         userClientRepository = existingUserClientRepository;
-        isAuthenticated = false;
     }
 
     @Override
@@ -43,9 +43,10 @@ public class UserClientController implements Controller, Authenticator {
         connectionManager.write(new AuthenticateUserCommand(user));
     }
 
-    public void handleAuthenticateUserResponse(UUID connectionIdentifier, String username, boolean isAuthenticated) {
+    public void handleAuthenticateUserResponse(UUID connectionIdentifier, String username, boolean existingIsAuthenticated) {
+        isAuthenticated = existingIsAuthenticated;
+
         if (isAuthenticated) {
-            isAuthenticated = true;
             userClientRepository.username(username);
         }
 

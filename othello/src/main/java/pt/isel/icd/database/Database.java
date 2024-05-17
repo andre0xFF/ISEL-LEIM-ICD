@@ -2,7 +2,7 @@ package pt.isel.icd.database;
 
 public interface Database {
 
-    Entity load(Class<?> type);
+    <T extends Entity> T load(Entity entity);
 
     boolean save(Entity entity);
 }

@@ -7,14 +7,11 @@ import pt.isel.icd.user.logic.Profiles;
 import pt.isel.icd.user.logic.User;
 import pt.isel.icd.user.logic.Users;
 
-import java.io.File;
-import java.util.HashMap;
-
 public class UserServerRepository implements Repository {
-    private final HashMap<String, File> files = new HashMap<>();
+    private final Database database;
+
     private Users users = new Users();
     private Profiles profiles = new Profiles();
-    private Database database;
 
     public UserServerRepository(Database existingDatabase) {
         database = existingDatabase;
@@ -31,7 +28,7 @@ public class UserServerRepository implements Repository {
     }
 
     public void loadUsers() {
-        database.load(users.getClass());
+        users = database.load(users);
     }
 
     public void saveUsers() {
@@ -40,15 +37,11 @@ public class UserServerRepository implements Repository {
 
 
     public void loadProfiles() {
-        database.load(profiles.getClass());
+        profiles = database.load(profiles);
     }
 
     public void saveProfiles() {
         database.save(profiles);
-    }
-
-    public void addFile(String users, File file) {
-        files.put(users, file);
     }
 
     public User readUser(String username) {

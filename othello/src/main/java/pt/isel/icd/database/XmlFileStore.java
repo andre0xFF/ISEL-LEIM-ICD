@@ -8,17 +8,19 @@ import java.io.IOException;
 public class XmlFileStore implements Database {
 
     private final Serializer xmlSerializer;
+    private String fileStorePath;
 
     public XmlFileStore(Serializer existingXmlSerializer) {
         xmlSerializer = existingXmlSerializer;
     }
 
+
     @Override
-    public Entity load(Class<?> type) {
-        File file = getFile(type.getSimpleName());
+    public <T extends Entity> T load(Entity entity) {
+        File file = getFile(entity.name());
 
         try {
-            return (Entity) xmlSerializer.deserialize(file, type);
+            return (T) xmlSerializer.deserialize(file, entity.getClass());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -26,7 +28,7 @@ public class XmlFileStore implements Database {
 
     @Override
     public boolean save(Entity entity) {
-        File file = getFile(entity.toString());
+        File file = getFile(entity.name());
 
         try {
             xmlSerializer.serialize(file, entity);
@@ -37,8 +39,12 @@ public class XmlFileStore implements Database {
         return true;
     }
 
-    private static File getFile(String entity) {
-        String path = String.format("src/main/resources/user/management/%s.xml", entity);
+    private File getFile(String entity) {
+        if (fileStorePath == null) {
+            throw new IllegalStateException("File store path not set");
+        }
+
+        String path = String.format("%s/%s.xml", fileStorePath, entity);
         File file = new File(path);
 
         if (!file.exists()) {
@@ -46,5 +52,9 @@ public class XmlFileStore implements Database {
         }
 
         return file;
+    }
+
+    public void setFileStorePath(String existingFileStorePath) {
+        fileStorePath = existingFileStorePath;
     }
 }

@@ -36,4 +36,9 @@ public class Users implements Entity {
 
         userEntities.remove(user);
     }
+
+    @Override
+    public String name() {
+        return "user/management/users";
+    }
 }
