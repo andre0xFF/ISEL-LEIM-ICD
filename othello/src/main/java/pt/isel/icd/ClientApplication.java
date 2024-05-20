@@ -1,5 +1,6 @@
 package pt.isel.icd;
 
+import com.sun.tools.javac.Main;
 import pt.isel.icd.communication.Client;
 import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.game.management.GameClientController;
@@ -21,11 +22,21 @@ public class ClientApplication {
 
         simpleSocketManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userClientController));
 
-        client.addController(gameClientController);
-        client.addController(userClientController);
-        client.connect();
+//        client.addController(gameClientController);
+//        client.addController(userClientController);
+//        client.connect();
 
-        userClientController.authenticateUser(new User("user11", "password1234"));
+//        JFrame frame = new JFrame("Othello");
+//        int BUTTON_SIZE = 60;
+//        int columns = 10;
+//        int rows = 10;
+//        frame.setSize(new Dimension(BUTTON_SIZE * columns, (BUTTON_SIZE * rows) + 40));
+//        frame.setVisible(true);
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+////        StartClientView startClientView = new StartClientView(frame, userClientController);
+//
+//        UserClientView userClientView = new UserClientView(frame, userClientController);
+
 
         gameClientController.joinGame();
 
