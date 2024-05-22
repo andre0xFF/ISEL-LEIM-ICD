@@ -5,14 +5,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import pt.isel.icd.communication.ConnectedCommand;
 import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.DisconnectedCommand;
-import pt.isel.icd.game.logic.Piece;
 import pt.isel.icd.patterns.command.Command;
 import pt.isel.icd.patterns.command.Receiver;
 import pt.isel.icd.patterns.verticals.Controller;
 
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 public class GameClientController implements Controller {
+    private static final Logger logger = Logger.getLogger(GameClientController.class.getName());
+
     private final ConnectionManager connectionManager;
 
     public GameClientController(ConnectionManager existingConnectionManager) {
@@ -37,7 +39,7 @@ public class GameClientController implements Controller {
     }
 
     protected void handleJoinGameResponse(boolean joinedGame) {
-        // TODO: Implement method
+        logger.info("Joined game: " + joinedGame);
     }
 
     public void leaveGame() throws JsonProcessingException {
@@ -45,7 +47,7 @@ public class GameClientController implements Controller {
     }
 
     protected void handleLeaveGameResponse(boolean leftGame) {
-        // TODO: Implement method
+        logger.info("Left game: " + leftGame);
     }
 
     public void placePiece(int row, int column) throws JsonProcessingException {
@@ -53,6 +55,6 @@ public class GameClientController implements Controller {
     }
 
     protected void handlePlacePieceResponse(boolean placedPiece, int row, int column) {
-        // TODO: Implement method
+        logger.info("Placed piece at (" + row + ", " + column + "): " + placedPiece);
     }
 }

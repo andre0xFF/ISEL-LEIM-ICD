@@ -17,8 +17,8 @@ public class ClientApplication {
         Client client = new Client(simpleSocketManager, xmlSerializer);
         UserClientController userClientController = new UserClientController(simpleSocketManager);
         GameClientController gameClientController = new GameClientController(simpleSocketManager);
-        UserFrame userFrame = new UserFrame();
-        StartClientView startClientView = new StartClientView(userFrame, userClientController);
+        // UserFrame userFrame = new UserFrame();
+        // StartClientView startClientView = new StartClientView(userFrame, userClientController);
 
         simpleSocketManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userClientController));
 
@@ -45,6 +45,7 @@ public class ClientApplication {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
         gameClientController.placePiece(1, 1);
     }
 }

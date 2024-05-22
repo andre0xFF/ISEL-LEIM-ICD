@@ -4,15 +4,14 @@ import pt.isel.icd.database.Entity;
 
 public class Game implements Entity {
     public static final int BOARD_SIZE = 8;
-
-    private boolean isOpen;
     private final Player[] players = new Player[2];
 
     private Piece[][] board;
     private int totalPieces;
     private Player currentPlayer;
+    private GameState gameState = GameState.CLOSED;
 
-    private void initializeBoard() {
+    public void initializeBoard() {
         board = new Piece[BOARD_SIZE][BOARD_SIZE];
 
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -164,22 +163,42 @@ public class Game implements Entity {
         return board[row][column];
     }
 
+    public void close() {
+        gameState = GameState.CLOSED;
+    }
+
     public boolean isClosed() {
-        return !isOpen;
+        return gameState.equals(GameState.CLOSED);
     }
 
     public void open() {
-        isOpen = true;
-
-        initializeBoard();
+        gameState = GameState.OPEN;
     }
 
-    public boolean isAcceptingPlayers() {
-        return isOpen && players[0] == null || players[1] == null;
+    public boolean isOpen() {
+        return gameState.equals(GameState.OPEN);
+    }
+
+    public void start() {
+        initializeBoard();
+
+        gameState = GameState.STARTED;
+    }
+
+    public boolean hasStarted() {
+        return gameState.equals(GameState.STARTED);
+    }
+
+    public void finish() {
+        gameState = GameState.FINISHED;
+    }
+
+    public boolean isFinished() {
+        return gameState.equals(GameState.FINISHED);
     }
 
     public boolean join(Player player) {
-        if (!isAcceptingPlayers()) {
+        if (!isOpen()) {
             return false;
         }
 
@@ -193,12 +212,8 @@ public class Game implements Entity {
         return true;
     }
 
-    public boolean isBeingPlayed() {
-        return isOpen && players[0] != null && players[1] != null;
-    }
-
     public boolean leave(Player player) {
-        if (!isBeingPlayed()) {
+        if (!isOpen() || hasStarted()) {
             return false;
         }
 
@@ -217,17 +232,15 @@ public class Game implements Entity {
         return false;
     }
 
-    public void close() {
-        players[0] = null;
-        players[1] = null;
-        isOpen = false;
-    }
-
     public boolean isPlayerTurn(Player player) {
-        return isBeingPlayed() && player.equals(currentPlayer);
+        return hasStarted() && player.equals(currentPlayer);
     }
 
     public Piece[][] board() {
         return board;
+    }
+
+    public int countPlayers() {
+        return (players[0] != null ? 1 : 0) + (players[1] != null ? 1 : 0);
     }
 }

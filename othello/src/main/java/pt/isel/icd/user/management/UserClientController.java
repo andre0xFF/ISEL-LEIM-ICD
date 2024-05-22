@@ -10,8 +10,11 @@ import pt.isel.icd.user.logic.User;
 
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 public class UserClientController implements Controller, Authenticator {
+    private static final Logger logger = Logger.getLogger(UserClientController.class.getName());
+
     private final ConnectionManager connectionManager;
 
     private String username;
@@ -46,7 +49,7 @@ public class UserClientController implements Controller, Authenticator {
             username = existingUsername;
         }
 
-        // TODO: Implement method
+        logger.info(isAuthenticated ? "User authenticated" : "User not authenticated");
     }
 
     public void deauthenticateUser() throws JsonProcessingException {
@@ -54,7 +57,7 @@ public class UserClientController implements Controller, Authenticator {
     }
 
     protected void handleDeauthenticateUserResponse() {
-        // TODO: Implement method
+        logger.info("User deauthenticated");
     }
 
     public void createUser(User user) throws JsonProcessingException {
@@ -62,10 +65,7 @@ public class UserClientController implements Controller, Authenticator {
     }
 
     protected void handleCreateUserResponse(String username, boolean isRegistered) {
-        if (isRegistered) {
-        }
-
-        // TODO: Implement method
+        logger.info(isRegistered ? "User registered" : "User not registered");
     }
 
     public void deleteUser() throws JsonProcessingException {
@@ -74,8 +74,7 @@ public class UserClientController implements Controller, Authenticator {
     }
 
     protected void handleDeleteUserResponse(boolean isDeleted) {
-        // TODO: Implement method
-        System.out.printf("User %s%n", isDeleted ? "deleted" : "not deleted");
+        logger.info(isDeleted ? "User deleted" : "User not deleted");
     }
 
     public void readUserProfile() throws JsonProcessingException {

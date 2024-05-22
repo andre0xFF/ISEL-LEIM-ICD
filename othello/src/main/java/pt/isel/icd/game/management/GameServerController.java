@@ -42,15 +42,19 @@ public class GameServerController implements Controller {
             game.open();
         }
 
-        Piece piece = players.isEmpty() ? Piece.X : Piece.O;
-        Player player = new Player(piece);
-        boolean playerJoined = game.join(player);
+        if (game.isOpen()) {
+            Piece piece = players.isEmpty() ? Piece.X : Piece.O;
+            Player player = new Player(piece);
 
-        if (playerJoined) {
+            game.join(player);
             players.put(socketId, player);
         }
 
-        if (game.isBeingPlayed()) {
+        if (game.countPlayers() == 2) {
+            game.start();
+        }
+
+        if (game.hasStarted()) {
             UUID otherSocketId = players.keySet().stream().findFirst().orElse(null);
 
             connectionManager.write(socketId, new JoinGameResponseCommand(players.containsKey(socketId)));
@@ -61,9 +65,9 @@ public class GameServerController implements Controller {
     public void leaveGame(UUID socketId) throws JsonProcessingException {
         boolean playerLeft = false;
         Player player = players.get(socketId);
-        UUID otherSocketId = null;
+        UUID otherSocketId;
 
-        if (game.isBeingPlayed()) {
+        if (game.isOpen() || game.hasStarted()) {
             playerLeft = game.leave(player);
         }
 
@@ -90,8 +94,8 @@ public class GameServerController implements Controller {
         piecePlaced = game.placePiece(player, row, column);
 
         connectionManager.write(
-                socketId,
-                new PlacePieceResponseCommand(piecePlaced, row, column)
+            socketId,
+            new PlacePieceResponseCommand(piecePlaced, row, column)
         );
     }
 }

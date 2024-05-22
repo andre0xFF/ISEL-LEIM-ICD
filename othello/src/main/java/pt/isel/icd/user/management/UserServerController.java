@@ -51,7 +51,15 @@ public class UserServerController implements Controller, Authenticator {
     }
 
     public void deauthenticateUser(UUID socketId) {
-        // TODO: Implement method
+        users.remove(socketId);
+
+        DeauthenticateUserResponseCommand deauthenticateUserResponseCommand = new DeauthenticateUserResponseCommand();
+
+        try {
+            connectionManager.write(deauthenticateUserResponseCommand);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void createUser(UUID socketId, User user) throws JsonProcessingException {

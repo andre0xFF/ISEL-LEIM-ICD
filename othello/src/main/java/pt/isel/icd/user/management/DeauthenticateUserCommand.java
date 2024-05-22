@@ -26,6 +26,6 @@ public class DeauthenticateUserCommand implements SimpleSocketCommand<UserServer
 
     @Override
     public void execute() {
-
+        userServerController.deauthenticateUser(socketId);
     }
 }
