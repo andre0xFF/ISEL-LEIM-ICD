@@ -1,6 +1,5 @@
 package pt.isel.icd;
 
-import com.sun.tools.javac.Main;
 import pt.isel.icd.communication.Client;
 import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.game.management.GameClientController;
@@ -11,20 +10,23 @@ import pt.isel.icd.user.management.*;
 import java.io.IOException;
 
 public class ClientApplication {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         SimpleSocketManager simpleSocketManager = new SimpleSocketManager();
         XMLSerializer xmlSerializer = new XMLSerializer();
         Client client = new Client(simpleSocketManager, xmlSerializer);
         UserClientController userClientController = new UserClientController(simpleSocketManager);
         GameClientController gameClientController = new GameClientController(simpleSocketManager);
+        AuthenticationSimpleSocketMiddleware authenticationMiddleware = new AuthenticationSimpleSocketMiddleware(userClientController);
         // UserFrame userFrame = new UserFrame();
         // StartClientView startClientView = new StartClientView(userFrame, userClientController);
 
-        simpleSocketManager.addMiddleware(new AuthenticationSimpleSocketMiddleware(userClientController));
+        simpleSocketManager.addMiddleware(authenticationMiddleware);
 
-//        client.addController(gameClientController);
-//        client.addController(userClientController);
-//        client.connect();
+        client.addController(gameClientController);
+        client.addController(userClientController);
+        client.connect();
+
+        Thread.sleep(1000);
 
 //        JFrame frame = new JFrame("Othello");
 //        int BUTTON_SIZE = 60;
@@ -33,19 +35,11 @@ public class ClientApplication {
 //        frame.setSize(new Dimension(BUTTON_SIZE * columns, (BUTTON_SIZE * rows) + 40));
 //        frame.setVisible(true);
 //        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-////        StartClientView startClientView = new StartClientView(frame, userClientController);
+//        StartClientView startClientView = new StartClientView(frame, userClientController);
 //
 //        UserClientView userClientView = new UserClientView(frame, userClientController);
 
-
-        gameClientController.joinGame();
-
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        gameClientController.placePiece(1, 1);
+        userClientController.authenticateUser(new User("user11", "password1234"));
+        userClientController.readUserProfile();
     }
 }

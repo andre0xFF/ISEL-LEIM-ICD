@@ -38,47 +38,51 @@ public class GameServerController implements Controller {
     }
 
     public void joinGame(UUID socketId) throws JsonProcessingException {
+        if (players.containsKey(socketId)) {
+            return;
+        }
+
         if (game.isClosed()) {
             game.open();
         }
 
-        if (game.isOpen()) {
-            Piece piece = players.isEmpty() ? Piece.X : Piece.O;
-            Player player = new Player(piece);
+        Piece playerPiece = players.isEmpty() ? Piece.X : Piece.O;
+        Player player = new Player(playerPiece);
 
-            game.join(player);
-            players.put(socketId, player);
-        }
+        game.join(player);
+        players.put(socketId, player);
 
-        if (game.countPlayers() == 2) {
+        if (players.size() == 2) {
             game.start();
         }
 
-        if (game.hasStarted()) {
-            UUID otherSocketId = players.keySet().stream().findFirst().orElse(null);
-
-            connectionManager.write(socketId, new JoinGameResponseCommand(players.containsKey(socketId)));
-            connectionManager.write(otherSocketId, new JoinGameResponseCommand(players.containsKey(otherSocketId)));
-        }
-    }
-
-    public void leaveGame(UUID socketId) throws JsonProcessingException {
-        boolean playerLeft = false;
-        Player player = players.get(socketId);
-        UUID otherSocketId;
-
-        if (game.isOpen() || game.hasStarted()) {
-            playerLeft = game.leave(player);
-        }
-
-        if (!playerLeft) {
+        if (!game.hasStarted()) {
             return;
         }
 
+        UUID otherSocketId = players.keySet().stream().filter(id -> !id.equals(socketId)).findFirst().orElse(null);
+        Player otherPlayer = players.get(otherSocketId);
+        Piece otherPlayerPiece = otherPlayer.playPiece();
+
+        connectionManager.write(
+                socketId,
+                new JoinGameResponseCommand(players.containsKey(socketId), playerPiece)
+        );
+        connectionManager.write(
+                otherSocketId,
+                new JoinGameResponseCommand(players.containsKey(otherSocketId), otherPlayerPiece)
+        );
+    }
+
+    public void leaveGame(UUID socketId) throws JsonProcessingException {
+        Player player = players.get(socketId);
+        Player otherPlayer = players.get(players.keySet().stream().findFirst().orElse(null));
+        UUID otherSocketId = players.keySet().stream().findFirst().orElse(null);
+
+        game.leave(player);
         players.remove(socketId);
 
-        otherSocketId = players.keySet().stream().findFirst().orElse(null);
-
+        game.leave(otherPlayer);
         players.remove(otherSocketId);
 
         game.close();
@@ -89,13 +93,20 @@ public class GameServerController implements Controller {
 
     public void placeGamePiece(UUID socketId, int row, int column) throws JsonProcessingException {
         Player player = players.get(socketId);
-        boolean piecePlaced = false;
+        boolean piecePlaced = game.placePiece(player, row, column);
 
-        piecePlaced = game.placePiece(player, row, column);
+        connectionManager.write(socketId, new PlacePieceResponseCommand(piecePlaced, row, column));
 
-        connectionManager.write(
-            socketId,
-            new PlacePieceResponseCommand(piecePlaced, row, column)
-        );
+        if (!game.hasWinner()) {
+            return;
+        }
+
+        Player winner = game.winner();
+        UUID winnerSocketId = players.entrySet().stream().filter(entry -> entry.getValue().equals(winner)).map(HashMap.Entry::getKey).findFirst().orElse(null);
+        Player loser = game.loser();
+        UUID loserSocketId = players.entrySet().stream().filter(entry -> entry.getValue().equals(loser)).map(HashMap.Entry::getKey).findFirst().orElse(null);
+
+        // connectionManager.write(winnerSocketId, new GameOverCommand(winner.playPiece(), true));
+        // connectionManager.write(loserSocketId, new GameOverCommand(loser.playPiece(), false));
     }
 }

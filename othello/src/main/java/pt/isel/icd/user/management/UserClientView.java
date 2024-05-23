@@ -717,11 +717,11 @@ public class UserClientView {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        try {
-            userClientController.authenticate(new User(username, password));
-        } catch (JsonProcessingException ex) {
-            notificationLabel.setText("Error authenticating user");
-        }
+        // try {
+        //     userClientController.authenticate(new User(username, password));
+        // } catch (JsonProcessingException ex) {
+        //     notificationLabel.setText("Error authenticating user");
+        // }
     }
     
     private void handleSignUpAction(ActionEvent e) {

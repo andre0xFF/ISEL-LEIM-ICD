@@ -80,9 +80,8 @@ public class UserServerController implements Controller, Authenticator {
     }
 
     public void readUserProfile(UUID socketId) throws JsonProcessingException {
-        Profile profile = null;
         User user = users.get(socketId);
-        profile = userServerRepository.readProfile(user);
+        Profile profile = userServerRepository.readProfile(user);
 
         ReadUserProfileResponseCommand readUserProfileResponseCommand = new ReadUserProfileResponseCommand(
                 profile,
