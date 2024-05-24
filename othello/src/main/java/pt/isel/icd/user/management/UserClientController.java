@@ -97,12 +97,4 @@ public class UserClientController implements Controller, Authenticator {
     protected void handleReadUserProfileResponse(Profile profile, boolean hasProfile) {
         logger.info(hasProfile ? "Profile read" : "Profile not read");
     }
-
-    public void readUserStatistics() throws JsonProcessingException {
-        connectionManager.write(new ReadUserStatisticsCommand());
-    }
-
-    protected void handleReadUserStatisticsResponse(boolean hasStatistics) {
-        logger.info(hasStatistics ? "Statistics read" : "Statistics not read");
-    }
 }

@@ -91,10 +91,6 @@ public class UserServerController implements Controller, Authenticator {
         connectionManager.write(socketId, readUserProfileResponseCommand);
     }
 
-    public void readUserStatistics(UUID socketId) {
-        // TODO: Implement method
-    }
-
     @Override
     public boolean isAuthenticated(UUID socketId) {
         return users.containsKey(socketId);
