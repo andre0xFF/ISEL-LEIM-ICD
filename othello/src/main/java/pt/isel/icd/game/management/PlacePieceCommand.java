@@ -34,7 +34,7 @@ public class PlacePieceCommand implements SimpleSocketCommand<GameServerControll
     @Override
     public void execute() {
         try {
-            gameServerController.placeGamePiece(socketId, row, column);
+            gameServerController.placePiece(socketId, row, column);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

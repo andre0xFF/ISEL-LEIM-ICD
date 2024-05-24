@@ -91,7 +91,7 @@ public class GameServerController implements Controller {
         connectionManager.write(otherSocketId, new LeaveGameResponseCommand(!players.containsKey(otherSocketId)));
     }
 
-    public void placeGamePiece(UUID socketId, int row, int column) throws JsonProcessingException {
+    public void placePiece(UUID socketId, int row, int column) throws JsonProcessingException {
         Player player = players.get(socketId);
         boolean piecePlaced = game.placePiece(player, row, column);
 
@@ -106,7 +106,7 @@ public class GameServerController implements Controller {
         Player loser = game.loser();
         UUID loserSocketId = players.entrySet().stream().filter(entry -> entry.getValue().equals(loser)).map(HashMap.Entry::getKey).findFirst().orElse(null);
 
-        // connectionManager.write(winnerSocketId, new GameOverCommand(winner.playPiece(), true));
-        // connectionManager.write(loserSocketId, new GameOverCommand(loser.playPiece(), false));
+        connectionManager.write(winnerSocketId, new GameOverCommand(winner.playPiece(), true));
+        connectionManager.write(loserSocketId, new GameOverCommand(loser.playPiece(), false));
     }
 }
