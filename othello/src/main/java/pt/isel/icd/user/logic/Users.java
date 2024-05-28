@@ -39,6 +39,6 @@ public class Users implements Entity {
 
     @Override
     public String name() {
-        return "user/management/users";
+        return "user/management/Users";
     }
 }

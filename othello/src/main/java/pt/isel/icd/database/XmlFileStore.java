@@ -14,7 +14,6 @@ public class XmlFileStore implements Database {
         xmlSerializer = existingXmlSerializer;
     }
 
-
     @Override
     public <T extends Entity> T load(Entity entity) {
         File file = getFile(entity.name());

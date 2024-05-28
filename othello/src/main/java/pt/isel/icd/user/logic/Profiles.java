@@ -45,6 +45,6 @@ public class Profiles implements Entity {
 
     @Override
     public String name() {
-        return "user/management/profiles";
+        return "user/management/Profiles";
     }
 }

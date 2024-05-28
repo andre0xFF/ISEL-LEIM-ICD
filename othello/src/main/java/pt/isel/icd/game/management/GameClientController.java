@@ -97,4 +97,8 @@ public class GameClientController implements Controller {
 
         game.placePiece(otherPlayer, row, column);
     }
+
+    public void gameOver(boolean hasWinner, Player winner) {
+        logger.info("Game over: " + hasWinner + ", winner: " + winner);
+    }
 }
