@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<agenda>
+
+  <!-- Eventos Interessantes -->
+  <eventos>
+    <evento categoria="Conferência">
+      <titulo>Conferência de Tecnologia 2026</titulo>
+      <inicio>2026-04-10T09:00:00</inicio>
+      <fim>2026-04-10T18:00:00</fim>
+      <local>Centro de Congressos de Lisboa</local>
+    </evento>
+    <evento categoria="Workshop">
+      <titulo>Workshop de XML e JSON</titulo>
+      <inicio>2026-05-15T14:00:00</inicio>
+      <fim>2026-05-15T17:00:00</fim>
+    </evento>
+    <evento>
+      <titulo>Reunião de Projeto</titulo>
+      <inicio>2026-03-20T10:00:00</inicio>
+      <fim>2026-03-20T11:30:00</fim>
+      <local>Sala B, Edifício Principal</local>
+    </evento>
+  </eventos>
+
+  <!-- Tarefas Relevantes -->
+  <tarefas>
+    <tarefa concluida="false">
+      <descricao>Preparar relatório semestral</descricao>
+      <prazo>2026-03-31</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="true">
+      <descricao>Entregar trabalho de Bases de Dados</descricao>
+      <prazo>2026-03-01</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Estudar para exame de Redes</descricao>
+      <prazo>2026-04-05</prazo>
+      <prioridade>Média</prioridade>
+    </tarefa>
+  </tarefas>
+
+  <!-- Inscrições Ativas -->
+  <inscricoes>
+    <inscricao turma="LEIM51D">
+      <abrUC>IECD</abrUC>
+      <abrUC>SMI</abrUC>
+      <abrUC>DAM</abrUC>
+    </inscricao>
+    <inscricao turma="LEIM52D">
+      <abrUC>SBD</abrUC>
+    </inscricao>
+  </inscricoes>
+
+</agenda>
