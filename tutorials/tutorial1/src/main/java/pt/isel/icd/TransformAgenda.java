@@ -1,3 +1,5 @@
+package pt.isel.icd;
+
 import java.io.File;
 import java.time.Duration;
 import java.time.LocalDate;

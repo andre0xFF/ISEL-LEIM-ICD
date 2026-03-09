@@ -1,6 +1,6 @@
 # Tutorial 1 — Agenda: XML → HTML com Java, DOM e XSLT
 
-Transformação de um ficheiro XML (`agenda.xml`) numa página HTML estilizada, usando Java/DOM para aplicar lógica de negócio e XSLT para a apresentação.
+Transformação de um ficheiro XML (`agenda.xml`) numa página HTML estilizada, usando Java/DOM para aplicar lógica de dominio e XSLT para a apresentação.
 
 ## Estrutura do Projeto
 
@@ -82,12 +82,12 @@ Folha de estilos XSLT 1.0 que define a transformação XML → HTML. Principais 
 - **CSS embutido** — o HTML gerado é autónomo, sem dependências externas
 - **Tratamento de dados em falta** — campos opcionais (como `local` ou `@categoria`) apresentam placeholders em itálico
 
-### `src/TransformAgenda.java` — Lógica de Negócio + Transformação
+### `src/TransformAgenda.java` — Lógica de dominio + Transformação
 
 Programa Java que combina processamento DOM com transformação XSLT em três fases:
 
 1. **Parse** — carrega o XML num `Document` DOM (`DocumentBuilder.parse()`)
-2. **Enrich** — aplica lógica de negócio manipulando a árvore DOM
+2. **Enrich** — aplica lógica de dominio manipulando a árvore DOM
 3. **Transform** — passa o DOM enriquecido (`DOMSource`) ao XSLT para gerar HTML
 
 ```java
@@ -103,7 +103,7 @@ enrichInscricoes(doc);
 transformer.transform(new DOMSource(doc), new StreamResult(new File(outFile)));
 ```
 
-#### Lógica de negócio aplicada
+#### Lógica de dominio aplicada
 
 | Secção         | Campo adicionado  | Tipo     | Descrição                                                    |
 | -------------- | ----------------- | -------- | ------------------------------------------------------------ |
@@ -117,23 +117,23 @@ transformer.transform(new DOMSource(doc), new StreamResult(new File(outFile)));
 ## Arquitetura
 
 ```
-┌───────────┐      ┌────────────────┐      ┌───────────┐      ┌────────────┐
+┌───────────┐      ┌────────────────┐      ┌───────────┐      ┌─────────────┐
 │ data/*.xml│─────▶│  Java (DOM)    │─────▶│ xsl/*.xsl │─────▶│output/*.html│
-│ (dados)   │      │ lógica negócio │      │ (apres.)  │      │ (resultado)│
-└───────────┘      └────────────────┘      └───────────┘      └────────────┘
+│ (dados)   │      │ lógica dominio │      │ (apres.)  │      │ (resultado) │
+└───────────┘      └────────────────┘      └───────────┘      └─────────────┘
                    enrich/filter/compute
 ```
 
 | Componente | Pasta     | Papel                                                     |
 | ---------- | --------- | --------------------------------------------------------- |
 | **XML**    | `data/`   | Fonte de dados estruturados (dados brutos)                |
-| **Java**   | `src/`    | Lógica de negócio — enriquece o DOM com campos calculados |
+| **Java**   | `src/`    | Lógica de dominio — enriquece o DOM com campos calculados |
 | **XSLT**   | `xsl/`    | Lógica de apresentação — define _como_ gerar o HTML       |
 | **HTML**   | `output/` | Resultado final, visualizável em qualquer browser         |
 
 ### Separação de responsabilidades
 
-- **Java** trata do _quê_ — decisões de negócio, cálculos, validações (e.g. "esta tarefa está atrasada?")
+- **Java** trata do _quê_ — decisões de dominio, cálculos, validações (e.g. "esta tarefa está atrasada?")
 - **XSLT** trata do _como_ — formatação, layout, estilos (e.g. "tarefas atrasadas aparecem com badge vermelho")
 - **XML** é o contrato entre ambos — o Java enriquece-o, o XSLT consome-o
 
