@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="xsl/estruturaCurricular.xsl"?>
+ <estruturaCurricular xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                      xsi:noNamespaceSchemaLocation="xsd/estruturaCurricular.xsd">
+   <unidadeCurricular idUC="UC01" nome="Algoritmos e Estruturas de Dados" sigla="AED"/>
+   <unidadeCurricular idUC="UC02" nome="Bases de Dados" sigla="BD"/>
+   <unidadeCurricular idUC="UC03" nome="Sistemas Operativos" sigla="SO"/>
+   <unidadeCurricular idUC="UC04" nome="Redes de Computadores" sigla="RC"/>
+   <unidadeCurricular idUC="UC05" nome="Interação Pessoa-Máquina" sigla="IPM"/>
+   <unidadeCurricular idUC="UC06" nome="Infraestruturas Computacionais Distribuídas" sigla="IECD"/>
+   <unidadeCurricular idUC="UC07" nome="Animação em Ambientes Virtuais" sigla="AAV"/>
+   <unidadeCurricular idUC="UC08" nome="Codificação de Sinais Multimédia" sigla="CSM"/>
+   <unidadeCurricular idUC="UC09" nome="Inteligência Artificial para Sistemas Autónomos" sigla="IASA"/>
+   <unidadeCurricular idUC="UC10" nome="Processamento de Imagem e Visão" sigla="PIV"/>
+   <unidadeCurricular idUC="UC11" nome="Sistemas de Bases de Dados" sigla="SBD"/>
+   <unidadeCurricular idUC="UC12" nome="Aprendizagem Automática" sigla="AA"/>
+   <unidadeCurricular idUC="UC13" nome="Sistemas Multimédia para a Internet" sigla="SMI"/>
+   <unidadeCurricular idUC="UC14" nome="Desenvolvimento de Aplicações Móveis" sigla="DAM"/>
+   <unidadeCurricular idUC="UC15" nome="Centralização de Divs sem Bruxarias" sigla="CDB" />
+   <unidadeCurricular idUC="UC16" nome="Arqueologia de Código sem Documentação" sigla="ACD" />
+   <unidadeCurricular idUC="UC17" nome="Configuração de Impressoras e outros Desvios" sigla="DID" />
+   <unidadeCurricular idUC="UC18" nome="Caça ao Bug que ainda não aconteceu" sigla="CB" />
+   <unidadeCurricular idUC="UC19" nome="Introdução ao Remendo Estruturado" sigla="IRE" />
+ </estruturaCurricular>

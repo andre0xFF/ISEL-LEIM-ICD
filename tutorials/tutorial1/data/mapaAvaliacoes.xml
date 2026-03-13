@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="xsl/mapaAvaliacoes.xsl"?>
+<mapa xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	  xmlns:xi="http://www.w3.org/2001/XInclude"
+	  departamento="Engenharia Informática (DEI)"
+	  semestre="Inverno" inicio="2025-09-08" fim="2025-12-20"
+	  aprovado="2025-10-15" por="Mariângela Silvana Aleixo de Figueiró">
+	
+	<xi:include href="estruturaCurricular.xml"/>
+	  
+	<unidadeCurricular sigla="IRE">
+		<teste inicio="2025-10-16T14:00Z">
+			<sala>A.2.16-18</sala>
+		</teste>
+		<teste inicio="2025-11-16T14:00Z">
+			<sala>A.2.16-18</sala>
+		</teste>
+		<normal inicio="2026-01-16T14:00Z">
+			<sala>A.2.16-20</sala>
+			<sala>A.2.16-18</sala>
+		</normal>
+		<recurso inicio="2026-02-02T19:00Z">
+			<sala>A.2.16-20</sala>
+		</recurso>
+		<especial inicio="2026-02-12T19:00Z">
+			<sala>A.2.16-20</sala>
+		</especial>
+	</unidadeCurricular>
+	<unidadeCurricular sigla="IECD">
+		<teste inicio="2025-10-17T14:00Z">
+			<sala>A.2.16-20</sala>
+		</teste>
+		<teste inicio="2025-11-17T14:00Z">
+			<sala>A.2.16-20</sala>
+		</teste>
+		<normal inicio="2026-01-17T14:00Z">
+			<sala>A.2.16-20</sala>
+			<sala>A.2.16-18</sala>
+		</normal>
+		<recurso inicio="2026-02-03T19:00Z">
+			<sala>A.2.16-20</sala>
+		</recurso>
+		<especial inicio="2026-02-13T19:00Z">
+			<sala>A.2.16-20</sala>
+		</especial>
+	</unidadeCurricular>
+	<unidadeCurricular sigla="SBD">
+		<normal inicio="2026-01-19T14:00Z">
+			<sala>A.2.16-20</sala>
+			<sala>A.2.16-18</sala>
+		</normal>
+		<recurso inicio="2026-02-05T19:00Z">
+			<sala>A.2.16-20</sala>
+		</recurso>
+		<especial inicio="2026-02-15T19:00Z">
+			<sala>A.2.16-20</sala>
+		</especial>
+	</unidadeCurricular>
+	<unidadeCurricular sigla="CB">
+		<teste inicio="2025-10-20T14:00Z">
+			<sala>A.2.16-18</sala>
+		</teste>
+		<teste inicio="2025-11-20T14:00Z">
+			<sala>A.2.16-20</sala>
+		</teste>
+		<normal inicio="2026-01-21T14:00Z">
+			<sala>A.2.16-20</sala>
+			<sala>A.2.16-18</sala>
+		</normal>
+		<recurso inicio="2026-02-07T19:00Z">
+			<sala>A.2.16-20</sala>
+		</recurso>
+	</unidadeCurricular>
+</mapa>

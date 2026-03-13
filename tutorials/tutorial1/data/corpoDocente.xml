@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="xsl/corpoDocente.xsl"?>
+ <corpoDocente xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="xsd/corpoDocente.xsd">
+    <docente idDoc="D001" nome="Carlos Alberto Ferreira"/>
+    <docente idDoc="D002" nome="Ana Maria Santos"/>
+    <docente idDoc="D003" nome="José Manuel Silva"/>
+    <docente idDoc="D004" nome="Maria Rita Oliveira"/>
+    <docente idDoc="D005" nome="Ricardo Jorge Martins"/>
+    <docente idDoc="D006" nome="António Domingos Boavida"/>
+    <docente idDoc="D007" nome="Carlos Duro da Costa"/>
+    <docente idDoc="D008" nome="Diogo Grão Moído" />
+	<docente idDoc="D009" nome="Jonh Mestre do Stack" />
+	<docente idDoc="D010" nome="Malaquias Burnout de Oliveira" />
+	<docente idDoc="D011" nome="Sebastião Senior Forçado" />
+	<docente idDoc="D012" nome="Aníbal Cobol da Silva" />
+	<docente idDoc="D013" nome="Linus Mestre do Kernel"/>
+	<docente idDoc="D014" nome="Ada Rainha do Código"/>
+	<docente idDoc="D015" nome="Grace Almirante do Debug"/>
+	<docente idDoc="D016" nome="Alan Decifrador de Enigmas"/>
+	<docente idDoc="D017" nome="Guido Guardião do Java"/>
+  </corpoDocente>

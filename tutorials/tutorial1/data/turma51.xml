@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="xsl/horarioTurma.xsl"?>
+<horarioSemanal xmlns:xi="http://www.w3.org/2001/XInclude"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <validade>
+    <de>2026-02-09</de>
+    <ate>2026-06-30</ate>
+  </validade>
+
+  <xi:include href="estruturaCurricular.xml"/>
+  <xi:include href="corpoDocente.xml"/>
+
+  <semana>
+    <segunda>
+      <aula>
+        <UCRef ref="UC01"/>
+        <docentes>
+          <docenteRef ref="D001"/>
+          <docenteRef ref="D003"/>
+        </docentes>
+        <horaInicio>09:00:00</horaInicio>
+        <horaFim>11:00:00</horaFim>
+        <sala>Laboratório 1</sala>
+      </aula>
+      <aula>
+        <UCRef ref="UC06"/>
+        <docentes>
+          <docenteRef ref="D006"/>
+        </docentes>
+        <horaInicio>11:30:00</horaInicio>
+        <horaFim>13:30:00</horaFim>
+        <sala>Sala 201</sala>
+      </aula>
+    </segunda>
+
+    <terca>
+      <aula>
+        <UCRef ref="UC02"/>
+        <docentes>
+          <docenteRef ref="D002"/>
+        </docentes>
+        <horaInicio>09:00:00</horaInicio>
+        <horaFim>11:00:00</horaFim>
+        <sala>Anfiteatro A</sala>
+      </aula>
+      <aula>
+        <UCRef ref="UC11"/>
+        <docentes>
+          <docenteRef ref="D007"/>
+        </docentes>
+        <horaInicio>14:00:00</horaInicio>
+        <horaFim>16:00:00</horaFim>
+        <sala>Laboratório Multimédia</sala>
+      </aula>
+    </terca>
+
+    <quarta>
+      <aula>
+        <UCRef ref="UC19"/>
+        <docentes>
+          <docenteRef ref="D004"/>
+        </docentes>
+        <horaInicio>10:00:00</horaInicio>
+        <horaFim>12:00:00</horaFim>
+        <sala>Biblioteca</sala>
+      </aula>
+      <aula>
+        <UCRef ref="UC18"/>
+        <docentes>
+          <docenteRef ref="D005"/>
+        </docentes>
+        <horaInicio>14:30:00</horaInicio>
+        <horaFim>16:30:00</horaFim>
+        <sala>Sala 102</sala>
+      </aula>
+    </quarta>
+
+    <quinta>
+      <aula>
+        <UCRef ref="UC18"/>
+        <docentes>
+          <docenteRef ref="D004"/>
+        </docentes>
+        <horaInicio>09:30:00</horaInicio>
+        <horaFim>11:30:00</horaFim>
+        <sala>Sala 105</sala>
+      </aula>
+      <aula>
+        <UCRef ref="UC15"/>
+        <docentes>
+          <docenteRef ref="D001"/>
+        </docentes>
+        <horaInicio>14:00:00</horaInicio>
+        <horaFim>16:00:00</horaFim>
+        <sala>Laboratório IA</sala>
+      </aula>
+    </quinta>
+
+    <sexta>
+      <aula>
+        <UCRef ref="UC15"/>
+        <docentes>
+          <docenteRef ref="D005"/>
+        </docentes>
+        <horaInicio>09:00:00</horaInicio>
+        <horaFim>11:00:00</horaFim>
+        <sala>Sala 204</sala>
+      </aula>
+      <aula>
+        <UCRef ref="UC19"/>
+        <docentes>
+          <docenteRef ref="D002"/>
+        </docentes>
+        <horaInicio>14:00:00</horaInicio>
+        <horaFim>16:00:00</horaFim>
+        <sala>Laboratório 2</sala>
+      </aula>
+    </sexta>
+  </semana>
+</horarioSemanal>

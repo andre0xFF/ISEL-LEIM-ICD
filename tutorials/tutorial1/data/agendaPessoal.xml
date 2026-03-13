@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="agendaPessoal.xsl"?>
+<agenda xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:xi="http://www.w3.org/2001/XInclude">
+  <eventos>
+    <evento categoria="Social">
+      <titulo>Jantar de 'Vamos Combinar Algo'</titulo>
+      <inicio>2026-02-15T20:00:00</inicio>
+      <fim>2026-02-15T22:00:00</fim>
+      <local>Restaurante Caro e Barulhento</local>
+    </evento>
+    <evento categoria="Trabalho">
+      <titulo>Reunião que poderia ter sido um e-mail</titulo>
+      <inicio>2026-02-16T09:00:00</inicio>
+      <fim>2026-02-16T11:00:00</fim>
+      <local>Sala de Tortura Corporativa B</local>
+    </evento>
+    <evento categoria="Saúde">
+      <titulo>Tentativa Semestral de Ginásio</titulo>
+      <inicio>2026-02-17T18:00:00</inicio>
+      <fim>2026-02-17T18:15:00</fim>
+      <local>Passadeira nº 4</local>
+    </evento>
+    <evento categoria="Lazer">
+      <titulo>Maratona de Série que nem é assim tão boa</titulo>
+      <inicio>2026-02-20T21:00:00</inicio>
+      <fim>2026-02-21T03:00:00</fim>
+      <local>Sofá</local>
+    </evento>
+    <evento categoria="Família">
+      <titulo>Explicação Tecnológica aos Avós</titulo>
+      <inicio>2026-02-22T15:00:00</inicio>
+      <fim>2026-02-22T19:00:00</fim>
+      <local>Casa da Avó</local>
+    </evento>
+    <evento categoria="Auto-ajuda">
+      <titulo>Crise Existencial de Domingo à Tarde</titulo>
+      <inicio>2026-02-22T19:01:00</inicio>
+      <fim>2026-02-22T23:59:00</fim>
+    </evento>
+    <evento categoria="Profissional">
+      <titulo>Webinar sobre 'Como ser Produtivo a dormir'</titulo>
+      <inicio>2026-02-24T14:00:00</inicio>
+      <fim>2026-02-24T15:00:00</fim>
+      <local>Câmara Desligada (Zoom)</local>
+    </evento>
+    <evento categoria="Financeiro">
+      <titulo>Chorar a olhar para o extrato bancário</titulo>
+      <inicio>2026-02-28T10:00:00</inicio>
+      <fim>2026-02-28T10:30:00</fim>
+      <local>App do Banco</local>
+    </evento>
+    <evento categoria="Social">
+      <titulo>Aniversário do 'Conhecido do LinkedIn'</titulo>
+      <inicio>2026-03-05T19:00:00</inicio>
+      <fim>2026-03-05T21:00:00</fim>
+      <local>Bar com Networking Forçado</local>
+    </evento>
+    <evento categoria="Logística">
+      <titulo>Esperar pela encomenda que diz 'entregue'</titulo>
+      <inicio>2026-03-10T08:00:00</inicio>
+      <fim>2026-03-10T18:00:00</fim>
+      <local>Atrás da porta de entrada</local>
+    </evento>
+  </eventos>
+
+  <tarefas>
+    <tarefa concluida="false">
+      <descricao>Cancelar subscrição que não uso mas tenho pena</descricao>
+      <prazo>2026-02-10</prazo>
+      <prioridade>Baixa</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Beber água (aquela coisa transparente, lembra-te)</descricao>
+      <prazo>2026-02-06</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="true">
+      <descricao>Fingir que percebi a piada do chefe</descricao>
+      <prazo>2026-02-05</prazo>
+      <prioridade>Media</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Arrumar a 'Cadeira da Roupa' (o ecossistema local)</descricao>
+      <prazo>2026-02-12</prazo>
+      <prioridade>Baixa</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Responder aos 432 e-mails não lidos</descricao>
+      <prazo>2026-02-07</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="true">
+      <descricao>Procrastinar o projeto importante com sucesso</descricao>
+      <prazo>2026-02-04</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Aprender a cozinhar algo que não envolva micro-ondas</descricao>
+      <prazo>2026-03-01</prazo>
+      <prioridade>Media</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Ler as 'Condições de Utilização' (Spoilers: ninguém lê)</descricao>
+      <prazo>2026-12-31</prazo>
+      <prioridade>Baixa</prioridade>
+    </tarefa>
+    <tarefa concluida="false">
+      <descricao>Ligar à mãe antes que ela chame a polícia</descricao>
+      <prazo>2026-02-08</prazo>
+      <prioridade>Alta</prioridade>
+    </tarefa>
+    <tarefa concluida="true">
+      <descricao>Aceitar que o fim de semana acabou</descricao>
+      <prazo>2026-02-01</prazo>
+      <prioridade>Media</prioridade>
+    </tarefa>
+  </tarefas>
+  <inscricoes>
+  	<xi:include href="xml/estruturaCurricular.xml"/>
+  	<inscricao turma="turma41">
+  		<abrUC>IECD</abrUC>
+  		<abrUC>AAV</abrUC>
+  		<abrUC>CSM</abrUC>
+  	</inscricao>
+  	<inscricao turma="turma51">
+  		<abrUC>SBD</abrUC>
+  		<abrUC>CDB</abrUC>
+  		<abrUC>IRE</abrUC>
+  		<abrUC>CB</abrUC>
+  	</inscricao>
+  </inscricoes>
+</agenda>

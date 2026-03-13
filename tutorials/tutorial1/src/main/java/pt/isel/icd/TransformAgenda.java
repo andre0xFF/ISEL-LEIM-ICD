@@ -18,7 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * TransformAgenda — Reads agenda.xml into a DOM tree, applies business logic
+ * TransformAgenda — Reads agendaPessoal.xml into a DOM tree, applies business logic
  * to enrich it with computed fields, then passes the enriched DOM to an XSLT
  * stylesheet to produce an HTML output file.
  *
@@ -36,8 +36,8 @@ import org.w3c.dom.NodeList;
  *   java -cp build TransformAgenda [xml-file] [xsl-file] [output-html]
  *
  * Defaults (no arguments):
- *   xml  = data/agenda.xml
- *   xsl  = xsl/agenda.xsl
+ *   xml  = data/agendaPessoal.xml
+ *   xsl  = xsl/agendaPessoal.xsl
  *   out  = output/agenda.html
  */
 public class TransformAgenda {
@@ -46,8 +46,8 @@ public class TransformAgenda {
         DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
 
     public static void main(String[] args) {
-        String xmlFile = args.length > 0 ? args[0] : "data/agenda.xml";
-        String xslFile = args.length > 1 ? args[1] : "xsl/agenda.xsl";
+        String xmlFile = args.length > 0 ? args[0] : "data/agendaPessoal.xml";
+        String xslFile = args.length > 1 ? args[1] : "xsl/agendaPessoal.xsl";
         String outFile = args.length > 2 ? args[2] : "output/agenda.html";
 
         try {

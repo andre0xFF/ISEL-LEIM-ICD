@@ -1,6 +1,6 @@
 # Tutorial 1 — Agenda: XML → HTML com Java, DOM e XSLT
 
-Transformação de um ficheiro XML (`agenda.xml`) numa página HTML estilizada, usando Java/DOM para aplicar lógica de dominio e XSLT para a apresentação.
+Transformação de um ficheiro XML (`agendaPessoal.xml`) numa página HTML estilizada, usando Java/DOM para aplicar lógica de dominio e XSLT para a apresentação.
 
 ## Estrutura do Projeto
 
@@ -9,11 +9,11 @@ tutorial-1/
 ├── README.md
 ├── .gitignore
 ├── data/                         # Ficheiros XML (dados fonte)
-│   ├── agenda.xml
+│   ├── agendaPessoal.xml
 │   ├── calendario_academico.xml
 │   └── calendario_avaliacoes.xml
 ├── xsl/                          # Folhas de estilos XSLT (regras de transformação)
-│   └── agenda.xsl
+│   └── agendaPessoal.xsl
 ├── src/                          # Código fonte Java
 │   └── TransformAgenda.java
 ├── build/                        # Ficheiros .class compilados (gitignored)
@@ -50,11 +50,11 @@ open output/agenda.html
 java -cp build TransformAgenda [xml-file] [xsl-file] [output-html]
 ```
 
-| Argumento     | Valor por omissão    | Descrição                        |
-| ------------- | -------------------- | -------------------------------- |
-| `xml-file`    | `data/agenda.xml`    | Caminho para o ficheiro XML      |
-| `xsl-file`    | `xsl/agenda.xsl`     | Caminho para a folha de estilos  |
-| `output-html` | `output/agenda.html` | Caminho para o ficheiro de saída |
+| Argumento     | Valor por omissão        | Descrição                        |
+| ------------- | ------------------------ | -------------------------------- |
+| `xml-file`    | `data/agendaPessoal.xml` | Caminho para o ficheiro XML      |
+| `xsl-file`    | `xsl/agendaPessoal.xsl`  | Caminho para a folha de estilos  |
+| `output-html` | `output/agenda.html`     | Caminho para o ficheiro de saída |
 
 Exemplo com argumentos personalizados:
 
@@ -64,7 +64,7 @@ java -cp build TransformAgenda data/calendario_academico.xml xsl/calendario.xsl 
 
 ## Descrição dos Ficheiros
 
-### `data/agenda.xml` — Dados
+### `data/agendaPessoal.xml` — Dados
 
 Ficheiro XML com três secções principais:
 
@@ -72,7 +72,7 @@ Ficheiro XML com três secções principais:
 - **`<tarefas>`** — Lista de tarefas com descrição, prazo, prioridade e estado de conclusão (atributo `concluida`)
 - **`<inscricoes>`** — Inscrições em turmas com as respetivas unidades curriculares
 
-### `xsl/agenda.xsl` — Regras de Transformação
+### `xsl/agendaPessoal.xsl` — Regras de Transformação
 
 Folha de estilos XSLT 1.0 que define a transformação XML → HTML. Principais características:
 
@@ -156,7 +156,7 @@ Uma decisão frequente ao desenhar um documento XML é: quando usar **atributos*
 
 > **Se descreve _o que a coisa é_ → atributo. Se descreve _o que a coisa contém_ → elemento.**
 
-### Exemplos em `data/agenda.xml`
+### Exemplos em `data/agendaPessoal.xml`
 
 **Atributos** — classificadores e flags:
 
@@ -218,7 +218,7 @@ Estes valores são:
 </evento>
 ```
 
-Ambos funcionam tecnicamente, mas o equilíbrio usado em `agenda.xml` é o mais idiomático.
+Ambos funcionam tecnicamente, mas o equilíbrio usado em `agendaPessoal.xml` é o mais idiomático.
 
 ## Secções do HTML Gerado
 
