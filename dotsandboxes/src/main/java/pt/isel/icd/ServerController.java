@@ -9,8 +9,8 @@ import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.Controller;
 import pt.isel.icd.communication.DisconnectedCommand;
 import pt.isel.icd.communication.SimpleSocketCommand;
+import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.game.logic.Game;
-import pt.isel.icd.game.logic.Line;
 import pt.isel.icd.game.logic.Player;
 import pt.isel.icd.game.logic.PlayerMarker;
 import pt.isel.icd.game.management.GameOverCommand;
@@ -204,16 +204,11 @@ public class ServerController implements Controller, Authenticator {
         game.close();
     }
 
-    public void placeLine(
-        UUID socketId,
-        int row,
-        int col,
-        Line.Orientation orientation
-    ) {
+    public void placeLine(UUID socketId, Dot dot1, Dot dot2) {
         Player player = players.get(socketId);
         if (player == null) return;
 
-        boolean placed = game.placeLine(player, row, col, orientation);
+        boolean placed = game.placeLine(player, dot1, dot2);
         boolean extraTurn =
             placed && !game.isFinished() && game.isPlayerTurn(player);
 
@@ -222,9 +217,8 @@ public class ServerController implements Controller, Authenticator {
                 entry.getKey(),
                 new PlaceLineResponseCommand(
                     placed,
-                    row,
-                    col,
-                    orientation,
+                    dot1,
+                    dot2,
                     0,
                     player.marker().name(),
                     extraTurn

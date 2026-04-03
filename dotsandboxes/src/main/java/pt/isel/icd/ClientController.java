@@ -8,8 +8,8 @@ import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.Controller;
 import pt.isel.icd.communication.DisconnectedCommand;
 import pt.isel.icd.communication.SimpleSocketCommand;
+import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.game.logic.Game;
-import pt.isel.icd.game.logic.Line;
 import pt.isel.icd.game.logic.Player;
 import pt.isel.icd.game.logic.PlayerMarker;
 import pt.isel.icd.game.management.GameOverCommand;
@@ -162,25 +162,23 @@ public class ClientController implements Controller, Authenticator {
         game = null;
     }
 
-    public void placeLine(int row, int col, Line.Orientation orientation) {
-        connectionManager.write(new PlaceLineCommand(row, col, orientation));
+    public void placeLine(Dot dot1, Dot dot2) {
+        connectionManager.write(new PlaceLineCommand(dot1, dot2));
     }
 
     public void handlePlaceLineResponse(
         boolean placed,
-        int row,
-        int col,
-        Line.Orientation orientation,
+        Dot dot1,
+        Dot dot2,
         int boxesClosed,
         String marker,
         boolean extraTurn
     ) {
         logger.info(
             String.format(
-                "Line %s at (%d,%d) %s: placed=%s, extraTurn=%s",
-                orientation,
-                row,
-                col,
+                "Line %s -> %s %s: placed=%s, extraTurn=%s",
+                dot1,
+                dot2,
                 marker,
                 placed,
                 extraTurn

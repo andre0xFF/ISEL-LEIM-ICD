@@ -5,7 +5,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import pt.isel.icd.ClientController;
 import pt.isel.icd.communication.SimpleSocketCommand;
-import pt.isel.icd.game.logic.Line;
+import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.serialization.XmlHelper;
 
 public class PlaceLineResponseCommand
@@ -15,9 +15,10 @@ public class PlaceLineResponseCommand
     private ClientController receiver;
     private UUID socketId;
     private boolean placed;
-    private int row;
-    private int col;
-    private String orientation;
+    private int dot1Row;
+    private int dot1Col;
+    private int dot2Row;
+    private int dot2Col;
     private int boxesClosed;
     private String marker; // who placed the line
     private boolean extraTurn;
@@ -26,17 +27,17 @@ public class PlaceLineResponseCommand
 
     public PlaceLineResponseCommand(
         boolean placed,
-        int row,
-        int col,
-        Line.Orientation orientation,
+        Dot dot1,
+        Dot dot2,
         int boxesClosed,
         String marker,
         boolean extraTurn
     ) {
         this.placed = placed;
-        this.row = row;
-        this.col = col;
-        this.orientation = orientation.name();
+        this.dot1Row = dot1.row();
+        this.dot1Col = dot1.col();
+        this.dot2Row = dot2.row();
+        this.dot2Col = dot2.col();
         this.boxesClosed = boxesClosed;
         this.marker = marker;
         this.extraTurn = extraTurn;
@@ -71,9 +72,8 @@ public class PlaceLineResponseCommand
     public void execute() {
         receiver.handlePlaceLineResponse(
             placed,
-            row,
-            col,
-            Line.Orientation.valueOf(orientation),
+            new Dot(dot1Row, dot1Col),
+            new Dot(dot2Row, dot2Col),
             boxesClosed,
             marker,
             extraTurn
@@ -83,9 +83,10 @@ public class PlaceLineResponseCommand
     @Override
     public void toXml(Document doc, Element el) {
         XmlHelper.addChildElement(doc, el, "placed", String.valueOf(placed));
-        XmlHelper.addChildElement(doc, el, "row", String.valueOf(row));
-        XmlHelper.addChildElement(doc, el, "col", String.valueOf(col));
-        XmlHelper.addChildElement(doc, el, "orientation", orientation);
+        XmlHelper.addChildElement(doc, el, "dot1Row", String.valueOf(dot1Row));
+        XmlHelper.addChildElement(doc, el, "dot1Col", String.valueOf(dot1Col));
+        XmlHelper.addChildElement(doc, el, "dot2Row", String.valueOf(dot2Row));
+        XmlHelper.addChildElement(doc, el, "dot2Col", String.valueOf(dot2Col));
         XmlHelper.addChildElement(
             doc,
             el,
@@ -104,9 +105,10 @@ public class PlaceLineResponseCommand
     @Override
     public void fromXml(Element el) {
         placed = Boolean.parseBoolean(XmlHelper.getChildText(el, "placed"));
-        row = Integer.parseInt(XmlHelper.getChildText(el, "row"));
-        col = Integer.parseInt(XmlHelper.getChildText(el, "col"));
-        orientation = XmlHelper.getChildText(el, "orientation");
+        dot1Row = Integer.parseInt(XmlHelper.getChildText(el, "dot1Row"));
+        dot1Col = Integer.parseInt(XmlHelper.getChildText(el, "dot1Col"));
+        dot2Row = Integer.parseInt(XmlHelper.getChildText(el, "dot2Row"));
+        dot2Col = Integer.parseInt(XmlHelper.getChildText(el, "dot2Col"));
         String bc = XmlHelper.getChildText(el, "boxesClosed");
         boxesClosed = bc != null ? Integer.parseInt(bc) : 0;
         marker = XmlHelper.getChildText(el, "marker");

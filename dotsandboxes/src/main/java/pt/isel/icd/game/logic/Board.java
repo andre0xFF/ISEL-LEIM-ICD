@@ -13,6 +13,7 @@ import java.util.Set;
  * For a "3x3 board" we mean 3x3 dots = 2x2 boxes.
  */
 public class Board {
+
     private final int rows; // number of dot rows
     private final int cols; // number of dot columns
     private final Set<Line> lines;
@@ -20,7 +21,9 @@ public class Board {
 
     public Board(int rows, int cols) {
         if (rows < 2 || cols < 2) {
-            throw new IllegalArgumentException("Board must have at least 2x2 dots");
+            throw new IllegalArgumentException(
+                "Board must have at least 2x2 dots"
+            );
         }
         this.rows = rows;
         this.cols = cols;
@@ -28,25 +31,43 @@ public class Board {
         this.boxOwners = new PlayerMarker[rows - 1][cols - 1];
     }
 
-    public int rows() { return rows; }
-    public int cols() { return cols; }
-    public int boxRows() { return rows - 1; }
-    public int boxCols() { return cols - 1; }
+    public int rows() {
+        return rows;
+    }
+
+    public int cols() {
+        return cols;
+    }
+
+    public int boxRows() {
+        return rows - 1;
+    }
+
+    public int boxCols() {
+        return cols - 1;
+    }
 
     /**
      * Checks if a line is valid (within bounds and not already placed).
      */
     public boolean isLineValid(Line line) {
-        if (line == null) return false;
-        if (lines.contains(line)) return false;
-
-        if (line.orientation() == Line.Orientation.HORIZONTAL) {
-            return line.row() >= 0 && line.row() < rows
-                && line.col() >= 0 && line.col() < cols - 1;
-        } else { // VERTICAL
-            return line.row() >= 0 && line.row() < rows - 1
-                && line.col() >= 0 && line.col() < cols;
+        if (line == null) {
+            return false;
         }
+        if (lines.contains(line)) {
+            return false;
+        }
+
+        return isDotInBounds(line.dot1()) && isDotInBounds(line.dot2());
+    }
+
+    private boolean isDotInBounds(Dot dot) {
+        return (
+            dot.row() >= 0 &&
+            dot.row() < rows &&
+            dot.col() >= 0 &&
+            dot.col() < cols
+        );
     }
 
     /**
@@ -65,29 +86,39 @@ public class Board {
         lines.add(line);
         int boxesClosed = 0;
 
-        // Check which boxes this line could complete
-        if (line.orientation() == Line.Orientation.HORIZONTAL) {
-            // A horizontal line at (row, col) is the top side of box (row, col)
-            // and the bottom side of box (row-1, col)
-            if (line.row() < rows - 1 && isBoxComplete(line.row(), line.col())) {
-                boxOwners[line.row()][line.col()] = marker;
+        // dot1 is always the top-left dot (normalized by Line)
+        int row = line.dot1().row();
+        int col = line.dot1().col();
+
+        if (line.isHorizontal()) {
+            // A horizontal line at (row, col)-(row, col+1) is:
+            // - the top side of box (row, col)
+            // - the bottom side of box (row-1, col)
+            if (isBoxComplete(row, col)) {
+                boxOwners[row][col] = marker;
                 boxesClosed++;
             }
-            if (line.row() > 0 && isBoxComplete(line.row() - 1, line.col())) {
-                boxOwners[line.row() - 1][line.col()] = marker;
+            if (isBoxComplete(row - 1, col)) {
+                boxOwners[row - 1][col] = marker;
                 boxesClosed++;
             }
-        } else { // VERTICAL
-            // A vertical line at (row, col) is the left side of box (row, col)
-            // and the right side of box (row, col-1)
-            if (line.col() < cols - 1 && isBoxComplete(line.row(), line.col())) {
-                boxOwners[line.row()][line.col()] = marker;
+        } else if (line.isVertical()) {
+            // A vertical line at (row, col)-(row+1, col) is:
+            // - the left side of box (row, col)
+            // - the right side of box (row, col-1)
+            if (isBoxComplete(row, col)) {
+                boxOwners[row][col] = marker;
                 boxesClosed++;
             }
-            if (line.col() > 0 && isBoxComplete(line.row(), line.col() - 1)) {
-                boxOwners[line.row()][line.col() - 1] = marker;
+            if (isBoxComplete(row, col - 1)) {
+                boxOwners[row][col - 1] = marker;
                 boxesClosed++;
             }
+        } else {
+            // This should never happen due to Line validation
+            throw new IllegalStateException(
+                "Line is neither horizontal nor vertical: " + line
+            );
         }
 
         return boxesClosed;
@@ -96,23 +127,41 @@ public class Board {
     /**
      * Checks if box at (boxRow, boxCol) has all 4 sides drawn.
      * A box at position (r, c) needs:
-     * - Top:    horizontal line at (r, c)
-     * - Bottom: horizontal line at (r+1, c)
-     * - Left:   vertical line at (r, c)
-     * - Right:  vertical line at (r, c+1)
+     * - Top:    horizontal line (r,c)-(r,c+1)
+     * - Bottom: horizontal line (r+1,c)-(r+1,c+1)
+     * - Left:   vertical line (r,c)-(r+1,c)
+     * - Right:  vertical line (r,c+1)-(r+1,c+1)
      */
     private boolean isBoxComplete(int boxRow, int boxCol) {
-        if (boxRow < 0 || boxRow >= rows - 1 || boxCol < 0 || boxCol >= cols - 1) {
+        if (
+            boxRow < 0 || boxRow >= rows - 1 || boxCol < 0 || boxCol >= cols - 1
+        ) {
             return false;
         }
 
-        Line top    = new Line(boxRow, boxCol, Line.Orientation.HORIZONTAL);
-        Line bottom = new Line(boxRow + 1, boxCol, Line.Orientation.HORIZONTAL);
-        Line left   = new Line(boxRow, boxCol, Line.Orientation.VERTICAL);
-        Line right  = new Line(boxRow, boxCol + 1, Line.Orientation.VERTICAL);
+        Line top = new Line(
+            new Dot(boxRow, boxCol),
+            new Dot(boxRow, boxCol + 1)
+        );
+        Line bottom = new Line(
+            new Dot(boxRow + 1, boxCol),
+            new Dot(boxRow + 1, boxCol + 1)
+        );
+        Line left = new Line(
+            new Dot(boxRow, boxCol),
+            new Dot(boxRow + 1, boxCol)
+        );
+        Line right = new Line(
+            new Dot(boxRow, boxCol + 1),
+            new Dot(boxRow + 1, boxCol + 1)
+        );
 
-        return lines.contains(top) && lines.contains(bottom)
-            && lines.contains(left) && lines.contains(right);
+        return (
+            lines.contains(top) &&
+            lines.contains(bottom) &&
+            lines.contains(left) &&
+            lines.contains(right)
+        );
     }
 
     /**

@@ -4,6 +4,7 @@ package pt.isel.icd.game.logic;
  * Manages a Dots and Boxes game session.
  */
 public class Game {
+
     public static final int DEFAULT_ROWS = 4; // 4x4 dots = 3x3 boxes
     public static final int DEFAULT_COLS = 4;
 
@@ -19,12 +20,11 @@ public class Game {
      * Implements the bonus rule: if a box is completed, the same player goes again.
      *
      * @param player the player making the move
-     * @param row    the line row
-     * @param col    the line column
-     * @param orientation the line orientation
+     * @param dot1   one end of the line
+     * @param dot2   the other end of the line
      * @return true if the line was placed successfully
      */
-    public boolean placeLine(Player player, int row, int col, Line.Orientation orientation) {
+    public boolean placeLine(Player player, Dot dot1, Dot dot2) {
         if (!hasStarted()) {
             throw new IllegalStateException("Game has not started");
         }
@@ -32,7 +32,13 @@ public class Game {
             throw new IllegalStateException("It is not the player's turn");
         }
 
-        Line line = new Line(row, col, orientation);
+        Line line;
+        try {
+            line = new Line(dot1, dot2);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
         if (!board.isLineValid(line)) {
             return false;
         }
@@ -53,7 +59,9 @@ public class Game {
     }
 
     private void swapCurrentPlayer() {
-        currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0];
+        currentPlayer = currentPlayer.equals(players[0])
+            ? players[1]
+            : players[0];
     }
 
     private void calculateWinner() {
@@ -63,14 +71,29 @@ public class Game {
         } else if (players[1].score() > players[0].score()) {
             winner = players[1];
             loser = players[0];
+        } else if (players[0].score() == players[1].score()) {
+            winner = null;
+            loser = null;
+        } else {
+            throw new IllegalStateException("Unexpected score state");
         }
-        // If equal, winner stays null (draw)
     }
 
-    public Player winner() { return winner; }
-    public Player loser() { return loser; }
-    public Board board() { return board; }
-    public Player currentPlayer() { return currentPlayer; }
+    public Player winner() {
+        return winner;
+    }
+
+    public Player loser() {
+        return loser;
+    }
+
+    public Board board() {
+        return board;
+    }
+
+    public Player currentPlayer() {
+        return currentPlayer;
+    }
 
     public Player getPlayer(int index) {
         return players[index];
@@ -78,11 +101,21 @@ public class Game {
 
     // === Game lifecycle ===
 
-    public void close() { gameState = GameState.CLOSED; }
-    public boolean isClosed() { return gameState == GameState.CLOSED; }
+    public void close() {
+        gameState = GameState.CLOSED;
+    }
 
-    public void open() { gameState = GameState.OPEN; }
-    public boolean isOpen() { return gameState == GameState.OPEN; }
+    public boolean isClosed() {
+        return gameState == GameState.CLOSED;
+    }
+
+    public void open() {
+        gameState = GameState.OPEN;
+    }
+
+    public boolean isOpen() {
+        return gameState == GameState.OPEN;
+    }
 
     public void start() {
         if (!isOpen()) {
@@ -98,10 +131,17 @@ public class Game {
         gameState = GameState.STARTED;
     }
 
-    public boolean hasStarted() { return gameState == GameState.STARTED; }
+    public boolean hasStarted() {
+        return gameState == GameState.STARTED;
+    }
 
-    public void finish() { gameState = GameState.FINISHED; }
-    public boolean isFinished() { return gameState == GameState.FINISHED; }
+    public void finish() {
+        gameState = GameState.FINISHED;
+    }
+
+    public boolean isFinished() {
+        return gameState == GameState.FINISHED;
+    }
 
     public void join(Player player) {
         if (!isOpen()) {
