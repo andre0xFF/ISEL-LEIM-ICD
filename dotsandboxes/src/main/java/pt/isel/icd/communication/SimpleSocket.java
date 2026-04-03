@@ -3,7 +3,6 @@ package pt.isel.icd.communication;
 import java.io.*;
 import java.net.Socket;
 import java.util.UUID;
-import java.util.logging.Logger;
 import org.xml.sax.SAXException;
 import pt.isel.icd.serialization.CommandSerializer;
 
@@ -13,10 +12,6 @@ import pt.isel.icd.serialization.CommandSerializer;
  * Optionally validates incoming XML against an XSD schema.
  */
 public class SimpleSocket implements Closeable {
-
-    private static final Logger logger = Logger.getLogger(
-        SimpleSocket.class.getName()
-    );
 
     public static final int DEFAULT_PORT = 8000;
     public static final String DEFAULT_HOSTNAME = "localhost";
@@ -95,19 +90,14 @@ public class SimpleSocket implements Closeable {
      * @return the deserialized command, or {@code null} if the stream has ended
      * @throws IOException if an I/O error occurs
      */
-    public SimpleSocketCommand<?> read() throws IOException {
+    public SimpleSocketCommand<?> read() throws IOException, SAXException {
         String line = readLine();
         if (line == null) {
             return null;
         }
 
         if (schemaValidator != null) {
-            try {
-                schemaValidator.validate(line);
-            } catch (SAXException e) {
-                logger.warning("XML validation failed: " + e.getMessage());
-                return null;
-            }
+            schemaValidator.validate(line);
         }
 
         return commandSerializer.deserialize(line);

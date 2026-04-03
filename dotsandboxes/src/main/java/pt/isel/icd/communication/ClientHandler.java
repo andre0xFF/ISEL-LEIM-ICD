@@ -1,8 +1,14 @@
 package pt.isel.icd.communication;
 
 import java.io.IOException;
+import java.util.logging.Logger;
+import org.xml.sax.SAXException;
 
 public class ClientHandler implements Runnable {
+
+    private static final Logger logger = Logger.getLogger(
+        ClientHandler.class.getName()
+    );
 
     private final SimpleSocket simpleSocket;
     private final SimpleSocketManager simpleSocketManager;
@@ -21,14 +27,18 @@ public class ClientHandler implements Runnable {
 
         try {
             while (simpleSocket.isConnected()) {
-                SimpleSocketCommand<?> command = simpleSocket.read();
+                try {
+                    SimpleSocketCommand<?> command = simpleSocket.read();
 
-                if (command == null) {
-                    simpleSocketManager.route(new DisconnectedCommand());
-                    simpleSocket.close();
-                } else {
-                    command.socketId(simpleSocket.identifier());
-                    simpleSocketManager.route(command);
+                    if (command == null) {
+                        simpleSocketManager.route(new DisconnectedCommand());
+                        simpleSocket.close();
+                    } else {
+                        command.socketId(simpleSocket.identifier());
+                        simpleSocketManager.route(command);
+                    }
+                } catch (SAXException e) {
+                    logger.warning("XML validation failed: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
