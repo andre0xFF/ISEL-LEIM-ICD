@@ -1,16 +1,20 @@
 package pt.isel.icd.communication;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Logger;
+import pt.isel.icd.user.management.Authenticator;
 
 public class SimpleSocketRouter {
+
+    private static final Logger logger = Logger.getLogger(
+        SimpleSocketRouter.class.getName()
+    );
 
     private final HashMap<
         Class<? extends SimpleSocketCommand<?>>,
         Object
     > controllers = new HashMap<>();
-    private final ArrayList<SimpleSocketMiddleware> middlewares =
-        new ArrayList<>();
+    private Authenticator authenticator;
     private SimpleSocketCommand<Object> command;
 
     public void addReceiver(
@@ -26,12 +30,8 @@ public class SimpleSocketRouter {
         controllers.remove(commandType);
     }
 
-    public void addMiddleware(SimpleSocketMiddleware middleware) {
-        middlewares.add(middleware);
-    }
-
-    public void removeMiddleware(SimpleSocketMiddleware middleware) {
-        middlewares.remove(middleware);
+    public void setAuthenticator(Authenticator authenticator) {
+        this.authenticator = authenticator;
     }
 
     @SuppressWarnings("unchecked")
@@ -45,9 +45,18 @@ public class SimpleSocketRouter {
             return;
         }
 
-        for (SimpleSocketMiddleware middleware : middlewares) {
-            boolean handled = middleware.handle(command);
-            if (!handled) {
+        if (command.requiresAuthentication() && authenticator != null) {
+            boolean isAuthenticated = authenticator.isAuthenticated(
+                command.socketId()
+            );
+            if (!isAuthenticated) {
+                logger.warning(
+                    String.format(
+                        "Command %s from socket %s is not authenticated",
+                        command.getClass().getSimpleName(),
+                        command.socketId()
+                    )
+                );
                 return;
             }
         }

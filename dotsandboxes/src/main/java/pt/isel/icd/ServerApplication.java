@@ -7,7 +7,6 @@ import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.database.XmlFileStore;
 import pt.isel.icd.serialization.CommandRegistry;
 import pt.isel.icd.serialization.CommandSerializer;
-import pt.isel.icd.user.management.AuthenticationSimpleSocketMiddleware;
 import pt.isel.icd.user.management.UserServerRepository;
 
 public class ServerApplication {
@@ -45,10 +44,8 @@ public class ServerApplication {
             simpleSocketManager
         );
 
-        // Middleware
-        AuthenticationSimpleSocketMiddleware authMiddleware =
-            new AuthenticationSimpleSocketMiddleware(serverController);
-        simpleSocketManager.addMiddleware(authMiddleware);
+        // Authentication
+        simpleSocketManager.setAuthenticator(serverController);
 
         // Register controller
         server.addController(serverController);

@@ -3,6 +3,7 @@ package pt.isel.icd.communication;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import pt.isel.icd.user.management.Authenticator;
 
 public class SimpleSocketManager implements ConnectionManager {
 
@@ -54,13 +55,7 @@ public class SimpleSocketManager implements ConnectionManager {
         }
     }
 
-    @Override
-    public void addMiddleware(SimpleSocketMiddleware middleware) {
-        router.addMiddleware(middleware);
-    }
-
-    @Override
-    public void removeMiddleware(SimpleSocketMiddleware middleware) {
-        router.removeMiddleware(middleware);
+    public void setAuthenticator(Authenticator authenticator) {
+        router.setAuthenticator(authenticator);
     }
 }
