@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
-import pt.isel.icd.communication.Command;
 import pt.isel.icd.communication.ConnectedCommand;
 import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.Controller;
 import pt.isel.icd.communication.DisconnectedCommand;
+import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.game.logic.Game;
 import pt.isel.icd.game.logic.Line;
 import pt.isel.icd.game.logic.Player;
@@ -53,7 +53,7 @@ public class ServerController implements Controller, Authenticator {
     }
 
     @Override
-    public List<Class<? extends Command<?>>> commandsList() {
+    public List<Class<? extends SimpleSocketCommand<?>>> commandsList() {
         return List.of(
             ConnectedCommand.class,
             DisconnectedCommand.class,

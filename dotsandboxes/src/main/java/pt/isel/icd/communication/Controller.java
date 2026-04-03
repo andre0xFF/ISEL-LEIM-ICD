@@ -7,5 +7,5 @@ import java.util.List;
  * Each controller declares the commands it can handle.
  */
 public interface Controller {
-    List<Class<? extends Command<?>>> commandsList();
+    List<Class<? extends SimpleSocketCommand<?>>> commandsList();
 }

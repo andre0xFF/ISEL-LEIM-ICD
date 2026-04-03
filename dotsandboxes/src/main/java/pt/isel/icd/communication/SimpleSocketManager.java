@@ -18,20 +18,22 @@ public class SimpleSocketManager implements ConnectionManager {
     }
 
     protected void addController(Controller controller) {
-        List<Class<? extends Command<?>>> commands = controller.commandsList();
-        for (Class<? extends Command<?>> commandClass : commands) {
+        List<Class<? extends SimpleSocketCommand<?>>> commands =
+            controller.commandsList();
+        for (Class<? extends SimpleSocketCommand<?>> commandClass : commands) {
             router.addReceiver(commandClass, controller);
         }
     }
 
     protected void removeController(Controller controller) {
-        List<Class<? extends Command<?>>> commands = controller.commandsList();
-        for (Class<? extends Command<?>> commandClass : commands) {
+        List<Class<? extends SimpleSocketCommand<?>>> commands =
+            controller.commandsList();
+        for (Class<? extends SimpleSocketCommand<?>> commandClass : commands) {
             router.removeReceiver(commandClass);
         }
     }
 
-    protected void route(Command<?> command) {
+    protected void route(SimpleSocketCommand<?> command) {
         router.route(command);
     }
 

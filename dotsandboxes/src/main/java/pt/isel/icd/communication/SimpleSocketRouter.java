@@ -5,20 +5,24 @@ import java.util.HashMap;
 
 public class SimpleSocketRouter {
 
-    private final HashMap<Class<? extends Command<?>>, Object> controllers =
-        new HashMap<>();
+    private final HashMap<
+        Class<? extends SimpleSocketCommand<?>>,
+        Object
+    > controllers = new HashMap<>();
     private final ArrayList<SimpleSocketMiddleware> middlewares =
         new ArrayList<>();
-    private Command<Object> command;
+    private SimpleSocketCommand<Object> command;
 
     public void addReceiver(
-        Class<? extends Command<?>> commandType,
+        Class<? extends SimpleSocketCommand<?>> commandType,
         Object controller
     ) {
         controllers.put(commandType, controller);
     }
 
-    public void removeReceiver(Class<? extends Command<?>> commandType) {
+    public void removeReceiver(
+        Class<? extends SimpleSocketCommand<?>> commandType
+    ) {
         controllers.remove(commandType);
     }
 
@@ -31,8 +35,8 @@ public class SimpleSocketRouter {
     }
 
     @SuppressWarnings("unchecked")
-    public void route(Command<?> newCommand) {
-        command = (Command<Object>) newCommand;
+    public void route(SimpleSocketCommand<?> newCommand) {
+        command = (SimpleSocketCommand<Object>) newCommand;
 
         Class<?> commandType = command.getClass();
         Object receiver = controllers.get(commandType);
@@ -41,12 +45,10 @@ public class SimpleSocketRouter {
             return;
         }
 
-        if (command instanceof SimpleSocketCommand<?> socketCommand) {
-            for (SimpleSocketMiddleware middleware : middlewares) {
-                boolean handled = middleware.handle(socketCommand);
-                if (!handled) {
-                    return;
-                }
+        for (SimpleSocketMiddleware middleware : middlewares) {
+            boolean handled = middleware.handle(command);
+            if (!handled) {
+                return;
             }
         }
 

@@ -9,7 +9,10 @@ import pt.isel.icd.serialization.CommandSerializer;
  */
 public interface SimpleSocketCommand<
     T
-> extends Command<T>, CommandSerializer.XmlSerializable {
+> extends CommandSerializer.XmlSerializable {
+    void setReceiver(T receiver);
+    void execute();
+
     UUID socketId();
 
     void socketId(UUID socketId);
