@@ -6,13 +6,10 @@ import org.w3c.dom.Element;
 import pt.isel.icd.ClientController;
 import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.game.logic.PlayerMarker;
-import pt.isel.icd.serialization.CommandSerializer;
 import pt.isel.icd.serialization.XmlHelper;
 
 public class JoinGameResponseCommand
-    implements
-        SimpleSocketCommand<ClientController>,
-        CommandSerializer.XmlSerializable
+    implements SimpleSocketCommand<ClientController>
 {
 
     private ClientController receiver;

@@ -6,14 +6,9 @@ import org.w3c.dom.Element;
 import pt.isel.icd.ServerController;
 import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.game.logic.Line;
-import pt.isel.icd.serialization.CommandSerializer;
 import pt.isel.icd.serialization.XmlHelper;
 
-public class PlaceLineCommand
-    implements
-        SimpleSocketCommand<ServerController>,
-        CommandSerializer.XmlSerializable
-{
+public class PlaceLineCommand implements SimpleSocketCommand<ServerController> {
 
     private ServerController receiver;
     private UUID socketId;

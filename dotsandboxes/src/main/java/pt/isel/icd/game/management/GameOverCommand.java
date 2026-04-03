@@ -5,14 +5,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import pt.isel.icd.ClientController;
 import pt.isel.icd.communication.SimpleSocketCommand;
-import pt.isel.icd.serialization.CommandSerializer;
 import pt.isel.icd.serialization.XmlHelper;
 
-public class GameOverCommand
-    implements
-        SimpleSocketCommand<ClientController>,
-        CommandSerializer.XmlSerializable
-{
+public class GameOverCommand implements SimpleSocketCommand<ClientController> {
 
     private ClientController receiver;
     private UUID socketId;

@@ -41,9 +41,7 @@ public class CommandSerializer {
         Element commandElement = doc.createElement(command.commandName());
         root.appendChild(commandElement);
 
-        if (command instanceof XmlSerializable serializable) {
-            serializable.toXml(doc, commandElement);
-        }
+        command.toXml(doc, commandElement);
 
         return XmlHelper.serialize(doc);
     }

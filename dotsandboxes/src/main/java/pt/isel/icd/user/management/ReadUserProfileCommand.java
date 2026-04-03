@@ -5,12 +5,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import pt.isel.icd.ServerController;
 import pt.isel.icd.communication.SimpleSocketCommand;
-import pt.isel.icd.serialization.CommandSerializer;
 
 public class ReadUserProfileCommand
-    implements
-        SimpleSocketCommand<ServerController>,
-        CommandSerializer.XmlSerializable
+    implements SimpleSocketCommand<ServerController>
 {
 
     private ServerController receiver;
