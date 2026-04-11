@@ -41,6 +41,8 @@ public class ClientController implements Controller, Authenticator {
     private boolean isAuthenticated;
     private Game game;
     private PlayerMarker myMarker;
+    private GameEventListener listener;
+
 
     public ClientController(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
@@ -78,6 +80,12 @@ public class ClientController implements Controller, Authenticator {
         return myMarker;
     }
 
+
+    public void setListener(GameEventListener listener){
+        this.listener = listener;
+    }
+
+
     // === User actions ===
 
     public void authenticateUser(User user) {
@@ -99,6 +107,10 @@ public class ClientController implements Controller, Authenticator {
                 ? "Authenticated as " + username
                 : "Authentication failed"
         );
+
+        if(listener != null){
+            listener.onAuthenticated(username, authenticated);
+        }
     }
 
     public void createUser(User user) {
@@ -109,6 +121,9 @@ public class ClientController implements Controller, Authenticator {
         logger.info(
             created ? "User " + username + " created" : "User creation failed"
         );
+        if (listener != null) {
+            listener.onUserCreated(username, created);
+        }
     }
 
     public void readUserProfile() {
@@ -151,6 +166,11 @@ public class ClientController implements Controller, Authenticator {
         game.join(playerB);
         game.start();
         logger.info("Joined game as player " + marker);
+
+        if(listener != null){
+            listener.onGameJoined(marker);
+        }
+
     }
 
     public void leaveGame() {
@@ -160,6 +180,10 @@ public class ClientController implements Controller, Authenticator {
     public void handleLeaveGameResponse(boolean left) {
         logger.info("Left game: " + left);
         game = null;
+
+        if(listener != null){
+            listener.onGameLeft();
+        }
     }
 
     public void placeLine(Dot dot1, Dot dot2) {
@@ -184,6 +208,11 @@ public class ClientController implements Controller, Authenticator {
                 extraTurn
             )
         );
+
+        if(listener != null){
+            listener.onLinePlaced(dot1, dot2, marker, extraTurn);
+        }
+
     }
 
     public void handleGameOver(
@@ -200,5 +229,10 @@ public class ClientController implements Controller, Authenticator {
                 scoreB
             )
         );
+
+        if(listener != null){
+            listener.onGameOver(hasWinner, winnerMarker, scoreA, scoreB);
+        }
+
     }
 }

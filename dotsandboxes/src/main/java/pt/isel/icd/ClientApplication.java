@@ -1,17 +1,22 @@
 package pt.isel.icd;
 
-import java.io.IOException;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import pt.isel.icd.communication.Client;
 import pt.isel.icd.communication.SchemaValidator;
 import pt.isel.icd.communication.SimpleSocketManager;
 import pt.isel.icd.serialization.CommandRegistry;
 import pt.isel.icd.serialization.CommandSerializer;
-import pt.isel.icd.user.logic.User;
+import pt.isel.icd.ui.ViewManager;
+import pt.isel.icd.ui.auth.LoginController;
 
-public class ClientApplication {
+public class ClientApplication extends Application {
 
-    public static void main(String[] args)
-        throws IOException, InterruptedException {
+    @Override
+    public void start(Stage stage) throws Exception {
         // Serialization
         CommandSerializer commandSerializer = new CommandSerializer();
         CommandRegistry.registerAll(commandSerializer);
@@ -38,26 +43,16 @@ public class ClientApplication {
         // Register controller
         client.addController(clientController);
 
-        // Connect to server
-        System.out.println("Connecting to Dots and Boxes Server...");
+        // Load FXML and wire up
+        ViewManager viewManager = new ViewManager(stage, clientController);
         client.connect();
+        stage.setTitle("Dots and Boxes");
+        viewManager.show(new LoginController());
+        stage.show();
 
-        // Wait for connection to establish
-        Thread.sleep(1000);
+    }
 
-        // Example: authenticate
-        clientController.authenticateUser(new User("player1", "password1234"));
-
-        // Wait for response
-        Thread.sleep(1000);
-
-        // Example: read profile
-        clientController.readUserProfile();
-
-        // Wait for response
-        Thread.sleep(1000);
-
-        // Example: join game
-        clientController.joinGame();
+    public static void main(String[] args) {
+        launch(args);
     }
 }
