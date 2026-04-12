@@ -234,8 +234,27 @@ public class ServerController implements Controller, Authenticator {
                 winner != null ? winner.marker().name() : "DRAW";
 
             for (var entry : players.entrySet()) {
+                UUID sid = entry.getKey();
+                Player p = entry.getValue();
+                User user = authenticatedUsers.get(sid);
+                if (user != null) {
+                    Profile profile = userServerRepository.readProfile(user.username());
+                    if (profile != null) {
+                        boolean isWinner = winner != null && p.marker() == winner.marker();
+                        boolean isLoser  = winner != null && p.marker() != winner.marker();
+                        userServerRepository.updateProfile(new Profile(
+                            profile.username(),
+                            profile.nationality(),
+                            profile.age(),
+                            profile.photo(),
+                            profile.wins()   + (isWinner ? 1 : 0),
+                            profile.losses() + (isLoser  ? 1 : 0)
+                        ));
+                    }
+                }
+
                 connectionManager.write(
-                    entry.getKey(),
+                    sid,
                     new GameOverCommand(
                         winner != null,
                         winnerMarker,

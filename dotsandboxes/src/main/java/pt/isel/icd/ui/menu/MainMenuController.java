@@ -10,6 +10,7 @@ import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.game.logic.PlayerMarker;
 import pt.isel.icd.ui.ViewController;
 import pt.isel.icd.ui.ViewManager;
+import pt.isel.icd.ui.game.GameController;
 import pt.isel.icd.ui.profile.ProfileController;
 
 
@@ -17,8 +18,6 @@ import pt.isel.icd.ui.profile.ProfileController;
 public class MainMenuController implements ViewController, GameEventListener {
 
     @FXML private Label labelWelcome;
-    @FXML private Button btnJoinGame;
-    @FXML private Button profile;
 
     private ClientController clientController;
     private ViewManager viewManager;
@@ -51,5 +50,10 @@ public class MainMenuController implements ViewController, GameEventListener {
     @FXML
     public void onQuitClicked(){
         Platform.exit();
+    }
+
+    @FXML
+    public void onPlayClicked(){
+        viewManager.show(new GameController());
     }
 }

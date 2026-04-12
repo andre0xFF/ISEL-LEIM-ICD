@@ -4,4 +4,8 @@
     <username>ice</username>
     <password>12345678</password>
   </user>
+  <user>
+    <username>Margo</username>
+    <password>87654321</password>
+  </user>
 </users>

@@ -209,7 +209,7 @@ public class ClientController implements Controller, Authenticator {
             )
         );
 
-        if(listener != null){
+        if(listener != null && placed){
             listener.onLinePlaced(dot1, dot2, marker, extraTurn);
         }
 

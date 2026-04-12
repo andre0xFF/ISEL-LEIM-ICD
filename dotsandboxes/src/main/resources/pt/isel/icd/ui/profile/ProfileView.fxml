@@ -6,12 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-    <VBox xmlns="http://javafx.com/javafx"
-          xmlns:fx="http://javafx.com/fxml"
-          fx:controller="pt.isel.icd.ui.profile.ProfileController"
-          alignment="CENTER" spacing="12"
-          prefWidth="400.0" prefHeight="380.0"
-          style="-fx-padding: 24;">
+<?import javafx.scene.image.ImageView?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pt.isel.icd.ui.profile.ProfileController"
+      alignment="CENTER" spacing="12"
+      prefWidth="400.0" prefHeight="380.0"
+      style="-fx-padding: 24;">
 
 
         <Label text="Your Profile" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
@@ -31,7 +32,7 @@
             <TextField fx:id="fieldAge" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
 
             <Label text="Photo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-            <TextField fx:id="fieldPhoto" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+            <ImageView fx:id="imagePhoto" fitWidth="100" fitHeight="100" preserveRatio="true" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
 
             <Label text="Wins:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
             <Label fx:id="lblWins" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
@@ -44,6 +45,7 @@
             <Button fx:id="btnEdit" text="Edit" onAction="#onEditClicked"/>
             <Button fx:id="btnSave" text="Save" onAction="#onSaveClicked" visible="false" managed="false"/>
             <Button text="Back" onAction="#onBackClicked"/>
+            <Button fx:id="btnChoosePhoto" text="Choose Pohoto" onAction="#onChoosePhotoClicked" visible="false" managed="false"/>
         </HBox>
 
         <Label fx:id="lblStatus" text=""/>

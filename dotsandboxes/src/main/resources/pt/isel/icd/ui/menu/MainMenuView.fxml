@@ -12,6 +12,7 @@
             style="-fx-padding: 30;">
 
             <Label fx:id="labelWelcome" text=""/>
+            <Button text="Play" onAction="#onPlayClicked" maxWidth="Infinity"/>
             <Button text="Profile" onAction="#onProfileClicked" maxWidth="Infinity"/>
             <Button text="Quit" onAction="#onQuitClicked" maxWidth="Infinity"/>
 </VBox>
