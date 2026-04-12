@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="pt.isel.icd.ui.auth.RegisterController"
+      alignment="CENTER" spacing="12"
+      prefWidth="300" prefHeight="260"
+      style="-fx-padding: 20;">
+
+    <TextField fx:id="fieldUsername" promptText="Username (3–20 chars)"/>
+    <PasswordField fx:id="fieldPassword" promptText="Password (8–20 chars)"/>
+    <PasswordField fx:id="fieldConfirmPassword" promptText="Confirm Password"/>
+    <Button fx:id="btnRegister" text="Register" onAction="#onRegisterClicked" maxWidth="Infinity"/>
+    <Button text="Back" onAction="#onBackClicked" maxWidth="Infinity"/>
+    <Label fx:id="labelStatus" text=""/>
+
+</VBox>

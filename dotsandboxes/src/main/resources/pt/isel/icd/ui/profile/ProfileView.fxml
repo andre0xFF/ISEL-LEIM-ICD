@@ -6,9 +6,46 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="CONTROLLER_NAME"
-            prefHeight="400.0" prefWidth="600.0">
+    <VBox xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="pt.isel.icd.ui.profile.ProfileController"
+          alignment="CENTER" spacing="12"
+          prefWidth="400.0" prefHeight="380.0"
+          style="-fx-padding: 24;">
 
-</AnchorPane>
+
+        <Label text="Your Profile" style="-fx-font-size: 16; -fx-font-weight: bold;"/>
+        <GridPane hgap="12" vgap="8">
+            <columnConstraints>
+                <ColumnConstraints minWidth="100"/>
+                <ColumnConstraints minWidth="200"/>
+            </columnConstraints>
+
+            <Label text="username:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="lblUsername" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <Label text="Nationality:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <TextField fx:id="fieldNationality" editable="false" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <Label text="Age:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <TextField fx:id="fieldAge" editable="false" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <Label text="Photo:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+            <TextField fx:id="fieldPhoto" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <Label text="Wins:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <Label fx:id="lblWins" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <Label text="Losses" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+            <Label fx:id="lblLosses" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+        </GridPane>
+
+        <HBox spacing="8" alignment="CENTER">
+            <Button fx:id="btnEdit" text="Edit" onAction="#onEditClicked"/>
+            <Button fx:id="btnSave" text="Save" onAction="#onSaveClicked" visible="false" managed="false"/>
+            <Button text="Back" onAction="#onBackClicked"/>
+        </HBox>
+
+        <Label fx:id="lblStatus" text=""/>
+    </VBox>
+

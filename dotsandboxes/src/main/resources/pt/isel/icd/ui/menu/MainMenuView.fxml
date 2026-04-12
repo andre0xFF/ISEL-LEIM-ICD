@@ -13,4 +13,5 @@
 
             <Label fx:id="labelWelcome" text=""/>
             <Button text="Profile" onAction="#onProfileClicked" maxWidth="Infinity"/>
+            <Button text="Quit" onAction="#onQuitClicked" maxWidth="Infinity"/>
 </VBox>

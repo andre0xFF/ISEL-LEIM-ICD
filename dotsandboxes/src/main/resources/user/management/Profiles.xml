@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<profiles>
+  <profile>
+    <username>ice</username>
+    <nationality>Portugal</nationality>
+    <age>39</age>
+    <photo>test</photo>
+    <wins>0</wins>
+    <losses>0</losses>
+  </profile>
+</profiles>

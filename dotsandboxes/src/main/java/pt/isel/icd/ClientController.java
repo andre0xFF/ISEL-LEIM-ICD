@@ -130,11 +130,11 @@ public class ClientController implements Controller, Authenticator {
         connectionManager.write(new ReadUserProfileCommand());
     }
 
-    public void handleReadUserProfileResponse(
-        Profile profile,
-        boolean hasProfile
-    ) {
+    public void handleReadUserProfileResponse(Profile profile, boolean hasProfile) {
         logger.info(hasProfile ? "Profile: " + profile : "No profile found");
+        if(listener != null){
+            listener.onProfileRead(profile, hasProfile);
+        }
     }
 
     public void updateProfile(String nationality, int age, String photo) {
@@ -233,6 +233,6 @@ public class ClientController implements Controller, Authenticator {
         if(listener != null){
             listener.onGameOver(hasWinner, winnerMarker, scoreA, scoreB);
         }
-
     }
+
 }

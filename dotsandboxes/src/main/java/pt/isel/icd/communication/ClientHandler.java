@@ -18,6 +18,7 @@ public class ClientHandler implements Runnable {
         simpleSocket = socket;
         simpleSocketManager.connectClient(simpleSocket);
         Thread thread = new Thread(this);
+        thread.setDaemon(true);
         thread.start();
     }
 

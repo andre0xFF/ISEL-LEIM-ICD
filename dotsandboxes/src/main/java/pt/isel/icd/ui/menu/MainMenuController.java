@@ -1,5 +1,6 @@
 package pt.isel.icd.ui.menu;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,31 +23,6 @@ public class MainMenuController implements ViewController, GameEventListener {
     private ClientController clientController;
     private ViewManager viewManager;
 
-    @Override
-    public void onAuthenticated(String username, boolean success) {}
-
-    @Override
-    public void onUserCreated(String username, boolean success) {}
-
-    @Override
-    public void onGameJoined(PlayerMarker myMarker) {
-
-    }
-
-    @Override
-    public void onLinePlaced(Dot dot1, Dot dot2, String marker, boolean extraTurn) {
-
-    }
-
-    @Override
-    public void onGameOver(boolean hasWinner, String winnerMarker, int scoreA, int scoreB) {
-
-    }
-
-    @Override
-    public void onGameLeft() {
-
-    }
 
     @Override
     public void setClientController(ClientController controller) {
@@ -72,6 +48,8 @@ public class MainMenuController implements ViewController, GameEventListener {
         viewManager.show(new ProfileController());
     }
 
-
-
+    @FXML
+    public void onQuitClicked(){
+        Platform.exit();
+    }
 }

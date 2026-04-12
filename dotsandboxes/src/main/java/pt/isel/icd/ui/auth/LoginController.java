@@ -29,33 +29,6 @@ public class LoginController implements ViewController, GameEventListener {
 
 
 
-
-
-
-    @Override
-    public void onUserCreated(String username, boolean success) {}
-
-    @Override
-    public void onGameJoined(PlayerMarker myMarker) {
-
-    }
-
-    @Override
-    public void onLinePlaced(Dot dot1, Dot dot2, String marker, boolean extraTurn) {
-
-    }
-
-    @Override
-    public void onGameOver(boolean hasWinner, String winnerMarker, int scoreA, int scoreB) {
-
-    }
-
-    @Override
-    public void onGameLeft() {
-
-    }
-
-
     @Override
     public void setClientController(ClientController controller) {
 
@@ -90,6 +63,11 @@ public class LoginController implements ViewController, GameEventListener {
         clientController.authenticateUser(new User(username, password));
     }
 
+    @FXML
+    private void onQuitClicked(){
+        Platform.exit();
+    }
+
     @Override
     public void onAuthenticated(String username, boolean success){
         Platform.runLater(() ->{
@@ -101,6 +79,4 @@ public class LoginController implements ViewController, GameEventListener {
             }
         });
     }
-
-
 }
