@@ -1,20 +1,16 @@
-# Dots and Boxes. Relatório do Projeto
+# Dots and Boxes. Relatório do projecto
 
 **Instituto Superior de Engenharia de Lisboa**  
 **Licenciatura em Engenharia Informática e Multimédia**  
 **Unidade Curricular:** Infraestruturas Computacionais Distribuídas  
 **Ano Letivo:** 2025/2026
 
-**Grupo:** <!-- TODO: Preencher número do grupo -->
-
 **Autores:**
-
-<!-- TODO: Preencher o número de aluno do Daniel Santos. -->
 
 | Nome          | Número de Aluno |
 | ------------- | --------------- |
 | Andre Fonseca | 39758           |
-| Daniel Santos |                 |
+| Daniel Santos | 32078           |
 
 ---
 
@@ -46,9 +42,9 @@
 
 ## 1. Introdução
 
-O Dots and Boxes é um jogo clássico de lápis e papel para dois jogadores, onde o objetivo é fechar mais caixas do que o adversário. Este projeto tem como objetivo desenvolver uma aplicação cliente-servidor que permita a dois jogadores disputarem partidas em tempo real, utilizando conceitos aprendidos no âmbito da unidade curricular Infraestruturas Computacionais Distribuídas do curso de Licenciatura em Engenharia Informática e Multimédia do Instituto Superior de Engenharia de Lisboa.
+O Dots and Boxes é um jogo clássico de lápis e papel para dois jogadores, onde o objetivo é fechar mais caixas do que o adversário. Este projecto tem como objetivo desenvolver uma aplicação cliente-servidor que permita a dois jogadores disputarem partidas em tempo real, utilizando conceitos aprendidos no âmbito da unidade curricular Infraestruturas Computacionais Distribuídas do curso de Licenciatura em Engenharia Informática e Multimédia do Instituto Superior de Engenharia de Lisboa.
 
-O presente relatório descreve a arquitetura do sistema, o modelo de domínio, o protocolo de comunicação, os padrões de desenho utilizados, a persistência de dados e a interface gráfica implementada. Além disso, são fornecidas instruções para compilar e executar a aplicação, bem como uma conclusão que reflete sobre o desenvolvimento do projeto e as aprendizagens retiradas.
+O presente relatório descreve a arquitetura do sistema, o modelo de domínio, o protocolo de comunicação, os padrões de desenho utilizados, a persistência de dados e a interface gráfica implementada. Além disso, são fornecidas instruções para compilar e executar a aplicação, bem como uma conclusão que reflete sobre o desenvolvimento do projecto e as aprendizagens retiradas.
 
 ---
 
@@ -134,8 +130,6 @@ De notar que o `SimpleSocket` abstrai toda a lógica de leitura/escrita de linha
 | `PlayerMarker` | Enum com dois valores: `A` e `B`.                                                                                                                         |
 | `GameState`    | Enum do ciclo de vida: `CLOSED` → `OPEN` → `STARTED` → `FINISHED`.                                                                                        |
 
-<!-- TODO: Incluir diagrama de classes UML -->
-
 ### 4.2 Gestão de Utilizadores
 
 | Classe                 | Descrição                                                                                                                   |
@@ -153,7 +147,7 @@ De notar que o `SimpleSocket` abstrai toda a lógica de leitura/escrita de linha
 
 Todas as mensagens seguem a estrutura:
 
-```
+```xml
 <Command>
   <NomeDoComando>
     <!-- campos do comando -->
@@ -177,7 +171,7 @@ As mensagens são validadas contra os seguintes esquemas:
 
 #### Gestão de Utilizadores
 
-| Comando                    | Direção            | Campos                                                                    | Descrição                                   |
+| Comando                    | Direcção           | Campos                                                                    | Descrição                                   |
 | -------------------------- | ------------------ | ------------------------------------------------------------------------- | ------------------------------------------- |
 | `AuthenticateUser`         | Cliente → Servidor | `username`, `password`                                                    | Autenticação de um utilizador existente.    |
 | `AuthenticateUserResponse` | Servidor → Cliente | `username`, `authenticated`                                               | Resultado da autenticação.                  |
@@ -212,7 +206,7 @@ As mensagens são validadas contra os seguintes esquemas:
 
 ## 6. Padrões de Desenho
 
-O projeto faz uso dos seguintes padrões de desenho:
+O projecto faz uso dos seguintes padrões de desenho:
 
 | Padrão                 | Onde é Aplicado                             | Descrição                                                                                                                                                          |
 | ---------------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -236,7 +230,14 @@ A persistência é feita em ficheiros XML no servidor, geridos pela classe `XmlF
 
 A classe `UserServerRepository` carrega os dados para memória no arranque e persiste (reescreve o ficheiro completo) em cada operação de escrita. A validação dos ficheiros é assegurada pelos esquemas `Users.xsd` e `Profiles.xsd`.
 
-<!-- TODO: Ponderar mencionar limitações desta abordagem (e.g., concorrência, escalabilidade). e possiveis alternativas -->
+**Limitações desta abordagem:**
+
+- **Concorrência**: Se dois clientes desencadearem escritas em simultâneo (e.g., dois jogos terminam ao mesmo tempo e ambos actualizam perfis), existe um risco de _race condition_: uma escrita pode sobrepor as alterações da outra, uma vez que não existe bloqueio de ficheiro nem acesso sincronizado ao repositório.
+- **Escalabilidade**: A reescrita integral do ficheiro XML em cada mutação tem complexidade linear no número de registos. Embora seja aceitável para um número reduzido de jogadores, esta abordagem não escala para cenários com centenas ou milhares de utilizadores.
+- **Durabilidade**: Se o processo do servidor terminar abruptamente durante uma escrita, o ficheiro XML pode ficar num estado corrompido ou truncado. Não existe um mecanismo de escrita atómica (e.g., escrita para ficheiro temporário seguida de renomeação) nem _write-ahead log_.
+- **Segurança**: As palavras-passe são armazenadas em texto claro no ficheiro `Users.xml`, sem qualquer forma de _hashing_.
+
+**Alternativas consideradas:** a utilização de uma base de dados relacional (e.g., SQLite) resolveria os problemas de concorrência, escalabilidade e durabilidade, mas introduziria uma dependência externa. Para o âmbito deste projecto, a solução baseada em ficheiros XML foi um requisito.
 
 ---
 
@@ -259,7 +260,7 @@ RegisterView ──[sucesso]──► LoginView      ProfileView      │
                                          MainMenuView ◄─────┘
 ```
 
-Cada controller de vista implementa `ViewController` (contrato de injeção de dependências e caminho FXML) e `GameEventListener` (callbacks de eventos do servidor). Apenas um _listener_ está ativo de cada vez. o ecrã visível.
+Cada controller de vista implementa `ViewController` (contrato de injeção de dependências e caminho FXML) e `GameEventListener` (callbacks de eventos do servidor). Apenas um _listener_ está activo de cada vez. O ecrã visível.
 
 ### 8.2 Descrição dos Ecrãs
 
@@ -313,62 +314,64 @@ mvn clean compile
 ### Executar o Servidor
 
 ```sh
-mvn javafx:run -pl dotsandboxes -Djavafx.mainClass=pt.isel.icd.ServerApplication
+mvn compile exec:java -Dexec.mainClass=pt.isel.icd.ServerApplication
 ```
-
-<!-- TODO: Confirmar/ajustar o comando exato de arranque do servidor. -->
 
 ### Executar o Cliente
 
 ```sh
-mvn javafx:run -pl dotsandboxes
+mvn javafx:run
 ```
 
 > **Nota:** O cliente liga-se a `localhost:8000` por omissão. O servidor deve estar a correr antes de iniciar o cliente.
-
-<!-- TODO: Confirmar porto e parâmetros de configuração. -->
 
 ---
 
 ## 10. Conclusão
 
-<!-- TODO: Escrever a conclusão. O enunciado EXIGE que esta secção aborde explicitamente: -->
-<!--       vantagens e desvantagens da arquitetura/solução proposta, destacando: -->
+A elaboração do Dots and Boxes permitiu aplicar diversos conceitos de infraestruturas computacionais distribuídas, incluindo comunicação por sockets TCP, serialização de dados em XML, validação com XSD, e a implementação de um protocolo de comunicação. A arquitectura cliente-servidor permite que dois jogadores joguem a distância e praticamente em tempo real.
 
-<!-- 1. EXPANSIBILIDADE — Facilidade de adicionar novos comandos (basta criar classe + registar no CommandRegistry), -->
-<!--    possibilidade de suportar múltiplos jogos simultâneos, novos tipos de jogo, etc. -->
-<!--    Limitação: protocolo proprietário dificulta interoperabilidade com outros clientes. -->
+Os componentes de software foram organizados de forma modular, com uma clara separação de responsabilidades entre a camada de rede, a lógica de jogo e a interface gráfica. O uso de padrões de desenho como Command, Observer e Mediator e MVC contribuiu para a manutenção e fácil expansibilidade do sistema. Por exemplo, a adição de novas funcionalidades (como chat, histórico de partidas) pode ser feita com a criação de novos comandos e mensagens, e até novos controladores, sem necessidade de alterar o processo de comunicação. No entanto, estamos perante um protocolo de comunicação proprietário, o que limita a interoperabilidade com clientes de terceiros. A adoção de um formato padronizado facilitaria essa integração.
 
-<!-- 2. TOLERÂNCIA ÀS FALHAS — O que acontece se o servidor cair? E se um cliente desligar a meio do jogo? -->
-<!--    O DisconnectedCommand deteta desconexões. Limitação: não há reconexão automática nem persistência -->
-<!--    do estado de jogo (se o servidor reiniciar, os jogos em curso perdem-se). -->
+Os clientes ligam-se e desligam-se do servidor ao enviar os comandos apropriados. No entanto, a tolerância a falhas e a robustez do sistema são limitadas. O servidor não suporta reconexão automática nem persistência do estado de jogo, o que significa que jogos activos perdem-se se o servidor terminar inesperadamente. A persistência de dados em ficheiros XML é também limitada em termos de concorrência e escalabilidade, reescrevendo o ficheiro completo em cada mutação.
 
-<!-- 3. SEGURANÇA — Passwords guardadas em texto claro no Users.xml (sem hashing). -->
-<!--    Comunicação em texto claro (sem TLS/SSL). Validação XSD protege contra mensagens malformadas. -->
-<!--    Melhoria futura: hashing de passwords (bcrypt), TLS para a ligação TCP. -->
+Foi também identificada uma race condition em que, quando um jogador abandona um jogo e tenta entrar novamente de imediato, o estado do servidor pode não ter sido corretamente atualizado, levando a comportamentos inesperados. Numa versão futura, a persistência do estado de jogo e um mecanismo de reconexão com retoma de sessão melhorariam significativamente a robustez do sistema.
 
-<!-- 4. TRANSPARÊNCIA — O cliente não precisa de saber detalhes da implementação do servidor (mediado pelo -->
-<!--    ClientController). A serialização XML e o padrão Command abstraem a complexidade da comunicação. -->
+A validação de mensagens com XSD protege o servidor contra mensagens malformadas ou com estrutura inesperada. Contudo, existem fragilidades relevantes como as palavras-passe serem armazenadas em texto no ficheiro, sem qualquer forma de hashing, e toda a comunicação entre cliente e servidor ser feita sobre TCP sem encriptação.
 
-<!-- 5. CONCORRÊNCIA — Servidor concorrente (uma thread por cliente). Limitação: acesso ao estado partilhado -->
-<!--    (e.g., lista de jogos, repositório de utilizadores) pode necessitar de sincronização adicional. -->
-<!--    No cliente, callbacks do servidor são marshalled para a JavaFX Application Thread via Platform.runLater(). -->
+O servidor é concorrente, com uma thread dedicada por cliente. Isto permite que múltiplos clientes estejam ligados em simultâneo sem bloqueio mútuo.
+Existem limitações conhecidas face aos requisitos iniciais, como o tempo gasto em cada jogo não ser registado e a fotografia do jogador não ser pedida durante o registo.
 
-<!-- Outros tópicos a incluir: -->
-<!-- - Resumo do trabalho desenvolvido. -->
-<!-- - Principais desafios encontrados (e.g., concorrência de threads com JavaFX, serialização XML manual). -->
-<!-- - Limitações conhecidas: -->
-<!--     * Tempo gasto em cada jogo NÃO é registado (requisito do enunciado não implementado). -->
-<!--     * Fotografia não é pedida no registo (apenas editável no perfil, após registo). -->
-<!--     * Persistência naïve (reescrita total do XML em cada mutação). -->
-<!--     * Apenas um jogo ativo de cada vez no servidor. -->
-<!-- - Possíveis melhorias futuras. -->
-<!-- - Aprendizagens retiradas do projeto. -->
+Para melhorias futuras, seria interessante adicionar suporte a múltiplos jogos simultâneos no servidor, implementar hashing de palavras-passe e encriptação, substituir a persistência em ficheiros por uma base de dados, e reconexão automática do cliente com retoma ao jogo activo.
+
+Apesar das limitações, o projeto cumpre os objetivos propostos e oferece uma base sólida para futuras extensões, permitindo a dois jogadores disputarem partidas de Dots and Boxes em tempo real através de uma interface gráfica intuitiva.
 
 ---
 
 ## Anexos
 
-<!-- TODO (OBRIGATÓRIO pelo enunciado): -->
-<!-- - Capturas de ecrã com exemplos relevantes que comprovem o bom funcionamento da solução. -->
-<!-- - Diagrama de classes UML completo (opcional mas valorizado). -->
+### Capturas de Ecrã
+
+#### Ecrã de Login
+
+![Ecrã de Login](Screenshot_2026-04-26_15-16-31.png)
+
+O ecrã de login permite ao utilizador introduzir o seu nome de utilizador e palavra-passe. A partir deste ecrã é possível iniciar sessão, navegar para o registo de uma nova conta ou sair da aplicação.
+
+#### Ecrã de Jogo — Início de Partida
+
+![Jogo — Início de Partida](Screenshot_2026-04-26_15-45-20.png)
+
+Vista do tabuleiro no início de uma partida (4×4 pontos, 3×3 caixas). O quadro de pontuação no topo mostra as pontuações de ambos os jogadores (A: 0, B: 0) e indica de quem é o turno. O jogador está identificado como Player B e aguarda a jogada do adversário.
+
+#### Ecrã de Jogo — Partida em Curso
+
+![Jogo — Partida em Curso](Screenshot_2026-04-26_15-47-52.png)
+
+Vista do tabuleiro a meio de uma partida. As caixas conquistadas pelo Jogador A são coloridas a azul e as do Jogador B a vermelho. O quadro de pontuação reflete o estado atual (A: 1, B: 2). É o turno do jogador local (Player A).
+
+#### Ecrã de Perfil
+
+![Ecrã de Perfil](Screenshot_2026-04-26_15-48-17.png)
+
+O ecrã de perfil apresenta os dados do utilizador autenticado: nome de utilizador, nacionalidade, idade, fotografia, número de vitórias e de derrotas. O botão "Edit" permite entrar em modo de edição para alterar os campos editáveis.
