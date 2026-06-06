@@ -27,9 +27,18 @@ public class ServerApplication {
             schemaValidator
         );
 
-        // Database
+        // Base de dados.
+        // O diretorio de dados e configuravel via a propriedade de sistema
+        // "dab.data.dir" (ex.: -Ddab.data.dir=/data nos contentores Docker),
+        // deixando de depender do diretorio de trabalho atual (resolve a L7).
+        // Por omissao usa "src/main/resources" para preservar a execucao local.
+        String dataDir = System.getProperty(
+            "dab.data.dir",
+            "src/main/resources"
+        );
         XmlFileStore xmlFileStore = new XmlFileStore();
-        xmlFileStore.setFileStorePath("src/main/resources");
+        xmlFileStore.setFileStorePath(dataDir);
+        System.out.println("Diretorio de dados: " + dataDir);
 
         // Repository
         UserServerRepository userServerRepository = new UserServerRepository(

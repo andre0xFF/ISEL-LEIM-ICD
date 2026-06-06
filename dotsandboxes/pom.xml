@@ -9,14 +9,19 @@
   <groupId>pt.isel.icd</groupId>
   <artifactId>dotsandboxes</artifactId>
   <version>2026.04.28</version>
+  <packaging>war</packaging>
 
   <name>dotsandboxes</name>
   <url>http://www.example.com</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.release>17</maven.compiler.release>
+    <!-- TP02: alvo JDK 25 (Standard Edition), conforme requisitos do enunciado. -->
+    <maven.compiler.release>25</maven.compiler.release>
     <javafx.version>21.0.4</javafx.version>
+    <!-- APIs Jakarta EE 11 fornecidas pelo Tomcat 11 (escopo provided). -->
+    <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+    <jakarta.websocket.version>2.2.0</jakarta.websocket.version>
   </properties>
 
   <dependencyManagement>
@@ -52,6 +57,24 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
       <version>${javafx.version}</version>
+    </dependency>
+
+    <!--
+      APIs do contentor (Tomcat 11 / Jakarta EE 11). Escopo "provided":
+      sao usadas para compilar a camada Web mas NAO sao empacotadas no .war,
+      pois o Tomcat ja as fornece. Respeita a regra "sem bibliotecas adicionais".
+    -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>${jakarta.servlet.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.websocket</groupId>
+      <artifactId>jakarta.websocket-api</artifactId>
+      <version>${jakarta.websocket.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 
@@ -115,10 +138,26 @@
           <artifactId>maven-war-plugin</artifactId>
           <version>3.4.0</version>
           <configuration>
+            <!--
+              O JavaFX e uma biblioteca externa com modulos nativos: nunca pode
+              ser empacotado no .war. Excluimo-lo do WEB-INF/lib (continua
+              disponivel para o build da GUI e para "mvn javafx:run").
+            -->
+            <packagingExcludes>WEB-INF/lib/javafx-*.jar</packagingExcludes>
             <webResources>
+              <!--
+                Embebe o projeto Maven completo (fonte + pom) dentro do .war,
+                em WEB-INF/project, para que o artefacto seja importavel num IDE
+                com codigo-fonte editavel. E inerte em runtime (nao servido,
+                fora do classpath).
+              -->
               <resource>
-                <directory>src/main/java</directory>
-                <targetPath>WEB-INF/classes</targetPath>
+                <directory>${project.basedir}</directory>
+                <targetPath>WEB-INF/project</targetPath>
+                <includes>
+                  <include>pom.xml</include>
+                  <include>src/**</include>
+                </includes>
               </resource>
             </webResources>
           </configuration>

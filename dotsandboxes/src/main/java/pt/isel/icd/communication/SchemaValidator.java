@@ -2,8 +2,8 @@ package pt.isel.icd.communication;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import javax.xml.XMLConstants;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.Schema;
@@ -14,12 +14,37 @@ import org.xml.sax.SAXException;
 
 public class SchemaValidator {
 
-    public static final String DEFAULT_XSD_SCHEMAS_PATH =
-        "src/main/resources/schemas/Commands.xsd";
+    /**
+     * Recurso do XSD no classpath. Carregar a partir do classpath (em vez de um
+     * caminho relativo ao diretorio de trabalho) permite que o servidor corra a
+     * partir de qualquer diretorio (resolve a lacuna L7).
+     */
+    public static final String DEFAULT_XSD_CLASSPATH_RESOURCE =
+        "/schemas/Commands.xsd";
     private final Validator validator;
 
     public SchemaValidator() {
-        this(Paths.get(DEFAULT_XSD_SCHEMAS_PATH));
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(
+            XMLConstants.W3C_XML_SCHEMA_NS_URI
+        );
+        URL schemaUrl = SchemaValidator.class.getResource(
+            DEFAULT_XSD_CLASSPATH_RESOURCE
+        );
+        if (schemaUrl == null) {
+            throw new RuntimeException(
+                "XSD nao encontrado no classpath: " +
+                    DEFAULT_XSD_CLASSPATH_RESOURCE
+            );
+        }
+        try {
+            Schema schema = schemaFactory.newSchema(schemaUrl);
+            validator = schema.newValidator();
+        } catch (SAXException e) {
+            throw new RuntimeException(
+                "Falha ao carregar o XSD do classpath: " + schemaUrl,
+                e
+            );
+        }
     }
 
     public SchemaValidator(Path xsdPath) {

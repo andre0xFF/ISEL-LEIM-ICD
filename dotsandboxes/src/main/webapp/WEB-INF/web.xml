@@ -1,10 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app
+    xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                              https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+    version="6.0"
+>
 
   <display-name>dotsandboxes</display-name>
+
+  <!--
+    Localizacao do servidor de jogo TCP que a camada Web contacta.
+    A resolucao efetiva (em F2) sera: propriedade de sistema
+    "dab.server.host"/"dab.server.port" (ex.: CATALINA_OPTS no Docker) com
+    recurso a estes context-param e, por fim, ao valor por omissao localhost:8000.
+  -->
+  <context-param>
+    <param-name>dab.server.host</param-name>
+    <param-value>localhost</param-value>
+  </context-param>
+  <context-param>
+    <param-name>dab.server.port</param-name>
+    <param-value>8000</param-value>
+  </context-param>
 
 </web-app>
