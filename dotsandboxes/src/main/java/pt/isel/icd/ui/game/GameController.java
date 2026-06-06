@@ -1,5 +1,7 @@
 package pt.isel.icd.ui.game;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -18,20 +20,25 @@ import pt.isel.icd.ui.ViewController;
 import pt.isel.icd.ui.ViewManager;
 import pt.isel.icd.ui.menu.MainMenuController;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public class GameController implements ViewController, GameEventListener {
 
     private static final int DOT_SIZE = 12;
     private static final int BOX_SIZE = 60;
 
-    @FXML private Label lblScoreA;
-    @FXML private Label lblScoreB;
-    @FXML private Label lblTurn;
-    @FXML private GridPane boardGrid;
-    @FXML private Label lblStatus;
+    @FXML
+    private Label lblScoreA;
+
+    @FXML
+    private Label lblScoreB;
+
+    @FXML
+    private Label lblTurn;
+
+    @FXML
+    private GridPane boardGrid;
+
+    @FXML
+    private Label lblStatus;
 
     private ClientController clientController;
     private ViewManager viewManager;
@@ -45,9 +52,6 @@ public class GameController implements ViewController, GameEventListener {
     private Button[][] vLines;
     private Pane[][] boxPanes;
     private List<Button> lineButtons = new ArrayList<>();
-
-
-
 
     @Override
     public void setClientController(ClientController controller) {
@@ -68,14 +72,11 @@ public class GameController implements ViewController, GameEventListener {
         return "/pt/isel/icd/ui/game/GameView.fxml";
     }
 
-
-
     // GameEventListener
 
     @Override
     public void onGameJoined(PlayerMarker marker) {
-        Platform.runLater(() ->{
-
+        Platform.runLater(() -> {
             myMarker = marker;
             scoreA = 0;
             scoreB = 0;
@@ -87,30 +88,31 @@ public class GameController implements ViewController, GameEventListener {
             setLineButtonsEnabled(isMyTurn);
             lblTurn.setText(isMyTurn ? "Your turn" : "Opponent's turn");
             lblStatus.setText("You are Player " + marker.name());
-
         });
-
     }
 
     @Override
-    public void onLinePlaced(Dot dot1, Dot dot2, String marker, boolean extraTurn) {
-        Platform.runLater(() ->{
+    public void onLinePlaced(
+        Dot dot1,
+        Dot dot2,
+        String marker,
+        boolean extraTurn
+    ) {
+        Platform.runLater(() -> {
             drawLine(dot1, dot2);
 
-            try{
+            try {
                 Line line = new Line(dot1, dot2);
 
                 PlayerMarker pm = PlayerMarker.valueOf(marker);
                 int boxesClosed = localBoard.placeLine(line, pm);
 
-                if(pm == PlayerMarker.A){
+                if (pm == PlayerMarker.A) {
                     scoreA += boxesClosed;
-                }else{
+                } else {
                     scoreB += boxesClosed;
                 }
-            }catch (Exception ignored){
-
-            }
+            } catch (Exception ignored) {}
             refreshBoxes();
             lblScoreA.setText("A: " + scoreA);
             lblScoreB.setText("B: " + scoreB);
@@ -120,21 +122,33 @@ public class GameController implements ViewController, GameEventListener {
 
             setLineButtonsEnabled(isMyTurn);
             lblTurn.setText(isMyTurn ? "Your turn" : "Opponent's turn");
-
         });
     }
 
     @Override
-    public void onGameOver(boolean hasWinner, String winnerMarker, int scoreA, int scoreB) {
+    public void onGameOver(
+        boolean hasWinner,
+        String winnerMarker,
+        int scoreA,
+        int scoreB,
+        String reason
+    ) {
         Platform.runLater(() -> {
             setLineButtonsEnabled(false);
             lblTurn.setText("");
+            boolean timeout = "TIMEOUT".equals(reason);
+            String suffix =
+                (timeout ? " (timeout)" : "") +
+                "  A: " +
+                scoreA +
+                "  B: " +
+                scoreB;
             if (!hasWinner) {
-                lblStatus.setText("Draw! A: " + scoreA + "  B: " + scoreB);
+                lblStatus.setText("Draw!" + suffix);
             } else if (winnerMarker.equals(myMarker.name())) {
-                lblStatus.setText("You Win! A: " + scoreA + "  B: " + scoreB);
+                lblStatus.setText("You Win!" + suffix);
             } else {
-                lblStatus.setText("You Lose! A: " + scoreA + "  B: " + scoreB);
+                lblStatus.setText("You Lose!" + suffix);
             }
         });
     }
@@ -147,7 +161,7 @@ public class GameController implements ViewController, GameEventListener {
     }
 
     @FXML
-    public void onLeaveClicked(){
+    public void onLeaveClicked() {
         clientController.leaveGame();
     }
 
@@ -163,7 +177,9 @@ public class GameController implements ViewController, GameEventListener {
             horizontal ? BOX_SIZE : DOT_SIZE,
             horizontal ? DOT_SIZE : BOX_SIZE
         );
-        btn.setStyle("-fx-background-color: #cccccc; -fx-background-radius: 0; -fx-padding: 0;");
+        btn.setStyle(
+            "-fx-background-color: #cccccc; -fx-background-radius: 0; -fx-padding: 0;"
+        );
         return btn;
     }
 
@@ -174,7 +190,9 @@ public class GameController implements ViewController, GameEventListener {
             ? hLines[d.row()][d.col()]
             : vLines[d.row()][d.col()];
         if (btn != null) {
-            btn.setStyle("-fx-background-color: #222222; -fx-background-radius: 0; -fx-padding: 0;");
+            btn.setStyle(
+                "-fx-background-color: #222222; -fx-background-radius: 0; -fx-padding: 0;"
+            );
             btn.setDisable(true);
             btn.setUserData("placed");
         }
@@ -184,23 +202,24 @@ public class GameController implements ViewController, GameEventListener {
         for (int r = 0; r < localBoard.boxRows(); r++) {
             for (int c = 0; c < localBoard.boxCols(); c++) {
                 PlayerMarker owner = localBoard.getBoxOwner(r, c);
-                if (owner == PlayerMarker.A)
-                    boxPanes[r][c].setStyle("-fx-background-color: #aaddff;");
-                else if (owner == PlayerMarker.B)
-                    boxPanes[r][c].setStyle("-fx-background-color: #ffaaaa;");
+                if (owner == PlayerMarker.A) boxPanes[r][c].setStyle(
+                    "-fx-background-color: #aaddff;"
+                );
+                else if (owner == PlayerMarker.B) boxPanes[r][c].setStyle(
+                    "-fx-background-color: #ffaaaa;"
+                );
             }
         }
     }
 
     private void setLineButtonsEnabled(boolean enabled) {
         for (Button btn : lineButtons) {
-            if (btn.getUserData() == null)
-                btn.setDisable(!enabled);
+            if (btn.getUserData() == null) btn.setDisable(!enabled);
         }
     }
 
     // Board building
-    private void buildBoard(int rows, int cols){
+    private void buildBoard(int rows, int cols) {
         boardGrid.getChildren().clear();
         boardGrid.getColumnConstraints().clear();
         boardGrid.getRowConstraints().clear();
@@ -209,62 +228,63 @@ public class GameController implements ViewController, GameEventListener {
         localBoard = new Board(rows, cols);
         hLines = new Button[rows][cols - 1];
         vLines = new Button[rows - 1][cols];
-        boxPanes = new Pane[rows - 1][cols -1];
+        boxPanes = new Pane[rows - 1][cols - 1];
 
         int gridRows = 2 * rows - 1;
         int gridCols = 2 * cols - 1;
 
-        for(int col = 0; col < gridCols; col++){
-
+        for (int col = 0; col < gridCols; col++) {
             ColumnConstraints colConstrains = new ColumnConstraints();
             colConstrains.setPrefWidth(col % 2 == 0 ? DOT_SIZE : BOX_SIZE);
             boardGrid.getColumnConstraints().add(colConstrains);
         }
 
-        for(int row = 0; row < gridRows; row++){
-
+        for (int row = 0; row < gridRows; row++) {
             RowConstraints rowConstraints = new RowConstraints();
-            rowConstraints.setPrefHeight( row % 2 == 0 ? DOT_SIZE : BOX_SIZE);
+            rowConstraints.setPrefHeight(row % 2 == 0 ? DOT_SIZE : BOX_SIZE);
             boardGrid.getRowConstraints().add(rowConstraints);
         }
 
-        for(int grow = 0; grow < gridRows; grow++){
-            for(int gcol = 0; gcol < gridCols; gcol++){
-                if(grow % 2 == 0 && gcol % 2 == 0){
+        for (int grow = 0; grow < gridRows; grow++) {
+            for (int gcol = 0; gcol < gridCols; gcol++) {
+                if (grow % 2 == 0 && gcol % 2 == 0) {
                     // dot
                     Pane dot = new Pane();
 
                     dot.setPrefSize(DOT_SIZE, DOT_SIZE);
-                    dot.setStyle("-fx-background-color: Black; -fx-background-radius: 50%;");
+                    dot.setStyle(
+                        "-fx-background-color: Black; -fx-background-radius: 50%;"
+                    );
                     boardGrid.add(dot, gcol, grow);
-
-                }else if (grow % 2 == 0){
+                } else if (grow % 2 == 0) {
                     // horizontal line slot
                     int dotRow = grow / 2;
                     int dotCol = gcol / 2;
                     Button btn = createLineButton(true);
-                    btn.setOnAction(e -> clientController.placeLine(
+                    btn.setOnAction(e ->
+                        clientController.placeLine(
                             new Dot(dotRow, dotCol),
                             new Dot(dotRow, dotCol + 1)
-                    ));
+                        )
+                    );
                     hLines[dotRow][dotCol] = btn;
                     lineButtons.add(btn);
                     boardGrid.add(btn, gcol, grow);
-
-                }else if (gcol % 2 == 0){
+                } else if (gcol % 2 == 0) {
                     // Vertical line slot
                     int dotRow = grow / 2;
                     int dotCol = gcol / 2;
                     Button btn = createLineButton(false);
-                    btn.setOnAction(e -> clientController.placeLine(
+                    btn.setOnAction(e ->
+                        clientController.placeLine(
                             new Dot(dotRow, dotCol),
                             new Dot(dotRow + 1, dotCol)
-                    ));
+                        )
+                    );
                     vLines[dotRow][dotCol] = btn;
                     lineButtons.add(btn);
                     boardGrid.add(btn, gcol, grow);
-
-                }else {
+                } else {
                     // Box
                     int boxRow = grow / 2;
                     int boxCol = gcol / 2;
@@ -276,9 +296,5 @@ public class GameController implements ViewController, GameEventListener {
                 }
             }
         }
-
     }
-
-
-
 }

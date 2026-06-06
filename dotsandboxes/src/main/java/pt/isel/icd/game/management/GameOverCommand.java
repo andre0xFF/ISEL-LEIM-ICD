@@ -16,6 +16,7 @@ public class GameOverCommand implements SimpleSocketCommand<ClientController> {
     private int scoreA;
     private int scoreB;
     private String gameId; // jogo terminado (multi-jogo)
+    private String reason; // motivo do fim: "COMPLETED" ou "TIMEOUT"
 
     public GameOverCommand() {}
 
@@ -24,13 +25,15 @@ public class GameOverCommand implements SimpleSocketCommand<ClientController> {
         String winnerMarker,
         int scoreA,
         int scoreB,
-        String gameId
+        String gameId,
+        String reason
     ) {
         this.hasWinner = hasWinner;
         this.winnerMarker = winnerMarker;
         this.scoreA = scoreA;
         this.scoreB = scoreB;
         this.gameId = gameId;
+        this.reason = reason;
     }
 
     @Override
@@ -65,7 +68,8 @@ public class GameOverCommand implements SimpleSocketCommand<ClientController> {
             winnerMarker,
             scoreA,
             scoreB,
-            gameId
+            gameId,
+            reason
         );
     }
 
@@ -81,6 +85,7 @@ public class GameOverCommand implements SimpleSocketCommand<ClientController> {
         XmlHelper.addChildElement(doc, el, "scoreA", String.valueOf(scoreA));
         XmlHelper.addChildElement(doc, el, "scoreB", String.valueOf(scoreB));
         XmlHelper.addChildElement(doc, el, "gameId", gameId);
+        XmlHelper.addChildElement(doc, el, "reason", reason);
     }
 
     @Override
@@ -94,5 +99,6 @@ public class GameOverCommand implements SimpleSocketCommand<ClientController> {
         String sb = XmlHelper.getChildText(el, "scoreB");
         scoreB = sb != null ? Integer.parseInt(sb) : 0;
         gameId = XmlHelper.getChildText(el, "gameId");
+        reason = XmlHelper.getChildText(el, "reason");
     }
 }

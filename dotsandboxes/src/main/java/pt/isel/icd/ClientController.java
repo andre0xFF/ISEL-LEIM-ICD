@@ -225,19 +225,27 @@ public class ClientController implements Controller, Authenticator {
         String winnerMarker,
         int scoreA,
         int scoreB,
-        String gameId
+        String gameId,
+        String reason
     ) {
         logger.info(
             String.format(
-                "Game Over! Winner: %s, Score A: %d, Score B: %d",
+                "Game Over! Winner: %s, Score A: %d, Score B: %d (%s)",
                 hasWinner ? winnerMarker : "DRAW",
                 scoreA,
-                scoreB
+                scoreB,
+                reason
             )
         );
 
         if (listener != null) {
-            listener.onGameOver(hasWinner, winnerMarker, scoreA, scoreB);
+            listener.onGameOver(
+                hasWinner,
+                winnerMarker,
+                scoreA,
+                scoreB,
+                reason
+            );
         }
     }
 }

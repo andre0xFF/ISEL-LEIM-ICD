@@ -1,6 +1,8 @@
 /* Estilos escritos a mao (sem frameworks CSS), conforme requisito. */
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body {
     margin: 0;
@@ -23,14 +25,33 @@ body {
     max-width: 420px;
 }
 
-.card.game { max-width: 520px; }
+.card.game {
+    max-width: 520px;
+}
 
-h1 { margin: 0 0 4px; font-size: 1.5rem; }
-h2 { margin: 0 0 18px; font-weight: 500; color: #5a6472; font-size: 1.05rem; }
+h1 {
+    margin: 0 0 4px;
+    font-size: 1.5rem;
+}
+h2 {
+    margin: 0 0 18px;
+    font-weight: 500;
+    color: #5a6472;
+    font-size: 1.05rem;
+}
 
-form { display: flex; flex-direction: column; gap: 14px; }
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
 
-label { display: flex; flex-direction: column; gap: 4px; font-size: 0.9rem; }
+label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.9rem;
+}
 
 input {
     padding: 10px 12px;
@@ -39,7 +60,8 @@ input {
     font-size: 1rem;
 }
 
-button, .button {
+button,
+.button {
     display: inline-block;
     padding: 10px 16px;
     border: none;
@@ -52,11 +74,22 @@ button, .button {
     text-align: center;
 }
 
-button:hover, .button:hover { background: #235ac0; }
-.button.secondary { background: #6b7280; }
-.button.secondary:hover { background: #565d68; }
+button:hover,
+.button:hover {
+    background: #235ac0;
+}
+.button.secondary {
+    background: #6b7280;
+}
+.button.secondary:hover {
+    background: #565d68;
+}
 
-.actions { display: flex; gap: 12px; margin-top: 18px; }
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
 
 .error {
     background: #fde8e8;
@@ -66,7 +99,11 @@ button:hover, .button:hover { background: #235ac0; }
     font-size: 0.9rem;
 }
 
-.hint { color: #6b7280; font-size: 0.85rem; margin-top: 18px; }
+.hint {
+    color: #6b7280;
+    font-size: 0.85rem;
+    margin-top: 18px;
+}
 
 /* === Ecra de jogo === */
 .topbar {
@@ -77,11 +114,28 @@ button:hover, .button:hover { background: #235ac0; }
     margin-bottom: 8px;
 }
 
-.score.a { color: #1f6fb2; }
-.score.b { color: #c0392b; }
-.turn { color: #5a6472; font-weight: 500; }
+.score.a {
+    color: #1f6fb2;
+}
+.score.b {
+    color: #c0392b;
+}
+.turn {
+    color: #5a6472;
+    font-weight: 500;
+}
 
-.status { margin: 4px 0 18px; color: #374151; }
+.status {
+    margin: 4px 0 6px;
+    color: #374151;
+}
+.countdown {
+    margin: 0 0 14px;
+    font-variant-numeric: tabular-nums;
+    color: #8a5a00;
+    font-weight: 600;
+    min-height: 1.2em;
+}
 
 .board {
     display: grid;
@@ -104,11 +158,29 @@ button:hover, .button:hover { background: #235ac0; }
     background: #d4d9e2;
 }
 
-.line.h { width: 56px; height: 16px; }
-.line.v { width: 16px; height: 56px; }
-.line:not(:disabled):hover { background: #9aa6ff; }
-.line.drawn { background: #2b2f36; }
+.line.h {
+    width: 56px;
+    height: 16px;
+}
+.line.v {
+    width: 16px;
+    height: 56px;
+}
+.line:not(:disabled):hover {
+    background: #9aa6ff;
+}
+.line.drawn {
+    background: #2b2f36;
+}
 
-.box { width: 56px; height: 56px; background: #eef1f6; }
-.box.owned-a { background: #bfe0f5; }
-.box.owned-b { background: #f5c6c0; }
+.box {
+    width: 56px;
+    height: 56px;
+    background: #eef1f6;
+}
+.box.owned-a {
+    background: #bfe0f5;
+}
+.box.owned-b {
+    background: #f5c6c0;
+}

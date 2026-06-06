@@ -1,6 +1,7 @@
 package pt.isel.icd.game.management;
 
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
 import pt.isel.icd.game.logic.Game;
 import pt.isel.icd.game.logic.Player;
 import pt.isel.icd.game.logic.PlayerMarker;
@@ -22,6 +23,11 @@ public class GameSession {
     private final Player playerA;
     private final Player playerB;
     private final long startMillis;
+
+    // Estado do temporizador de jogada (acedido sob synchronized(session)).
+    private ScheduledFuture<?> turnTimer; // tarefa de timeout do turno atual
+    private long turnToken; // distingue temporizadores (anti-corrida)
+    private boolean ended; // garante terminacao unica do jogo
 
     public GameSession(
         String gameId,
@@ -77,5 +83,32 @@ public class GameSession {
     /** Indica se o socket dado participa nesta sessao. */
     public boolean hasParticipant(UUID socketId) {
         return socketId.equals(socketA) || socketId.equals(socketB);
+    }
+
+    // === Temporizador de jogada (coordenado pelo ServerController) ===
+
+    public ScheduledFuture<?> turnTimer() {
+        return turnTimer;
+    }
+
+    public void setTurnTimer(ScheduledFuture<?> timer) {
+        this.turnTimer = timer;
+    }
+
+    public long turnToken() {
+        return turnToken;
+    }
+
+    /** Avanca o token do turno e devolve o novo valor. */
+    public long bumpTurnToken() {
+        return ++turnToken;
+    }
+
+    public boolean isEnded() {
+        return ended;
+    }
+
+    public void markEnded() {
+        this.ended = true;
     }
 }

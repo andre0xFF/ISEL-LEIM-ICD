@@ -7,6 +7,10 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import pt.isel.icd.game.logic.Game;
 import pt.isel.icd.game.logic.Player;
 import pt.isel.icd.game.logic.PlayerMarker;
@@ -23,6 +27,15 @@ public class GameRegistry {
 
     private final Map<String, GameSession> games = new ConcurrentHashMap<>();
     private final Queue<UUID> matchmaking = new ArrayDeque<>();
+
+    // Agendador dos temporizadores de jogada (30s por turno). Threads daemon
+    // para nao impedir o encerramento do processo.
+    private final ScheduledExecutorService timers =
+        Executors.newScheduledThreadPool(2, runnable -> {
+            Thread thread = new Thread(runnable, "turn-timer");
+            thread.setDaemon(true);
+            return thread;
+        });
 
     /**
      * Coloca o participante na fila de espera e, havendo outro a aguardar, cria
@@ -96,6 +109,11 @@ public class GameRegistry {
     /** Remove um socket da fila de espera (ex.: ao sair ou ao desligar). */
     public synchronized void cancelWaiting(UUID socketId) {
         matchmaking.remove(socketId);
+    }
+
+    /** Agenda uma tarefa de timeout de turno; devolve o ScheduledFuture. */
+    public ScheduledFuture<?> scheduleTimeout(long seconds, Runnable task) {
+        return timers.schedule(task, seconds, TimeUnit.SECONDS);
     }
 
     /** Lista as sessoes em que o socket participa (suporte a varios jogos). */

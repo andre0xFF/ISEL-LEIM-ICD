@@ -22,6 +22,7 @@
         <span id="scoreB" class="score b">B: 0</span>
     </div>
     <p id="status" class="status">Connecting…</p>
+    <p id="countdown" class="countdown"></p>
     <div id="board" class="board"></div>
     <div class="actions">
         <button id="leaveBtn" class="button secondary">Leave game</button>
@@ -38,6 +39,9 @@
     let myMarker = null;
     let rows = 4, cols = 4;
     let myTurn = false;
+    const TURN_SECONDS = 30;          // espelha o temporizador autoritativo do servidor
+    let remaining = 0;
+    let countdownTimer = null;
     const edges = new Set();              // "H_r_c" / "V_r_c"
     const boxOwner = {};                  // "br_bc" -> "A"/"B"
     const score = { A: 0, B: 0 };
@@ -112,6 +116,7 @@
         myTurn = (myMarker === "A");
         setStatus("You are Player " + myMarker);
         updateTurn();
+        startCountdown();
     }
 
     function onLinePlaced(cmd) {
@@ -126,18 +131,23 @@
         const justByMe = (marker === myMarker);
         myTurn = extraTurn ? justByMe : !justByMe;
         updateTurn();
+        // Cada jogada valida inicia um novo turno: reinicia o contador (30s).
+        startCountdown();
     }
 
     function onGameOver(cmd) {
         const hasWinner = field(cmd, "hasWinner") === "true";
         const winner = field(cmd, "winnerMarker");
         const a = field(cmd, "scoreA"), b = field(cmd, "scoreB");
+        const timeout = field(cmd, "reason") === "TIMEOUT";
+        stopCountdown();
         setLinesEnabled(false);
         document.getElementById("turn").textContent = "";
+        const tail = (timeout ? " (timeout)" : "") + "  A: " + a + "  B: " + b;
         let msg;
-        if (!hasWinner) msg = "Draw! A: " + a + "  B: " + b;
-        else if (winner === myMarker) msg = "You win! A: " + a + "  B: " + b;
-        else msg = "You lose! A: " + a + "  B: " + b;
+        if (!hasWinner) msg = "Draw!" + tail;
+        else if (winner === myMarker) msg = "You win!" + tail;
+        else msg = "You lose!" + tail;
         setStatus(msg);
     }
 
@@ -261,6 +271,34 @@
 
     function setStatus(text) {
         document.getElementById("status").textContent = text;
+    }
+
+    // === Contagem decrescente (visual; o servidor e a autoridade) ===
+    function startCountdown() {
+        remaining = TURN_SECONDS;
+        renderCountdown();
+        if (!countdownTimer) {
+            countdownTimer = setInterval(tickCountdown, 1000);
+        }
+    }
+
+    function tickCountdown() {
+        remaining = Math.max(0, remaining - 1);
+        renderCountdown();
+    }
+
+    function stopCountdown() {
+        if (countdownTimer) {
+            clearInterval(countdownTimer);
+            countdownTimer = null;
+        }
+        document.getElementById("countdown").textContent = "";
+    }
+
+    function renderCountdown() {
+        const label = myTurn ? "Your move" : "Opponent";
+        document.getElementById("countdown").textContent =
+            label + ": " + remaining + "s";
     }
 
     // === Arranque ===

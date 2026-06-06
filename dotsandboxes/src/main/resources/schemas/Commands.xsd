@@ -118,6 +118,8 @@
             <xs:element name="scoreA" type="xs:string" />
             <xs:element name="scoreB" type="xs:string" />
             <xs:element name="gameId" type="xs:string" />
+            <!-- Motivo do fim: COMPLETED (jogo concluido) ou TIMEOUT (forfait). -->
+            <xs:element name="reason" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 

@@ -3,6 +3,7 @@ package pt.isel.icd;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 import pt.isel.icd.communication.ConnectedCommand;
 import pt.isel.icd.communication.ConnectionManager;
@@ -41,6 +42,15 @@ public class ServerController
     private static final Logger logger = Logger.getLogger(
         ServerController.class.getName()
     );
+
+    // Tempo maximo por jogada (segundos). Configuravel para testes; 30s por
+    // omissao, conforme o requisito.
+    private static final long TURN_TIMEOUT_SECONDS = Long.getLong(
+        "dab.turn.timeout.seconds",
+        30L
+    );
+    private static final String REASON_COMPLETED = "COMPLETED";
+    private static final String REASON_TIMEOUT = "TIMEOUT";
 
     private final ConnectionManager connectionManager;
     private final UserServerRepository userServerRepository;
@@ -86,14 +96,19 @@ public class ServerController
         authenticatedUsers.remove(socketId);
         gameRegistry.cancelWaiting(socketId);
         for (GameSession session : gameRegistry.sessionsOf(socketId)) {
-            gameRegistry.remove(session.gameId());
-            UUID opponent = session.socketA().equals(socketId)
-                ? session.socketB()
-                : session.socketA();
-            connectionManager.write(
-                opponent,
-                new LeaveGameResponseCommand(true, session.gameId())
-            );
+            synchronized (session) {
+                if (session.isEnded()) continue;
+                session.markEnded();
+                cancelTurnTimer(session);
+                gameRegistry.remove(session.gameId());
+                UUID opponent = session.socketA().equals(socketId)
+                    ? session.socketB()
+                    : session.socketA();
+                connectionManager.write(
+                    opponent,
+                    new LeaveGameResponseCommand(true, session.gameId())
+                );
+            }
         }
     }
 
@@ -193,6 +208,12 @@ public class ServerController
         }
         notifyJoined(session, session.socketA());
         notifyJoined(session, session.socketB());
+        // Arranca o temporizador da primeira jogada (jogador A).
+        synchronized (session) {
+            if (!session.isEnded()) {
+                startTurnTimer(session);
+            }
+        }
     }
 
     private void notifyJoined(GameSession session, UUID socketId) {
@@ -224,15 +245,26 @@ public class ServerController
             return;
         }
 
-        gameRegistry.remove(gameId);
-        connectionManager.write(
-            session.socketA(),
-            new LeaveGameResponseCommand(true, gameId)
-        );
-        connectionManager.write(
-            session.socketB(),
-            new LeaveGameResponseCommand(true, gameId)
-        );
+        synchronized (session) {
+            if (session.isEnded()) {
+                connectionManager.write(
+                    socketId,
+                    new LeaveGameResponseCommand(true, gameId)
+                );
+                return;
+            }
+            session.markEnded();
+            cancelTurnTimer(session);
+            gameRegistry.remove(gameId);
+            connectionManager.write(
+                session.socketA(),
+                new LeaveGameResponseCommand(true, gameId)
+            );
+            connectionManager.write(
+                session.socketB(),
+                new LeaveGameResponseCommand(true, gameId)
+            );
+        }
     }
 
     /**
@@ -244,41 +276,55 @@ public class ServerController
         GameSession session = gameRegistry.get(gameId);
         if (session == null) return;
 
-        Player player = session.playerFor(socketId);
-        if (player == null) return;
+        synchronized (session) {
+            if (session.isEnded()) return;
 
-        Game game = session.game();
-        boolean placed = game.placeLine(player, dot1, dot2);
-        boolean extraTurn =
-            placed && !game.isFinished() && game.isPlayerTurn(player);
+            Player player = session.playerFor(socketId);
+            if (player == null) return;
 
-        for (UUID sid : List.of(session.socketA(), session.socketB())) {
-            connectionManager.write(
-                sid,
-                new PlaceLineResponseCommand(
-                    placed,
-                    dot1,
-                    dot2,
-                    0,
-                    player.marker().name(),
-                    extraTurn,
-                    gameId
-                )
-            );
-        }
+            Game game = session.game();
+            // Ignora jogadas fora de vez (evita excecao e jogadas indevidas).
+            if (!game.isPlayerTurn(player)) return;
 
-        if (game.isFinished()) {
-            finishGame(session);
+            boolean placed = game.placeLine(player, dot1, dot2);
+            boolean extraTurn =
+                placed && !game.isFinished() && game.isPlayerTurn(player);
+
+            for (UUID sid : List.of(session.socketA(), session.socketB())) {
+                connectionManager.write(
+                    sid,
+                    new PlaceLineResponseCommand(
+                        placed,
+                        dot1,
+                        dot2,
+                        0,
+                        player.marker().name(),
+                        extraTurn,
+                        gameId
+                    )
+                );
+            }
+
+            if (game.isFinished()) {
+                endGame(session, game.winner(), REASON_COMPLETED);
+            } else if (placed) {
+                // Jogada valida: reinicia o temporizador para o proximo turno.
+                startTurnTimer(session);
+            }
         }
     }
 
     /**
-     * Termina a sessao: atualiza as estatisticas de cada participante
-     * autenticado e envia GameOver a ambos, removendo o jogo do registo.
+     * Termina a sessao: cancela o temporizador, atualiza as estatisticas de cada
+     * participante autenticado e envia GameOver a ambos, removendo o jogo.
+     * Deve ser chamado dentro de synchronized(session).
      */
-    private void finishGame(GameSession session) {
+    private void endGame(GameSession session, Player winner, String reason) {
+        if (session.isEnded()) return;
+        session.markEnded();
+        cancelTurnTimer(session);
+
         Game game = session.game();
-        Player winner = game.winner();
         Player playerA = game.getPlayer(0);
         Player playerB = game.getPlayer(1);
         String winnerMarker = winner != null ? winner.marker().name() : "DRAW";
@@ -292,12 +338,67 @@ public class ServerController
                     winnerMarker,
                     playerA.score(),
                     playerB.score(),
-                    session.gameId()
+                    session.gameId(),
+                    reason
                 )
             );
         }
 
         gameRegistry.remove(session.gameId());
+    }
+
+    // === Temporizador de jogada (30s) ===
+
+    /**
+     * (Re)inicia o temporizador da jogada para o turno atual da sessao. Cada
+     * agendamento usa um token; quando dispara, so vale se o token ainda for o
+     * atual (uma jogada valida entretanto teria avancado o token).
+     * Deve ser chamado dentro de synchronized(session).
+     */
+    private void startTurnTimer(GameSession session) {
+        cancelTurnTimer(session);
+        long token = session.bumpTurnToken();
+        ScheduledFuture<?> future = gameRegistry.scheduleTimeout(
+            TURN_TIMEOUT_SECONDS,
+            () -> onTurnTimeout(session, token)
+        );
+        session.setTurnTimer(future);
+    }
+
+    /** Cancela o temporizador ativo da sessao. Chamar sob synchronized(session). */
+    private void cancelTurnTimer(GameSession session) {
+        ScheduledFuture<?> future = session.turnTimer();
+        if (future != null) {
+            future.cancel(false);
+            session.setTurnTimer(null);
+        }
+    }
+
+    /**
+     * Disparo do temporizador: o jogador que estava a jogar perde por nao ter
+     * jogado a tempo (forfait); o adversario ganha. Corre numa thread do
+     * agendador, por isso sincroniza na sessao e valida o token.
+     */
+    private void onTurnTimeout(GameSession session, long token) {
+        synchronized (session) {
+            if (session.isEnded()) return;
+            if (token != session.turnToken()) return; // jogada repos o temporizador
+
+            Game game = session.game();
+            Player current = game.currentPlayer();
+            Player winner =
+                current == game.getPlayer(0)
+                    ? game.getPlayer(1)
+                    : game.getPlayer(0);
+            logger.info(
+                "Timeout no jogo " +
+                    session.gameId() +
+                    ": " +
+                    current.marker() +
+                    " perde por forfait"
+            );
+            endGame(session, winner, REASON_TIMEOUT);
+        }
     }
 
     /** Incrementa vitorias/derrotas do participante autenticado no fim do jogo. */
