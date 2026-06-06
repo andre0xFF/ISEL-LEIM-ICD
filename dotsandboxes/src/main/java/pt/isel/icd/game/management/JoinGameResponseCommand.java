@@ -18,6 +18,7 @@ public class JoinGameResponseCommand
     private String marker; // "A" or "B"
     private int boardRows;
     private int boardCols;
+    private String gameId; // identifica o jogo (multi-jogo); opaco no cliente
 
     public JoinGameResponseCommand() {}
 
@@ -25,12 +26,14 @@ public class JoinGameResponseCommand
         boolean joined,
         PlayerMarker marker,
         int boardRows,
-        int boardCols
+        int boardCols,
+        String gameId
     ) {
         this.joined = joined;
         this.marker = marker != null ? marker.name() : null;
         this.boardRows = boardRows;
         this.boardCols = boardCols;
+        this.gameId = gameId;
     }
 
     @Override
@@ -64,7 +67,8 @@ public class JoinGameResponseCommand
             joined,
             PlayerMarker.valueOf(marker),
             boardRows,
-            boardCols
+            boardCols,
+            gameId
         );
     }
 
@@ -84,6 +88,7 @@ public class JoinGameResponseCommand
             "boardCols",
             String.valueOf(boardCols)
         );
+        XmlHelper.addChildElement(doc, el, "gameId", gameId);
     }
 
     @Override
@@ -94,5 +99,6 @@ public class JoinGameResponseCommand
         boardRows = r != null ? Integer.parseInt(r) : 4;
         String c = XmlHelper.getChildText(el, "boardCols");
         boardCols = c != null ? Integer.parseInt(c) : 4;
+        gameId = XmlHelper.getChildText(el, "gameId");
     }
 }

@@ -12,8 +12,9 @@ import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.game.logic.Game;
 import pt.isel.icd.game.logic.Player;
-import pt.isel.icd.game.logic.PlayerMarker;
 import pt.isel.icd.game.management.GameOverCommand;
+import pt.isel.icd.game.management.GameRegistry;
+import pt.isel.icd.game.management.GameSession;
 import pt.isel.icd.game.management.JoinGameCommand;
 import pt.isel.icd.game.management.JoinGameResponseCommand;
 import pt.isel.icd.game.management.LeaveGameCommand;
@@ -41,8 +42,8 @@ public class ServerController implements Controller, Authenticator {
     private final ConnectionManager connectionManager;
     private final UserServerRepository userServerRepository;
     private final HashMap<UUID, User> authenticatedUsers = new HashMap<>();
-    private final HashMap<UUID, Player> players = new HashMap<>();
-    private final Game game = new Game();
+    // Registo de todos os jogos a decorrer + emparelhamento (multi-jogo, L1).
+    private final GameRegistry gameRegistry = new GameRegistry();
 
     public ServerController(
         UserServerRepository repository,
@@ -155,114 +156,149 @@ public class ServerController implements Controller, Authenticator {
 
     // === Game management ===
 
+    /**
+     * Pedido de entrada em jogo. Faz emparelhamento no GameRegistry: se houver
+     * outro participante a aguardar, cria uma nova sessao e avisa ambos; caso
+     * contrario, o pedido fica em espera. Um participante pode pedir varios
+     * jogos em simultaneo.
+     */
     public void joinGame(UUID socketId) {
-        if (players.containsKey(socketId)) return;
-
-        if (game.isClosed()) {
-            game.open();
+        GameSession session = gameRegistry.matchOrEnqueue(socketId);
+        if (session == null) {
+            return; // a aguardar adversario
         }
-
-        PlayerMarker marker = players.isEmpty()
-            ? PlayerMarker.A
-            : PlayerMarker.B;
-        Player player = new Player(marker);
-        game.join(player);
-        players.put(socketId, player);
-
-        if (game.isFull()) {
-            game.start();
-
-            for (var entry : players.entrySet()) {
-                connectionManager.write(
-                    entry.getKey(),
-                    new JoinGameResponseCommand(
-                        true,
-                        entry.getValue().marker(),
-                        Game.DEFAULT_ROWS,
-                        Game.DEFAULT_COLS
-                    )
-                );
-            }
-        }
+        notifyJoined(session, session.socketA());
+        notifyJoined(session, session.socketB());
     }
 
-    public void leaveGame(UUID socketId) {
-        Player player = players.get(socketId);
-        if (player == null) return;
+    private void notifyJoined(GameSession session, UUID socketId) {
+        connectionManager.write(
+            socketId,
+            new JoinGameResponseCommand(
+                true,
+                session.markerFor(socketId),
+                Game.DEFAULT_ROWS,
+                Game.DEFAULT_COLS,
+                session.gameId()
+            )
+        );
+    }
 
-        players.remove(socketId);
-        connectionManager.write(socketId, new LeaveGameResponseCommand(true));
-
-        for (var entry : players.entrySet()) {
+    /**
+     * Abandono de um jogo identificado por gameId. Termina a sessao e avisa os
+     * dois participantes. Se ainda nao havia jogo (so estava em espera), apenas
+     * retira o socket da fila de emparelhamento.
+     */
+    public void leaveGame(UUID socketId, String gameId) {
+        GameSession session = gameRegistry.get(gameId);
+        if (session == null) {
+            gameRegistry.cancelWaiting(socketId);
             connectionManager.write(
-                entry.getKey(),
-                new LeaveGameResponseCommand(true)
+                socketId,
+                new LeaveGameResponseCommand(true, gameId)
             );
+            return;
         }
 
-        players.clear();
-        game.close();
+        gameRegistry.remove(gameId);
+        connectionManager.write(
+            session.socketA(),
+            new LeaveGameResponseCommand(true, gameId)
+        );
+        connectionManager.write(
+            session.socketB(),
+            new LeaveGameResponseCommand(true, gameId)
+        );
     }
 
-    public void placeLine(UUID socketId, Dot dot1, Dot dot2) {
-        Player player = players.get(socketId);
+    /**
+     * Coloca uma linha no jogo identificado por gameId, em nome do socket dado,
+     * e difunde o resultado aos dois participantes. Se o jogo terminar, atualiza
+     * estatisticas e envia GameOver.
+     */
+    public void placeLine(UUID socketId, String gameId, Dot dot1, Dot dot2) {
+        GameSession session = gameRegistry.get(gameId);
+        if (session == null) return;
+
+        Player player = session.playerFor(socketId);
         if (player == null) return;
 
+        Game game = session.game();
         boolean placed = game.placeLine(player, dot1, dot2);
         boolean extraTurn =
             placed && !game.isFinished() && game.isPlayerTurn(player);
 
-        for (var entry : players.entrySet()) {
+        for (UUID sid : List.of(session.socketA(), session.socketB())) {
             connectionManager.write(
-                entry.getKey(),
+                sid,
                 new PlaceLineResponseCommand(
                     placed,
                     dot1,
                     dot2,
                     0,
                     player.marker().name(),
-                    extraTurn
+                    extraTurn,
+                    gameId
                 )
             );
         }
 
         if (game.isFinished()) {
-            Player winner = game.winner();
-            Player playerA = game.getPlayer(0);
-            Player playerB = game.getPlayer(1);
-            String winnerMarker =
-                winner != null ? winner.marker().name() : "DRAW";
-
-            for (var entry : players.entrySet()) {
-                UUID sid = entry.getKey();
-                Player p = entry.getValue();
-                User user = authenticatedUsers.get(sid);
-                if (user != null) {
-                    Profile profile = userServerRepository.readProfile(user.username());
-                    if (profile != null) {
-                        boolean isWinner = winner != null && p.marker() == winner.marker();
-                        boolean isLoser  = winner != null && p.marker() != winner.marker();
-                        userServerRepository.updateProfile(new Profile(
-                            profile.username(),
-                            profile.nationality(),
-                            profile.age(),
-                            profile.photo(),
-                            profile.wins()   + (isWinner ? 1 : 0),
-                            profile.losses() + (isLoser  ? 1 : 0)
-                        ));
-                    }
-                }
-
-                connectionManager.write(
-                    sid,
-                    new GameOverCommand(
-                        winner != null,
-                        winnerMarker,
-                        playerA.score(),
-                        playerB.score()
-                    )
-                );
-            }
+            finishGame(session);
         }
+    }
+
+    /**
+     * Termina a sessao: atualiza as estatisticas de cada participante
+     * autenticado e envia GameOver a ambos, removendo o jogo do registo.
+     */
+    private void finishGame(GameSession session) {
+        Game game = session.game();
+        Player winner = game.winner();
+        Player playerA = game.getPlayer(0);
+        Player playerB = game.getPlayer(1);
+        String winnerMarker = winner != null ? winner.marker().name() : "DRAW";
+
+        for (UUID sid : List.of(session.socketA(), session.socketB())) {
+            updateProfileAfterGame(sid, session.playerFor(sid), winner);
+            connectionManager.write(
+                sid,
+                new GameOverCommand(
+                    winner != null,
+                    winnerMarker,
+                    playerA.score(),
+                    playerB.score(),
+                    session.gameId()
+                )
+            );
+        }
+
+        gameRegistry.remove(session.gameId());
+    }
+
+    /** Incrementa vitorias/derrotas do participante autenticado no fim do jogo. */
+    private void updateProfileAfterGame(
+        UUID sid,
+        Player player,
+        Player winner
+    ) {
+        User user = authenticatedUsers.get(sid);
+        if (user == null) return;
+
+        Profile profile = userServerRepository.readProfile(user.username());
+        if (profile == null) return;
+
+        boolean isWinner = winner != null && player.marker() == winner.marker();
+        boolean isLoser = winner != null && player.marker() != winner.marker();
+        userServerRepository.updateProfile(
+            new Profile(
+                profile.username(),
+                profile.nationality(),
+                profile.age(),
+                profile.photo(),
+                profile.wins() + (isWinner ? 1 : 0),
+                profile.losses() + (isLoser ? 1 : 0)
+            )
+        );
     }
 }

@@ -16,14 +16,20 @@ public class PlaceLineCommand implements SimpleSocketCommand<ServerController> {
     private int dot1Col;
     private int dot2Row;
     private int dot2Col;
+    private String gameId; // jogo a que a jogada se destina (multi-jogo)
 
     public PlaceLineCommand() {}
 
-    public PlaceLineCommand(Dot dot1, Dot dot2) {
+    public PlaceLineCommand(String gameId, Dot dot1, Dot dot2) {
+        this.gameId = gameId;
         this.dot1Row = dot1.row();
         this.dot1Col = dot1.col();
         this.dot2Row = dot2.row();
         this.dot2Col = dot2.col();
+    }
+
+    public String gameId() {
+        return gameId;
     }
 
     public Dot dot1() {
@@ -56,7 +62,7 @@ public class PlaceLineCommand implements SimpleSocketCommand<ServerController> {
 
     @Override
     public void execute() {
-        receiver.placeLine(socketId, dot1(), dot2());
+        receiver.placeLine(socketId, gameId, dot1(), dot2());
     }
 
     @Override
@@ -65,6 +71,7 @@ public class PlaceLineCommand implements SimpleSocketCommand<ServerController> {
         XmlHelper.addChildElement(doc, el, "dot1Col", String.valueOf(dot1Col));
         XmlHelper.addChildElement(doc, el, "dot2Row", String.valueOf(dot2Row));
         XmlHelper.addChildElement(doc, el, "dot2Col", String.valueOf(dot2Col));
+        XmlHelper.addChildElement(doc, el, "gameId", gameId);
     }
 
     @Override
@@ -73,5 +80,6 @@ public class PlaceLineCommand implements SimpleSocketCommand<ServerController> {
         dot1Col = Integer.parseInt(XmlHelper.getChildText(el, "dot1Col"));
         dot2Row = Integer.parseInt(XmlHelper.getChildText(el, "dot2Row"));
         dot2Col = Integer.parseInt(XmlHelper.getChildText(el, "dot2Col"));
+        gameId = XmlHelper.getChildText(el, "gameId");
     }
 }

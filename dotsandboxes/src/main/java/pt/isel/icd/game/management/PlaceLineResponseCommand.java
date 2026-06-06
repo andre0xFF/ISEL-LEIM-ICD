@@ -22,6 +22,7 @@ public class PlaceLineResponseCommand
     private int boxesClosed;
     private String marker; // who placed the line
     private boolean extraTurn;
+    private String gameId; // jogo a que a resposta se refere (multi-jogo)
 
     public PlaceLineResponseCommand() {}
 
@@ -31,7 +32,8 @@ public class PlaceLineResponseCommand
         Dot dot2,
         int boxesClosed,
         String marker,
-        boolean extraTurn
+        boolean extraTurn,
+        String gameId
     ) {
         this.placed = placed;
         this.dot1Row = dot1.row();
@@ -41,6 +43,7 @@ public class PlaceLineResponseCommand
         this.boxesClosed = boxesClosed;
         this.marker = marker;
         this.extraTurn = extraTurn;
+        this.gameId = gameId;
     }
 
     @Override
@@ -76,7 +79,8 @@ public class PlaceLineResponseCommand
             new Dot(dot2Row, dot2Col),
             boxesClosed,
             marker,
-            extraTurn
+            extraTurn,
+            gameId
         );
     }
 
@@ -100,6 +104,7 @@ public class PlaceLineResponseCommand
             "extraTurn",
             String.valueOf(extraTurn)
         );
+        XmlHelper.addChildElement(doc, el, "gameId", gameId);
     }
 
     @Override
@@ -115,5 +120,6 @@ public class PlaceLineResponseCommand
         extraTurn = Boolean.parseBoolean(
             XmlHelper.getChildText(el, "extraTurn")
         );
+        gameId = XmlHelper.getChildText(el, "gameId");
     }
 }

@@ -41,8 +41,10 @@ public class ClientController implements Controller, Authenticator {
     private boolean isAuthenticated;
     private Game game;
     private PlayerMarker myMarker;
+    // Identificador do jogo atual (multi-jogo). A GUI joga um jogo de cada vez,
+    // por isso basta guardar e reenviar ("echo") o gameId de forma opaca.
+    private String gameId;
     private GameEventListener listener;
-
 
     public ClientController(ConnectionManager connectionManager) {
         this.connectionManager = connectionManager;
@@ -80,11 +82,9 @@ public class ClientController implements Controller, Authenticator {
         return myMarker;
     }
 
-
-    public void setListener(GameEventListener listener){
+    public void setListener(GameEventListener listener) {
         this.listener = listener;
     }
-
 
     // === User actions ===
 
@@ -108,7 +108,7 @@ public class ClientController implements Controller, Authenticator {
                 : "Authentication failed"
         );
 
-        if(listener != null){
+        if (listener != null) {
             listener.onAuthenticated(username, authenticated);
         }
     }
@@ -130,9 +130,12 @@ public class ClientController implements Controller, Authenticator {
         connectionManager.write(new ReadUserProfileCommand());
     }
 
-    public void handleReadUserProfileResponse(Profile profile, boolean hasProfile) {
+    public void handleReadUserProfileResponse(
+        Profile profile,
+        boolean hasProfile
+    ) {
         logger.info(hasProfile ? "Profile: " + profile : "No profile found");
-        if(listener != null){
+        if (listener != null) {
             listener.onProfileRead(profile, hasProfile);
         }
     }
@@ -151,12 +154,14 @@ public class ClientController implements Controller, Authenticator {
         boolean joined,
         PlayerMarker marker,
         int boardRows,
-        int boardCols
+        int boardCols,
+        String gameId
     ) {
         if (!joined) {
             logger.info("Failed to join game");
             return;
         }
+        this.gameId = gameId;
         myMarker = marker;
         game = new Game();
         game.open();
@@ -167,27 +172,27 @@ public class ClientController implements Controller, Authenticator {
         game.start();
         logger.info("Joined game as player " + marker);
 
-        if(listener != null){
+        if (listener != null) {
             listener.onGameJoined(marker);
         }
-
     }
 
     public void leaveGame() {
-        connectionManager.write(new LeaveGameCommand());
+        connectionManager.write(new LeaveGameCommand(gameId));
     }
 
-    public void handleLeaveGameResponse(boolean left) {
+    public void handleLeaveGameResponse(boolean left, String gameId) {
         logger.info("Left game: " + left);
         game = null;
+        this.gameId = null;
 
-        if(listener != null){
+        if (listener != null) {
             listener.onGameLeft();
         }
     }
 
     public void placeLine(Dot dot1, Dot dot2) {
-        connectionManager.write(new PlaceLineCommand(dot1, dot2));
+        connectionManager.write(new PlaceLineCommand(gameId, dot1, dot2));
     }
 
     public void handlePlaceLineResponse(
@@ -196,7 +201,8 @@ public class ClientController implements Controller, Authenticator {
         Dot dot2,
         int boxesClosed,
         String marker,
-        boolean extraTurn
+        boolean extraTurn,
+        String gameId
     ) {
         logger.info(
             String.format(
@@ -209,17 +215,17 @@ public class ClientController implements Controller, Authenticator {
             )
         );
 
-        if(listener != null && placed){
+        if (listener != null && placed) {
             listener.onLinePlaced(dot1, dot2, marker, extraTurn);
         }
-
     }
 
     public void handleGameOver(
         boolean hasWinner,
         String winnerMarker,
         int scoreA,
-        int scoreB
+        int scoreB,
+        String gameId
     ) {
         logger.info(
             String.format(
@@ -230,9 +236,8 @@ public class ClientController implements Controller, Authenticator {
             )
         );
 
-        if(listener != null){
+        if (listener != null) {
             listener.onGameOver(hasWinner, winnerMarker, scoreA, scoreB);
         }
     }
-
 }

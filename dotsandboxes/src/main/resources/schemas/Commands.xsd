@@ -1,123 +1,154 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="Command">
         <xs:complexType>
             <xs:choice>
                 <!-- User commands -->
-                <xs:element name="AuthenticateUserCommand"         type="CredentialsType"/>
-                <xs:element name="CreateUserCommand"               type="CredentialsType"/>
-                <xs:element name="ReadUserProfileCommand"          type="EmptyType"/>
-                <xs:element name="UpdateUserCommand"               type="UpdateUserType"/>
+                <xs:element
+                    name="AuthenticateUserCommand"
+                    type="CredentialsType"
+                />
+                <xs:element name="CreateUserCommand" type="CredentialsType" />
+                <xs:element name="ReadUserProfileCommand" type="EmptyType" />
+                <xs:element name="UpdateUserCommand" type="UpdateUserType" />
                 <!-- User response commands -->
-                <xs:element name="AuthenticateUserResponseCommand"
-                            type="AuthenticateUserResponseType"/>
-                <xs:element name="CreateUserResponseCommand"       type="CreateUserResponseType"/>
-                <xs:element name="ReadUserProfileResponseCommand"  type="ReadUserProfileResponseType"/>
+                <xs:element
+                    name="AuthenticateUserResponseCommand"
+                    type="AuthenticateUserResponseType"
+                />
+                <xs:element
+                    name="CreateUserResponseCommand"
+                    type="CreateUserResponseType"
+                />
+                <xs:element
+                    name="ReadUserProfileResponseCommand"
+                    type="ReadUserProfileResponseType"
+                />
                 <!-- Game commands -->
-                <xs:element name="JoinGameCommand"                 type="EmptyType"/>
-                <xs:element name="LeaveGameCommand"                type="EmptyType"/>
-                <xs:element name="PlaceLineCommand"                type="PlaceLineType"/>
+                <xs:element name="JoinGameCommand" type="EmptyType" />
+                <xs:element name="LeaveGameCommand" type="LeaveGameType" />
+                <xs:element name="PlaceLineCommand" type="PlaceLineType" />
                 <!-- Lifecycle -->
-                <xs:element name="ConnectedCommand"                type="EmptyType"/>
-                <xs:element name="DisconnectedCommand"             type="EmptyType"/>
+                <xs:element name="ConnectedCommand" type="EmptyType" />
+                <xs:element name="DisconnectedCommand" type="EmptyType" />
                 <!-- Game response commands -->
-                <xs:element name="JoinGameResponseCommand"         type="JoinGameResponseType"/>
-                <xs:element name="LeaveGameResponseCommand"        type="LeaveGameResponseType"/>
-                <xs:element name="PlaceLineResponseCommand"        type="PlaceLineResponseType"/>
-                <xs:element name="GameOverCommand"                 type="GameOverType"/>
+                <xs:element
+                    name="JoinGameResponseCommand"
+                    type="JoinGameResponseType"
+                />
+                <xs:element
+                    name="LeaveGameResponseCommand"
+                    type="LeaveGameResponseType"
+                />
+                <xs:element
+                    name="PlaceLineResponseCommand"
+                    type="PlaceLineResponseType"
+                />
+                <xs:element name="GameOverCommand" type="GameOverType" />
             </xs:choice>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="EmptyType"/>
+    <xs:complexType name="EmptyType" />
 
 
 
     <xs:complexType name="CredentialsType">
         <xs:sequence>
-            <xs:element name="username" type="xs:string"/>
-            <xs:element name="password" type="xs:string"/>
+            <xs:element name="username" type="xs:string" />
+            <xs:element name="password" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="AuthenticateUserResponseType">
         <xs:sequence>
-            <xs:element name="username" type="xs:string"/>
-            <xs:element name="authenticated" type="xs:string"/>
+            <xs:element name="username" type="xs:string" />
+            <xs:element name="authenticated" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="CreateUserResponseType">
         <xs:sequence>
-            <xs:element name="username" type="xs:string"/>
-            <xs:element name="created" type="xs:string"/>
+            <xs:element name="username" type="xs:string" />
+            <xs:element name="created" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="UpdateUserType">
         <xs:sequence>
-            <xs:element name="nationality" type="xs:string"/>
-            <xs:element name="age" type="xs:string"/>
-            <xs:element name="photo" type="xs:string"/>
+            <xs:element name="nationality" type="xs:string" />
+            <xs:element name="age" type="xs:string" />
+            <xs:element name="photo" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="ReadUserProfileResponseType">
         <xs:sequence>
-            <xs:element name="hasProfile" type="xs:string"/>
-            <xs:element name="username" type="xs:string" minOccurs="0"/>
-            <xs:element name="nationality" type="xs:string" minOccurs="0"/>
-            <xs:element name="age" type="xs:string" minOccurs="0"/>
-            <xs:element name="photo" type="xs:string" minOccurs="0"/>
-            <xs:element name="wins" type="xs:string" minOccurs="0"/>
-            <xs:element name="losses" type="xs:string" minOccurs="0"/>
+            <xs:element name="hasProfile" type="xs:string" />
+            <xs:element name="username" type="xs:string" minOccurs="0" />
+            <xs:element name="nationality" type="xs:string" minOccurs="0" />
+            <xs:element name="age" type="xs:string" minOccurs="0" />
+            <xs:element name="photo" type="xs:string" minOccurs="0" />
+            <xs:element name="wins" type="xs:string" minOccurs="0" />
+            <xs:element name="losses" type="xs:string" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- O gameId identifica o jogo nas trocas multi-jogo (texto = UUID). -->
+    <xs:complexType name="LeaveGameType">
+        <xs:sequence>
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="PlaceLineType">
         <xs:sequence>
-            <xs:element name="dot1Row" type="xs:string"/>
-            <xs:element name="dot1Col" type="xs:string"/>
-            <xs:element name="dot2Row" type="xs:string"/>
-            <xs:element name="dot2Col" type="xs:string"/>
+            <xs:element name="dot1Row" type="xs:string" />
+            <xs:element name="dot1Col" type="xs:string" />
+            <xs:element name="dot2Row" type="xs:string" />
+            <xs:element name="dot2Col" type="xs:string" />
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="GameOverType">
         <xs:sequence>
-            <xs:element name="hasWinner" type="xs:string"/>
-            <xs:element name="winnerMarker" type="xs:string" minOccurs="0"/>
-            <xs:element name="scoreA" type="xs:string"/>
-            <xs:element name="scoreB" type="xs:string"/>
+            <xs:element name="hasWinner" type="xs:string" />
+            <xs:element name="winnerMarker" type="xs:string" minOccurs="0" />
+            <xs:element name="scoreA" type="xs:string" />
+            <xs:element name="scoreB" type="xs:string" />
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="JoinGameResponseType">
         <xs:sequence>
-            <xs:element name="joined" type="xs:string"/>
-            <xs:element name="marker" type="xs:string"/>
-            <xs:element name="boardRows" type="xs:string"/>
-            <xs:element name="boardCols" type="xs:string"/>
+            <xs:element name="joined" type="xs:string" />
+            <xs:element name="marker" type="xs:string" />
+            <xs:element name="boardRows" type="xs:string" />
+            <xs:element name="boardCols" type="xs:string" />
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="LeaveGameResponseType">
         <xs:sequence>
-            <xs:element name="left" type="xs:string"/>
+            <xs:element name="left" type="xs:string" />
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="PlaceLineResponseType">
         <xs:sequence>
-            <xs:element name="placed" type="xs:string"/>
-            <xs:element name="dot1Row" type="xs:string"/>
-            <xs:element name="dot1Col" type="xs:string"/>
-            <xs:element name="dot2Row" type="xs:string"/>
-            <xs:element name="dot2Col" type="xs:string"/>
-            <xs:element name="boxesClosed" type="xs:string"/>
-            <xs:element name="marker" type="xs:string"/>
-            <xs:element name="extraTurn" type="xs:string"/>
+            <xs:element name="placed" type="xs:string" />
+            <xs:element name="dot1Row" type="xs:string" />
+            <xs:element name="dot1Col" type="xs:string" />
+            <xs:element name="dot2Row" type="xs:string" />
+            <xs:element name="dot2Col" type="xs:string" />
+            <xs:element name="boxesClosed" type="xs:string" />
+            <xs:element name="marker" type="xs:string" />
+            <xs:element name="extraTurn" type="xs:string" />
+            <xs:element name="gameId" type="xs:string" />
         </xs:sequence>
     </xs:complexType>
 

@@ -14,11 +14,13 @@ public class LeaveGameResponseCommand
     private ClientController receiver;
     private UUID socketId;
     private boolean left;
+    private String gameId; // jogo abandonado (multi-jogo)
 
     public LeaveGameResponseCommand() {}
 
-    public LeaveGameResponseCommand(boolean left) {
+    public LeaveGameResponseCommand(boolean left, String gameId) {
         this.left = left;
+        this.gameId = gameId;
     }
 
     @Override
@@ -48,16 +50,18 @@ public class LeaveGameResponseCommand
 
     @Override
     public void execute() {
-        receiver.handleLeaveGameResponse(left);
+        receiver.handleLeaveGameResponse(left, gameId);
     }
 
     @Override
     public void toXml(Document doc, Element el) {
         XmlHelper.addChildElement(doc, el, "left", String.valueOf(left));
+        XmlHelper.addChildElement(doc, el, "gameId", gameId);
     }
 
     @Override
     public void fromXml(Element el) {
         left = Boolean.parseBoolean(XmlHelper.getChildText(el, "left"));
+        gameId = XmlHelper.getChildText(el, "gameId");
     }
 }
