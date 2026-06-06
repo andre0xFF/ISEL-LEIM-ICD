@@ -105,6 +105,26 @@ button:hover,
     margin-top: 18px;
 }
 
+.profile-photo {
+    text-align: center;
+    margin-bottom: 14px;
+}
+.profile-photo img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: #374151;
+}
+
 /* === Ecra de jogo === */
 .topbar {
     display: flex;

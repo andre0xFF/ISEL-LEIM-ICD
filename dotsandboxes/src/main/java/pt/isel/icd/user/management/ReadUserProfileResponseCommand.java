@@ -15,11 +15,15 @@ public class ReadUserProfileResponseCommand
     private ClientController receiver;
     private UUID socketId;
     private String username;
+    private String fullName;
     private String nationality;
     private int age;
     private String photo;
+    private String preferredColor;
     private int wins;
     private int losses;
+    private int totalGames;
+    private long totalTimeMillis;
     private boolean hasProfile;
 
     public ReadUserProfileResponseCommand() {}
@@ -28,11 +32,15 @@ public class ReadUserProfileResponseCommand
         this.hasProfile = hasProfile;
         if (profile != null) {
             this.username = profile.username();
+            this.fullName = profile.fullName();
             this.nationality = profile.nationality();
             this.age = profile.age();
             this.photo = profile.photo();
+            this.preferredColor = profile.preferredColor();
             this.wins = profile.wins();
             this.losses = profile.losses();
+            this.totalGames = profile.totalGames();
+            this.totalTimeMillis = profile.totalTimeMillis();
         }
     }
 
@@ -64,7 +72,18 @@ public class ReadUserProfileResponseCommand
     @Override
     public void execute() {
         Profile profile = hasProfile
-            ? new Profile(username, nationality, age, photo, wins, losses)
+            ? new Profile(
+                  username,
+                  fullName,
+                  nationality,
+                  age,
+                  photo,
+                  preferredColor,
+                  wins,
+                  losses,
+                  totalGames,
+                  totalTimeMillis
+              )
             : null;
         receiver.handleReadUserProfileResponse(profile, hasProfile);
     }
@@ -79,15 +98,34 @@ public class ReadUserProfileResponseCommand
         );
         if (hasProfile) {
             XmlHelper.addChildElement(doc, el, "username", username);
+            XmlHelper.addChildElement(doc, el, "fullName", fullName);
             XmlHelper.addChildElement(doc, el, "nationality", nationality);
             XmlHelper.addChildElement(doc, el, "age", String.valueOf(age));
             XmlHelper.addChildElement(doc, el, "photo", photo);
+            XmlHelper.addChildElement(
+                doc,
+                el,
+                "preferredColor",
+                preferredColor
+            );
             XmlHelper.addChildElement(doc, el, "wins", String.valueOf(wins));
             XmlHelper.addChildElement(
                 doc,
                 el,
                 "losses",
                 String.valueOf(losses)
+            );
+            XmlHelper.addChildElement(
+                doc,
+                el,
+                "totalGames",
+                String.valueOf(totalGames)
+            );
+            XmlHelper.addChildElement(
+                doc,
+                el,
+                "totalTimeMillis",
+                String.valueOf(totalTimeMillis)
             );
         }
     }
@@ -99,14 +137,20 @@ public class ReadUserProfileResponseCommand
         );
         if (hasProfile) {
             username = XmlHelper.getChildText(el, "username");
+            fullName = XmlHelper.getChildText(el, "fullName");
             nationality = XmlHelper.getChildText(el, "nationality");
             String ageStr = XmlHelper.getChildText(el, "age");
             age = ageStr != null ? Integer.parseInt(ageStr) : 0;
             photo = XmlHelper.getChildText(el, "photo");
+            preferredColor = XmlHelper.getChildText(el, "preferredColor");
             String winsStr = XmlHelper.getChildText(el, "wins");
             wins = winsStr != null ? Integer.parseInt(winsStr) : 0;
             String lossesStr = XmlHelper.getChildText(el, "losses");
             losses = lossesStr != null ? Integer.parseInt(lossesStr) : 0;
+            String tgStr = XmlHelper.getChildText(el, "totalGames");
+            totalGames = tgStr != null ? Integer.parseInt(tgStr) : 0;
+            String ttStr = XmlHelper.getChildText(el, "totalTimeMillis");
+            totalTimeMillis = ttStr != null ? Long.parseLong(ttStr) : 0L;
         }
     }
 }

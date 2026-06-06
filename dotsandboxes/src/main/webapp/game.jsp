@@ -301,11 +301,27 @@
             label + ": " + remaining + "s";
     }
 
+    // Aplica a cor de fundo preferida do utilizador (lida do perfil via REST).
+    async function applyPreferredColor() {
+        try {
+            const res = await fetch(CONTEXT + "/api/users/me");
+            if (!res.ok) return;
+            const cmd = new DOMParser()
+                .parseFromString(await res.text(), "application/xml")
+                .documentElement.firstElementChild;
+            const color = field(cmd, "preferredColor");
+            if (color) document.body.style.background = color;
+        } catch (e) {
+            // sem cor preferida: mantem o fundo por omissao
+        }
+    }
+
     // === Arranque ===
     document.getElementById("leaveBtn").addEventListener("click", () => {
         if (gameId) send(buildCommand("LeaveGameCommand", { gameId: gameId }));
         else window.location = CONTEXT + "/lobby.jsp";
     });
+    applyPreferredColor();
     connect();
 </script>
 </body>

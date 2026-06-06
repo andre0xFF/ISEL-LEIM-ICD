@@ -1,5 +1,10 @@
 package pt.isel.icd.ui.profile;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Base64;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,34 +18,45 @@ import pt.isel.icd.ui.ViewManager;
 import pt.isel.icd.ui.menu.MainMenuController;
 import pt.isel.icd.user.logic.Profile;
 
-
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Base64;
-
-
 public class ProfileController implements ViewController, GameEventListener {
 
     private ViewManager viewManager;
     private ClientController clientController;
 
-    @FXML private Label lblUsername;
-    @FXML private TextField fieldNationality;
-    @FXML private TextField fieldAge;
-    @FXML private Label lblWins;
-    @FXML private Label lblLosses;
-    @FXML private Button btnEdit;
-    @FXML private Button btnSave;
-    @FXML private Label lblStatus;
-    @FXML private ImageView imagePhoto;
-    @FXML private Button btnChoosePhoto;
+    @FXML
+    private Label lblUsername;
+
+    @FXML
+    private TextField fieldNationality;
+
+    @FXML
+    private TextField fieldAge;
+
+    @FXML
+    private Label lblWins;
+
+    @FXML
+    private Label lblLosses;
+
+    @FXML
+    private Button btnEdit;
+
+    @FXML
+    private Button btnSave;
+
+    @FXML
+    private Label lblStatus;
+
+    @FXML
+    private ImageView imagePhoto;
+
+    @FXML
+    private Button btnChoosePhoto;
 
     private String photoBase64;
-
-
-
+    // Campos novos do TP02 que a GUI nao edita mas deve preservar ao gravar.
+    private String loadedFullName = "";
+    private String loadedPreferredColor = Profile.DEFAULT_COLOR;
 
     @Override
     public void setClientController(ClientController controller) {
@@ -60,28 +76,31 @@ public class ProfileController implements ViewController, GameEventListener {
     }
 
     @Override
-    public void onProfileRead(Profile profile, boolean hasProfile){
-        Platform.runLater(() ->{
-
-            if(hasProfile){
+    public void onProfileRead(Profile profile, boolean hasProfile) {
+        Platform.runLater(() -> {
+            if (hasProfile) {
                 lblUsername.setText(profile.username());
                 fieldNationality.setText(profile.nationality());
                 fieldAge.setText(String.valueOf(profile.age()));
                 lblWins.setText(String.valueOf(profile.wins()));
                 lblLosses.setText(String.valueOf(profile.losses()));
 
+                // Preserva os campos que esta vista nao edita.
+                loadedFullName = profile.fullName();
+                loadedPreferredColor = profile.preferredColor();
+
                 photoBase64 = profile.photo();
-                if(photoBase64 != null && !photoBase64.isEmpty()){
+                if (photoBase64 != null && !photoBase64.isEmpty()) {
                     try {
                         byte[] bytes = Base64.getDecoder().decode(photoBase64);
-                        imagePhoto.setImage(new Image(new ByteArrayInputStream(bytes)));
-                    }catch (IllegalArgumentException e){
+                        imagePhoto.setImage(
+                            new Image(new ByteArrayInputStream(bytes))
+                        );
+                    } catch (IllegalArgumentException e) {
                         lblStatus.setText("Failed to decode photo");
                     }
                 }
-
-
-            }else{
+            } else {
                 lblUsername.setText(clientController.getUsername());
                 lblStatus.setText("No profile yet. Click Edit to create one");
             }
@@ -89,7 +108,7 @@ public class ProfileController implements ViewController, GameEventListener {
     }
 
     @FXML
-    private void onEditClicked(){
+    private void onEditClicked() {
         fieldNationality.setEditable(true);
         fieldAge.setEditable(true);
         btnChoosePhoto.setVisible(true);
@@ -99,24 +118,29 @@ public class ProfileController implements ViewController, GameEventListener {
         btnSave.setVisible(true);
         btnSave.setManaged(true);
         lblStatus.setText("");
-
     }
 
     @FXML
-    private void onSaveClicked(){
+    private void onSaveClicked() {
         String nationality = fieldNationality.getText().trim();
         String ageText = fieldAge.getText().trim();
         String photo = photoBase64.trim();
 
         int age;
-        try{
+        try {
             age = Integer.parseInt(ageText);
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             lblStatus.setText("Age must be a number.");
             return;
         }
 
-        clientController.updateProfile(nationality, age, photo);
+        clientController.updateProfile(
+            loadedFullName,
+            nationality,
+            age,
+            photo,
+            loadedPreferredColor
+        );
 
         fieldNationality.setEditable(false);
         fieldAge.setEditable(false);
@@ -136,29 +160,36 @@ public class ProfileController implements ViewController, GameEventListener {
     }
 
     @FXML
-    private void onBackClicked(){
+    private void onBackClicked() {
         viewManager.show(new MainMenuController());
     }
 
     @FXML
-    private void onChoosePhotoClicked(){
+    private void onChoosePhotoClicked() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select Photo");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter(
-                        "Image Files", "*.png", "*.jpg", "*.jpeg"));
+        fileChooser
+            .getExtensionFilters()
+            .add(
+                new FileChooser.ExtensionFilter(
+                    "Image Files",
+                    "*.png",
+                    "*.jpg",
+                    "*.jpeg"
+                )
+            );
 
-        File file = fileChooser.showOpenDialog(imagePhoto.getScene().getWindow());
-        if(file != null){
+        File file = fileChooser.showOpenDialog(
+            imagePhoto.getScene().getWindow()
+        );
+        if (file != null) {
             try {
                 byte[] bytes = Files.readAllBytes(file.toPath());
                 photoBase64 = Base64.getEncoder().encodeToString(bytes);
                 imagePhoto.setImage(new Image(new ByteArrayInputStream(bytes)));
-            }catch (IOException e){
+            } catch (IOException e) {
                 lblStatus.setText("Failed to load image");
             }
         }
     }
-
-
-
 }

@@ -24,7 +24,20 @@ public class ServerProxy implements Closeable {
     private final BufferedReader reader;
 
     public ServerProxy(String host, int port) throws IOException {
+        this(host, port, 0);
+    }
+
+    /**
+     * @param readTimeoutMillis tempo maximo de leitura (0 = infinito). Usar 0
+     *        no gameplay (leitura bloqueante continua) e um valor finito nas
+     *        operacoes CRUD efemeras.
+     */
+    public ServerProxy(String host, int port, int readTimeoutMillis)
+        throws IOException {
         this.socket = new Socket(host, port);
+        if (readTimeoutMillis > 0) {
+            this.socket.setSoTimeout(readTimeoutMillis);
+        }
         this.writer = new PrintWriter(socket.getOutputStream(), true);
         this.reader = new BufferedReader(
             new InputStreamReader(socket.getInputStream())

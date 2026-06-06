@@ -16,6 +16,8 @@ public class CreateUserCommand
     private UUID socketId;
     private String username;
     private String password;
+    private String fullName; // opcional (registo Web); a GUI nao o envia
+    private String photo; // opcional (Base64)
 
     public CreateUserCommand() {}
 
@@ -24,12 +26,26 @@ public class CreateUserCommand
         this.password = user.password();
     }
 
+    public CreateUserCommand(User user, String fullName, String photo) {
+        this(user);
+        this.fullName = fullName;
+        this.photo = photo;
+    }
+
     public String username() {
         return username;
     }
 
     public String password() {
         return password;
+    }
+
+    public String fullName() {
+        return fullName;
+    }
+
+    public String photo() {
+        return photo;
     }
 
     @Override
@@ -59,18 +75,27 @@ public class CreateUserCommand
 
     @Override
     public void execute() {
-        receiver.createUser(socketId, username, password);
+        receiver.createUser(socketId, username, password, fullName, photo);
     }
 
     @Override
     public void toXml(Document doc, Element el) {
         XmlHelper.addChildElement(doc, el, "username", username);
         XmlHelper.addChildElement(doc, el, "password", password);
+        // Campos opcionais: so sao escritos quando presentes (registo Web).
+        if (fullName != null) {
+            XmlHelper.addChildElement(doc, el, "fullName", fullName);
+        }
+        if (photo != null) {
+            XmlHelper.addChildElement(doc, el, "photo", photo);
+        }
     }
 
     @Override
     public void fromXml(Element el) {
         username = XmlHelper.getChildText(el, "username");
         password = XmlHelper.getChildText(el, "password");
+        fullName = XmlHelper.getChildText(el, "fullName");
+        photo = XmlHelper.getChildText(el, "photo");
     }
 }

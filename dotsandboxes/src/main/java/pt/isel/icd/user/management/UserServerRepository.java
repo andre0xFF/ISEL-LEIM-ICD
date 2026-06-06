@@ -41,20 +41,22 @@ public class UserServerRepository {
         profiles.clear();
         List<Map<String, String>> data = xmlFileStore.loadProfiles();
         for (Map<String, String> entry : data) {
+            // Perfis antigos (sem os campos novos) recebem valores por omissao.
             profiles.add(
                 new Profile(
                     entry.get("username"),
-                    entry.get("nationality"),
-                    entry.get("age") != null
-                        ? Integer.parseInt(entry.get("age"))
-                        : 0,
-                    entry.get("photo"),
-                    entry.get("wins") != null
-                        ? Integer.parseInt(entry.get("wins"))
-                        : 0,
-                    entry.get("losses") != null
-                        ? Integer.parseInt(entry.get("losses"))
-                        : 0
+                    orDefault(entry.get("fullName"), ""),
+                    orDefault(entry.get("nationality"), ""),
+                    parseInt(entry.get("age"), 0),
+                    orDefault(entry.get("photo"), ""),
+                    orDefault(
+                        entry.get("preferredColor"),
+                        Profile.DEFAULT_COLOR
+                    ),
+                    parseInt(entry.get("wins"), 0),
+                    parseInt(entry.get("losses"), 0),
+                    parseInt(entry.get("totalGames"), 0),
+                    parseLong(entry.get("totalTimeMillis"), 0L)
                 )
             );
         }
@@ -65,14 +67,44 @@ public class UserServerRepository {
         for (Profile profile : profiles) {
             Map<String, String> entry = new HashMap<>();
             entry.put("username", profile.username());
-            entry.put("nationality", profile.nationality());
+            entry.put("fullName", orDefault(profile.fullName(), ""));
+            entry.put("nationality", orDefault(profile.nationality(), ""));
             entry.put("age", String.valueOf(profile.age()));
-            entry.put("photo", profile.photo());
+            entry.put("photo", orDefault(profile.photo(), ""));
+            entry.put(
+                "preferredColor",
+                orDefault(profile.preferredColor(), Profile.DEFAULT_COLOR)
+            );
             entry.put("wins", String.valueOf(profile.wins()));
             entry.put("losses", String.valueOf(profile.losses()));
+            entry.put("totalGames", String.valueOf(profile.totalGames()));
+            entry.put(
+                "totalTimeMillis",
+                String.valueOf(profile.totalTimeMillis())
+            );
             data.add(entry);
         }
         xmlFileStore.saveProfiles(data);
+    }
+
+    private static String orDefault(String value, String fallback) {
+        return value != null ? value : fallback;
+    }
+
+    private static int parseInt(String value, int fallback) {
+        try {
+            return value != null ? Integer.parseInt(value.trim()) : fallback;
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
+    }
+
+    private static long parseLong(String value, long fallback) {
+        try {
+            return value != null ? Long.parseLong(value.trim()) : fallback;
+        } catch (NumberFormatException e) {
+            return fallback;
+        }
     }
 
     public User readUser(String username) {

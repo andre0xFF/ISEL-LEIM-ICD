@@ -137,14 +137,32 @@ public class ServerController
         );
     }
 
-    public void createUser(UUID socketId, String username, String password) {
+    public void createUser(
+        UUID socketId,
+        String username,
+        String password,
+        String fullName,
+        String photo
+    ) {
         boolean success = false;
         try {
             User user = new User(username, password);
             if (userServerRepository.readUser(username) == null) {
                 userServerRepository.addUser(user);
+                // Cria o perfil com os campos opcionais do registo (ou defaults).
                 userServerRepository.addProfile(
-                    new Profile(username, "", 0, "", 0, 0)
+                    new Profile(
+                        username,
+                        fullName != null ? fullName : "",
+                        "",
+                        0,
+                        photo != null ? photo : "",
+                        Profile.DEFAULT_COLOR,
+                        0,
+                        0,
+                        0,
+                        0L
+                    )
                 );
                 success = true;
             }
@@ -172,9 +190,11 @@ public class ServerController
 
     public void updateUserProfile(
         UUID socketId,
+        String fullName,
         String nationality,
         int age,
-        String photo
+        String photo,
+        String preferredColor
     ) {
         User user = authenticatedUsers.get(socketId);
         if (user == null) return;
@@ -182,15 +202,16 @@ public class ServerController
         Profile existing = userServerRepository.readProfile(user.username());
         if (existing == null) return;
 
-        Profile updated = new Profile(
-            user.username(),
-            nationality,
-            age,
-            photo,
-            existing.wins(),
-            existing.losses()
+        // Substitui os campos editaveis, preservando as estatisticas.
+        userServerRepository.updateProfile(
+            existing.withEdits(
+                fullName,
+                nationality,
+                age,
+                photo,
+                preferredColor != null ? preferredColor : Profile.DEFAULT_COLOR
+            )
         );
-        userServerRepository.updateProfile(updated);
     }
 
     // === Game management ===
@@ -328,9 +349,16 @@ public class ServerController
         Player playerA = game.getPlayer(0);
         Player playerB = game.getPlayer(1);
         String winnerMarker = winner != null ? winner.marker().name() : "DRAW";
+        // Duracao do jogo, para o tempo medio (tie-break do quadro de honra).
+        long duration = System.currentTimeMillis() - session.startMillis();
 
         for (UUID sid : List.of(session.socketA(), session.socketB())) {
-            updateProfileAfterGame(sid, session.playerFor(sid), winner);
+            updateProfileAfterGame(
+                sid,
+                session.playerFor(sid),
+                winner,
+                duration
+            );
             connectionManager.write(
                 sid,
                 new GameOverCommand(
@@ -401,11 +429,15 @@ public class ServerController
         }
     }
 
-    /** Incrementa vitorias/derrotas do participante autenticado no fim do jogo. */
+    /**
+     * Atualiza as estatisticas do participante autenticado no fim do jogo:
+     * vitoria/derrota, mais um jogo e o tempo decorrido acumulado.
+     */
     private void updateProfileAfterGame(
         UUID sid,
         Player player,
-        Player winner
+        Player winner,
+        long durationMillis
     ) {
         User user = authenticatedUsers.get(sid);
         if (user == null) return;
@@ -416,14 +448,7 @@ public class ServerController
         boolean isWinner = winner != null && player.marker() == winner.marker();
         boolean isLoser = winner != null && player.marker() != winner.marker();
         userServerRepository.updateProfile(
-            new Profile(
-                profile.username(),
-                profile.nationality(),
-                profile.age(),
-                profile.photo(),
-                profile.wins() + (isWinner ? 1 : 0),
-                profile.losses() + (isLoser ? 1 : 0)
-            )
+            profile.withGameResult(isWinner, isLoser, durationMillis)
         );
     }
 }

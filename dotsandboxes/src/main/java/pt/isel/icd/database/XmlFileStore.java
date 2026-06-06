@@ -1,15 +1,14 @@
 package pt.isel.icd.database;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import pt.isel.icd.serialization.XmlHelper;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import pt.isel.icd.serialization.XmlHelper;
 
 /**
  * DOM-based XML file store for users and profiles.
@@ -68,8 +67,18 @@ public class XmlFileStore {
         for (Map<String, String> user : users) {
             Element userEl = doc.createElement("user");
             root.appendChild(userEl);
-            XmlHelper.addChildElement(doc, userEl, "username", user.get("username"));
-            XmlHelper.addChildElement(doc, userEl, "password", user.get("password"));
+            XmlHelper.addChildElement(
+                doc,
+                userEl,
+                "username",
+                user.get("username")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                userEl,
+                "password",
+                user.get("password")
+            );
         }
 
         File file = new File(fileStorePath + "/user/management/Users.xml");
@@ -109,12 +118,34 @@ public class XmlFileStore {
         for (int i = 0; i < profileNodes.getLength(); i++) {
             Element profileEl = (Element) profileNodes.item(i);
             Map<String, String> profile = new HashMap<>();
-            profile.put("username", XmlHelper.getChildText(profileEl, "username"));
-            profile.put("nationality", XmlHelper.getChildText(profileEl, "nationality"));
+            profile.put(
+                "username",
+                XmlHelper.getChildText(profileEl, "username")
+            );
+            profile.put(
+                "fullName",
+                XmlHelper.getChildText(profileEl, "fullName")
+            );
+            profile.put(
+                "nationality",
+                XmlHelper.getChildText(profileEl, "nationality")
+            );
             profile.put("age", XmlHelper.getChildText(profileEl, "age"));
             profile.put("photo", XmlHelper.getChildText(profileEl, "photo"));
+            profile.put(
+                "preferredColor",
+                XmlHelper.getChildText(profileEl, "preferredColor")
+            );
             profile.put("wins", XmlHelper.getChildText(profileEl, "wins"));
             profile.put("losses", XmlHelper.getChildText(profileEl, "losses"));
+            profile.put(
+                "totalGames",
+                XmlHelper.getChildText(profileEl, "totalGames")
+            );
+            profile.put(
+                "totalTimeMillis",
+                XmlHelper.getChildText(profileEl, "totalTimeMillis")
+            );
             profiles.add(profile);
         }
 
@@ -132,12 +163,67 @@ public class XmlFileStore {
         for (Map<String, String> profile : profiles) {
             Element profileEl = doc.createElement("profile");
             root.appendChild(profileEl);
-            XmlHelper.addChildElement(doc, profileEl, "username", profile.get("username"));
-            XmlHelper.addChildElement(doc, profileEl, "nationality", profile.get("nationality"));
-            XmlHelper.addChildElement(doc, profileEl, "age", profile.get("age"));
-            XmlHelper.addChildElement(doc, profileEl, "photo", profile.get("photo"));
-            XmlHelper.addChildElement(doc, profileEl, "wins", profile.get("wins"));
-            XmlHelper.addChildElement(doc, profileEl, "losses", profile.get("losses"));
+            // A ordem segue o Profiles.xsd.
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "username",
+                profile.get("username")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "fullName",
+                profile.get("fullName")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "nationality",
+                profile.get("nationality")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "age",
+                profile.get("age")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "photo",
+                profile.get("photo")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "preferredColor",
+                profile.get("preferredColor")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "wins",
+                profile.get("wins")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "losses",
+                profile.get("losses")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "totalGames",
+                profile.get("totalGames")
+            );
+            XmlHelper.addChildElement(
+                doc,
+                profileEl,
+                "totalTimeMillis",
+                profile.get("totalTimeMillis")
+            );
         }
 
         File file = new File(fileStorePath + "/user/management/Profiles.xml");

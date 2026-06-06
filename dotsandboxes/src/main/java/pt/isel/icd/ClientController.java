@@ -140,8 +140,22 @@ public class ClientController implements Controller, Authenticator {
         }
     }
 
-    public void updateProfile(String nationality, int age, String photo) {
-        connectionManager.write(new UpdateUserCommand(nationality, age, photo));
+    public void updateProfile(
+        String fullName,
+        String nationality,
+        int age,
+        String photo,
+        String preferredColor
+    ) {
+        connectionManager.write(
+            new UpdateUserCommand(
+                fullName,
+                nationality,
+                age,
+                photo,
+                preferredColor
+            )
+        );
     }
 
     // === Game actions ===
