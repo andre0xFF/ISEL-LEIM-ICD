@@ -18,7 +18,7 @@ public class UserServerRepository {
         this.xmlFileStore = xmlFileStore;
     }
 
-    public void loadUsers() {
+    public synchronized void loadUsers() {
         users.clear();
         List<Map<String, String>> data = xmlFileStore.loadUsers();
         for (Map<String, String> entry : data) {
@@ -26,7 +26,7 @@ public class UserServerRepository {
         }
     }
 
-    public void saveUsers() {
+    public synchronized void saveUsers() {
         List<Map<String, String>> data = new ArrayList<>();
         for (User user : users) {
             Map<String, String> entry = new HashMap<>();
@@ -37,7 +37,7 @@ public class UserServerRepository {
         xmlFileStore.saveUsers(data);
     }
 
-    public void loadProfiles() {
+    public synchronized void loadProfiles() {
         profiles.clear();
         List<Map<String, String>> data = xmlFileStore.loadProfiles();
         for (Map<String, String> entry : data) {
@@ -62,7 +62,7 @@ public class UserServerRepository {
         }
     }
 
-    public void saveProfiles() {
+    public synchronized void saveProfiles() {
         List<Map<String, String>> data = new ArrayList<>();
         for (Profile profile : profiles) {
             Map<String, String> entry = new HashMap<>();
@@ -107,7 +107,7 @@ public class UserServerRepository {
         }
     }
 
-    public User readUser(String username) {
+    public synchronized User readUser(String username) {
         return users
             .stream()
             .filter(u -> u.username().equals(username))
@@ -115,7 +115,7 @@ public class UserServerRepository {
             .orElse(null);
     }
 
-    public void addUser(User user) {
+    public synchronized void addUser(User user) {
         if (readUser(user.username()) != null) {
             throw new IllegalArgumentException("User already exists");
         }
@@ -123,12 +123,38 @@ public class UserServerRepository {
         saveUsers();
     }
 
-    public void removeUser(User user) {
+    public synchronized void removeUser(User user) {
         users.removeIf(u -> u.username().equals(user.username()));
         saveUsers();
     }
 
-    public Profile readProfile(String username) {
+    /**
+     * Quadro de honra: perfis ordenados por vitorias (desc); em caso de empate,
+     * por tempo medio de jogo (asc). Jogadores sem jogos nao tem tempo medio,
+     * pelo que ficam por ultimo dentro do mesmo numero de vitorias.
+     */
+    public synchronized List<Profile> honorBoard() {
+        List<Profile> board = new ArrayList<>(profiles);
+        board.sort((a, b) -> {
+            // Criterio primario: vitorias (descendente).
+            if (a.wins() != b.wins()) {
+                return Integer.compare(b.wins(), a.wins());
+            }
+            // Desempate: tempo medio (ascendente); quem nao jogou vai para o fim.
+            double avgA =
+                a.totalGames() > 0
+                    ? a.averageTimeMillis()
+                    : Double.POSITIVE_INFINITY;
+            double avgB =
+                b.totalGames() > 0
+                    ? b.averageTimeMillis()
+                    : Double.POSITIVE_INFINITY;
+            return Double.compare(avgA, avgB);
+        });
+        return board;
+    }
+
+    public synchronized Profile readProfile(String username) {
         return profiles
             .stream()
             .filter(p -> p.username().equals(username))
@@ -136,18 +162,18 @@ public class UserServerRepository {
             .orElse(null);
     }
 
-    public void addProfile(Profile profile) {
+    public synchronized void addProfile(Profile profile) {
         profiles.add(profile);
         saveProfiles();
     }
 
-    public void updateProfile(Profile profile) {
+    public synchronized void updateProfile(Profile profile) {
         profiles.removeIf(p -> p.username().equals(profile.username()));
         profiles.add(profile);
         saveProfiles();
     }
 
-    public void removeProfile(Profile profile) {
+    public synchronized void removeProfile(Profile profile) {
         profiles.removeIf(p -> p.username().equals(profile.username()));
         saveProfiles();
     }

@@ -4,7 +4,7 @@ package pt.isel.icd.user.logic;
  * Perfil de um utilizador com os respetivos dados e estatisticas.
  *
  * Campos novos do TP02:
- *  - fullName: nome completo (pesquisa de adversarios por AutoComplete);
+ *  - fullName: nome completo do utilizador (mostrado no perfil);
  *  - preferredColor: cor de fundo preferida do ecra de jogo (#RRGGBB);
  *  - totalGames: jogos concluidos (para o tempo medio);
  *  - totalTimeMillis: tempo de jogo acumulado (medio = total/totalGames).

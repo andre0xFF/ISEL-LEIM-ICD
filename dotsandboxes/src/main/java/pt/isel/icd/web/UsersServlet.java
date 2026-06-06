@@ -71,12 +71,14 @@ public class UsersServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
-        String xml = GameServerGateway.readOwnProfileXml(
-            getServletContext(),
-            creds[0],
-            creds[1]
+        writeXmlOrError(
+            resp,
+            GameServerGateway.readOwnProfileXml(
+                getServletContext(),
+                creds[0],
+                creds[1]
+            )
         );
-        writeXmlOrError(resp, xml);
     }
 
     /** PUT /api/users/me — editar perfil proprio (corpo XML). */
@@ -93,10 +95,7 @@ public class UsersServlet extends HttpServlet {
             return;
         }
 
-        String body = req
-            .getReader()
-            .lines()
-            .collect(Collectors.joining("\n"));
+        String body = req.getReader().lines().collect(Collectors.joining("\n"));
         String fullName;
         String nationality;
         int age;
@@ -108,9 +107,10 @@ public class UsersServlet extends HttpServlet {
             fullName = text(XmlHelper.getChildText(profile, "fullName"));
             nationality = text(XmlHelper.getChildText(profile, "nationality"));
             String ageStr = XmlHelper.getChildText(profile, "age");
-            age = ageStr != null && !ageStr.isBlank()
-                ? Integer.parseInt(ageStr.trim())
-                : 0;
+            age =
+                ageStr != null && !ageStr.isBlank()
+                    ? Integer.parseInt(ageStr.trim())
+                    : 0;
             photo = text(XmlHelper.getChildText(profile, "photo"));
             preferredColor = text(
                 XmlHelper.getChildText(profile, "preferredColor")

@@ -22,6 +22,7 @@
     <div class="actions">
         <a class="button" href="<%= request.getContextPath() %>/game.jsp">Play a game</a>
         <a class="button secondary" href="<%= request.getContextPath() %>/profile.jsp">My profile</a>
+        <a class="button secondary" href="<%= request.getContextPath() %>/honor.jsp">Honor board</a>
         <button id="logoutBtn" class="button secondary">Sign out</button>
     </div>
 

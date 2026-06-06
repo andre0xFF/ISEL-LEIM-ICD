@@ -11,6 +11,7 @@
                 <xs:element name="CreateUserCommand" type="CreateUserType" />
                 <xs:element name="ReadUserProfileCommand" type="EmptyType" />
                 <xs:element name="UpdateUserCommand" type="UpdateUserType" />
+                <xs:element name="HonorBoardCommand" type="EmptyType" />
                 <!-- User response commands -->
                 <xs:element
                     name="AuthenticateUserResponseCommand"
@@ -23,6 +24,10 @@
                 <xs:element
                     name="ReadUserProfileResponseCommand"
                     type="ReadUserProfileResponseType"
+                />
+                <xs:element
+                    name="HonorBoardResponseCommand"
+                    type="HonorBoardResponseType"
                 />
                 <!-- Game commands -->
                 <xs:element name="JoinGameCommand" type="EmptyType" />
@@ -91,6 +96,26 @@
             <xs:element name="age" type="xs:string" />
             <xs:element name="photo" type="xs:string" />
             <xs:element name="preferredColor" type="xs:string" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Quadro de honra: lista ordenada de entradas (uma por jogador). -->
+    <xs:complexType name="HonorBoardResponseType">
+        <xs:sequence>
+            <xs:element name="entry" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="username" type="xs:string" />
+                        <xs:element name="fullName" type="xs:string" />
+                        <xs:element name="nationality" type="xs:string" />
+                        <xs:element name="photo" type="xs:string" />
+                        <xs:element name="wins" type="xs:string" />
+                        <xs:element name="losses" type="xs:string" />
+                        <xs:element name="totalGames" type="xs:string" />
+                        <xs:element name="totalTimeMillis" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:sequence>
     </xs:complexType>
 

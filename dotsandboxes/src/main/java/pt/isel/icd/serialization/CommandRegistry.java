@@ -16,7 +16,8 @@ public class CommandRegistry {
             return cmd;
         });
         serializer.register("AuthenticateUserResponseCommand", el -> {
-            AuthenticateUserResponseCommand cmd = new AuthenticateUserResponseCommand();
+            AuthenticateUserResponseCommand cmd =
+                new AuthenticateUserResponseCommand();
             cmd.fromXml(el);
             return cmd;
         });
@@ -36,12 +37,23 @@ public class CommandRegistry {
             return cmd;
         });
         serializer.register("ReadUserProfileResponseCommand", el -> {
-            ReadUserProfileResponseCommand cmd = new ReadUserProfileResponseCommand();
+            ReadUserProfileResponseCommand cmd =
+                new ReadUserProfileResponseCommand();
             cmd.fromXml(el);
             return cmd;
         });
         serializer.register("UpdateUserCommand", el -> {
             UpdateUserCommand cmd = new UpdateUserCommand();
+            cmd.fromXml(el);
+            return cmd;
+        });
+        serializer.register("HonorBoardCommand", el -> {
+            HonorBoardCommand cmd = new HonorBoardCommand();
+            cmd.fromXml(el);
+            return cmd;
+        });
+        serializer.register("HonorBoardResponseCommand", el -> {
+            HonorBoardResponseCommand cmd = new HonorBoardResponseCommand();
             cmd.fromXml(el);
             return cmd;
         });

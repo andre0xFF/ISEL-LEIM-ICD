@@ -158,6 +158,14 @@ public class ClientController implements Controller, Authenticator {
         );
     }
 
+    /**
+     * Quadro de honra recebido. E uma funcionalidade Web (o cliente desktop nao
+     * o apresenta); fica disponivel para registo/futura utilizacao.
+     */
+    public void handleHonorBoardResponse(int entryCount) {
+        logger.info("Honor board with " + entryCount + " entries");
+    }
+
     // === Game actions ===
 
     public void joinGame() {

@@ -125,6 +125,38 @@ button:hover,
     color: #374151;
 }
 
+/* === Quadro de honra === */
+table.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+table.leaderboard th,
+table.leaderboard td {
+    padding: 8px 6px;
+    text-align: left;
+    border-bottom: 1px solid #eef1f6;
+}
+table.leaderboard th {
+    color: #6b7280;
+    font-weight: 600;
+}
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: inline-block;
+    vertical-align: middle;
+}
+.avatar.placeholder {
+    background: #dfe3ea;
+}
+.muted {
+    color: #9aa1ab;
+}
+
 /* === Ecra de jogo === */
 .topbar {
     display: flex;

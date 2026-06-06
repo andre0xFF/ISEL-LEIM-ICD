@@ -15,7 +15,6 @@ public class SimpleSocketRouter {
         Object
     > controllers = new HashMap<>();
     private Authenticator authenticator;
-    private SimpleSocketCommand<Object> command;
 
     public void addReceiver(
         Class<? extends SimpleSocketCommand<?>> commandType,
@@ -36,7 +35,12 @@ public class SimpleSocketRouter {
 
     @SuppressWarnings("unchecked")
     public void route(SimpleSocketCommand<?> newCommand) {
-        command = (SimpleSocketCommand<Object>) newCommand;
+        // Variavel LOCAL (nao um campo partilhado): route() e chamado em
+        // simultaneo por varias threads (uma por ligacao). Um campo partilhado
+        // provocava uma corrida que misturava comandos de ligacoes diferentes.
+        SimpleSocketCommand<Object> command = (SimpleSocketCommand<
+            Object
+        >) newCommand;
 
         Class<?> commandType = command.getClass();
         Object receiver = controllers.get(commandType);

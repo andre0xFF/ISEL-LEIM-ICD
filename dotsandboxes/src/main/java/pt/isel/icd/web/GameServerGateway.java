@@ -10,6 +10,7 @@ import pt.isel.icd.serialization.XmlHelper;
 import pt.isel.icd.user.logic.User;
 import pt.isel.icd.user.management.AuthenticateUserCommand;
 import pt.isel.icd.user.management.CreateUserCommand;
+import pt.isel.icd.user.management.HonorBoardCommand;
 import pt.isel.icd.user.management.ReadUserProfileCommand;
 import pt.isel.icd.user.management.UpdateUserCommand;
 
@@ -120,6 +121,19 @@ public final class GameServerGateway {
             // UpdateUser nao tem resposta propria: confirmamos relendo o perfil.
             proxy.send(SER.serialize(new ReadUserProfileCommand()));
             return readLineUntil(proxy, "ReadUserProfileResponseCommand");
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Obtem o quadro de honra (informacao publica; nao requer autenticacao).
+     * Devolve o XML da resposta para a camada Web reencaminhar.
+     */
+    public static String honorBoardXml(ServletContext ctx) {
+        try (ServerProxy proxy = open(ctx)) {
+            proxy.send(SER.serialize(new HonorBoardCommand()));
+            return readLineUntil(proxy, "HonorBoardResponseCommand");
         } catch (IOException e) {
             return null;
         }

@@ -1,8 +1,9 @@
 package pt.isel.icd;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Logger;
 import pt.isel.icd.communication.ConnectedCommand;
@@ -30,6 +31,8 @@ import pt.isel.icd.user.management.AuthenticateUserResponseCommand;
 import pt.isel.icd.user.management.Authenticator;
 import pt.isel.icd.user.management.CreateUserCommand;
 import pt.isel.icd.user.management.CreateUserResponseCommand;
+import pt.isel.icd.user.management.HonorBoardCommand;
+import pt.isel.icd.user.management.HonorBoardResponseCommand;
 import pt.isel.icd.user.management.ReadUserProfileCommand;
 import pt.isel.icd.user.management.ReadUserProfileResponseCommand;
 import pt.isel.icd.user.management.UpdateUserCommand;
@@ -54,7 +57,9 @@ public class ServerController
 
     private final ConnectionManager connectionManager;
     private final UserServerRepository userServerRepository;
-    private final HashMap<UUID, User> authenticatedUsers = new HashMap<>();
+    // Varias threads (gameplay + proxies CRUD) acedem em simultaneo.
+    private final Map<UUID, User> authenticatedUsers =
+        new ConcurrentHashMap<>();
     // Registo de todos os jogos a decorrer + emparelhamento (multi-jogo, L1).
     private final GameRegistry gameRegistry = new GameRegistry();
 
@@ -75,6 +80,7 @@ public class ServerController
             CreateUserCommand.class,
             ReadUserProfileCommand.class,
             UpdateUserCommand.class,
+            HonorBoardCommand.class,
             JoinGameCommand.class,
             LeaveGameCommand.class,
             PlaceLineCommand.class
@@ -173,6 +179,14 @@ public class ServerController
         connectionManager.write(
             socketId,
             new CreateUserResponseCommand(username, success)
+        );
+    }
+
+    /** Devolve o quadro de honra ordenado. */
+    public void honorBoard(UUID socketId) {
+        connectionManager.write(
+            socketId,
+            new HonorBoardResponseCommand(userServerRepository.honorBoard())
         );
     }
 
