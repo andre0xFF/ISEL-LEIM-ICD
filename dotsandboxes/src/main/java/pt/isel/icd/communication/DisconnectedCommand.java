@@ -12,6 +12,7 @@ public class DisconnectedCommand implements SimpleSocketCommand<Object> {
     );
 
     private UUID socketId;
+    private Object receiver;
 
     @Override
     public String commandName() {
@@ -34,11 +35,20 @@ public class DisconnectedCommand implements SimpleSocketCommand<Object> {
     }
 
     @Override
-    public void setReceiver(Object receiver) {}
+    public void setReceiver(Object receiver) {
+        this.receiver = receiver;
+    }
 
     @Override
     public void execute() {
         logger.info("Disconnected");
+        // Notifica o controlador interessado (ex.: limpeza de jogos/fila).
+        if (
+            receiver instanceof DisconnectionListener listener &&
+            socketId != null
+        ) {
+            listener.onDisconnected(socketId);
+        }
     }
 
     @Override

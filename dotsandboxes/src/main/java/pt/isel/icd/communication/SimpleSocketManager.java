@@ -1,14 +1,15 @@
 package pt.isel.icd.communication;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArrayList;
 import pt.isel.icd.user.management.Authenticator;
 
 public class SimpleSocketManager implements ConnectionManager {
 
     private final SimpleSocketRouter router = new SimpleSocketRouter();
-    private final ArrayList<SimpleSocket> sockets = new ArrayList<>();
+    // CopyOnWriteArrayList: varias threads ligam/desligam/escrevem em simultaneo.
+    private final List<SimpleSocket> sockets = new CopyOnWriteArrayList<>();
 
     protected void connectClient(SimpleSocket client) {
         sockets.add(client);

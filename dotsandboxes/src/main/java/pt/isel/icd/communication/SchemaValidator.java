@@ -21,7 +21,13 @@ public class SchemaValidator {
      */
     public static final String DEFAULT_XSD_CLASSPATH_RESOURCE =
         "/schemas/Commands.xsd";
-    private final Validator validator;
+
+    /**
+     * O Schema e imutavel e thread-safe; o Validator NAO e. Por isso guardamos o
+     * Schema e criamos um Validator novo por cada validacao, evitando corrupcao
+     * de estado quando varias ligacoes validam em simultaneo.
+     */
+    private final Schema schema;
 
     public SchemaValidator() {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(
@@ -37,8 +43,7 @@ public class SchemaValidator {
             );
         }
         try {
-            Schema schema = schemaFactory.newSchema(schemaUrl);
-            validator = schema.newValidator();
+            schema = schemaFactory.newSchema(schemaUrl);
         } catch (SAXException e) {
             throw new RuntimeException(
                 "Falha ao carregar o XSD do classpath: " + schemaUrl,
@@ -54,8 +59,7 @@ public class SchemaValidator {
         java.io.File schemaFile = xsdPath.toFile();
 
         try {
-            Schema schema = schemaFactory.newSchema(schemaFile);
-            validator = schema.newValidator();
+            schema = schemaFactory.newSchema(schemaFile);
         } catch (SAXException e) {
             throw new RuntimeException(
                 "Failed to load XSD schema: " + xsdPath,
@@ -65,6 +69,8 @@ public class SchemaValidator {
     }
 
     public void validate(String xmlContent) throws IOException, SAXException {
+        // Um Validator novo por chamada: seguro com varias threads concorrentes.
+        Validator validator = schema.newValidator();
         validator.validate(
             new SAXSource(new InputSource(new StringReader(xmlContent)))
         );

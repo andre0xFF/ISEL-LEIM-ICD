@@ -76,6 +76,17 @@
       <version>${jakarta.websocket.version}</version>
       <scope>provided</scope>
     </dependency>
+    <!--
+      As classes nucleares (jakarta.websocket.*: OnOpen, Session, EndpointConfig,
+      CloseReason, ...) vivem neste artefacto separado; o -api so traz os tipos
+      jakarta.websocket.server.*. O Tomcat fornece ambos em runtime.
+    -->
+    <dependency>
+      <groupId>jakarta.websocket</groupId>
+      <artifactId>jakarta.websocket-client-api</artifactId>
+      <version>${jakarta.websocket.version}</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 

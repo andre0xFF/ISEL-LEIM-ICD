@@ -8,6 +8,7 @@ import pt.isel.icd.communication.ConnectedCommand;
 import pt.isel.icd.communication.ConnectionManager;
 import pt.isel.icd.communication.Controller;
 import pt.isel.icd.communication.DisconnectedCommand;
+import pt.isel.icd.communication.DisconnectionListener;
 import pt.isel.icd.communication.SimpleSocketCommand;
 import pt.isel.icd.game.logic.Dot;
 import pt.isel.icd.game.logic.Game;
@@ -33,7 +34,9 @@ import pt.isel.icd.user.management.ReadUserProfileResponseCommand;
 import pt.isel.icd.user.management.UpdateUserCommand;
 import pt.isel.icd.user.management.UserServerRepository;
 
-public class ServerController implements Controller, Authenticator {
+public class ServerController
+    implements Controller, Authenticator, DisconnectionListener
+{
 
     private static final Logger logger = Logger.getLogger(
         ServerController.class.getName()
@@ -71,6 +74,27 @@ public class ServerController implements Controller, Authenticator {
     @Override
     public boolean isAuthenticated(UUID socketId) {
         return authenticatedUsers.containsKey(socketId);
+    }
+
+    /**
+     * Limpeza ao desligar um socket: remove a autenticacao, tira-o da fila de
+     * emparelhamento e termina os jogos em que participava, avisando o
+     * adversario (resolve a limitacao de "fantasmas" no emparelhamento).
+     */
+    @Override
+    public void onDisconnected(UUID socketId) {
+        authenticatedUsers.remove(socketId);
+        gameRegistry.cancelWaiting(socketId);
+        for (GameSession session : gameRegistry.sessionsOf(socketId)) {
+            gameRegistry.remove(session.gameId());
+            UUID opponent = session.socketA().equals(socketId)
+                ? session.socketB()
+                : session.socketA();
+            connectionManager.write(
+                opponent,
+                new LeaveGameResponseCommand(true, session.gameId())
+            );
+        }
     }
 
     public User getAuthenticatedUser(UUID socketId) {

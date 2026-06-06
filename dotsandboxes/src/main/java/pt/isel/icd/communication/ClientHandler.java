@@ -32,8 +32,8 @@ public class ClientHandler implements Runnable {
                     SimpleSocketCommand<?> command = simpleSocket.read();
 
                     if (command == null) {
-                        simpleSocketManager.route(new DisconnectedCommand());
-                        simpleSocket.close();
+                        handleDisconnect();
+                        return;
                     } else {
                         command.socketId(simpleSocket.identifier());
                         simpleSocketManager.route(command);
@@ -43,8 +43,24 @@ public class ClientHandler implements Runnable {
                 }
             }
         } catch (IOException e) {
-            simpleSocketManager.route(new DisconnectedCommand());
-            throw new RuntimeException(e);
+            handleDisconnect();
+        }
+    }
+
+    /**
+     * Encaminha um DisconnectedCommand (com o id do socket) para que o
+     * controlador possa limpar o estado associado, retira o socket do gestor e
+     * fecha-o.
+     */
+    private void handleDisconnect() {
+        DisconnectedCommand disconnected = new DisconnectedCommand();
+        disconnected.socketId(simpleSocket.identifier());
+        simpleSocketManager.route(disconnected);
+        simpleSocketManager.disconnectClient(simpleSocket);
+        try {
+            simpleSocket.close();
+        } catch (IOException ignored) {
+            // fecho best-effort
         }
     }
 }
