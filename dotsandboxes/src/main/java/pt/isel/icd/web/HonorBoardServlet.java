@@ -19,16 +19,19 @@ public class HonorBoardServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
         HttpSession session = req.getSession(false);
+
         if (session == null || session.getAttribute("username") == null) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
         String xml = GameServerGateway.honorBoardXml(getServletContext());
+
         if (xml == null) {
             resp.sendError(HttpServletResponse.SC_BAD_GATEWAY);
             return;
         }
+
         resp.setContentType("application/xml;charset=UTF-8");
         resp.getWriter().write(xml);
     }

@@ -2,19 +2,22 @@
 # Build multi-etapa: compila com Maven/JDK 25 e corre apenas com o JRE.
 # O JavaFX NAO e necessario em runtime — o servidor so usa o JDK.
 
-# --- Etapa de build ---
+# Build -
 FROM docker.io/library/maven:3.9-eclipse-temurin-25 AS build
 WORKDIR /app
-# Copia o POM primeiro para aproveitar a cache de dependencias.
+
 COPY pom.xml .
+#
 RUN mvn -q -e -DskipTests dependency:go-offline || true
+
 # Copia o codigo-fonte e empacota (gera tambem target/classes).
 COPY src ./src
 RUN mvn -q -e -DskipTests clean package
 
-# --- Etapa de runtime ---
+# Runtime -
 FROM docker.io/library/eclipse-temurin:25-jre AS runtime
 WORKDIR /app
+
 # So precisamos das classes e recursos compilados (inclui /schemas no classpath).
 COPY --from=build /app/target/classes /app/classes
 

@@ -9,12 +9,6 @@
 
   <display-name>dotsandboxes</display-name>
 
-  <!--
-    Localizacao do servidor de jogo TCP que a camada Web contacta.
-    A resolucao efetiva (em F2) sera: propriedade de sistema
-    "dab.server.host"/"dab.server.port" (ex.: CATALINA_OPTS no Docker) com
-    recurso a estes context-param e, por fim, ao valor por omissao localhost:8000.
-  -->
   <context-param>
     <param-name>dab.server.host</param-name>
     <param-value>localhost</param-value>

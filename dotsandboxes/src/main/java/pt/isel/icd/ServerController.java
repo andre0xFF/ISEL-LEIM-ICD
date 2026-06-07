@@ -46,8 +46,7 @@ public class ServerController
         ServerController.class.getName()
     );
 
-    // Tempo maximo por jogada (segundos). Configuravel para testes; 30s por
-    // omissao, conforme o requisito.
+    // Tempo maximo por jogada (segundos).
     private static final long TURN_TIMEOUT_SECONDS = Long.getLong(
         "dab.turn.timeout.seconds",
         30L
@@ -101,15 +100,21 @@ public class ServerController
     public void onDisconnected(UUID socketId) {
         authenticatedUsers.remove(socketId);
         gameRegistry.cancelWaiting(socketId);
+
         for (GameSession session : gameRegistry.sessionsOf(socketId)) {
             synchronized (session) {
-                if (session.isEnded()) continue;
+                if (session.isEnded()) {
+                    continue;
+                }
+
                 session.markEnded();
                 cancelTurnTimer(session);
                 gameRegistry.remove(session.gameId());
+
                 UUID opponent = session.socketA().equals(socketId)
                     ? session.socketB()
                     : session.socketA();
+
                 connectionManager.write(
                     opponent,
                     new LeaveGameResponseCommand(true, session.gameId())
@@ -122,8 +127,7 @@ public class ServerController
         return authenticatedUsers.get(socketId);
     }
 
-    // === User management ===
-
+    // User management
     public void authenticateUser(
         UUID socketId,
         String username,
@@ -151,10 +155,13 @@ public class ServerController
         String photo
     ) {
         boolean success = false;
+
         try {
             User user = new User(username, password);
+
             if (userServerRepository.readUser(username) == null) {
                 userServerRepository.addUser(user);
+
                 // Cria o perfil com os campos opcionais do registo (ou defaults).
                 userServerRepository.addProfile(
                     new Profile(
@@ -170,6 +177,7 @@ public class ServerController
                         0L
                     )
                 );
+
                 success = true;
             }
         } catch (IllegalArgumentException e) {
@@ -196,6 +204,7 @@ public class ServerController
             user != null
                 ? userServerRepository.readProfile(user.username())
                 : null;
+
         connectionManager.write(
             socketId,
             new ReadUserProfileResponseCommand(profile, profile != null)
@@ -211,10 +220,16 @@ public class ServerController
         String preferredColor
     ) {
         User user = authenticatedUsers.get(socketId);
-        if (user == null) return;
+
+        if (user == null) {
+            return;
+        }
 
         Profile existing = userServerRepository.readProfile(user.username());
-        if (existing == null) return;
+
+        if (existing == null) {
+            return;
+        }
 
         // Substitui os campos editaveis, preservando as estatisticas.
         userServerRepository.updateProfile(
@@ -228,7 +243,7 @@ public class ServerController
         );
     }
 
-    // === Game management ===
+    // Game management
 
     /**
      * Pedido de entrada em jogo. Faz emparelhamento no GameRegistry: se houver
@@ -238,11 +253,14 @@ public class ServerController
      */
     public void joinGame(UUID socketId) {
         GameSession session = gameRegistry.matchOrEnqueue(socketId);
+
         if (session == null) {
-            return; // a aguardar adversario
+            return; // a aguardar adversario.
         }
+
         notifyJoined(session, session.socketA());
         notifyJoined(session, session.socketB());
+
         // Arranca o temporizador da primeira jogada (jogador A).
         synchronized (session) {
             if (!session.isEnded()) {
@@ -271,12 +289,14 @@ public class ServerController
      */
     public void leaveGame(UUID socketId, String gameId) {
         GameSession session = gameRegistry.get(gameId);
+
         if (session == null) {
             gameRegistry.cancelWaiting(socketId);
             connectionManager.write(
                 socketId,
                 new LeaveGameResponseCommand(true, gameId)
             );
+
             return;
         }
 
@@ -286,15 +306,19 @@ public class ServerController
                     socketId,
                     new LeaveGameResponseCommand(true, gameId)
                 );
+
                 return;
             }
+
             session.markEnded();
             cancelTurnTimer(session);
             gameRegistry.remove(gameId);
+
             connectionManager.write(
                 session.socketA(),
                 new LeaveGameResponseCommand(true, gameId)
             );
+
             connectionManager.write(
                 session.socketB(),
                 new LeaveGameResponseCommand(true, gameId)
@@ -309,17 +333,28 @@ public class ServerController
      */
     public void placeLine(UUID socketId, String gameId, Dot dot1, Dot dot2) {
         GameSession session = gameRegistry.get(gameId);
-        if (session == null) return;
+
+        if (session == null) {
+            return;
+        }
 
         synchronized (session) {
-            if (session.isEnded()) return;
+            if (session.isEnded()) {
+                return;
+            }
 
             Player player = session.playerFor(socketId);
-            if (player == null) return;
+
+            if (player == null) {
+                return;
+            }
 
             Game game = session.game();
             // Ignora jogadas fora de vez (evita excecao e jogadas indevidas).
-            if (!game.isPlayerTurn(player)) return;
+
+            if (!game.isPlayerTurn(player)) {
+                return;
+            }
 
             boolean placed = game.placeLine(player, dot1, dot2);
             boolean extraTurn =
@@ -355,7 +390,10 @@ public class ServerController
      * Deve ser chamado dentro de synchronized(session).
      */
     private void endGame(GameSession session, Player winner, String reason) {
-        if (session.isEnded()) return;
+        if (session.isEnded()) {
+            return;
+        }
+
         session.markEnded();
         cancelTurnTimer(session);
 
@@ -363,6 +401,7 @@ public class ServerController
         Player playerA = game.getPlayer(0);
         Player playerB = game.getPlayer(1);
         String winnerMarker = winner != null ? winner.marker().name() : "DRAW";
+
         // Duracao do jogo, para o tempo medio (tie-break do quadro de honra).
         long duration = System.currentTimeMillis() - session.startMillis();
 
@@ -389,7 +428,7 @@ public class ServerController
         gameRegistry.remove(session.gameId());
     }
 
-    // === Temporizador de jogada (30s) ===
+    // Temporizador de jogada (30s)
 
     /**
      * (Re)inicia o temporizador da jogada para o turno atual da sessao. Cada
@@ -400,16 +439,19 @@ public class ServerController
     private void startTurnTimer(GameSession session) {
         cancelTurnTimer(session);
         long token = session.bumpTurnToken();
+
         ScheduledFuture<?> future = gameRegistry.scheduleTimeout(
             TURN_TIMEOUT_SECONDS,
             () -> onTurnTimeout(session, token)
         );
+
         session.setTurnTimer(future);
     }
 
     /** Cancela o temporizador ativo da sessao. Chamar sob synchronized(session). */
     private void cancelTurnTimer(GameSession session) {
         ScheduledFuture<?> future = session.turnTimer();
+
         if (future != null) {
             future.cancel(false);
             session.setTurnTimer(null);
@@ -423,8 +465,13 @@ public class ServerController
      */
     private void onTurnTimeout(GameSession session, long token) {
         synchronized (session) {
-            if (session.isEnded()) return;
-            if (token != session.turnToken()) return; // jogada repos o temporizador
+            if (session.isEnded()) {
+                return;
+            }
+
+            if (token != session.turnToken()) {
+                return; // jogada repos o temporizador
+            }
 
             Game game = session.game();
             Player current = game.currentPlayer();
@@ -432,6 +479,7 @@ public class ServerController
                 current == game.getPlayer(0)
                     ? game.getPlayer(1)
                     : game.getPlayer(0);
+
             logger.info(
                 "Timeout no jogo " +
                     session.gameId() +
@@ -439,6 +487,7 @@ public class ServerController
                     current.marker() +
                     " perde por forfait"
             );
+
             endGame(session, winner, REASON_TIMEOUT);
         }
     }
@@ -454,13 +503,20 @@ public class ServerController
         long durationMillis
     ) {
         User user = authenticatedUsers.get(sid);
-        if (user == null) return;
+
+        if (user == null) {
+            return;
+        }
 
         Profile profile = userServerRepository.readProfile(user.username());
-        if (profile == null) return;
+
+        if (profile == null) {
+            return;
+        }
 
         boolean isWinner = winner != null && player.marker() == winner.marker();
         boolean isLoser = winner != null && player.marker() != winner.marker();
+
         userServerRepository.updateProfile(
             profile.withGameResult(isWinner, isLoser, durationMillis)
         );

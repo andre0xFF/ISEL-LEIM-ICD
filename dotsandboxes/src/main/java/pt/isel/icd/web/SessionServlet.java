@@ -49,13 +49,15 @@ public class SessionServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
         throws IOException {
         HttpSession session = req.getSession(false);
-        String username = session == null
-            ? null
-            : (String) session.getAttribute("username");
+
+        String username =
+            session == null ? null : (String) session.getAttribute("username");
+
         if (username == null) {
             resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
+
         writeUserXml(resp, username);
     }
 
@@ -63,23 +65,28 @@ public class SessionServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         HttpSession session = req.getSession(false);
+
         if (session != null) {
             session.invalidate();
         }
+
         resp.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204
     }
 
     private void writeUserXml(HttpServletResponse resp, String username)
         throws IOException {
         resp.setContentType("application/xml;charset=UTF-8");
-        resp
-            .getWriter()
-            .write("<user><username>" + escape(username) + "</username></user>");
+        resp.getWriter().write(
+            "<user><username>" + escape(username) + "</username></user>"
+        );
     }
 
     /** Escapa caracteres especiais de XML (mitiga XSS em nomes livres). */
     static String escape(String s) {
-        if (s == null) return "";
+        if (s == null) {
+            return "";
+        }
+
         return s
             .replace("&", "&amp;")
             .replace("<", "&lt;")

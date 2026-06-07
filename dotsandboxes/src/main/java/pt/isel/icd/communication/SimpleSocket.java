@@ -92,6 +92,7 @@ public class SimpleSocket implements Closeable {
      */
     public SimpleSocketCommand<?> read() throws IOException, SAXException {
         String line = readLine();
+
         if (line == null) {
             return null;
         }

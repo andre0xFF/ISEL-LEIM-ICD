@@ -70,6 +70,11 @@ as linhas estão colocadas; vence quem tiver mais caixas (ou empate).
 
 ## 3. Arquitetura do Sistema (TP02)
 
+> **Em resumo:** dois processos — um servidor de jogo TCP que detém todo o estado
+> e é o único escritor da persistência, e uma aplicação Web em Tomcat que serve de
+> ponte para o browser. Os três transportes (TCP, HTTP e WebSocket) partilham um
+> único protocolo: o mesmo vocabulário XML validado por `Commands.xsd`.
+
 A solução é um **split em dois processos por estilo de interação**:
 
 - O **servidor de jogo TCP** (o servidor da 1ª entrega, estendido) detém todo o
@@ -83,16 +88,16 @@ A solução é um **split em dois processos por estilo de interação**:
 ```mermaid
 graph TD
     subgraph Browser["Browser (jogador Web)"]
-        JS["Página JSP + JS vanilla<br/>(WebSocket, fetch, DOMParser)"]
+        JS["Página JSP + JS vanilla<br/>(WebSocket)"]
     end
     subgraph Tomcat["Tomcat 11 (.war)"]
         JSP["JSP + servlets REST (/api, HTTP)"]
         WS["GameSocketEndpoint (WebSocket)"]
         PX["ServerProxy (TCP para o servidor)"]
     end
-    subgraph GS["Servidor de Jogo TCP (porta 8000)"]
+    subgraph GS["Servidor de Jogo TCP"]
         SC["ServerController + SimpleSocketManager"]
-        GR["GameRegistry (multi-jogo + temporizadores)"]
+        GR["GameRegistry (multi-jogo)"]
         REPO["UserServerRepository (único escritor)"]
     end
     GUI["Cliente JavaFX"]
@@ -120,6 +125,61 @@ do browser, transportando as mesmas mensagens XML). Isto satisfaz o requisito de
 | Cliente JavaFX   | _Fat client_          | Inalterado em estrutura; liga por TCP                                            |
 | Camada Web       | Ponte + thin client   | JSP; proxy WebSocket de gameplay; servlets REST (proxy CRUD). Sem lógica de jogo |
 | Browser          | _Thin client_         | HTML/CSS/JS vanilla; HTTP (páginas/CRUD) + WebSocket (gameplay)                  |
+
+### 3.1 Camadas e pacotes
+
+O código organiza-se em pacotes `pt.isel.icd.*` que mapeiam diretamente as
+camadas arquiteturais. O **núcleo de comunicação e domínio é partilhado** entre o
+servidor, o cliente JavaFX e a camada Web; só a fronteira (UI/transporte) difere.
+
+| Pacote               | Camada                   | Responsabilidade                                                                       |
+| -------------------- | ------------------------ | -------------------------------------------------------------------------------------- |
+| `pt.isel.icd` (raiz) | Orquestração             | _Bootstrap_ e controladores (`ServerApplication`/`ServerController`, lado cliente)     |
+| `communication`      | Transporte + _dispatch_  | `SimpleSocket`, `ClientHandler`, `SimpleSocketManager`/`Router`, `SchemaValidator`     |
+| `serialization`      | Protocolo                | (De)serialização XML via DOM (`CommandSerializer`, `CommandRegistry`, `XmlHelper`)     |
+| `game.logic`         | Domínio (puro)           | Regras do jogo sem I/O (`Board`, `Game`, `Line`, `Dot`, `Player`, `GameState`)         |
+| `game.management`    | Aplicação (jogo)         | Comandos de jogo + estado multi-jogo (`GameRegistry`, `GameSession`)                   |
+| `user.logic`         | Domínio (utilizador)     | `User`, `Profile`                                                                      |
+| `user.management`    | Aplicação + persistência | Comandos de utilizador, `Authenticator`, `UserServerRepository` (único escritor)       |
+| `database`           | Persistência             | Acesso aos ficheiros XML (`XmlFileStore`)                                              |
+| `ui` (+ subpacotes)  | Cliente JavaFX           | Vistas e controladores MVC (auth, game, menu, profile)                                 |
+| `web`                | Camada Web (Tomcat)      | `GameSocketEndpoint`, `ServerProxy`, `GameServerGateway`, servlets REST, configurators |
+
+### 3.2 Pipeline de comandos no servidor
+
+Todo o protocolo assenta no **padrão _Command_**: cada mensagem é um
+`SimpleSocketCommand` que se sabe (de)serializar e executar. No servidor, cada
+ligação tem **uma _thread_ daemon dedicada** (`ClientHandler`) que corre o mesmo
+ciclo, seja a origem um cliente JavaFX ou um `ServerProxy` do Tomcat — é isto que
+torna os transportes indistinguíveis para a lógica de jogo.
+
+```mermaid
+sequenceDiagram
+    participant C as Cliente (TCP)
+    participant H as ClientHandler (1 thread/ligação)
+    participant V as SchemaValidator
+    participant S as CommandSerializer
+    participant R as SimpleSocketRouter
+    participant Ctrl as ServerController
+    C->>H: linha XML
+    H->>V: validar contra Commands.xsd
+    H->>S: deserializar → SimpleSocketCommand
+    H->>R: route(command) com socketId
+    R->>R: requiresAuthentication? → Authenticator
+    R->>Ctrl: command.execute() no recetor registado
+    Ctrl-->>C: ConnectionManager.write(uuid, resposta)
+```
+
+Passos: (1) `ClientHandler` lê uma linha (uma mensagem = uma linha); (2)
+`SchemaValidator` valida-a contra `Commands.xsd` — XML inválido é descartado sem
+derrubar a ligação; (3) `CommandSerializer` desserializa para o comando concreto;
+(4) o comando é carimbado com o `socketId` da ligação; (5) o `SimpleSocketRouter`
+procura o controlador registado para aquele tipo e, se o comando o exigir,
+verifica a autenticação via `Authenticator` antes de injetar o recetor e chamar
+`execute()`. As respostas e _pushes_ assíncronos saem por
+`ConnectionManager.write(uuid, …)`, endereçados ao destinatário pelo `UUID` do
+socket. A lista de sockets é uma `CopyOnWriteArrayList`, segura para o acesso
+concorrente de múltiplas _threads_ de ligação.
 
 ---
 

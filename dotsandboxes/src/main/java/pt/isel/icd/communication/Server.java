@@ -32,6 +32,7 @@ public class Server {
                 schemaValidator,
                 serverSocket.accept()
             );
+
             new ClientHandler(simpleSocketManager, clientSocket);
         }
     }

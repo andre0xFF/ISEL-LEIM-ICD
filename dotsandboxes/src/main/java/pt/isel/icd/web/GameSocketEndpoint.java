@@ -24,10 +24,7 @@ import pt.isel.icd.user.management.AuthenticateUserCommand;
  * Um unico WebSocket transporta todos os jogos em simultaneo do utilizador,
  * multiplexados pelo gameId (o servidor cuida do encaminhamento por sessao).
  */
-@ServerEndpoint(
-    value = "/game",
-    configurator = HttpSessionConfigurator.class
-)
+@ServerEndpoint(value = "/game", configurator = HttpSessionConfigurator.class)
 public class GameSocketEndpoint {
 
     private static final Logger LOGGER = Logger.getLogger(
@@ -44,12 +41,12 @@ public class GameSocketEndpoint {
             .get(HttpSessionConfigurator.HTTP_SESSION_KEY);
 
         // Rejeita handshakes sem sessao autenticada (requisito de seguranca).
-        String username = http == null
-            ? null
-            : (String) http.getAttribute("username");
-        String password = http == null
-            ? null
-            : (String) http.getAttribute("password");
+        String username =
+            http == null ? null : (String) http.getAttribute("username");
+
+        String password =
+            http == null ? null : (String) http.getAttribute("password");
+
         if (username == null || password == null) {
             closeQuietly(wsSession, "Nao autenticado");
             return;
@@ -70,7 +67,10 @@ public class GameSocketEndpoint {
             );
 
             // Thread leitora: servidor -> browser (encaminha cada linha XML).
-            Thread reader = new Thread(() -> pumpServerToBrowser(proxy, wsSession));
+            Thread reader = new Thread(() ->
+                pumpServerToBrowser(proxy, wsSession)
+            );
+
             reader.setDaemon(true);
             reader.start();
         } catch (IOException e) {
@@ -84,6 +84,7 @@ public class GameSocketEndpoint {
         ServerProxy proxy = (ServerProxy) wsSession
             .getUserProperties()
             .get(PROXY_KEY);
+
         if (proxy != null) {
             // browser -> servidor: uma mensagem WebSocket = um comando XML.
             proxy.send(xml);
@@ -105,10 +106,12 @@ public class GameSocketEndpoint {
     private void pumpServerToBrowser(ServerProxy proxy, Session wsSession) {
         try {
             String line;
+
             while ((line = proxy.readLine()) != null) {
                 if (!wsSession.isOpen()) {
                     break;
                 }
+
                 wsSession.getBasicRemote().sendText(line);
             }
         } catch (IOException ignored) {
@@ -122,6 +125,7 @@ public class GameSocketEndpoint {
         ServerProxy proxy = (ServerProxy) wsSession
             .getUserProperties()
             .remove(PROXY_KEY);
+
         if (proxy != null) {
             proxy.close();
         }

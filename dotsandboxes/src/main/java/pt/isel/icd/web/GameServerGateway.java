@@ -60,9 +60,11 @@ public final class GameServerGateway {
         String request = SER.serialize(
             new CreateUserCommand(new User(username, password), fullName, photo)
         );
+
         try (ServerProxy proxy = open(ctx)) {
             proxy.send(request);
             Element resp = readUntil(proxy, "CreateUserResponseCommand");
+
             return (
                 resp != null &&
                 "true".equals(XmlHelper.getChildText(resp, "created"))
@@ -83,7 +85,10 @@ public final class GameServerGateway {
         String password
     ) {
         try (ServerProxy proxy = open(ctx)) {
-            if (!authenticateOn(proxy, username, password)) return null;
+            if (!authenticateOn(proxy, username, password)) {
+                return null;
+            }
+
             proxy.send(SER.serialize(new ReadUserProfileCommand()));
             return readLineUntil(proxy, "ReadUserProfileResponseCommand");
         } catch (IOException e) {
@@ -106,7 +111,10 @@ public final class GameServerGateway {
         String preferredColor
     ) {
         try (ServerProxy proxy = open(ctx)) {
-            if (!authenticateOn(proxy, username, password)) return null;
+            if (!authenticateOn(proxy, username, password)) {
+                return null;
+            }
+
             proxy.send(
                 SER.serialize(
                     new UpdateUserCommand(
@@ -118,6 +126,7 @@ public final class GameServerGateway {
                     )
                 )
             );
+
             // UpdateUser nao tem resposta propria: confirmamos relendo o perfil.
             proxy.send(SER.serialize(new ReadUserProfileCommand()));
             return readLineUntil(proxy, "ReadUserProfileResponseCommand");
@@ -159,7 +168,9 @@ public final class GameServerGateway {
                 new AuthenticateUserCommand(new User(username, password))
             )
         );
+
         Element resp = readUntil(proxy, "AuthenticateUserResponseCommand");
+
         return (
             resp != null &&
             "true".equals(XmlHelper.getChildText(resp, "authenticated"))
@@ -171,10 +182,18 @@ public final class GameServerGateway {
         throws IOException {
         for (int i = 0; i < 50; i++) {
             String line = proxy.readLine();
-            if (line == null) return null;
+
+            if (line == null) {
+                return null;
+            }
+
             Element el = firstCommand(XmlHelper.parse(line));
-            if (el != null && el.getTagName().equals(name)) return el;
+
+            if (el != null && el.getTagName().equals(name)) {
+                return el;
+            }
         }
+
         return null;
     }
 
@@ -183,21 +202,31 @@ public final class GameServerGateway {
         throws IOException {
         for (int i = 0; i < 50; i++) {
             String line = proxy.readLine();
-            if (line == null) return null;
+
+            if (line == null) {
+                return null;
+            }
+
             Element el = firstCommand(XmlHelper.parse(line));
-            if (el != null && el.getTagName().equals(name)) return line;
+
+            if (el != null && el.getTagName().equals(name)) {
+                return line;
+            }
         }
+
         return null;
     }
 
     /** Devolve o elemento de comando (filho de &lt;Command&gt;), ou null. */
     static Element firstCommand(Document doc) {
         NodeList children = doc.getDocumentElement().getChildNodes();
+
         for (int i = 0; i < children.getLength(); i++) {
             if (children.item(i) instanceof Element element) {
                 return element;
             }
         }
+
         return null;
     }
 }

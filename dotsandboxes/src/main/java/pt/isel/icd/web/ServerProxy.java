@@ -35,9 +35,11 @@ public class ServerProxy implements Closeable {
     public ServerProxy(String host, int port, int readTimeoutMillis)
         throws IOException {
         this.socket = new Socket(host, port);
+
         if (readTimeoutMillis > 0) {
             this.socket.setSoTimeout(readTimeoutMillis);
         }
+
         this.writer = new PrintWriter(socket.getOutputStream(), true);
         this.reader = new BufferedReader(
             new InputStreamReader(socket.getInputStream())
